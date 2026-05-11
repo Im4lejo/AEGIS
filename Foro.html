@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEGIS - Foro</title>
+    <!-- Importación de la fuente Rounded Bold solicitada -->
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styleforo.css">
+</head>
+<body>
+
+    <!-- Tu Header Original (Sin cambios) -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="pag_productos.html">
+            <div class="logo" >AEGIS</div></a>
+            <nav class="nav-links">
+                <a href="/Publicar.html">Publicar Producto</a>
+                <a href="#">Mi Punto Fisico</a>
+                <a href="/index.html">Puntos Verificados</a>
+                <a href="/Foro.html">Foro</a>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Busca tu producto aqui...">
+                <button class="search-icon">🔍︎</button>
+            </div>
+            <div class="user-area">
+                <div class="profile-dropdown">
+                    <input type="checkbox" id="profile-toggle" class="dropdown-check">
+                    <label for="profile-toggle" class="profile-label">
+                        <img src="/images/images.jfif" alt="Perfil" class="avatar">
+        
+                    </label>
+                    <div class="dropdown-content profile-menu">
+                        <a href="/aegis-perfil.html">Ajustes</a>
+                        <a href="/aegis-perfil.html">Mi perfil</a>
+                        <a href="aegis-dashboard.html">Mis ventas</a>
+                        <a href="#">Cerrar sesion</a>
+                    </div>
+                </div>
+                <img src="/images/icons8-carrito-de-compras-48.png" alt="Carrito" class="cart-icon">
+            </div>
+        </div>
+    </header>
+
+    <!-- Estructura del Foro -->
+    <div class="forum-layout">
+        
+        <!-- SECCIÓN IZQUIERDA: TEMAS -->
+        <aside class="sidebar-left">
+            <div class="search-forum-container">
+                <input type="text" placeholder="Buscar Conversacion" class="forum-search-input">
+                <span class="search-icon-inside"></span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-link-item"> 🏠︎   Principal</a>
+                <a href="#" class="nav-link-item"> ★   Popular</a>
+                
+                <div class="divider"></div>
+
+                <p class="section-title">Temas</p>
+                <a href="#" class="topic-link">Celulares</a>
+                <a href="#" class="topic-link">Computadores</a>
+                <a href="#" class="topic-link">Televisores</a>
+                
+                <div class="dropdown-wrapper">
+                    <input type="checkbox" id="more-topics-toggle" class="dropdown-check">
+                    <label for="more-topics-toggle">
+                    <a  class="topic-link">Mas  +</a></label>
+                    
+                    <div class="dropdown-content-sub">
+                        <a href="#">Consolas</a>
+                        <a href="#">Audio</a>
+                        <a href="#">Componentes</a>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="legal-links">
+                    <a href="#">Reglas del foro</a>
+                    <a href="#">Politica Privacidad</a>
+                    <a href="#">Terminos y Condiciones</a>
+                    <a href="#">Ayuda</a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- SECCIÓN CENTRAL: FEED -->
+        <main class="feed-center">
+            <div class="create-post-container">
+                <div class="user-mini-avatar"></div>
+                <div class="post-input-wrapper">
+                    <input type="text" placeholder="Publica Aqui....">
+                    <span class="media-icon">⛶</span>
+                </div>
+            </div>
+
+            <div class="sort-container">
+                <div class="sort-dropdown">
+                    <input type="checkbox" id="sort-toggle" class="dropdown-check">
+                    <label for="sort-toggle" class="sort-label"> ↘ Ordenar Por</label>
+                    <div class="dropdown-content-sub sort-menu">
+                        <a href="#">Mas recientes</a>
+                        <a href="#">Mas antiguos</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Listado de Posts -->
+            <div class="post-list">
+                <!-- Post 1 (Texto) -->
+                <article class="post-card">
+                    <div class="post-header">
+                        <div class="post-author">
+                            <div class="author-circle"></div>
+                            <span class="author-name">TheDarkMoon7456</span>
+                        </div>
+                        <span class="report-flag">⚐ </span>
+                    </div>
+                    <div class="post-body">
+                        <h3>¿Alguien sabe si mi GTX 1050 puede correr Cyberpunk 2077 en ultra?</h3>
+                        <p>He visto vídeos dispares y quiero asegurarme antes de comprarlo. Tengo un i5 y 16GB de RAM. ¿Alguna sugerencia sobre rendimiento?</p>
+                    </div>
+                    <div class="post-footer">
+                        <button class="footer-btn">🤍 892 Likes</button>
+                        <button class="footer-btn">💬 100 Comentarios</button>
+                        <button class="footer-btn">🔗</button>
+                    </div>
+                </article>
+
+                <!-- Post 2 (Con Imagen) -->
+                <article class="post-card">
+                    <div class="post-header">
+                        <div class="post-author">
+                            <div class="author-circle"></div>
+                            <span class="author-name">TheDarkMoon7456</span>
+                        </div>
+                        <span class="report-flag">⚐ </span>
+                    </div>
+                    <div class="post-body">
+                        <h3>¿Alguien sabe cómo arreglar mi PC? Se queda en pantalla azul (BSOD) constantemente y no arranca.</h3>
+                        <div class="post-image-box">
+                            <img src="/images/pc-bsod.jpg" alt="BSOD">
+                        </div>
+                    </div>
+                    <div class="post-footer">
+                        <button class="footer-btn">🤍 450 Likes</button>
+                        <button class="footer-btn">💬 32 Comentarios</button>
+                        <button class="footer-btn">🔗</button>
+                    </div>
+                </article>
+
+                <!-- Post 3 (Texto corto) -->
+                <article class="post-card">
+                    <div class="post-header"><div class="post-author"><div class="author-circle"></div><span class="author-name">GamerPro</span></div><span class="report-flag">⚐ </span></div>
+                    <div class="post-body"><h3>Recomendación de mouse pad?</h3><p>Busco algo matte que combine con mi setup gris y negro.</p></div>
+                    <div class="post-footer"><button class="footer-btn">🤍 120</button><button class="footer-btn">💬 15</button><button class="footer-btn">🔗</button></div>
+                </article>
+
+                <!-- Post 4 (Texto corto) -->
+                <article class="post-card">
+                    <div class="post-header"><div class="post-author"><div class="author-circle"></div><span class="author-name">Aprendiz_Java</span></div><span class="report-flag">⚐ </span></div>
+                    <div class="post-body"><h3>Duda con el patrón Decorator</h3><p>¿Es mejor usarlo en el simulador de carrera ciclista o herencia simple?</p></div>
+                    <div class="post-footer"><button class="footer-btn">🤍 88</button><button class="footer-btn">💬 10</button><button class="footer-btn">🔗</button></div>
+                </article>
+            </div>
+        </main>
+
+        <!-- SECCIÓN DERECHA: PUBLICIDAD -->
+        <aside class="sidebar-right">
+            <div class="ad-banner">
+                <img src="/images/image_bfb38f99.png" alt="Publicidad">
+            </div>
+            <div class="ad-banner">
+                <img src="/images/image_bfb38f99.png" alt="Publicidad">
+            </div>
+        </aside>
+
+    </div>
+
+</body>
+</html>

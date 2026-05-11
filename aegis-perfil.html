@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AEGIS – Perfil del Vendedor</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Syne:wght@600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/style1.css">  
+<style>
+    /* ── Variables ── */
+    :root {
+      --bg: #f2f2f5;
+      --white: #ffffff;
+      --text-main: #1a1a2e;
+      --text-muted: #7a7a9d;
+      --border: #e4e4ee;
+      --accent-start: #6c47ff;
+      --accent-end: #a855f7;
+      --accent-grad: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+      --hover-bg: rgba(0,0,0,0.06);
+      --positive: #16a34a;
+      --nav-h: 56px;
+      --font-ui: sans-serif ;
+      --font-brand: sans-serif ;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-ui);
+      background: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    /* ── Topbar (Figma original style) ── */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--nav-h);
+      background: #1a0a4a;
+      display: flex; align-items: center; padding: 0 24px; gap: 32px;
+    }
+
+    .brand {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--font-brand);
+      font-size: 18px; font-weight: 700;
+      color: #fff; text-decoration: none;
+    }
+    .brand-icon {
+      width: 28px; height: 28px;
+      background: var(--accent-grad);
+      border-radius: 7px;
+      display: grid; place-items: center;
+    }
+    .brand-icon svg { width: 16px; height: 16px; fill: white; }
+
+    .topbar-nav { display: flex; align-items: center; gap: 4px; flex: 1; }
+
+    .topbar-link {
+      font-size: 13.5px; font-weight: 500;
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: background 0.18s, color 0.18s;
+    }
+    .topbar-link:hover { background: var(--hover-bg); color: #fff; }
+    .topbar-link:active { background: var(--accent-grad); color: white; }
+
+    .topbar-link.special {
+      background: linear-gradient(135deg, #6c47ff40, #a855f740);
+      color: #c4b5fd;
+      font-weight: 600;
+    }
+    .topbar-link.special:hover { background: linear-gradient(135deg, #6c47ff60, #a855f760); color: #fff; }
+    .topbar-link.special:active { background: var(--accent-grad); color: white; }
+
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+
+    .search-bar {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 6px 14px;
+    }
+    .search-bar svg { width: 14px; height: 14px; stroke: rgba(255,255,255,0.6); fill: none; }
+    .search-bar input {
+      border: none; background: transparent;
+      font-family: var(--font-ui); font-size: 13px;
+      color: #fff; outline: none; width: 160px;
+    }
+    .search-bar input::placeholder { color: rgba(255,255,255,0.45); }
+
+    .avatar-wrap {
+      display: flex; align-items: center; gap: 6px;
+      cursor: pointer;
+      padding: 4px 8px 4px 4px;
+      border-radius: 20px;
+      transition: background 0.18s;
+    }
+    .avatar-wrap:hover { background: var(--hover-bg); }
+    .avatar-wrap:active { background: var(--accent-grad); }
+    .avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--accent-grad);
+      display: grid; place-items: center;
+      font-size: 13px; font-weight: 600; color: white;
+    }
+    .avatar-caret { width: 12px; height: 12px; stroke: rgba(255,255,255,0.7); fill: none; }
+
+    .icon-btn {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: grid; place-items: center;
+      cursor: pointer; text-decoration: none;
+      color: rgba(255,255,255,0.75);
+      transition: background 0.18s, color 0.18s;
+      position: relative;
+    }
+    .icon-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; }
+    .icon-btn:hover { background: var(--hover-bg); color: #fff; }
+    .icon-btn:active { background: var(--accent-grad); color: white; }
+    .cart-badge {
+      position: absolute; top: 2px; right: 2px;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: #ef4444;
+      font-size: 9px; font-weight: 700; color: white;
+      display: grid; place-items: center;
+    }
+
+    /* ── Page wrapper ── */
+    .page { padding-top: var(--nav-h); }
+
+    .page-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 28px 40px;
+    }
+
+    .profile-card {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .cover {
+      position: relative;
+      height: 180px;
+      background: linear-gradient(135deg, #3b1fa8 0%, #6c47ff 40%, #a855f7 70%, #ec4899 100%);
+      overflow: hidden;
+      border-radius: 16px 16px 0 0;
+    }    .cover-noise {
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+      opacity: 0.3;
+    }
+    .edit-cover-btn {
+      position: absolute; top: 14px; left: 14px;
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(0,0,0,0.35);
+      color: #fff;
+      font-size: 13px; font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      backdrop-filter: blur(4px);
+      transition: background 0.18s;
+    }
+    .edit-cover-btn:hover { background: rgba(0,0,0,0.55); }
+    .edit-cover-btn:active { background: var(--accent-grad); }
+    .edit-cover-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+
+    /* ── Profile row ── */
+    .profile-row {
+      background: var(--white);
+      padding: 0 32px 24px;
+      display: flex; align-items: flex-end; gap: 24px;
+      position: relative;
+    }
+
+    .avatar-profile-wrap {
+      position: relative;
+      margin-top: -52px;
+      flex-shrink: 0;
+    }
+    .avatar-profile {
+      width: 96px; height: 96px; border-radius: 50%;
+      background: #ddd;
+      border: 4px solid var(--white);
+      display: grid; place-items: center;
+      overflow: hidden;
+    }
+    .avatar-profile svg { width: 40px; height: 40px; stroke: #bbb; fill: none; }
+    .avatar-edit-btn {
+      position: absolute; bottom: 4px; right: 4px;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--accent-grad);
+      display: grid; place-items: center;
+      cursor: pointer; text-decoration: none;
+      transition: opacity 0.18s;
+    }
+    .avatar-edit-btn:hover { opacity: 0.85; }
+    .avatar-edit-btn:active { opacity: 1; filter: brightness(1.2); }
+    .avatar-edit-btn svg { width: 13px; height: 13px; stroke: white; fill: none; }
+
+    .profile-info { flex: 1; padding-bottom: 2px; }
+    .profile-name {
+      font-family: var(--font-brand);
+      font-size: 20px; font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .profile-handle {
+      font-size: 13px; color: var(--text-muted);
+    }
+
+    /* Badges row */
+    .badges-row {
+      display: flex; gap: 16px; align-items: center;
+      padding-bottom: 2px;
+    }
+    .badge-item {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      padding: 14px 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      min-width: 100px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.18s, border-color 0.18s;
+    }
+    .badge-item:hover { background: var(--hover-bg); border-color: #c4b5fd; }
+    .badge-item:active { background: linear-gradient(135deg, #6c47ff12, #a855f712); border-color: var(--accent-start); }
+
+    .badge-icon {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--accent-grad);
+      display: grid; place-items: center;
+    }
+    .badge-icon svg { width: 20px; height: 20px; stroke: white; fill: none; }
+    .badge-icon.gold { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+    .badge-icon.star-outline {
+      background: transparent;
+      border: 2px solid var(--border);
+    }
+    .badge-icon.star-outline svg { stroke: #f59e0b; }
+
+    .badge-label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-align: center; }
+    .badge-sub { font-size: 11px; color: var(--text-muted); }
+    .badge-rating {
+      font-family: var(--font-brand);
+      font-size: 20px; font-weight: 700;
+      color: var(--text-main);
+    }
+    .stars { color: #f59e0b; font-size: 12px; letter-spacing: 1px; }
+
+    /* ── Content ── */
+    .content {
+      padding: 24px 0 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* ── Left column ── */
+    .left-col { display: flex; flex-direction: column; gap: 20px; }
+
+    .info-card {
+      background: var(--white);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 22px 24px;
+    }
+
+    .info-section-title {
+      font-family: var(--font-brand);
+      font-size: 16px; font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .info-desc {
+      font-size: 13.5px; color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .info-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .info-row-label { font-weight: 600; color: var(--text-muted); }
+    .info-row-value { color: var(--text-main); font-weight: 500; }
+
+    .chip {
+      display: inline-flex; align-items: center;
+      background: linear-gradient(135deg, #6c47ff18, #a855f718);
+      color: var(--accent-start);
+      font-size: 12px; font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid #c4b5fd55;
+    }
+
+    /* Publications card */
+    .pub-card {
+      background: var(--white);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .pub-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .pub-header-title {
+      font-family: var(--font-brand);
+      font-size: 16px; font-weight: 700;
+    }
+
+    /* Sort btn */
+    .sort-btn {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 500;
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      text-decoration: none;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+    }
+    .sort-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+    .sort-btn:hover { background: var(--hover-bg); color: var(--text-main); border-color: #c4b5fd; }
+    .sort-btn:active { background: var(--accent-grad); color: white; border-color: transparent; }
+
+    .pub-item {
+      display: flex; gap: 14px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none; color: inherit;
+      transition: background 0.18s;
+    }
+    .pub-item:last-child { border-bottom: none; }
+    .pub-item:hover { background: var(--hover-bg); }
+    .pub-item:active { background: linear-gradient(135deg, #6c47ff08, #a855f708); }
+
+    .pub-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      display: grid; place-items: center;
+      flex-shrink: 0;
+    }
+    .pub-avatar svg { width: 18px; height: 18px; stroke: var(--text-muted); fill: none; }
+
+    .pub-content { flex: 1; }
+    .pub-author { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+    .pub-text { font-size: 13px; color: var(--text-muted); line-height: 1.55; margin-bottom: 10px; }
+    .pub-actions {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .pub-action {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 12.5px; color: var(--text-muted);
+      text-decoration: none;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: background 0.18s, color 0.18s;
+    }
+    .pub-action svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+    .pub-action:hover { background: var(--hover-bg); color: var(--text-main); }
+    .pub-action:active { background: var(--accent-grad); color: white; }
+    .pub-action-flag {
+      margin-left: auto;
+      padding: 4px 8px; border-radius: 6px;
+      text-decoration: none; color: var(--text-muted);
+      transition: background 0.18s, color 0.18s;
+    }
+    .pub-action-flag svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+    .pub-action-flag:hover { background: #fee2e2; color: #ef4444; }
+    .pub-action-flag:active { background: #ef4444; color: white; }
+
+    /* ── Right column: products ── */
+    .right-col { display: flex; flex-direction: column; gap: 20px; }
+
+    .products-header {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .products-title {
+      font-family: var(--font-brand);
+      font-size: 18px; font-weight: 700;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .product-card {
+      background: var(--white);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.18s, border-color 0.18s, transform 0.18s, box-shadow 0.18s;
+      display: flex; flex-direction: column;
+    }
+    .product-card:hover {
+      border-color: #c4b5fd;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(108,71,255,0.1);
+    }
+    .product-card:active {
+      background: linear-gradient(135deg, #6c47ff08, #a855f708);
+      transform: translateY(0);
+    }
+
+    .product-img {
+      width: 100%; aspect-ratio: 1;
+      background: #e8e8f0;
+      display: grid; place-items: center;
+      overflow: hidden;
+    }
+    .product-img img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .product-img-placeholder {
+      width: 36px; height: 36px;
+    }
+    .product-img-placeholder svg { width: 100%; height: 100%; stroke: #bbb; fill: none; }
+
+    .product-info {
+      padding: 8px 10px;
+      flex: 1; display: flex; flex-direction: column; gap: 2px;
+    }
+    .product-name {
+      font-size: 11px; font-weight: 600; line-height: 1.35;
+      color: var(--text-main);
+    }
+    .product-price {
+      font-size: 12px; font-weight: 700;
+      color: var(--accent-start);
+    }
+    .product-price-old {
+      font-size: 10px; color: var(--text-muted);
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Topbar (Figma original) ── -->
+<header class="topbar">
+  <a href="#" class="brand">
+    <span class="brand-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z"/></svg>
+    </span>
+    AEGIS
+  </a>
+
+  <nav class="nav-links">
+                <a href="/Publicar.html">Publicar Producto</a>
+                <a href="#">Mi Punto Fisico</a>
+                <a href="/index.html">Puntos Verificados</a>
+                <a href="/Foro.html">Foro</a>
+            </nav>
+  <div class="topbar-right">
+    <div class="search-bar">
+      <svg viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" placeholder="Busca tu producto aquí..."/>
+    </div>
+
+    <a href="#" class="avatar-wrap">
+      <div class="avatar">A</div>
+      <svg class="avatar-caret" viewBox="0 0 24 24" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </a>
+
+    <a href="#" class="icon-btn">
+      <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span class="cart-badge">3</span>
+    </a>
+  </div>
+</header>
+
+<div class="page">
+  <div class="page-inner">
+
+  <!-- ── Cover + Profile card ── -->
+  <div class="profile-card">
+
+  <!-- ── Cover ── -->
+  <div class="cover">
+    <div class="cover-noise"></div>
+    <a href="#" class="edit-cover-btn">
+      <svg viewBox="0 0 24 24" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Editar Portada
+    </a>
+  </div>
+
+  <!-- ── Profile row ── -->
+  <div class="profile-row">
+    <div class="avatar-profile-wrap">
+      <div class="avatar-profile">
+        <svg viewBox="0 0 24 24" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <a href="#" class="avatar-edit-btn">
+        <svg viewBox="0 0 24 24" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </a>
+    </div>
+
+    <div class="profile-info">
+      <div class="profile-name">Luis Alejandro Montenegro Ojeda</div>
+      <div class="profile-handle">apdo</div>
+    </div>
+
+    <!-- Badges -->
+    <div class="badges-row">
+      <a href="#" class="badge-item">
+        <span class="badge-icon">
+          <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7z"/></svg>
+        </span>
+        <span class="badge-label">Nivel de Servicio</span>
+        <span class="badge-sub">Plataforma</span>
+      </a>
+
+      <a href="#" class="badge-item">
+        <span class="badge-icon gold">
+          <svg viewBox="0 0 24 24" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </span>
+        <span class="badge-label">Vendedor Estrella</span>
+        <span class="badge-sub">Nivel 3</span>
+      </a>
+
+      <a href="#" class="badge-item">
+        <span class="badge-icon star-outline">
+          <svg viewBox="0 0 24 24" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </span>
+        <div class="badge-rating">4.7</div>
+        <div class="stars">★★★★½</div>
+        <span class="badge-label">Reseñas</span>
+      </a>
+    </div>
+  </div>
+  </div><!-- end profile-card -->
+
+  <!-- ── Content ── -->
+  <div class="content">
+
+    <!-- LEFT -->
+    <div class="left-col">
+
+      <!-- Info card -->
+      <div class="info-card">
+        <div class="info-section-title">Descripcion</div>
+        <div class="info-desc">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          Phasellus tempor elementum justo finibus tempus.
+        </div>
+
+        <div class="info-row">
+          <span class="info-row-label">Lugar de residencia</span>
+          <span class="info-row-value">Popayán, Cauca</span>
+        </div>
+        <div class="info-row">
+          <span class="info-row-label">Fecha de nacimiento</span>
+          <span class="info-row-value">29 de marzo del 2008</span>
+        </div>
+        <div class="info-row">
+          <span class="info-row-label">Fecha de registro de cuenta</span>
+          <span class="info-row-value">30/04/2026</span>
+        </div>
+        <div class="info-row">
+          <span class="info-row-label">Productos más vendidos</span>
+          <span class="chip">Tarjetas Gráficas</span>
+        </div>
+      </div>
+
+      <!-- Publications -->
+      <div class="pub-card">
+        <div class="pub-header">
+          <span class="pub-header-title">Publicaciones</span>
+          <a href="#" class="sort-btn">
+            Ordenar Por
+            <svg viewBox="0 0 24 24" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </a>
+        </div>
+
+        <!-- Post 1 -->
+        <a href="#" class="pub-item">
+          <div class="pub-avatar">
+            <svg viewBox="0 0 24 24" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            
+          </div>
+              <div class="pub-author">TheDarkMoon7456</div>
+          <div class="pub-content">
+
+            <div class="pub-text">
+              ¿Alguien sabe si mi GTX 1050 puede correr Cyberpunk 2077 en ultra?<br>
+              He visto videos dispares y quiero asegurarme antes de comprarlo.<br>
+              Tengo un i5 y 16GB de RAM.<br>
+              ¿Alguna sugerencia sobre rendimiento?
+            </div>
+            <div class="pub-actions">
+              <a href="#" class="pub-action">
+                <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                892 Likes
+              </a>
+              <a href="#" class="pub-action">
+                <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                100 Comentarios
+              </a>
+              <a href="#" class="pub-action">
+                <svg viewBox="0 0 24 24" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              </a>
+              <a href="#" class="pub-action-flag">
+                <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+              </a>
+            </div>
+          </div>
+        </a>
+
+        <!-- Post 2 -->
+        <a href="#" class="pub-item">
+          <div class="pub-avatar">
+            <svg viewBox="0 0 24 24" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          </div>
+              <div class="pub-author">TheDarkMoon7456</div>
+          <div class="pub-content">
+
+            <div class="pub-text">
+              ¿Recomiendan algún monitor 1440p por menos de $2M COP?<br>
+              Busco algo con buen tiempo de respuesta para gaming.
+            </div>
+            <div class="pub-actions">
+              <a href="#" class="pub-action">
+                <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                344 Likes
+              </a>
+              <a href="#" class="pub-action">
+                <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                58 Comentarios
+              </a>
+              <a href="#" class="pub-action">
+                <svg viewBox="0 0 24 24" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              </a>
+              <a href="#" class="pub-action-flag">
+                <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+              </a>
+            </div>
+          </div>
+        </a>
+
+      </div><!-- end pub-card -->
+    </div><!-- end left-col -->
+
+    <!-- RIGHT -->
+    <div class="right-col">
+      <div class="products-header">
+        <span class="products-title">Productos del Vendedor</span>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <a href="#" class="sort-btn">
+            Ordenar por
+            <svg viewBox="0 0 24 24" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </a>
+          <a href="#" class="sort-btn" style="padding:6px 10px;">
+            <svg viewBox="0 0 24 24" stroke-width="2" style="width:16px;height:16px;stroke:currentColor;fill:none;"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="products-grid">
+        <!-- Product cards -->
+        <a href="#" class="product-card">
+          <div class="product-img">
+            <div class="product-img-placeholder">
+              <svg viewBox="0 0 24 24" stroke-width="1"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Celular Xiaomi 13 Pro 12GB+256GB</div>
+            <div class="product-price">$1'900.999</div>
+            <div class="product-price-old">$2'100.000</div>
+          </div>
+        </a>
+
+        <a href="#" class="product-card">
+          <div class="product-img">
+            <div class="product-img-placeholder">
+              <svg viewBox="0 0 24 24" stroke-width="1"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Celular Xiaomi 13 Pro 12GB+256GB</div>
+            <div class="product-price">$1'900.999</div>
+            <div class="product-price-old">$2'100.000</div>
+          </div>
+        </a>
+
+        <a href="#" class="product-card">
+          <div class="product-img">
+            <div class="product-img-placeholder">
+              <svg viewBox="0 0 24 24" stroke-width="1"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Celular Xiaomi 13 Pro 12GB+256GB</div>
+            <div class="product-price">$1'900.999</div>
+            <div class="product-price-old">$2'100.000</div>
+          </div>
+        </a>
+
+        <a href="#" class="product-card">
+          <div class="product-img">
+            <div class="product-img-placeholder">
+              <svg viewBox="0 0 24 24" stroke-width="1"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Celular Xiaomi 13 Pro 12GB+256GB</div>
+            <div class="product-price">$1'900.999</div>
+            <div class="product-price-old">$2'100.000</div>
+          </div>
+        </a>
+
+        <a href="#" class="product-card">
+          <div class="product-img">
+            <div class="product-img-placeholder">
+              <svg viewBox="0 0 24 24" stroke-width="1"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Celular Xiaomi 13 Pro 12GB+256GB</div>
+            <div class="product-price">$1'900.999</div>
+            <div class="product-price-old">$2'100.000</div>
+          </div>
+        </a>
+
+      </div><!-- end products-grid -->
+    </div><!-- end right-col -->
+
+  </div><!-- end content -->
+  </div><!-- end page-inner -->
+</div><!-- end page -->
+
+</body>
+</html>

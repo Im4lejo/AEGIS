@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEGIS - Publicación</title>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-content">
+            <a href="/pag_productos.html">
+            <div class="logo">AEGIS</div>
+            </a>
+            <nav class="nav-links">
+                <a href="/Publicar.html">Publicar Producto</a>
+                <a href="#">Mi Punto Fisico</a>
+                <a href="/index.html">Puntos Verificados</a>
+                <a href="/Foro.html">Foro</a>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Busca tu producto aqui...">
+                <button class="search-icon">🔍︎</button>
+            </div>
+            <div class="user-area">
+                
+                <div class="profile-dropdown">
+                    <input type="checkbox" id="profile-toggle" class="dropdown-check">
+                    
+                    <label for="profile-toggle" class="dropdown-overlay"></label>
+                        <label for="profile-toggle" class="profile-label">
+                        <img src="/images/images.jfif" alt="Perfil" class="avatar">
+                
+                    </label>
+                    <div class="dropdown-content profile-menu">
+                        <a href="/aegis-perfil.html">Ajustes</a>
+                        <a href="/aegis-perfil.html">Mi perfil</a>
+                        <a href="aegis-dashboard.html">Mis ventas</a>
+                        <a href="#">Cerrar sesion</a>
+                    </div>
+                <img src="/images/icons8-carrito-de-compras-48.png" alt="Carrito" class="cart-icon">
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Barra de título y botón publicar -->
+        <div class="publish-header-bar">
+            <div class="back-title">
+                <button class="btn-back" onclick="history.back()">←</button>
+                <h1>Publicación..</h1>
+            </div>
+            <button class="btn-submit-publish">Publicar</button>
+        </div>
+
+        <section class="publish-form-card">
+            <div class="form-row">
+                <!-- 1. Imágenes -->
+               <div class="form-col images-upload">
+    <h2>1. Imagenes</h2>
+    <div class="upload-container">
+        <!-- El label actúa como el disparador del explorador -->
+        <label class="main-photo-picker">
+            <input type="file" accept="image/*" style="display: none;">
+            <span class="icon-camera">[ ◉¯]</span>
+            <p>Añadir Foto Principal</p>
+        </label>
+
+        <div class="side-photo-grid">
+            <label class="small-holder">
+                <input type="file" accept="image/*" style="display: none;">
+                +
+            </label>
+            <label class="small-holder">
+                <input type="file" accept="image/*" style="display: none;">
+                +
+            </label>
+            <label class="small-holder">
+                <input type="file" accept="image/*" style="display: none;">
+                +
+            </label>
+            <label class="small-holder">
+                <input type="file" accept="image/*" style="display: none;">
+                +
+            </label>
+        </div>
+    </div>
+</div>
+
+                <!-- 2. Información Básica -->
+                <div class="form-col">
+                    <h2>2 .Informacion Basica</h2>
+                    <div class="input-field">
+                        <label>Titulo del Anuncio</label>
+                        <input type="text" class="capsule-input">
+                    </div>
+                    <div class="input-field">
+                        <label>Categoria</label>
+                        <input type="text" class="capsule-input">
+                    </div>
+                    <div class="triple-row">
+                        <div class="input-field">
+                            <label>Marca</label>
+                            <input type="text" class="capsule-input">
+                        </div>
+                        <div class="input-field">
+                            <label>Modelo</label>
+                            <input type="text" class="capsule-input">
+                        </div>
+                        <div class="input-field">
+                            <label>Estado</label>
+                            <input type="text" class="capsule-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Detalles del Intercambio -->
+        <section class="publish-form-card">
+            <h2>3. Detalles del Intercambio</h2>
+            <div class="form-row">
+                <div class="input-field flex-1">
+                    <label>Precio Referencial</label>
+                    <input type="text" placeholder="COP 0.00" class="capsule-input gray-input">
+                </div>
+                <div class="input-field flex-1">
+                    <label>Stock Disponibles</label>
+                    <input type="number" placeholder="0" class="capsule-input gray-input">
+                </div>
+            </div>
+            <div class="input-field">
+                <label>Descripción (Opcional)</label>
+                <textarea placeholder="Especificaciones opcionales..." class="capsule-input gray-input"></textarea>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

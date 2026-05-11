@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aegis - Puntos Verificados</title>
+    <!-- Enlace al archivo CSS externo -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Barra de Navegación Superior -->
+    <header class="navbar">
+        <div class="logo-container">
+            <img src="imagenes/escudo aegis.png" alt="Logo Aegis" class="logo-img">
+            <span class="logo-text">AEGIS</span>
+        </div>
+            <nav class="nav-links">
+                <a href="/Publicar.html">Publicar Producto</a>
+                <a href="#">Mi Punto Fisico</a>
+                <a href="/index.html">Puntos Verificados</a>
+                <a href="/Foro.html">Foro</a>
+            </nav>
+        <div class="search-bar">
+            <input type="text" placeholder="Busca tu producto aqui...">
+            <!-- Icono de lupa simple -->
+            <span class="search-icon">&#128269;</span> 
+        </div>
+        <div class="user-actions">
+            <div class="user-profile">
+                <img src="https://via.placeholder.com/40" alt="Usuario" class="user-avatar">
+                <span class="arrow-down">&#9662;</span>
+            </div>
+            <!-- Icono de carrito de compras simple -->
+            <span class="cart-icon">&#128722;</span>
+        </div>
+    </header>
+
+    <!-- Sección Principal del Contenido -->
+    <main class="content">
+        
+        <!-- Tarjeta Principal de Información del Punto Físico -->
+        <div class="punto-fisico-card">
+            
+            <!-- Encabezado de la Tarjeta con Fondo Azul -->
+            <div class="card-header">
+                <h2>Puntos Fisicos Verificados</h2>
+            </div>
+
+            <!-- Contenido del Punto Físico (Mapa + Detalles) -->
+            <div class="card-body">
+                
+                <!-- Columna Izquierda: Sección del Mapa -->
+                <div class="map-section">
+                    <img src="imagenes/imagenes.jpg" alt="Mapa de Popayán" class="map-image">
+                    <!-- Botón "Mostrar Ruta" superpuesto -->
+                    <button class="btn-ruta">&#x21e8; Mostrar Ruta</button>
+                    <!-- Etiqueta de "Tiempo estimado" superpuesta -->
+                    <div class="tiempo-estimado">Tiempo estimado: 10 min</div>
+                </div>
+
+                <!-- Columna Derecha: Detalles del Punto -->
+                <div class="details-section">
+                    
+                    <!-- Información de Texto -->
+                    <div class="text-details">
+                        <h3 class="store-name">TeachHub Center</h3>
+                        <p class="address">Av. Principal 123, Local 4</p>
+                        <p class="schedule"><strong>Horario:</strong> Lunes a Viernes,<br>9:00 AM - 6:00 PM</p>
+                    </div>
+
+                    <!-- Lista de Servicios/Iconos -->
+                    <ul class="services-list">
+                        <li>
+                            <!-- Icono de Auto -->
+                            <span class="service-icon">&#128663;</span>
+                            <span class="service-text">Estacionamiento Disponible</span>
+                        </li>
+                        <li>
+                            <!-- Icono de Wi-Fi -->
+                            <span class="service-icon">&#128246;</span>
+                            <span class="service-text">Conexion Wi-Fi gratuita</span>
+                        </li>
+                        <li>
+                            <!-- Icono de Estrella -->
+                            <span class="service-icon">&#11088;</span>
+                            <span class="service-text">Atencion Personalizada</span>
+                        </li>
+                    </ul>
+
+                    <!-- Botón de Acción -->
+                    <button class="btn-agendar">AGENDAR CITA</button>
+                </div>
+
+            </div> <!-- fin card-body -->
+        </div> <!-- fin punto-fisico-card -->
+
+        <!-- Tarjeta de Mensaje de Seguridad (Debajo de la principal) -->
+        <div class="security-card">
+            <div class="security-icon-container">
+                <!-- Icono de escudo azul -->
+                <span class="security-icon">&#128737;</span>
+            </div>
+            <div class="security-text-container">
+                <p class="security-title">Encuentro Seguro en un punto verificado</p>
+                <p class="security-subtitle">Transacciones Protegidas</p>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+</html>

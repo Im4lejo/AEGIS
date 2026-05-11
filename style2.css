@@ -1,0 +1,285 @@
+/* CODIGOS ENTREGADOS POR EL USUARIO - SIN MODIFICACIONES */
+:root {
+    --bg-dark: #0A1931;
+    --purple: #945CF0;
+    --pink: #E00AA0;
+    --rounded-font: 'M PLUS Rounded 1c', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 10px; 
+}
+
+.main-header {
+    background-color: var(--bg-dark);
+    color: white;
+    padding: 15px 0;
+}
+
+.header-content {
+    max-width: 1440px;
+    padding: 0 40px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-family: var(--rounded-font);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--purple);
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 14px;
+}
+
+.search-bar {
+    position: relative;
+    width: 336px;
+    height: 40px;
+}
+
+.search-bar input {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    border: none;
+    padding: 0 15px;
+}
+
+.search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #888;
+}
+
+.cart-icon {
+    width: 30px;
+    height: 30px;
+    filter: invert(0);
+    cursor: pointer;
+    margin-left: 30px;
+}
+
+.dropdown-check {
+     display: none; }
+
+.user-area {
+    display: flex;
+     align-items: center; 
+     gap: 10px;
+     }
+.avatar { 
+    width: 40px;
+     height: 40px; 
+     border-radius: 50%;
+      border: 2px solid #ce039b;
+       cursor: pointer; }
+
+.profile-dropdown, .category-dropdown {
+     position: relative; 
+     align-items: center;
+     display: inline-flex;}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    width: 180px;
+    z-index: 1000;
+    border: 2px solid;
+    border-image: linear-gradient(to right, var(--purple), var(--pink)) 1;
+   left: 0;
+}
+
+.dropdown-check:checked ~ .dropdown-content { 
+    display: flex; flex-direction: column; }
+
+.dropdown-content a {
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+}
+.dropdown-content a:hover{
+    background-color: #aaa8a8;
+}
+.dropdown-overlay{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: transparent;
+    z-index: 900;
+}
+.dropdown-check:checked ~ .dropdown-overlay{
+    display: block;
+}
+
+/* ESTILOS NUEVOS PARA LA PÁGINA DE PUBLICACIÓN */
+
+.publish-main {
+    padding: 40px 60px;
+}
+
+.publish-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 30px 40px;
+}
+
+.back-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.btn-back {
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: #333;
+}
+
+h1 { font-size: 24px; }
+
+.btn-submit-publish {
+    background-color: #0A1931; /* Azul solicitado */
+    color: white;
+    padding: 10px 40px;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.publish-form-card {
+    background: white;
+    border-radius: 10px;
+    padding: 30px;
+    margin: 0 40px 20px 40px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.form-row {
+    display: flex;
+    gap: 40px;
+}
+
+.form-col {
+    flex: 1;
+}
+
+h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+/* Sección 1: Imágenes */
+.upload-container {
+    display: flex;
+    gap: 15px;
+}
+
+.main-photo-picker {
+    flex: 2;
+    height: 180px;
+    background-color: #E6F7F5; /* Cian claro */
+    border: 2px solid #9AD9D1;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.icon-camera { font-size: 40px; }
+.main-photo-picker p { font-weight: bold; font-size: 14px; margin-top: 5px; }
+
+.side-photo-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.small-holder {
+    background-color: #E0E0E0;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #555;
+    cursor: pointer;
+}
+
+/* Inputs */
+.input-field {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-field label {
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.capsule-input {
+    border: 1px solid #CCC;
+    border-radius: 20px;
+    padding: 10px 15px;
+    outline: none;
+}
+
+.gray-input {
+    background-color: #E0E0E0;
+    border: none;
+}
+
+.triple-row {
+    display: flex;
+    gap: 15px;
+}
+
+.triple-row .input-field { flex: 1; }
+.flex-1 { flex: 1; }
+
+textarea {
+    height: 80px;
+    resize: none;
+}
+a{
+    text-decoration: none;
+}
