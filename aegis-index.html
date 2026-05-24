@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AEGIS – Página principal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --bg-card: #1b13253f;
+      --bg-card-border: #26163546;
+      --text-white: #f0f4ff;
+      --text-muted: #8892a4;
+      --text-dim: #5a6478;
+      --accent-green: #3e60cf;
+      --accent-green-dim: rgba(142, 62, 207, 0.15);
+      --accent-blue: #4f8ef7;
+      --accent-purple: #a66fff;
+      --accent-orange: #f5a623;
+      --accent-teal: #2d30d4;
+      --pill-bg: rgba(77, 62, 207, 0.12);
+      --pill-border: rgba(113, 62, 207, 0.3);
+      --btn-started-bg: #763ecf;
+      --btn-started-hover: #763ecf;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(rgb(6, 11, 48),rgb(5, 1, 26),rgb(16, 0, 34));
+      color: var(--text-white);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── HERO LANDING SECTION ─── */
+    .hero-landing {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 80px 64px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+      .hero-landing-2 {
+    margin-left: 20vh;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+
+    }
+
+
+    .hero-landing-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      position: relative; z-index: 1;
+    }
+
+    /* Left */
+    .hero-left { display: flex; flex-direction: column; gap: 28px; }
+
+    .hero-pill-top {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(137, 62, 207, 0.08);
+      border: 1px solid rgba(62, 65, 207, 0.22);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 12px; font-weight: 600;
+      color: var(--accent-green);
+      width: fit-content;
+    }
+    .hero-pill-top-2 {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #111936;
+      border-radius: 12px;
+      padding: 5px 14px;
+      font-size: 12px; font-weight: 600;
+      color: var(--accent-green);
+      width: fit-content;
+    }
+    .hero-pill-top svg { width: 13px; height: 13px; stroke: var(--accent-green); fill: none; }
+    .hero-pill-top-2 svg { width: 30px; height: 50px; stroke: var(--accent-green); fill: none; }
+    .hero-headline {
+      font-size: clamp(36px, 4.5vw, 58px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--text-white);
+    }
+    .hero-headline .green { color: var(--accent-green); }
+
+    .hero-body {
+      font-size: 14.5px; font-weight: 400;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 380px;
+    }
+
+    .hero-ctas {
+      display: flex; align-items: center; gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .cta-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--accent-green);
+      color: #0a0f1a;
+      font-size: 14px; font-weight: 700;
+      padding: 12px 24px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.18s, box-shadow 0.18s, transform 0.15s;
+    }
+    .cta-primary:hover {
+      background: #4834b8;
+      box-shadow: 0 6px 24px rgba(89, 62, 207, 0.35);
+    }
+    .cta-primary:active { transform: scale(0.97); background: #5e2aa3; }
+    .cta-primary svg { width: 16px; height: 16px; stroke: #0a0f1a; fill: none; transition: transform 0.18s; }
+    .cta-primary:hover svg { transform: translateX(3px); }
+
+    .cta-secondary {
+      display: inline-flex; align-items: center; gap: 10px;
+      color: var(--text-muted);
+      font-size: 14px; font-weight: 600;
+      padding: 12px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+    }
+    .cta-secondary:hover { background: rgba(255,255,255,0.06); color: var(--text-white); border-color: rgba(255,255,255,0.18); }
+    .cta-secondary:active { background: rgba(62, 65, 207, 0.1); color: var(--accent-green); border-color: var(--accent-green); }
+    .cta-secondary svg { width: 14px; height: 14px; stroke: currentColor; fill: none; transition: transform 0.18s; }
+    .cta-secondary:hover svg { transform: translateX(3px); }
+
+    /* Right: product card */
+    .hero-right {
+      display: flex; justify-content: center; align-items: center;
+      position: relative;
+      
+    }
+
+    .product-showcase {
+      background: rgba(22,27,36,0.9);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      overflow: hidden;
+      width: 300%;
+      max-width: 900px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+      margin-left: 10vh;
+    }
+    .div-low{
+  justify-content: center;
+align-items: center;
+position: relative;
+padding-top: 2vh;
+    }
+
+    /* AEGIS Verified badge */
+    .verified-badge {
+      position: fixed; top: 14px; right: 14px; z-index: 2;
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(106, 62, 207, 0.15);
+      border: 1px solid rgba(62, 130, 207, 0.35);
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 11px; font-weight: 700;
+      color: var(--accent-green);
+margin-bottom: 1vh;
+    }
+    .verified-badge svg { width: 11px; height: 11px; stroke: var(--accent-green); fill: none; }
+
+    .showcase-img {
+      width: 100%;
+      
+      background: linear-gradient(135deg, #1a2540 0%, #2a3a5c 50%, #1e2d4a 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .showcase-info {
+      padding: 18px 20px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+
+    .showcase-title-row {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+    }
+    .showcase-name {
+      font-size: 14px; font-weight: 700; color: var(--text-white);
+      line-height: 1.3;
+    }
+    .showcase-sub {
+      font-size: 11.5px; color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .showcase-price {
+      font-size: 16px; font-weight: 800;
+      color: var(--accent-green);
+      white-space: nowrap;
+    }
+
+    .showcase-tags {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .showcase-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+    .tag-qr {
+      background: rgba(79,142,247,0.12);
+      color: var(--accent-blue);
+      border: 1px solid rgba(79,142,247,0.2);
+    }
+    .tag-secure {
+      background: rgba(62, 65, 207, 0.1);
+      color: var(--accent-green);
+      border: 1px solid rgba(62, 125, 207, 0.2);
+    }
+    .showcase-tag svg { width: 10px; height: 10px; stroke: currentColor; fill: none; }
+
+
+
+
+
+  
+    .hero-left  { animation: heroFadeLeft  0.6s 0.1s ease both; }
+    .hero-right { animation: heroFadeRight 0.6s 0.2s ease both; }
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 56px;
+      background: rgba(11, 5, 32, 0.322);
+      border-bottom: 1px solid rgba(37, 14, 58, 0.329);
+      display: flex; align-items: center;
+      padding: 0 32px;
+      gap: 0;
+    }
+
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+      margin-right: auto;
+    }
+    .nav-brand-icon {
+      width: 30px; height: 30px; border-radius: 8px;
+      background: linear-gradient(135deg, #b23ecf, #2dd4bf);
+      display: grid; place-items: center;
+    }
+   /*quitar */.nav-brand-icon svg { width: 16px; height: 16px; fill: #0d1117; }
+    .nav-brand-name {
+      font-size: 16px; font-weight: 700;
+      color: var(--text-white); letter-spacing: 0.01em;
+    }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 4px;
+      margin-right: 24px;
+    }
+    .nav-link {
+      font-size: 13.5px; font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 7px;
+      transition: background 0.18s, color 0.18s;
+    }
+    .nav-link:hover { background: rgba(255, 255, 255, 0.06); color: var(--text-white); }
+    .nav-link:active { background: rgba(118, 62, 207, 0.15); color: var(--accent-green); }
+
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+
+    .btn-signin {
+      font-size: 13.5px; font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 6px 16px;
+      border-radius: 7px;
+      transition: background 0.18s, color 0.18s;
+    }
+    .btn-signin:hover { background: rgba(255, 255, 255, 0.06); color: var(--text-white); }
+    .btn-signin:active { color: var(--accent-green); }
+
+    .btn-started {
+      font-size: 13.5px; font-weight: 600;
+      color: #ffffff;
+      background: var(--btn-started-bg);
+      text-decoration: none;
+      padding: 7px 18px;
+      border-radius: 8px;
+      transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+      box-shadow: 0 0 0 0 rgba(62,207,142,0);
+    }
+    .btn-started:hover {
+      background: var(--btn-started-hover);
+      box-shadow: 0 4px 16px rgba(72, 62, 207, 0.3);
+    }
+    .btn-started:active {
+      transform: scale(0.97);
+      background: #2a36a3;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding-top: 20vh;
+      padding-bottom: 20vh;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle radial glow behind text */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 20vh; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 300px;
+      pointer-events: none;
+    }
+
+    /* Proceso Stripe pill */
+    .pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 12.5px; font-weight: 600;
+      color: var(--accent-green);
+      margin-bottom: 32px;
+      letter-spacing: 0.01em;
+      animation: fadeDown 0.5s ease both;
+    }
+    .pill-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 6px var(--accent-green);
+    }
+
+    .hero-title {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 800;
+      color: var(--text-white);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 5vh;
+      animation: fadeDown 0.5s 0.1s ease both;
+    }
+      .hero-title-2 {
+      font-size: clamp(24px, 5vw, 40px);
+      font-weight: 500;
+      color: var(--text-white);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin: 5vh;
+      animation: fadeDown 0.5s 0.1s ease both;
+    }
+    .hero-sub {
+      font-size: 16px; font-weight: 400;
+      color: var(--text-muted);
+      max-width: 420px;
+      line-height: 1.65;
+      animation: fadeDown 0.5s 0.2s ease both;
+      margin-bottom: 8vh;
+    }
+
+    /* ─── STEPS GRID ─── */
+    .steps {
+      max-width: 1080px;
+      margin: 0 auto;
+margin-bottom: 15 vh;
+      padding: 0 32px 80px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5vh;
+    }
+    .steps-2 {
+    margin-left: 15vh;
+    margin-bottom: 5vh;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+    align-items: normal;
+    }
+
+    .step-card {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      display: flex; flex-direction: column; gap: 14px;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      animation: fadeUp 0.5s ease both;
+    }
+    .step-card-2 {
+
+      justify-content: center;
+      align-items: center;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 16px;
+      padding: 28px 24px;
+max-width: 50vh;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      display: flex;  gap: 14px;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .step-card:hover {
+      border-color: rgba(41, 7, 104, 0.15);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+    }
+/*
+    .step-card:active {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    }
+*/
+    /* ===== FOOTER ===== */
+
+.footer{
+    position: relative;
+    background: linear-gradient(
+        to bottom,
+        #060816,
+        #0B1023,
+        #111936
+    );
+
+    overflow: hidden;
+    color: white;
+    padding-top: 180px;
+}
+
+/* ===== EFECTO PINCELADAS ===== */
+
+.footer-wave{
+    position: absolute;
+    top: -20px;
+    left: 0;
+
+    width: 100%;
+    height: 220px;
+
+    background:
+    radial-gradient(circle at 10% 60%, #4A8FF0 0%, transparent 30%),
+    radial-gradient(circle at 30% 50%, #272BF0 0%, transparent 28%),
+    radial-gradient(circle at 50% 70%, #945CF0 0%, transparent 32%),
+    radial-gradient(circle at 70% 45%, #4A8FF0 0%, transparent 30%),
+    radial-gradient(circle at 90% 60%, #945CF0 0%, transparent 30%);
+
+    filter: blur(45px);
+    opacity: .9;
+}
+
+/* ===== CONTENIDO ===== */
+
+.footer-container{
+    position: relative;
+    z-index: 2;
+
+    max-width: 1400px;
+    margin: auto;
+
+    padding: 0 80px 70px;
+
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+}
+
+/* ===== LOGO ===== */
+
+.footer-brand h2{
+    font-size: 2rem;
+    margin-bottom: 20px;
+
+    background: linear-gradient(
+        to right,
+        #4A8FF0,
+        #945CF0
+    );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.footer-brand p{
+    color: #94A3B8;
+    line-height: 1.8;
+    max-width: 350px;
+}
+
+/* ===== LINKS ===== */
+
+.footer-links h3{
+    margin-bottom: 20px;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.footer-links a{
+    display: block;
+
+    margin-bottom: 14px;
+
+    color: #94A3B8;
+    text-decoration: none;
+
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #4A8FF0;
+    transform: translateX(5px);
+}
+
+/* ===== FOOTER BOTTOM ===== */
+
+.footer-bottom{
+    border-top: 1px solid rgba(255,255,255,.08);
+
+    padding: 25px;
+
+    text-align: center;
+
+    color: #64748B;
+
+    position: relative;
+    z-index: 2;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media(max-width: 1000px){
+
+    .footer-container{
+        grid-template-columns: 1fr 1fr;
+        padding: 0 40px 70px;
+    }
+
+}
+
+@media(max-width: 700px){
+
+    .footer-container{
+        grid-template-columns: 1fr;
+    }
+
+    .footer{
+        padding-top: 140px;
+    }
+
+}
+    /* Step number watermark */
+    .step-num {
+      position: absolute; top: 16px; right: 20px;
+      font-size: 40px; font-weight: 800;
+      color: rgba(255,255,255,0.04);
+      line-height: 1;
+      user-select: none;
+      letter-spacing: -0.02em;
+    }
+
+    /* Icon circle */
+    .step-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: grid; place-items: center;
+      flex-shrink: 0;
+    }
+    .step-icon svg { width: 20px; height: 20px; }
+
+    .icon-blue   { background: rgba(79,142,247,0.15); }
+    .icon-blue svg   { stroke: var(--accent-blue); fill: none; }
+    .icon-purple { background: rgba(124,111,255,0.15); }
+    .icon-purple svg { stroke: var(--accent-purple); fill: none; }
+    .icon-green  { background: rgba(62,207,142,0.15); }
+    .icon-green svg  { stroke: var(--accent-green); fill: none; }
+    .icon-orange { background: rgba(245,166,35,0.15); }
+    .icon-orange svg { stroke: var(--accent-orange); fill: none; }
+
+    .step-title {
+      font-size: 14px; font-weight: 700;
+      color: var(--text-white);
+      line-height: 1.3;
+    }
+
+    .step-desc {
+      font-size: 12.5px; font-weight: 400;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     HERO LANDING SECTION
+══════════════════════════════════ -->
+<section class="hero-landing">
+  <div class="glow-dot glow-dot-1"></div>
+  <div class="glow-dot glow-dot-2"></div>
+
+  <div class="hero-landing-inner">
+
+    <!-- LEFT -->
+    <div class="hero-left">
+
+      <div class="hero-pill-top">
+        <svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        +63.000 verificaciones en toda Colombia
+      </div>
+
+      <h1 class="hero-headline">
+        Comercio<br>
+        Tecnológico<br>
+        Seguro. <span class="green">Validacion<br>
+        Mundial</span> REAL.
+      </h1>
+
+      <p class="hero-body">
+        AEGIS combina reputación digital, autenticación mediante código QR y
+        puntos de encuentro físicos para eliminar el fraude en las
+        transacciones tecnológicas. Compre y venda con total confianza.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="#" class="cta-primary">
+          Get Started Free
+          <svg viewBox="0 0 24 24" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="#" class="cta-secondary">
+          Explora Productos
+          <svg viewBox="0 0 24 24" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: product card -->
+    <div class="hero-right">
+      <div class="product-showcase">
+        <div class="showcase-img">
+            <img src="images/cauca-department-map-administrative-division-of-colombia-vector.jpg" alt="img ilustración" style="border-radius: 12px; background: transparent;" width="100%">
+        </div>
+
+        
+
+
+      </div>
+
+    </div>
+
+  </div>
+      
+</section>
+
+<!-- ── Navbar ── -->
+<nav class="nav">
+  <a href="#" class="nav-brand">
+    <span class="nav-brand-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z"/></svg>
+    </span>
+    <span class="nav-brand-name">AEGIS</span>
+  </a>
+
+  <div class="nav-links">
+    <a href="#" class="nav-link">¿Como funciona?</a>
+    <a href="#" class="nav-link">Características</a>
+    <a href="#" class="nav-link">Precios</a>
+  </div>
+
+  <div class="nav-actions">
+    <a href="#" class="btn-signin">Sign In</a>
+    <a href="#" class="btn-started">Get Started</a>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+
+
+  <h1 class="hero-title">Como Funciona AEGIS</h1>
+
+  <p class="hero-sub">
+    Un proceso seguro y paso a paso que protege tanto a compradores
+    como a vendedoras.
+  </p>
+
+
+<!-- ── Steps ── -->
+<div class="steps">
+
+  <!-- 01 -->
+  <div class="step-card">
+    <span class="step-num">01</span>
+    <span class="step-icon icon-blue">
+      <svg viewBox="0 0 24 24" stroke-width="1.8">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+    </span>
+    <div class="step-title">Perfil Verificado</div>
+    <div class="step-desc">Regístrate y completa la verificación de AEGIS. Tu reputación comienza aquí.</div>
+  </div>
+
+  <!-- 02 -->
+  <div class="step-card">
+    <span class="step-num">02</span>
+    <span class="step-icon icon-purple">
+      <svg viewBox="0 0 24 24" stroke-width="1.8">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+    </span>
+    <div class="step-title">Browse &amp; Negotiate</div>
+    <div class="step-desc">Find verified products, chat with sellers, and agree on price safely.</div>
+  </div>
+
+  <!-- 03 -->
+  <div class="step-card">
+    <span class="step-num">03</span>
+    <span class="step-icon icon-green">
+      <svg viewBox="0 0 24 24" stroke-width="1.8">
+        <rect x="3" y="3" width="18" height="18" rx="3"/>
+        <path d="M9 12l2 2 4-4"/>
+      </svg>
+    </span>
+    <div class="step-title">Generate Secure QR</div>
+    <div class="step-desc">Create an encrypted QR code for your transaction. Valid only at agreed meeting point.</div>
+  </div>
+
+  <!-- 04 -->
+  <div class="step-card">
+    <span class="step-num">04</span>
+    <span class="step-icon icon-orange">
+      <svg viewBox="0 0 24 24" stroke-width="1.8">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        <path d="M9 12l2 2 4-4"/>
+      </svg>
+    </span>
+    <div class="step-title">Meet &amp; Confirm</div>
+    <div class="step-desc">Scan QR at AEGIS Hub. Confirm the transaction. Both parties protected.</div>
+  </div>
+
+</div>
+</section>
+<section class="hero-landing-2">
+
+  <h1 class="hero-title-2">Seguridad integrada en cada transacción</h1>
+
+
+
+
+
+
+
+<!-- ── Steps ── -->
+<div class="steps-2">
+
+  <!-- 01 -->
+  <div class="step-card-2">
+      <div class="hero-pill-top-2">
+        <svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+<div class="div-low">
+  <div class="step-title">Verificación de Identidad Digital</div>
+     
+    <div class="step-desc">La verificación KYC multicapa genera un índice de confianza inquebrantable.</div>
+</div>
+    
+  </div>
+
+  <!-- 02 -->
+  <div class="step-card-2">
+<svg width="120" height="120" viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg">
+  <rect width="88" height="88" rx="18" fill="#0f1a2a" stroke="#1a2d45" stroke-width="1"/>
+  <rect x="18" y="18" width="20" height="20" rx="3" fill="none" stroke="#4f8ef7" stroke-width="2"/>
+  <rect x="22" y="22" width="12" height="12" rx="1.5" fill="#4f8ef7"/>
+  <rect x="50" y="18" width="20" height="20" rx="3" fill="none" stroke="#4f8ef7" stroke-width="2"/>
+  <rect x="54" y="22" width="12" height="12" rx="1.5" fill="#4f8ef7"/>
+  <rect x="18" y="50" width="20" height="20" rx="3" fill="none" stroke="#4f8ef7" stroke-width="2"/>
+  <rect x="22" y="54" width="12" height="12" rx="1.5" fill="#4f8ef7"/>
+  <rect x="50" y="50" width="8" height="8" rx="1" fill="#4f8ef7"/>
+  <rect x="60" y="50" width="8" height="8" rx="1" fill="#4f8ef7" fill-opacity="0.5"/>
+  <rect x="50" y="60" width="8" height="8" rx="1" fill="#4f8ef7" fill-opacity="0.5"/>
+  <rect x="60" y="60" width="8" height="8" rx="1" fill="#4f8ef7"/>
+  <rect x="18" y="41" width="14" height="3" rx="1" fill="#4f8ef7" fill-opacity="0.6"/>
+  <rect x="35" y="41" width="7" height="3" rx="1" fill="#4f8ef7" fill-opacity="0.6"/>
+  <rect x="44" y="41" width="10" height="3" rx="1" fill="#4f8ef7" fill-opacity="0.4"/>
+</svg>
+<div>
+  <div class="step-title">Codigos QR Encriptados</div>
+     
+    <div class="step-desc">Los códigos QR con tiempo limitado y vinculados a una ubicación evitan el fraude en el momento de la entrega.</div>
+</div>
+    
+  </div>
+
+  <!-- 03 -->
+  <div class="step-card-2">
+<svg width="120" height="120" viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg">
+  <rect width="88" height="88" rx="18" fill="#1a0f2a" stroke="#2d1a45" stroke-width="1"/>
+  <path d="M44,16 C58,16 68,26 68,38 C68,52 44,72 44,72 C44,72 20,52 20,38 C20,26 30,16 44,16 Z" fill="#7c6fff" fill-opacity="0.15" stroke="#7c6fff" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="44" cy="38" r="10" fill="none" stroke="#7c6fff" stroke-width="2"/>
+  <circle cx="44" cy="38" r="4" fill="#7c6fff"/>
+</svg>
+<div>
+  <div class="step-title">Puntos Fisicos de Encuentro</div>
+     
+    <div class="step-desc">Centros certificados por AEGIS con personal capacitado y vigilancia para intercambios seguros.</div>
+</div>
+    
+  </div>
+
+  <!-- 04 -->
+  <div class="step-card-2">
+<svg width="120" height="120" viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg">
+  <rect width="88" height="88" rx="18" fill="#2a1a0a" stroke="#453018" stroke-width="1"/>
+  <polygon points="44,14 51,34 72,34 56,47 62,68 44,56 26,68 32,47 16,34 37,34" fill="#f5a623" fill-opacity="0.15" stroke="#f5a623" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="44" cy="44" r="12" fill="none" stroke="#f5a623" stroke-width="1.8"/>
+  <polygon points="44,36 46,42 52,42 47,46 49,52 44,48 39,52 41,46 36,42 42,42" fill="#f5a623"/>
+</svg>
+<div>
+  <div class="step-title">Puntuacion de Reputación</div>
+     
+    <div class="step-desc">El historial de transacciones inmutable y las revisiones entre pares fomentan la rendición de cuentas.</div>
+</div>
+    
+  </div>
+</div>
+
+</div>
+</body>
+</html>
