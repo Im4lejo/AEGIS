@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "aegis-movil",
+    "slug": "aegis-movil",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "package": "com.anonymous.aegismovil"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "react-native-bootsplash",
+        {
+          "assetsOutput": "assets/bootsplash",
+          "logo": "./assets/bootsplash/logoAegis.png",
+          "logoWidth": 100,
+          "background": "#232323",
+          "darkBackground": "#000000",
+          "darkLogo": "./assets/bootsplash/logo-dark.png"
+        }
+      ]
+    ]
+  }
+}
