@@ -1,0 +1,4 @@
+import PageFrame from '../../shared/PageFrame'
+import { route } from '../../shared/presentation'
+
+export default function Usuarios({ usuarios = [], auth }) { return <PageFrame title="AEGIS | Usuarios" auth={auth}><main className="table-page"><h1>Usuarios</h1><table><thead><tr><th>Nombre</th><th>Email</th><th>Rol</th><th>Estado</th><th>Acción</th></tr></thead><tbody>{usuarios.map((user) => <tr key={user.id}><td>{user.nombre} {user.apellido}</td><td>{user.email}</td><td>{user.rol}</td><td>{user.estado}</td><td><form method="POST" action={route('/admin/usuario/estado')}><input type="hidden" name="id" value={user.id} /><select name="estado" defaultValue={user.estado}><option>activo</option><option>suspendido</option><option>baneado</option></select><button type="submit">Guardar</button></form></td></tr>)}</tbody></table></main></PageFrame> }

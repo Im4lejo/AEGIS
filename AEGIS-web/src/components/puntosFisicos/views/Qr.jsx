@@ -1,0 +1,3 @@
+import PageFrame from '../../shared/PageFrame'
+
+export default function Qr({ encuentro = {}, qr, auth }) { return <PageFrame title="AEGIS | Código QR" auth={auth}><main className="form-page"><h1>Código QR de encuentro</h1><section className="info-card"><p><strong>Producto:</strong> {encuentro.producto_titulo}</p><p><strong>Punto:</strong> {encuentro.punto_nombre}</p><p><strong>Fecha:</strong> {encuentro.fecha_encuentro} {encuentro.hora_encuentro}</p><p><strong>Estado encuentro:</strong> {encuentro.estado}</p>{qr ? <div><strong>Token QR</strong><code>{qr.codigo}</code><p>Estado QR: {qr.estado}</p></div> : <p>Este encuentro aún no tiene QR activo. Debe estar confirmado.</p>}</section></main></PageFrame> }

@@ -1,0 +1,4 @@
+import PageFrame from '../../shared/PageFrame'
+import { route } from '../../shared/presentation'
+
+export default function Configuracion({ punto = {}, auth }) { return <PageFrame title="AEGIS | Configuración de punto físico" auth={auth}><main className="form-page"><h1>Configuración de punto físico</h1><form method="POST" action={route('/puntos-fisicos/guardar')}><label>Nombre del punto<input name="nombre" required defaultValue={punto.nombre || ''} /></label><label>Dirección<input name="direccion" required defaultValue={punto.direccion || ''} /></label><label>Ciudad<input name="ciudad" required defaultValue={punto.ciudad || ''} /></label><label>Teléfono<input name="telefono" defaultValue={punto.telefono || ''} /></label><label>Descripción<textarea name="descripcion" defaultValue={punto.descripcion || ''} /></label><button type="submit">Guardar</button></form></main></PageFrame> }

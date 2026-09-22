@@ -1,0 +1,4 @@
+import PageFrame from '../../shared/PageFrame'
+import { formatCurrency, route } from '../../shared/presentation'
+
+export default function MisProductos({ productos = [], auth }) { return <PageFrame title="AEGIS | Mis productos" auth={auth}><main className="table-page"><div className="page-heading"><h1>Mis productos</h1><a href={route('/productos/crear')}>Nuevo</a></div><table><thead><tr><th>Título</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>{productos.map((product) => <tr key={product.id}><td>{product.titulo}</td><td>${formatCurrency(product.precio)}</td><td>{product.estado_publicacion}</td><td><a href={route(`/productos/detalle?id=${product.id}`)}>Ver</a><form method="POST" action={route('/productos/eliminar')}><input type="hidden" name="id" value={product.id} /><button type="submit">Eliminar</button></form></td></tr>)}</tbody></table></main></PageFrame> }

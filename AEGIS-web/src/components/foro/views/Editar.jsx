@@ -1,0 +1,4 @@
+import PageFrame from '../../shared/PageFrame'
+import { route } from '../../shared/presentation'
+
+export default function Editar({ publicacion = {}, auth, error }) { return <PageFrame title="AEGIS | Editar Publicación" auth={auth}><main className="forum-edit-page">{error && <div className="auth-alert auth-alert--error">{error}</div>}<h1>Editar publicación</h1><form method="POST" action={route('/foro/actualizar')} className="edit-card"><input type="hidden" name="id" value={publicacion.id || 0} /><label htmlFor="titulo">Título del anuncio</label><input id="titulo" name="titulo" defaultValue={publicacion.titulo || ''} required /><label htmlFor="contenido">Contenido</label><textarea id="contenido" name="contenido" defaultValue={publicacion.contenido || ''} required /><button type="submit">Guardar cambios</button></form></main></PageFrame> }

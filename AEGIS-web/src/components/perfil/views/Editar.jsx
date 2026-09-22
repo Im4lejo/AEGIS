@@ -1,0 +1,4 @@
+import PageFrame from '../../shared/PageFrame'
+import { route } from '../../shared/presentation'
+
+export default function Editar({ usuario = {}, auth }) { return <PageFrame title="AEGIS | Editar perfil" auth={auth}><main className="form-page"><h1>Editar perfil</h1><form method="POST" action={route('/perfil/editar')}><label>Nombre<input value={usuario.nombre || ''} disabled readOnly /></label><label>Email<input value={usuario.email || ''} disabled readOnly /></label><label>Descripción<textarea name="descripcion" defaultValue={usuario.descripcion || ''} /></label><label>Ciudad<input name="ciudad" defaultValue={usuario.ciudad || ''} /></label><label>Teléfono<input name="telefono" defaultValue={usuario.telefono || ''} /></label><button type="submit">Guardar</button></form></main></PageFrame> }

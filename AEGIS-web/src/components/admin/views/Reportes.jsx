@@ -1,0 +1,4 @@
+import PageFrame from '../../shared/PageFrame'
+import { route } from '../../shared/presentation'
+
+export default function Reportes({ reportes = [], auth }) { return <PageFrame title="AEGIS | Reportes" auth={auth}><main className="table-page"><h1>Reportes</h1><table><thead><tr><th>Reporta</th><th>Reportado</th><th>Motivo</th><th>Estado</th><th>Acción</th></tr></thead><tbody>{reportes.map((report) => <tr key={report.id}><td>{report.reporta_nombre}</td><td>{report.reportado_nombre}</td><td>{report.motivo}</td><td>{report.estado}</td><td><form method="POST" action={route('/admin/reporte/estado')}><input type="hidden" name="id" value={report.id} /><select name="estado" defaultValue={report.estado}><option>pendiente</option><option>revisado</option><option>resuelto</option></select><button type="submit">Guardar</button></form></td></tr>)}</tbody></table></main></PageFrame> }
