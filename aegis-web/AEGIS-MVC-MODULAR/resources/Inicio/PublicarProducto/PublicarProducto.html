@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEGIS | Publicar Producto</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/pages/publish.css">
+
+    <!-- FUENTE -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- ICONOS -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+</head>
+
+<body>
+
+    <!-- =========================
+     NAVBAR SUPERIOR
+    ========================== -->
+<header class="navbar">
+
+    <!-- LOGO -->
+    <div class="nav-left">
+
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <span>AEGIS</span>
+        </div>
+
+        <!-- LINKS -->
+        <nav class="nav-links">
+            <a href="/Inicio/Home/Home.html">Inicio</a>
+            <a href="/Inicio/PuntoFisico/Dashboard.html">Mi Punto Físico</a>
+            <a href="#">Puntos Verificados</a>
+            <a href="/Inicio/Foro/Foro.html">Foro</a>
+        </nav>
+
+    </div>
+
+    <!-- DERECHA -->
+    <div class="nav-right">
+
+        <!-- SEARCH -->
+        <div class="search-box">
+            <input type="text" placeholder="Busca tu producto aquí...">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+
+        <!-- PERFIL CON MENÚ DESPLEGABLE -->
+        <div class="profile-dropdown">
+
+            <button class="profile-btn">
+                <img src="https://i.pravatar.cc/100" alt="Usuario">
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+
+            <div class="dropdown-menu">
+                <a href="/Inicio/Perfil/Perfil.html">
+                    <i class="fa-regular fa-user"></i>
+                    Mi perfil
+                </a>
+
+                <a href="#">
+                    <i class="fa-solid fa-gear"></i>
+                    Opciones
+                </a>
+
+                <a href="#" class="logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Salir
+                </a>
+            </div>
+
+        </div>
+
+        <!-- CARRITO -->
+        <div class="cart">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="cart-count">7</span>
+        </div>
+
+    </div>
+
+</header>
+
+    <!-- ======================================================
+         CONTENIDO PRINCIPAL
+    ======================================================= -->
+
+    <main class="main-content">
+
+        <!-- HEADER PUBLICACION -->
+        <div class="publish-header">
+
+            <div class="publish-title">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                <a href="/Inicio/Index/index.html"><h1>Publicación</h1></a>
+
+            </div>
+
+            <button class="publish-btn">
+                Publicar
+            </button>
+
+        </div>
+
+        <!-- ======================================================
+             CARD SUPERIOR
+        ======================================================= -->
+
+        <section class="publish-card">
+
+            <!-- IMAGENES -->
+            <div class="images-section">
+
+                <h2>1. Imágenes</h2>
+
+                <div class="images-container">
+
+                    <!-- FOTO PRINCIPAL -->
+                    <div class="main-image">
+
+                        <i class="fa-regular fa-image"></i>
+
+                        <span>Añadir Foto Principal</span>
+
+                    </div>
+
+                    <!-- MINIATURAS -->
+                    <div class="small-images">
+
+                        <div class="small-box">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+
+                        <div class="small-box">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+
+                        <div class="small-box">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+
+                        <div class="small-box">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- INFORMACION -->
+            <div class="info-section">
+
+                <h2>2. Información Básica</h2>
+
+                <!-- INPUT -->
+                <div class="input-group">
+
+                    <label>Título del anuncio</label>
+
+                    <input type="text">
+
+                </div>
+
+                <!-- INPUT -->
+                <div class="input-group">
+
+                    <label>Categoría</label>
+
+                    <input type="text">
+
+                </div>
+
+                <!-- GRID -->
+                <div class="triple-grid">
+
+                    <div class="input-group">
+
+                        <label>Marca</label>
+
+                        <input type="text">
+
+                    </div>
+
+                    <div class="input-group">
+
+                        <label>Modelo</label>
+
+                        <input type="text">
+
+                    </div>
+
+                    <div class="input-group">
+
+                        <label>Estado</label>
+
+                        <input type="text">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ======================================================
+             CARD DETALLES
+        ======================================================= -->
+
+        <section class="details-card">
+
+            <h2>3. Detalles del Intercambio</h2>
+
+            <!-- GRID -->
+            <div class="double-grid">
+
+                <div class="input-group">
+
+                    <label>Precio Referencial</label>
+
+                    <input type="text" placeholder="COP 0.00">
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>Stock Disponibles</label>
+
+                    <input type="number" placeholder="0">
+
+                </div>
+
+            </div>
+
+            <!-- DESCRIPCION -->
+            <div class="input-group">
+
+                <label>Descripción (Opcional)</label>
+
+                <textarea placeholder="Especificaciones opcionales..."></textarea>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

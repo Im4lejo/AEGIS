@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AEGIS - Dashboard Punto Físico</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/pages/dashboard.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="navbar">
+
+    <div class="nav-left">
+
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <span>AEGIS</span>
+        </div>
+
+        <nav class="nav-links">
+            <a href="/Inicio/Home/Home.html">Inicio</a>
+            <a href="/Inicio/PublicarProducto/PublicarProducto.html">Publicar Producto</a>
+            <a href="#">Puntos Verificados</a>
+            <a href="/Inicio/Foro/Foro.html">Foro</a>
+        </nav>
+
+    </div>
+
+    <div class="nav-right">
+
+        <div class="search-box">
+            <input type="text" placeholder="Busca tu producto aquí...">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+
+        <div class="profile-dropdown">
+
+            <button class="profile-btn">
+                <img src="https://i.pravatar.cc/100" alt="Usuario">
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+
+            <div class="dropdown-menu">
+                <a href="/Inicio/Perfil/Perfil.html">
+                    <i class="fa-regular fa-user"></i>
+                    Mi perfil
+                </a>
+
+                <a href="#">
+                    <i class="fa-solid fa-gear"></i>
+                    Opciones
+                </a>
+
+                <a href="#" class="logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Salir
+                </a>
+            </div>
+
+        </div>
+
+        <div class="cart">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="cart-count">7</span>
+        </div>
+
+    </div>
+    </header>
+
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+
+            <div class="physical-point-card">
+
+                <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=1200&auto=format&fit=crop" alt="Punto Físico">
+
+                <div class="physical-point-info">
+                    <h3>TechZone Medellín</h3>
+                    <div class="point-status">
+                        <span class="status-dot"></span>
+                        <p>Punto activo</p>
+                    </div>
+                    <div class="rating">
+                        <i class="fa-solid fa-star"></i>
+                        <span>4.8</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="#" class="active">
+                    <i class="fa-solid fa-house"></i>
+                    Inicio
+                </a>
+                <a href="#">
+                    <i class="fa-regular fa-calendar"></i>
+                    Encuentros
+                </a>
+                <a href="#">
+                    <i class="fa-solid fa-qrcode"></i>
+                    Escanear QR
+                </a>
+                <a href="#">
+                    <i class="fa-regular fa-clock"></i>
+                    Historial
+                </a>
+                <a href="#">
+                    <i class="fa-solid fa-store"></i>
+                    Mi Punto Físico
+                </a>
+                <a href="#">
+                    <i class="fa-regular fa-star"></i>
+                    Reputación
+                </a>
+                <a href="#">
+                    <i class="fa-solid fa-gear"></i>
+                    Configuración
+                </a>
+            </nav>
+
+        </aside>
+
+        <main class="main-content">
+
+            <header class="custom-navbar">
+                </header>
+
+            <section class="dashboard-content">
+
+                <div class="dashboard-header">
+                    <div>
+                        <h1>¡Bienvenido, Juan!</h1>
+                        <p>Aquí tienes un resumen de la actividad de tu punto físico.</p>
+                    </div>
+
+                    <div class="date-box">
+                        <i class="fa-regular fa-calendar"></i>
+                        23 de mayo de 2025
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fa-regular fa-calendar"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Encuentros hoy</h4>
+                            <h2>12</h2>
+                            <span class="positive">↑ 20% vs ayer</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <i class="fa-regular fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Citas pendientes</h4>
+                            <h2>4</h2>
+                            <span class="warning">Ver citas</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fa-solid fa-shield"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Confirmadas</h4>
+                            <h2>8</h2>
+                            <span class="positive">↑ 33% vs ayer</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fa-solid fa-flag"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Reportes recientes</h4>
+                            <h2>1</h2>
+                            <span class="purple-text">Ver reportes</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="middle-grid">
+
+                    <div class="meetings-card">
+                        <div class="section-title">
+                            <h3>Próximos encuentros</h3>
+                            <a href="#">Ver todos</a>
+                        </div>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Hora</th>
+                                    <th>Comprador</th>
+                                    <th>Vendedor</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>10:00 AM</td>
+                                    <td>Juan Pérez</td>
+                                    <td>María López</td>
+                                    <td>
+                                        <span class="badge pending">Pendiente</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>11:30 AM</td>
+                                    <td>Carlos Ramírez</td>
+                                    <td>Andrés Silva</td>
+                                    <td>
+                                        <span class="badge pending">Pendiente</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>01:00 PM</td>
+                                    <td>Luis García</td>
+                                    <td>Pedro Martínez</td>
+                                    <td>
+                                        <span class="badge confirmed">Confirmada</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="activity-card">
+                        <div class="section-title">
+                            <h3>Actividad reciente</h3>
+                            <a href="#">Ver todo</a>
+                        </div>
+
+                        <div class="activity-list">
+
+                            <div class="activity-item">
+                                <div class="activity-icon success">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <div>
+                                    <h4>Encuentro confirmado</h4>
+                                    <p>Juan Pérez y María López</p>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-icon blue-bg">
+                                    <i class="fa-solid fa-qrcode"></i>
+                                </div>
+                                <div>
+                                    <h4>QR validado</h4>
+                                    <p>Cita #AEG-7842</p>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-icon orange-bg">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                </div>
+                                <div>
+                                    <h4>Reporte de incidente</h4>
+                                    <p>Cita #AEG-7831</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!-- Reusable navbar component for MVC layouts -->
+<header class="navbar">
+    <div class="nav-left">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <span>AEGIS</span>
+        </div>
+        <nav class="nav-links">
+            <a href="/Inicio/Home/Home.html">Inicio</a>
+            <a href="/Inicio/PublicarProducto/PublicarProducto.html">Publicar Producto</a>
+            <a href="/Inicio/PuntoFisico/Dashboard.html">Mi Punto Físico</a>
+            <a href="#">Puntos Verificados</a>
+            <a href="/Inicio/Foro/Foro.html">Foro</a>
+        </nav>
+    </div>
+    <div class="nav-right">
+        <div class="search-box">
+            <input type="text" placeholder="Busca tu producto aquí...">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+        <div class="profile-dropdown">
+            <button class="profile-btn">
+                <img src="https://i.pravatar.cc/100" alt="Usuario">
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="dropdown-menu">
+                <a href="/Inicio/Perfil/Perfil.html"><i class="fa-regular fa-user"></i> Mi perfil</a>
+                <a href="#"><i class="fa-solid fa-gear"></i> Opciones</a>
+                <a href="#" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Salir</a>
+            </div>
+        </div>
+        <div class="cart">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="cart-count">7</span>
+        </div>
+    </div>
+</header>

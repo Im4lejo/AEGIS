@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEGIS Marketplace</title>
+
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/pages/home.css">
+
+    <!-- FUENTE -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- ICONOS -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+</head>
+
+<body>
+
+<!-- Reusable navbar (global) -->
+<header class="navbar">
+    <div class="nav-left">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <span>AEGIS</span>
+        </div>
+        <nav class="nav-links">
+            <a href="/Inicio/Home/Home.html">Inicio</a>
+            <a href="/Inicio/PublicarProducto/PublicarProducto.html">Publicar Producto</a>
+            <a href="/Inicio/PuntoFisico/Dashboard.html">Mi Punto Físico</a>
+            <a href="#">Puntos Verificados</a>
+            <a href="/Inicio/Foro/Foro.html">Foro</a>
+        </nav>
+    </div>
+    <div class="nav-right">
+        <div class="search-box">
+            <input type="text" placeholder="Busca tu producto aquí...">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+        <div class="profile-dropdown">
+            <button class="profile-btn">
+                <img src="https://i.pravatar.cc/100" alt="Usuario">
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="dropdown-menu">
+                <a href="/Inicio/Perfil/Perfil.html"><i class="fa-regular fa-user"></i> Mi perfil</a>
+                <a href="#"><i class="fa-solid fa-gear"></i> Opciones</a>
+                <a href="#" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Salir</a>
+            </div>
+        </div>
+        <div class="cart">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="cart-count">7</span>
+        </div>
+    </div>
+</header>
+
+<!-- SUBNAV de referencia -->
+<section class="subnav">
+    <a href="#">Categorías <i class="fa-solid fa-chevron-down"></i></a>
+    <a href="#">Ofertas</a>
+    <a href="#">Electrónica</a>
+    <a href="#">Gaming</a>
+    <a href="#">Ropa</a>
+    <a href="#">Accesorios</a>
+    <a href="#">Hogar</a>
+    <a href="#">Coleccionables</a>
+    <a href="#">Vehículos</a>
+</section>
+
+
+<main class="home-container">
+
+    <!-- HERO de referencia -->
+
+    <section class="hero-section">
+
+        <div class="hero-main">
+
+            <div class="hero-badge">Oferta destacada</div>
+
+            <h1>Potencia tu juego <span>al máximo</span></h1>
+
+            <h2>NVIDIA GeForce RTX™ 4070 Ti SUPER</h2>
+
+            <p>Gráficos increíbles, rendimiento superior y la experiencia gaming definitiva.</p>
+
+            <div class="hero-price">
+                <h3>$4.299.000</h3>
+                <span>$5.100.000</span>
+            </div>
+
+            <div class="hero-buttons">
+                <button class="primary-btn">Comprar ahora</button>
+                <button class="secondary-btn">Ver detalles</button>
+            </div>
+
+        </div>
+
+        <div class="hero-side">
+
+            <div class="promo-card orange">
+                <span>Oferta Hot</span>
+                <h3>Portátil HP Victus Gaming</h3>
+                <p>Hasta 50% OFF</p>
+                <button>Ver oferta</button>
+            </div>
+
+            <div class="promo-card blue">
+                <span>Black Friday</span>
+                <h3>Descuentos increíbles</h3>
+                <p>Hasta 70% DTO</p>
+                <button>Ver ofertas</button>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FEATURES -->
+
+    <section class="features">
+
+        <div class="feature-card">
+            <i class="fa-solid fa-shield-halved"></i>
+            <div>
+                <h4>Transacciones Seguras</h4>
+                <p>Compra con confianza</p>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <i class="fa-solid fa-user-check"></i>
+            <div>
+                <h4>Usuarios Verificados</h4>
+                <p>Perfiles con reputación</p>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <i class="fa-solid fa-location-dot"></i>
+            <div>
+                <h4>Puntos Físicos</h4>
+                <p>Encuentros seguros</p>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <i class="fa-solid fa-comments"></i>
+            <div>
+                <h4>Comunidad Activa</h4>
+                <p>Foros y ayuda</p>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- PRODUCTOS DESTACADOS -->
+
+    <section class="products-section">
+
+        <div class="section-header">
+            <h2>Productos Destacados</h2>
+            <a href="#">Ver todos</a>
+        </div>
+
+        <div class="products-grid">
+
+            <div class="product-card">
+                <div class="product-tag">Nuevo</div>
+                <img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?q=80&w=1200&auto=format&fit=crop" alt="">
+                <h3>MacBook Pro M3</h3>
+                <p>Apple</p>
+                <div class="product-bottom">
+                    <span>$9.500.000</span>
+                    <small><i class="fa-solid fa-star"></i> 4.9</small>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-tag green">Popular</div>
+                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop" alt="">
+                <h3>Nike Air Force</h3>
+                <p>Nike</p>
+                <div class="product-bottom">
+                    <span>$450.000</span>
+                    <small><i class="fa-solid fa-star"></i> 4.8</small>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-tag blue">Oferta</div>
+                <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1200&auto=format&fit=crop" alt="">
+                <h3>iPhone 15 Pro</h3>
+                <p>Apple</p>
+                <div class="product-bottom">
+                    <span>$5.900.000</span>
+                    <small><i class="fa-solid fa-star"></i> 4.7</small>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-tag">Nuevo</div>
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop" alt="">
+                <h3>Teclado RGB</h3>
+                <p>Redragon</p>
+                <div class="product-bottom">
+                    <span>$210.000</span>
+                    <small><i class="fa-solid fa-star"></i> 4.6</small>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>

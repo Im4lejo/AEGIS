@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AEGIS Foro</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <link rel="stylesheet" href="../../assets/css/pages/forum.css">
+</head>
+<body>
+
+    <!-- =========================
+     NAVBAR SUPERIOR
+========================== -->
+<header class="navbar">
+
+    <!-- LOGO -->
+    <div class="nav-left">
+
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <span>AEGIS</span>
+        </div>
+
+        <!-- LINKS -->
+        <nav class="nav-links">
+            <a href="/Inicio/Home/Home.html">Inicio</a>
+            <a href="/Inicio/PublicarProducto/PublicarProducto.html">Publicar Producto</a>
+            <a href="/Inicio/PuntoFisico/Dashboard.html">Mi Punto Físico</a>
+            <a href="#">Puntos Verificados</a>
+        </nav>
+
+    </div>
+
+    <!-- DERECHA -->
+    <div class="nav-right">
+
+        <!-- SEARCH -->
+        <div class="search-box">
+            <input type="text" placeholder="Busca tu producto aquí...">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+
+        <!-- PERFIL CON MENÚ DESPLEGABLE -->
+        <div class="profile-dropdown">
+
+            <button class="profile-btn">
+                <img src="https://i.pravatar.cc/100" alt="Usuario">
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+
+            <div class="dropdown-menu">
+                <a href="/Inicio/Perfil/Perfil.html">
+                    <i class="fa-regular fa-user"></i>
+                    Mi perfil
+                </a>
+
+                <a href="#">
+                    <i class="fa-solid fa-gear"></i>
+                    Opciones
+                </a>
+
+                <a href="#" class="logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Salir
+                </a>
+            </div>
+
+        </div>
+
+        <!-- CARRITO -->
+        <div class="cart">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="cart-count">7</span>
+        </div>
+
+    </div>
+
+</header>
+
+    <!-- ======================================================
+         CONTENEDOR PRINCIPAL
+    ====================================================== -->
+    <main class="layout">
+
+        <!-- SIDEBAR IZQUIERDO -->
+        <aside class="sidebar-left">
+            <div class="sidebar-card">
+                <div class="sidebar-search">
+                    <input type="text" placeholder="Buscar conversación">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+
+                <nav class="side-nav">
+                    <a class="active" href="#"><i class="fa-solid fa-house"></i> Principal</a>
+                    <a href="#"><i class="fa-solid fa-arrow-trend-up"></i> Popular</a>
+                </nav>
+
+                <div class="side-section">
+                    <h4>Temas</h4>
+                    <a href="#">Celulares</a>
+                    <a href="#">Computadores</a>
+                    <a href="#">Televisores</a>
+                    <a href="#">Componentes</a>
+                    <a href="#">Gaming</a>
+                    <a href="#">Más</a>
+                </div>
+
+                <div class="side-section">
+                    <a href="#">Reglas del foro</a>
+                    <a href="#">Política de privacidad</a>
+                    <a href="#">Términos y condiciones</a>
+                    <a href="#">Ayuda</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- FEED -->
+        <section class="feed">
+
+            <!-- CREAR PUBLICACIÓN -->
+            <div class="create-post">
+                <img src="https://i.pravatar.cc/100?img=12" alt="Usuario">
+                <input type="text" placeholder="Publica aquí tu pregunta o experiencia...">
+                <button>
+                    <i class="fa-regular fa-image"></i>
+                </button>
+            </div>
+
+            <!-- POST 1 -->
+            <article class="post">
+                <div class="post-header">
+                    <img src="https://i.pravatar.cc/100?img=33" alt="Usuario">
+                    <div>
+                        <h3>TheDarkMoon7456</h3>
+                        <span>Hace 2 horas • Hardware</span>
+                    </div>
+                    <button class="save-btn">
+                        <i class="fa-regular fa-bookmark"></i>
+                    </button>
+                </div>
+
+                <h2>¿Alguien sabe si mi GTX 1050 puede correr Cyberpunk 2077 en ultra?</h2>
+
+                <p>
+                    He visto videos dispares y quiero asegurarme antes de comprarlo.
+                    Tengo un Intel Core i5 y 16 GB de RAM.
+                    ¿Qué rendimiento podría esperar?
+                </p>
+
+                <div class="post-actions">
+                    <button><i class="fa-regular fa-heart"></i> 892</button>
+                    <button><i class="fa-regular fa-comment"></i> 100</button>
+                    <button><i class="fa-solid fa-share-nodes"></i> Compartir</button>
+                </div>
+
+                <div class="comments">
+                    <div class="comment">
+                        <img src="https://i.pravatar.cc/50?img=5" alt="">
+                        <div>
+                            <strong>FPSMaster</strong>
+                            <p>En ultra no será jugable. En bajo a 1080p podrías rondar 30 FPS.</p>
+                        </div>
+                    </div>
+
+                    <div class="comment">
+                        <img src="https://i.pravatar.cc/50?img=18" alt="">
+                        <div>
+                            <strong>Overclocked</strong>
+                            <p>Te recomiendo usar FSR y bajar sombras para una experiencia más fluida.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- POST 2 -->
+            <article class="post">
+                <div class="post-header">
+                    <img src="https://i.pravatar.cc/100?img=22" alt="Usuario">
+                    <div>
+                        <h3>BlueScreenHunter</h3>
+                        <span>Hace 5 horas • Soporte Técnico</span>
+                    </div>
+                    <button class="save-btn">
+                        <i class="fa-regular fa-bookmark"></i>
+                    </button>
+                </div>
+
+                <h2>Mi PC entra en pantalla azul (BSOD) constantemente</h2>
+
+                <p>
+                    El error aparece después de unos minutos jugando.
+                    Ya actualicé drivers y sigue ocurriendo.
+                </p>
+
+                <div class="post-actions">
+                    <button><i class="fa-regular fa-heart"></i> 421</button>
+                    <button><i class="fa-regular fa-comment"></i> 53</button>
+                    <button><i class="fa-solid fa-share-nodes"></i> Compartir</button>
+                </div>
+
+                <div class="comments">
+                    <div class="comment">
+                        <img src="https://i.pravatar.cc/50?img=41" alt="">
+                        <div>
+                            <strong>RamDoctor</strong>
+                            <p>Haz un test con MemTest86. Muchas veces el problema es la RAM.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- POST 3 -->
+            <article class="post">
+                <div class="post-header">
+                    <img src="https://i.pravatar.cc/100?img=47" alt="Usuario">
+                    <div>
+                        <h3>TechBuilder</h3>
+                        <span>Ayer • Armado de PC</span>
+                    </div>
+                    <button class="save-btn">
+                        <i class="fa-regular fa-bookmark"></i>
+                    </button>
+                </div>
+
+                <h2>¿RTX 4060 o RX 7700 XT para 1440p?</h2>
+
+                <p>
+                    Busco la mejor relación precio/rendimiento para gaming competitivo y AAA.
+                </p>
+
+                <div class="post-actions">
+                    <button><i class="fa-regular fa-heart"></i> 637</button>
+                    <button><i class="fa-regular fa-comment"></i> 88</button>
+                    <button><i class="fa-solid fa-share-nodes"></i> Compartir</button>
+                </div>
+
+                <div class="comments">
+                    <div class="comment">
+                        <img src="https://i.pravatar.cc/50?img=8" alt="">
+                        <div>
+                            <strong>GPUWizard</strong>
+                            <p>La 7700 XT ofrece mejor rasterización y más VRAM.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- POST 4 -->
+            <article class="post">
+                <div class="post-header">
+                    <img src="https://i.pravatar.cc/100?img=60" alt="Usuario">
+                    <div>
+                        <h3>MobileGuru</h3>
+                        <span>Hace 1 día • Celulares</span>
+                    </div>
+                    <button class="save-btn">
+                        <i class="fa-regular fa-bookmark"></i>
+                    </button>
+                </div>
+
+                <h2>¿Vale la pena cambiar un Galaxy S21 por un S24?</h2>
+
+                <p>
+                    Uso principalmente cámara, redes sociales y productividad.
+                </p>
+
+                <div class="post-actions">
+                    <button><i class="fa-regular fa-heart"></i> 289</button>
+                    <button><i class="fa-regular fa-comment"></i> 34</button>
+                    <button><i class="fa-solid fa-share-nodes"></i> Compartir</button>
+                </div>
+            </article>
+
+            <!-- POST 5 -->
+            <article class="post">
+                <div class="post-header">
+                    <img src="https://i.pravatar.cc/100?img=68" alt="Usuario">
+                    <div>
+                        <h3>MonitorFan</h3>
+                        <span>Hace 3 días • Monitores</span>
+                    </div>
+                    <button class="save-btn">
+                        <i class="fa-regular fa-bookmark"></i>
+                    </button>
+                </div>
+
+                <h2>Mejores monitores 144Hz por menos de $200</h2>
+
+                <p>
+                    Estoy buscando opciones con buen panel IPS y compatibilidad con FreeSync.
+                </p>
+
+                <div class="post-actions">
+                    <button><i class="fa-regular fa-heart"></i> 512</button>
+                    <button><i class="fa-regular fa-comment"></i> 72</button>
+                    <button><i class="fa-solid fa-share-nodes"></i> Compartir</button>
+                </div>
+            </article>
+        </section>
+
+        <!-- SIDEBAR DERECHO -->
+        <aside class="sidebar-right">
+            <div class="widget">
+                <h3>Tendencias</h3>
+                <ul>
+                    <li>#RTX5070</li>
+                    <li>#Cyberpunk2077</li>
+                    <li>#Ryzen9000</li>
+                    <li>#iPhone17</li>
+                    <li>#Windows12</li>
+                </ul>
+            </div>
+
+            <div class="widget">
+                <h3>Miembros destacados</h3>
+                <div class="member">
+                    <img src="https://i.pravatar.cc/60?img=4" alt="">
+                    <span>TechGuruPro</span>
+                </div>
+                <div class="member">
+                    <img src="https://i.pravatar.cc/60?img=15" alt="">
+                    <span>GPUExpert</span>
+                </div>
+                <div class="member">
+                    <img src="https://i.pravatar.cc/60?img=27" alt="">
+                    <span>MobileReview</span>
+                </div>
+            </div>
+
+            <div class="widget promo">
+                <h3>Oferta Especial</h3>
+                <p>Hasta 50% de descuento en tecnología seleccionada.</p>
+                <button>Comprar ahora</button>
+            </div>
+        </aside>
+    </main>
+
+</body>
+</html>

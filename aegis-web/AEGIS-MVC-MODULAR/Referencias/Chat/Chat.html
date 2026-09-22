@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEGIS - Chat de Producto</title>
+    <link rel="stylesheet" href="/Referencias/Chat/Chat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-left">
+            <div class="logo">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>AEGIS</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#">Publicar Producto</a>
+                <a href="#">Mi Punto Físico</a>
+                <a href="#">Puntos Verificados</a>
+                <a href="#">Foro</a>
+            </nav>
+        </div>
+        <div class="nav-right">
+            <div class="search-bar">
+                <input type="text" placeholder="Busca tu producto aquí...">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <div class="user-actions">
+                <img src="https://i.pravatar.cc/150?img=11" alt="Perfil" class="avatar">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-container">
+        
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fa-regular fa-comments"></i> Mensajes</h2>
+                <i class="fa-regular fa-pen-to-square action-icon"></i>
+            </div>
+            <div class="sidebar-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Buscar conversaciones...">
+                <i class="fa-solid fa-filter action-icon"></i>
+            </div>
+            
+            <div class="chat-list">
+                <div class="chat-item active">
+                    <img src="https://placehold.co/50x50/000/FFF?text=Monitor" alt="Monitor">
+                    <div class="chat-info">
+                        <div class="chat-title-row">
+                            <h4>Monitor Gamer AOC 24" 144Hz</h4>
+                            <span class="time">10:42 AM</span>
+                        </div>
+                        <span class="user-name">AEGIS Store</span>
+                        <div class="chat-preview-row">
+                            <p class="preview">Perfecto, ¿cuándo te vendría bi...</p>
+                            <span class="badge">1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-item">
+                    <img src="https://placehold.co/50x50/FFF/000?text=iPhone" alt="iPhone">
+                    <div class="chat-info">
+                        <div class="chat-title-row">
+                            <h4>iPhone 14 Pro 128GB</h4>
+                            <span class="time">Ayer</span>
+                        </div>
+                        <span class="user-name">Juan Pérez</span>
+                        <div class="chat-preview-row">
+                            <p class="preview">¿Sigue disponible?</p>
+                            <span class="badge">2</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-item">
+                    <img src="https://placehold.co/50x50/333/FFF?text=Audio" alt="Audifonos">
+                    <div class="chat-info">
+                        <div class="chat-title-row">
+                            <h4>Audífonos Sony WH-1000XM5</h4>
+                            <span class="time">Ayer</span>
+                        </div>
+                        <span class="user-name">María González</span>
+                        <div class="chat-preview-row">
+                            <p class="preview">Gracias, ya coordinamos.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-item">
+                    <img src="https://placehold.co/50x50/0055FF/FFF?text=Laptop" alt="Laptop">
+                    <div class="chat-info">
+                        <div class="chat-title-row">
+                            <h4>Laptop HP Pavilion 15</h4>
+                            <span class="time">Martes</span>
+                        </div>
+                        <span class="user-name">Tech Solutions</span>
+                        <div class="chat-preview-row">
+                            <p class="preview">Te comparto la factura.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-item">
+                    <img src="https://placehold.co/50x50/222/FFF?text=Silla" alt="Silla">
+                    <div class="chat-info">
+                        <div class="chat-title-row">
+                            <h4>Silla Ergonómica Premium</h4>
+                            <span class="time">Lunes</span>
+                        </div>
+                        <span class="user-name">Carlos Ramírez</span>
+                        <div class="chat-preview-row">
+                            <p class="preview">Listo, nos vemos entonces.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-footer">
+                <button class="btn-outline-full">Ver todas las conversaciones <i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+        </aside>
+
+        <main class="chat-area">
+            
+            <div class="product-header">
+                <img src="https://placehold.co/60x60/000/FFF?text=Monitor" alt="Monitor AOC">
+                <div class="product-details">
+                    <h3>Monitor Gamer AOC 24" 144Hz</h3>
+                    <p class="price">$199.990</p>
+                    <p class="seller">Publicado por <strong>AEGIS Store</strong> <i class="fa-solid fa-circle-check verify-icon"></i></p>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-outline">Ver producto</button>
+                    <button class="btn-icon"><i class="fa-solid fa-ellipsis-vertical"></i> Más opciones</button>
+                </div>
+            </div>
+
+            <div class="security-banner">
+                <i class="fa-solid fa-shield-halved"></i>
+                <p>Por tu seguridad, mantén todas las conversaciones y pagos dentro de AEGIS.</p>
+            </div>
+
+            <div class="chat-history">
+                <div class="timestamp-divider"><span>Hoy</span></div>
+
+                <div class="message-row outgoing">
+                    <div class="message-content">
+                        <div class="bubble bubble-blue">
+                            Hola, ¿este monitor sigue disponible?
+                        </div>
+                        <span class="msg-time">10:40 AM <i class="fa-solid fa-check-double read-icon"></i></span>
+                    </div>
+                    <img src="https://i.pravatar.cc/150?img=11" alt="Mi perfil" class="msg-avatar">
+                </div>
+
+                <div class="message-row incoming">
+                    <div class="msg-avatar-container">
+                        <div class="shield-avatar"><i class="fa-solid fa-shield-halved"></i></div>
+                    </div>
+                    <div class="message-content">
+                        <div class="bubble bubble-gray">
+                            ¡Hola! Sí, sigue disponible.<br>¿Te gustaría coordinar un encuentro para que lo revises?
+                        </div>
+                        <span class="msg-time">10:41 AM</span>
+                    </div>
+                </div>
+
+                <div class="message-row outgoing">
+                    <div class="message-content">
+                        <div class="bubble bubble-blue">
+                            Sí, claro. ¿Qué días tienes disponible?
+                        </div>
+                        <span class="msg-time">10:41 AM <i class="fa-solid fa-check-double read-icon"></i></span>
+                    </div>
+                    <img src="https://i.pravatar.cc/150?img=11" alt="Mi perfil" class="msg-avatar">
+                </div>
+
+                <div class="message-row incoming">
+                    <div class="msg-avatar-container">
+                        <div class="shield-avatar"><i class="fa-solid fa-shield-halved"></i></div>
+                    </div>
+                    <div class="message-content">
+                        <div class="bubble bubble-gray">
+                            Tengo disponibilidad mañana después de las 4:00 PM o el sábado en la mañana.
+                        </div>
+                        <span class="msg-time">10:42 AM</span>
+                    </div>
+                </div>
+
+                <div class="action-card-container">
+                    <div class="action-card">
+                        <div class="icon-bg"><i class="fa-regular fa-calendar-days"></i></div>
+                        <div class="action-details">
+                            <h4>Configurar encuentro</h4>
+                            <p>Coordina fecha, hora y lugar para revisar el producto.</p>
+                            <button class="btn-primary">Configurar encuentro</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-paperclip attachment-icon"></i>
+                    <input type="text" placeholder="Escribe tu mensaje...">
+                    <button class="btn-send"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+</body>
+</html>

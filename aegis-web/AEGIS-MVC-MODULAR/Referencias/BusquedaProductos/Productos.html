@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEGIS - Plataforma de Productos</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="/Referencias/BusquedaProductos/Productos.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo-section">
+            <span class="material-symbols-outlined logo-icon">shield</span>
+            <span class="logo-text">AEGIS</span>
+        </div>
+        
+        <ul class="nav-links">
+            <li><a href="/Referencias/PublicarProducto/PublicarProducto.html">Publicar Producto</a></li>
+            <li><a href="/Referencias/Dashboard-PF/Dashboard.html">Mi Punto Físico</a></li>
+            <li><a href="/Referencias/PuntosVerificados/PuntosVerificados.html">Puntos Verificados</a></li>
+            <li><a href="/Referencias/Foro/Foro.html">Foro</a></li>
+            <li>
+                <a href="#" class="nav-notification">
+                    <span class="material-symbols-outlined">notifications</span>
+                    Notificaciones
+                </a>
+            </li>
+        </ul>
+
+        <div class="user-section">
+            <div class="user-profile">
+                <div class="avatar"></div>
+                <span class="material-symbols-outlined arrow-icon">expand_more</span>
+            </div>
+            <div class="cart-icon">
+                <span class="material-symbols-outlined">shopping_cart</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-container">
+        
+        <aside class="filters-sidebar">
+            <h2 class="filters-title">Filtros</h2>
+            
+            <div class="filter-group">
+                <div class="filter-label-row">
+                    <span>Solo verificados</span>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <span class="sub-label">Vendedores AEGIS certificados</span>
+            </div>
+
+            <div class="filter-group">
+                <div class="filter-label-row">
+                    <span>Precio Max.</span>
+                    <span class="price-badge">5'000.000</span>
+                </div>
+                <input type="range" class="price-slider" min="0" max="5000000" value="5000000">
+                <div class="range-limits">
+                    <span>0 COP</span>
+                    <span>5'000.000 COP</span>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <span class="filter-heading">Estado</span>
+                <div class="radio-options">
+                    <label class="radio-label">
+                        <input type="radio" name="estado" checked>
+                        <span class="custom-radio"></span> Todo
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="estado">
+                        <span class="custom-radio"></span> Nuevo
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="estado">
+                        <span class="custom-radio"></span> Casi Nuevo
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="estado">
+                        <span class="custom-radio"></span> Usado - En buen estado
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="estado">
+                        <span class="custom-radio"></span> Usado - Con detalles
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="estado">
+                        <span class="custom-radio"></span> Usado - En mal estado
+                    </label>
+                </div>
+            </div>
+        </aside>
+
+        <section class="content-section">
+            
+            <div class="search-utilities-bar">
+                <span class="results-count">3 Productos Encontrados</span>
+                
+                <div class="search-bar-wrapper">
+                    <span class="material-symbols-outlined search-icon">search</span>
+                    <input type="text" placeholder="Busca tu producto aquí..." class="main-search-input">
+                    <button class="filter-action-btn">
+                        <span class="material-symbols-outlined">tune</span>
+                        Filtrar
+                    </button>
+                </div>
+
+                <div class="view-controls">
+                    <select class="sort-select">
+                        <option>Most Relevant</option>
+                        <option>Precio: Menor a Mayor</option>
+                        <option>Precio: Mayor a Menor</option>
+                    </select>
+                    <div class="layout-toggle-buttons">
+                        <button class="grid-btn active">
+                            <span class="material-symbols-outlined">grid_view</span>
+                        </button>
+                        <button class="list-btn">
+                            <span class="material-symbols-outlined">view_list</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="products-list-container">
+                
+                <article class="product-card">
+                    <div class="product-image-container">
+                        <div class="product-image placeholder-img-1"></div>
+                        <span class="product-tag tag-oferta">Oferta</span>
+                    </div>
+                    <div class="product-details">
+                        <h3 class="product-title">LENOVO THINKPAD 24" (I9 12900KS, 24GB RAM, 512GB SSD, WINDOWS 11 PRO)</h3>
+                        <span class="product-condition">DE SEGUNDA MANO</span>
+                        <div class="price-row">
+                            <span class="product-price">COP 4,900,000.00</span>
+                            <div class="seller-info">
+                                <div class="seller-avatar"></div>
+                                <div class="seller-text">
+                                    <span class="seller-name">Alejandro Martinez <strong>(4,9)</strong></span>
+                                    <span class="seller-meta">Más de 15k productos vendidos</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="add-to-cart-btn">Agregar al carrito</button>
+                    </div>
+                </article>
+
+                <article class="product-card">
+                    <div class="product-image-container">
+                        <div class="product-image placeholder-img-2"></div>
+                        <span class="product-tag tag-usado">Usado</span>
+                    </div>
+                    <div class="product-details">
+                        <h3 class="product-title">LENOVO THINKPAD 24" (I9 12900KS, 24GB RAM, 512GB SSD, WINDOWS 11 PRO)</h3>
+                        <span class="product-condition">DE SEGUNDA MANO</span>
+                        <div class="price-row">
+                            <span class="product-price">COP 4,900,000.00</span>
+                        </div>
+                        <button class="add-to-cart-btn">Agregar al carrito</button>
+                    </div>
+                </article>
+
+                <article class="product-card">
+                    <div class="product-image-container">
+                        <div class="product-image placeholder-img-3"></div>
+                        <span class="product-tag tag-usado">Usado</span>
+                    </div>
+                    <div class="product-details">
+                        <h3 class="product-title">LENOVO THINKPAD 24" (I9 12900KS, 24GB RAM, 512GB SSD, WINDOWS 11 PRO)</h3>
+                        <span class="product-condition">DE SEGUNDA MANO</span>
+                        <div class="price-row">
+                            <span class="product-price">COP 4,900,000.00</span>
+                        </div>
+                        <button class="add-to-cart-btn">Agregar al carrito</button>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>
