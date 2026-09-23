@@ -5,6 +5,8 @@ import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import ProductosHor from './assets/components/ProductList';
 import ProductosVer from './assets/components/ProductList2';
 import BootSplash from "react-native-bootsplash";
+import BottomBar from './assets/components/BottomBar';
+import Login from './assets/components/Login';
 export default function App() {
 
   useEffect(() => {
@@ -16,16 +18,19 @@ export default function App() {
    
     init();
   }, []);
+  /*
+    < SafeAreaProvider >
+      
+      <SafeAreaView style={{ flex: 1 }}>
+        <BottomBar />
+      </SafeAreaView>
+          
+    </SafeAreaProvider >
+   */
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView>
-          <ProductosHor />
-          <ProductosVer />
-        </ScrollView>
-      </SafeAreaView>
-    </SafeAreaProvider>
+      <Login/>
+
   );
 
 }
