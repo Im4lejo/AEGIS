@@ -1,52 +1,88 @@
-import React, { useState, useEffect } from 'react'
-import { formatCurrency, imageUrl } from '../../shared/presentation'
+import React, { useState, useEffect, useRef } from 'react'
+import { formatCurrency, imageUrl, avatarUrl } from '../../shared/presentation'
 import '../css/home.css'
 
 // --- COMPONENTE HEADER ---
-function Header({ auth, onNavigate }) {
+export function Header({ auth, onNavigate }) {
   const [profileOpen, setProfileOpen] = useState(false)
+  const [busqueda, setBusqueda] = useState('')
+  const profileRef = useRef(null)
+
+  // Cierra el menú desplegable al hacer clic fuera de él
+  useEffect(() => {
+    if (!profileOpen) return
+    const handleClickOutside = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setProfileOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [profileOpen])
+
+  const go = (event, path) => {
+    event.preventDefault()
+    if (onNavigate) onNavigate(path)
+  }
+
+  const buscar = (event) => {
+    if (event) event.preventDefault()
+    const termino = busqueda.trim()
+    if (onNavigate) onNavigate(termino ? `/productos?buscar=${encodeURIComponent(termino)}` : '/productos')
+  }
 
   return (
     <header className="main-header">
       <div className="header-container">
         {/* Logo */}
         <div className="header-logo" onClick={() => onNavigate && onNavigate('/')}>
-          <img src="/assets/aegis-logo.png" alt="AEGIS" className="logo-img" />
+          <img src="/favicon.svg" alt="AEGIS" className="logo-img" />
           <span className="logo-text">AEGIS</span>
         </div>
 
-       
         <nav className="header-nav">
-          <a href="#" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('/'); }}>Inicio</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('/productos'); }}>Productos</a>
-          <a href="#">Publicar Producto</a>
-          <a href="#">Foro</a>
+          <a href="#" onClick={(e) => go(e, '/productos/crear')}>Publicar Producto</a>
+          <a href="#" onClick={(e) => go(e, '/foro')}>Foro</a>
+          <a href="#" onClick={(e) => go(e, '/puntos-fisicos')}>Puntos Físicos</a>
         </nav>
 
         {/* Buscador */}
         <div className="header-search">
-          <input type="text" placeholder="Busca tu producto aquí..." />
-          <button className="search-btn" type="button"></button>
+          <input
+            type="text"
+            placeholder="Busca tu producto aquí..."
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') buscar(e) }}
+          />
+          <button className="search-btn" type="button" aria-label="Buscar" onClick={buscar}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <circle cx="11" cy="11" r="7" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </button>
         </div>
 
-        
         <div className="header-user-actions">
-          <div className="profile-dropdown-container">
-            <button 
+          <div className="profile-dropdown-container" ref={profileRef}>
+            <button
               className="profile-btn"
+              aria-haspopup="true"
+              aria-expanded={profileOpen}
               onClick={() => setProfileOpen(!profileOpen)}
               type="button"
             >
-              <img src={auth?.user?.avatar || "/assets/default-avatar.png"} alt="Perfil" className="profile-img" />
+              <img src={auth?.user?.avatar || avatarUrl(auth?.user)} alt="Perfil" className="profile-img" />
+              <span className="profile-caret" aria-hidden="true">▼</span>
             </button>
 
             {profileOpen && (
               <div className="profile-menu">
-                <a href="#">Mi Perfil</a>
-                <a href="#">Mis Compras</a>
-                <a href="#">Configuración</a>
+                <a href="#" onClick={(e) => go(e, '/perfil')}>Mi Perfil</a>
+                <a href="#" onClick={(e) => go(e, '/plantilla?origen=mis-compras')}>Mis Compras</a>
+                <a href="#" onClick={(e) => go(e, '/plantilla?origen=configuracion')}>Configuración</a>
                 <hr />
-                <a href="#" className="logout-link">Cerrar Sesión</a>
+                <a href="#" onClick={(e) => go(e, '/login')} className="logout-link">Cerrar Sesión</a>
               </div>
             )}
           </div>
@@ -61,14 +97,13 @@ function Header({ auth, onNavigate }) {
   )
 }
 
-
-function Footer({ onNavigate }) {
+export function Footer({ onNavigate }) {
   return (
     <footer className="main-footer">
       <div className="footer-container">
         <div className="footer-brand">
           <div className="footer-logo">
-            <img src="/assets/aegis-logo.png" alt="AEGIS" className="logo-img" />
+            <img src="/favicon.svg" alt="AEGIS" className="logo-img" />
             <span className="logo-text">AEGIS</span>
           </div>
           <p className="footer-description">
@@ -80,10 +115,8 @@ function Footer({ onNavigate }) {
           <div className="footer-column">
             <h4>Navegación</h4>
             <ul>
-              <li><a href="#" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('/'); }}>Inicio</a></li>
-              <li><a href="#" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('/productos'); }}>Productos</a></li>
-              <li><a href="#">Puntos Verificados</a></li>
-              <li><a href="#">Foro</a></li>
+              <li><a href="#" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('/puntos-fisicos'); }}>Puntos Verificados</a></li>
+              <li><a href="#" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('/foro'); }}>Foro</a></li>
             </ul>
           </div>
 
@@ -112,7 +145,7 @@ function Footer({ onNavigate }) {
   )
 }
 
-// --- DATOS DE SLIDES DEL CARRUSEL ---
+
 const BANNER_SLIDES = [
   {
     id: 1,
@@ -134,11 +167,11 @@ const BANNER_SLIDES = [
     price: "$1.899.900",
     oldPrice: "$3.799.800",
     btnText: "COMPRAR AHORA!",
-    image: "/hp-victus.png"
+    image: "/hp-victus.jpg"
   }
 ]
 
-            const productosEjemplo = [
+const productosEjemplo = [
   {
     id: 1,
     nombre: 'Televisor LG OLED 55" 4K Smart TV AI ThinQ',
@@ -198,21 +231,30 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
 
   const slide = BANNER_SLIDES[currentIndex]
 
+  const openPlantilla = (event, origen) => {
+    if (event) event.preventDefault()
+    if (onNavigate) onNavigate(`/plantilla?origen=${encodeURIComponent(origen)}`)
+  }
+
+  const openProducto = (event, prod) => {
+    if (onNavigate) onNavigate(`/plantilla?origen=producto-${prod.id}`)
+  }
+
   return (
     <div className="page-layout">
       <Header auth={auth} onNavigate={onNavigate} />
-      
+
       {/* Subnavegación */}
       <section className="subnav">
         <div className="dropdown-container">
-          <button 
-            className="dropdown-btn" 
+          <button
+            className="dropdown-btn"
             onClick={() => setCategoryOpen(!categoryOpen)}
             type="button"
           >
             Categorías <span className="arrow-down">▼</span>
           </button>
-          
+
           {categoryOpen && (
             <div className="dropdown-menu">
               <a href="#">Celulares</a>
@@ -235,14 +277,13 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
           <h2>Productos Destacados</h2>
         </div>
 
-        
         <section className="hero-section">
-          
+
           <div className="hero-main">
-            <img 
-              src={slide.image} 
-              alt={slide.title} 
-              className="hero-bg-img" 
+            <img
+              src={slide.image}
+              alt={slide.title}
+              className="hero-bg-img"
             />
 
             <div className="hero-overlay"></div>
@@ -251,7 +292,7 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
               <div className="hero-tag">{slide.tag}</div>
               <h2 className="hero-title">{slide.title}</h2>
               <p className="hero-subtitle">{slide.subtitle}</p>
-              
+
               <div className="hero-pricing">
                 <div className="price-tag">
                   {slide.badge && <span className="price-badge">{slide.badge}</span>}
@@ -286,82 +327,104 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
           {/* Tarjetas Laterales con Banners Integrados */}
           <div className="hero-side">
             <div className="side-banner-card">
-              <img src="/public/hp-victus.jpg" alt="OFERTA HOT: PORTÁTIL HP VICTUS GAMING" className="side-banner-img" />
-            </div>
-
-               <div className="side-banner-card">
-            <a 
+              <a
                 className="side-banner-link"
-                onClick={(e) => {
-                e.preventDefault();
-                
-                }}
-            >
-                <img 
-                src="/blackfriday.jpg" 
-                alt="BLACK FRIDAY DESCUENTOS INCREÍBLES" 
-                className="side-banner-img" 
+                href="#"
+                title="Ver plantilla: Banner HP Victus"
+                onClick={(e) => openPlantilla(e, 'banner-hp-victus')}
+              >
+                <img src="/hp-victus.jpg" alt="OFERTA HOT: PORTÁTIL HP VICTUS GAMING" className="side-banner-img" />
+              </a>
+            </div>
+
+            <div className="side-banner-card">
+              <a
+                className="side-banner-link"
+                href="#"
+                title="Ver plantilla: Banner Black Friday"
+                onClick={(e) => openPlantilla(e, 'banner-black-friday')}
+              >
+                <img
+                  src="/blackfriday.jpg"
+                  alt="BLACK FRIDAY DESCUENTOS INCREÍBLES"
+                  className="side-banner-img"
                 />
-            </a>
+              </a>
             </div>
-            </div>
-        </section>
-      {/* Separador Azul */}
-      <section className="explore-banner">
-        <h2>Explora Mas Productos</h2>
-      </section>
-
-      {/* Grid de Productos */}
-      <section className="products-section">
-        <div className="products-grid">
-          {/* Banner Promocional a la izquierda */}
-          <div className="promo-product-card">
-            <img 
-              src="/public/celulares-banner.png" 
-              alt="EQUIPA TU VIDA CON LO MEJOR EN CELULARES" 
-              className="promo-grid-img" 
-            />
           </div>
+        </section>
 
-          {/* Tarjetas de Productos desplegándose consecutivamente a la derecha */}
-          {(productos.length > 0 ? productos : productosEjemplo).map((prod) => {
-            const stateInfo = productState(prod.estado)
-            const srcImagen = prod.imagen?.startsWith('http') 
-              ? prod.imagen 
-              : imageUrl(prod.imagen)
+        <section className="explore-banner">
+          <h2>Explora Más Productos</h2>
+        </section>
 
-            return (
-              <div className="product-card" key={prod.id}>
-                <div className="product-image-container">
-                  <img src={srcImagen} alt={prod.nombre} />
-                  <span className={`product-state-tag ${stateInfo.className}`}>
-                    {stateInfo.label}
-                  </span>
-                </div>
+        <section className="products-section">
+          <div className="products-grid">
 
-                <div className="product-info">
-                  <h3 className="product-name">{prod.nombre}</h3>
-                  <p className="product-description">{prod.descripcion}</p>
-                  
-                  <p className="product-seller">
-                    Vendido por: <span>{prod.vendedor?.nombre || prod.vendedor || 'Charlie Kirk'}</span>
-                  </p>
+            <a
+              className="promo-product-card"
+              href="#"
+              title="Ver plantilla: Banner Celulares"
+              onClick={(e) => openPlantilla(e, 'banner-celulares')}
+            >
+              <img
+                src="/celulares-banner.png"
+                alt="EQUIPA TU VIDA CON LO MEJOR EN CELULARES"
+                className="promo-grid-img"
+              />
+            </a>
 
-                  <div className="product-price-row">
-                    <span className="product-price">{formatCurrency(prod.precio)}</span>
-                    {prod.descuento && (
-                      <span className="product-discount">{prod.descuento}% OFF</span>
-                    )}
+            {(productos.length > 0 ? productos : productosEjemplo).map((prod) => {
+              const stateInfo = productState(prod.estado)
+              const srcImagen = prod.imagen?.startsWith('http')
+                ? prod.imagen
+                : imageUrl(prod.imagen)
+
+              return (
+                <div
+                  className="product-card"
+                  key={prod.id}
+                  role="button"
+                  tabIndex={0}
+                  title="Ver detalle del producto"
+                  onClick={() => openProducto(null, prod)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      openProducto(null, prod)
+                    }
+                  }}
+                >
+                  <div className="product-image-container">
+                    <img src={srcImagen} alt={prod.nombre} />
+                    <span className={`product-state-tag ${stateInfo.className}`}>
+                      {stateInfo.label}
+                    </span>
+                  </div>
+
+                  <div className="product-info">
+                    <h3 className="product-name">{prod.nombre}</h3>
+                    <p className="product-description">{prod.descripcion}</p>
+
+                    <p className="product-seller">
+                      Vendido por: <span>{prod.vendedor?.nombre || prod.vendedor || 'Charlie Kirk'}</span>
+                    </p>
+
+                    <div className="product-price-row">
+                      <span className="product-price">{formatCurrency(prod.precio)}</span>
+                      {prod.descuento && (
+                        <span className="product-discount">{prod.descuento}% OFF</span>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )
-          })}
-        </div>
-      </section>
-    </main>
+              )
+            })}
+          </div>
+        </section>
+      </main>
 
-    <Footer onNavigate={onNavigate} />
-  </div>
-)
+      <Footer onNavigate={onNavigate} />
+    </div>
+  )
 }

@@ -1,5 +1,5 @@
 export function route(path) {
-    return path
+    return `#/${String(path || '').replace(/^\/+/, '')}`
 }
 
 export function asset(path) {
