@@ -54,11 +54,10 @@ const IconFlag = () => (
   </svg>
 )
 
-const IconImage = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-    <circle cx="8.5" cy="8.5" r="1.5" />
-    <polyline points="21 15 16 10 5 21" />
+const IconPlus = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+    <line x1="12" y1="5" x2="12" y2="19" />
+    <line x1="5" y1="12" x2="19" y2="12" />
   </svg>
 )
 
@@ -353,9 +352,10 @@ export default function Foro({ auth, onNavigate }) {
                   className="foro-composer-imgbtn"
                   type="button"
                   aria-label="Agregar imagen"
+                  title="Agregar imagen"
                   onClick={() => fileInputRef.current?.click()}
                 >
-                  <IconImage />
+                  <IconPlus />
                 </button>
               </div>
             </div>
