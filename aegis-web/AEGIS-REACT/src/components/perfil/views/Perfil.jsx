@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
+import { PRODUCTOS_PERFIL } from '../../productos/productosDemo'
 import '../css/perfil.css'
 
 // --- ICONOS (SVG inline, mismo estilo que Home y Foro) ---
@@ -136,14 +137,6 @@ const PUBLICACIONES_EJEMPLO = [
   },
 ]
 
-const PRODUCTOS_EJEMPLO = [
-  { id: 1, titulo: 'Xiaomi Redmi 13C 4GB-64GB - Negro', precio: 1085999, precioAnterior: 1299999, imagen: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=600' },
-  { id: 2, titulo: 'Xiaomi Redmi Note 13 Pro 8GB-256GB - Azul', precio: 1085999, precioAnterior: 1399999, imagen: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?q=80&w=600' },
-  { id: 3, titulo: 'Xiaomi Redmi 12 5G 8GB-256GB - Verde', precio: 1085999, precioAnterior: 1259999, imagen: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?q=80&w=600' },
-  { id: 4, titulo: 'Xiaomi Poco X6 8GB-256GB - Blanco', precio: 1085999, precioAnterior: 1499999, imagen: 'https://images.unsplash.com/photo-1567581935884-3349723552ca?q=80&w=600' },
-  { id: 5, titulo: 'Xiaomi Redmi Note 12 6GB-128GB - Gris', precio: 1085999, precioAnterior: 1199999, imagen: 'https://images.unsplash.com/photo-1580910051074-3eb694886505?q=80&w=600' },
-]
-
 const ORDENES = [
   { id: 'recientes', label: 'Más recientes' },
   { id: 'populares', label: 'Más populares' },
@@ -213,7 +206,7 @@ function MenuOpciones({ trigger, triggerClass = 'perfil-menu-btn', valor, opcion
 export default function Perfil({ usuario = {}, publicaciones, productos, esPropio = true, auth, onNavigate }) {
   const yo = { ...USUARIO_EJEMPLO, ...usuario }
   const pubsDemo = publicaciones && publicaciones.length > 0 ? publicaciones : PUBLICACIONES_EJEMPLO
-  const prodsDemo = productos && productos.length > 0 ? productos : PRODUCTOS_EJEMPLO
+  const prodsDemo = productos && productos.length > 0 ? productos : PRODUCTOS_PERFIL
 
   const avatar = yo.avatar || avatarUrl(yo, 160)
   const [orden, setOrden] = useState('recientes')

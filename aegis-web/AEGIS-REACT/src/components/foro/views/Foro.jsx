@@ -50,7 +50,7 @@ const IconChevron = ({ open }) => (
 )
 
 // --- DATOS DE EJEMPLO (mismo contenido de la imagen) ---
-const POSTS_EJEMPLO = [
+export const POSTS_EJEMPLO = [
   {
     id: 1,
     autor: 'TheDarkMoon7456',
