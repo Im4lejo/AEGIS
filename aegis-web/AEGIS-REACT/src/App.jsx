@@ -4,7 +4,7 @@ import { route } from './components/shared/presentation'
 import Home from './components/home/views/Home'
 import Foro from './components/foro/views/Foro'
 import ProductosIndex from './components/productos/views/Index'
-import CrearProducto from './components/productos/views/Crear'
+import PublicarProducto from './components/productos/views/PublicarProducto'
 import DetalleProducto from './components/productos/views/Detalle'
 import MisProductos from './components/productos/views/MisProductos'
 import Perfil from './components/perfil/views/Perfil'
@@ -31,7 +31,7 @@ const PAGES = {
   '/home': Home,
   '/foro': Foro,
   '/productos': ProductosIndex,
-  '/productos/crear': CrearProducto,
+  '/productos/crear': PublicarProducto,
   '/productos/detalle': DetalleProducto,
   '/productos/mis-productos': MisProductos,
   '/perfil': Perfil,
