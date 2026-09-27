@@ -32,6 +32,14 @@ export default function Header({ title, stylesheet, auth, onNavigate }) {
         navigateTo(termino ? `/productos?buscar=${encodeURIComponent(termino)}` : '/productos', onNavigate)
     }
 
+    const usuario = auth && auth.user ? auth.user : null
+    let avatar = ''
+    if (usuario && usuario.avatar) {
+        avatar = usuario.avatar
+    } else {
+        avatar = avatarUrl(usuario)
+    }
+
     return (
         <>
             <Head title={title} stylesheet={stylesheet} />
@@ -71,7 +79,7 @@ export default function Header({ title, stylesheet, auth, onNavigate }) {
                                 onClick={() => setProfileOpen(!profileOpen)}
                                 type="button"
                             >
-                                <img src={auth?.user?.avatar || avatarUrl(auth?.user)} alt="Perfil" className="profile-img" />
+                                <img src={avatar} alt="Perfil" className="profile-img" />
                                 <span className="profile-caret" aria-hidden="true">▼</span>
                             </button>
 

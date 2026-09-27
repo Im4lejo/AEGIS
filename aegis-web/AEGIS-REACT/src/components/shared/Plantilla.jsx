@@ -6,9 +6,12 @@ import Header from '../layouts/Header'
  * les asigne su página definitiva.
  */
 export default function Plantilla({ origen = 'Página', auth, onNavigate }) {
+  const origenTexto = String(origen || 'Página').split('-').join(' ')
+  const origenTitulo = origenTexto.charAt(0).toUpperCase() + origenTexto.substring(1)
+
   return (
     <div className="page-layout">
-      <Header title={`AEGIS | ${String(origen || 'Página').replace(/-/g, ' ').replace(/^./, (c) => c.toUpperCase())}`} auth={auth} onNavigate={onNavigate} />
+      <Header title={`AEGIS | ${origenTitulo}`} auth={auth} onNavigate={onNavigate} />
 
       <main className="plantilla-container">
         <div className="plantilla-card">

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import Sidebar from '../../layouts/Sidebar'
@@ -140,24 +140,21 @@ export default function Foro({ auth, onNavigate }) {
   }, [toast])
 
   // Filtrado y ordenamiento de publicaciones
-  const postsVisibles = useMemo(() => {
-    const term = busqueda.trim().toLowerCase()
-    let lista = posts.filter((post) => {
-      const coincideBusqueda =
-        !term ||
-        post.titulo.toLowerCase().includes(term) ||
-        post.cuerpo.toLowerCase().includes(term) ||
-        post.autor.toLowerCase().includes(term)
-      return coincideBusqueda
-    })
+  const termino = busqueda.trim().toLowerCase()
+  let postsVisibles = posts.filter((post) => {
+    if (!termino) return true
+    return (
+      post.titulo.toLowerCase().includes(termino) ||
+      post.cuerpo.toLowerCase().includes(termino) ||
+      post.autor.toLowerCase().includes(termino)
+    )
+  })
 
-    if (orden === 'populares') lista = [...lista].sort((a, b) => b.likes - a.likes)
-    if (orden === 'comentados') lista = [...lista].sort((a, b) => b.comentarios.length - a.comentarios.length)
+  if (orden === 'populares') postsVisibles.sort((a, b) => b.likes - a.likes)
+  if (orden === 'comentados') postsVisibles.sort((a, b) => b.comentarios.length - a.comentarios.length)
 
-    return lista
-  }, [posts, busqueda, orden])
-
-  const usuario = auth?.user?.nombre || 'Usuario AEGIS'
+  let usuario = 'Usuario AEGIS'
+  if (auth && auth.user && auth.user.nombre) usuario = auth.user.nombre
 
   // --- ACCIONES ---
   const toggleLike = (id) => {
@@ -192,13 +189,19 @@ export default function Foro({ auth, onNavigate }) {
     setToast('Comentario publicado ✓')
   }
 
-  const compartir = async (post) => {
-    try {
-      await navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}#/plantilla?origen=post-${post.id}`)
-      setToast('Enlace copiado al portapapeles 🔗')
-    } catch {
+  const compartir = (post) => {
+    const enlace = `${window.location.origin}${window.location.pathname}#/plantilla?origen=post-${post.id}`
+    if (!navigator.clipboard) {
       setToast('No se pudo copiar el enlace')
+      return
     }
+    navigator.clipboard.writeText(enlace)
+      .then(function () {
+        setToast('Enlace copiado al portapapeles 🔗')
+      })
+      .catch(function () {
+        setToast('No se pudo copiar el enlace')
+      })
   }
 
   const reportar = (post) => {
@@ -209,7 +212,7 @@ export default function Foro({ auth, onNavigate }) {
     const texto = textoPublicacion.trim()
     if (!texto && !imagenNueva) return
 
-    const primerasLineas = texto.split('\n').filter(Boolean)
+    const primerasLineas = texto.split('\n').filter((linea) => linea !== '')
     const titulo = primerasLineas[0] || 'Nueva publicación'
     const cuerpo = primerasLineas.slice(1).join('\n')
 
@@ -235,7 +238,7 @@ export default function Foro({ auth, onNavigate }) {
   }
 
   const seleccionarImagen = (event) => {
-    const [file] = event.target.files
+    const file = event.target.files[0]
     if (!file) return
     const reader = new FileReader()
     reader.onload = (loadEvent) => setImagenNueva(loadEvent.target.result)
@@ -272,7 +275,7 @@ export default function Foro({ auth, onNavigate }) {
                   type="button"
                   aria-label="Agregar imagen"
                   title="Agregar imagen"
-                  onClick={() => fileInputRef.current?.click()}
+                  onClick={() => { if (fileInputRef.current) fileInputRef.current.click() }}
                 >
                   <IconPlus />
                 </button>
@@ -304,7 +307,7 @@ export default function Foro({ auth, onNavigate }) {
               />
               {imagenNueva && <img className="foro-composer-preview" src={imagenNueva} alt="Vista previa" />}
               <div className="foro-composer-actions">
-                <button className="foro-btn foro-btn--ghost" type="button" onClick={() => fileInputRef.current?.click()}>
+                <button className="foro-btn foro-btn--ghost" type="button" onClick={() => { if (fileInputRef.current) fileInputRef.current.click() }}>
                   📷 Imagen
                 </button>
                 <button className="foro-btn foro-btn--ghost" type="button" onClick={() => { setPanelAbierto(false); setTextoPublicacion(''); setImagenNueva(null) }}>

@@ -43,15 +43,27 @@ const PAGES = {
 }
 
 const getHashPath = () => {
-  const hash = window.location.hash.replace(/^#/, '')
+  const hash = window.location.hash.substring(1)
   return hash.split('?')[0] || '/'
 }
 
 const getHashParams = () => {
-  const hash = window.location.hash.replace(/^#/, '')
+  const hash = window.location.hash.substring(1)
   const queryIndex = hash.indexOf('?')
-  if (queryIndex === -1) return {}
-  return Object.fromEntries(new URLSearchParams(hash.slice(queryIndex + 1)))
+  const params = {}
+  if (queryIndex === -1) return params
+
+  const consulta = hash.substring(queryIndex + 1)
+  const partes = consulta.split('&')
+  for (let i = 0; i < partes.length; i++) {
+    const separador = partes[i].indexOf('=')
+    if (separador !== -1) {
+      const clave = decodeURIComponent(partes[i].substring(0, separador))
+      const valor = decodeURIComponent(partes[i].substring(separador + 1))
+      params[clave] = valor
+    }
+  }
+  return params
 }
 
 function App() {
@@ -80,14 +92,15 @@ function App() {
 
   // Cualquier ruta que no exista todavía cae en la plantilla de "página en construcción".
   const Page = PAGES[path] || Plantilla
-  const pageProps = {
-    auth: DEFAULT_AUTH,
-    onNavigate: navigate,
-    origen: params.origen || path || '/',
-    filtros: { busqueda: params.buscar || '' },
-  }
 
-  return <Page {...pageProps} />
+  return (
+    <Page
+      auth={DEFAULT_AUTH}
+      onNavigate={navigate}
+      origen={params.origen || path || '/'}
+      filtros={{ busqueda: params.buscar || '' }}
+    />
+  )
 }
 
 export default App

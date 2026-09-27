@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
@@ -241,13 +241,11 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [lightbox])
 
-  const publicacionesList = useMemo(() => {
-    let lista = [...pubsDemo]
-    if (filtro === 'con-imagen') lista = lista.filter((item) => Boolean(item.imagen))
-    if (orden === 'populares') lista.sort((a, b) => Number(b.likes || 0) - Number(a.likes || 0))
-    if (orden === 'comentados') lista.sort((a, b) => contarComentarios(b) - contarComentarios(a))
-    return lista
-  }, [pubsDemo, orden, filtro])
+  // Filtrado y ordenamiento de publicaciones
+  let publicacionesList = [...pubsDemo]
+  if (filtro === 'con-imagen') publicacionesList = publicacionesList.filter((item) => item.imagen)
+  if (orden === 'populares') publicacionesList.sort((a, b) => Number(b.likes || 0) - Number(a.likes || 0))
+  if (orden === 'comentados') publicacionesList.sort((a, b) => contarComentarios(b) - contarComentarios(a))
 
   const alternarLike = (id) => setLikesActivos((prev) => ({ ...prev, [id]: !prev[id] }))
 
@@ -265,7 +263,11 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
   }
 
   const compartir = (publicacion) => {
-    if (navigator.clipboard) navigator.clipboard.writeText(window.location.href).catch(() => {})
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href).catch(function () {
+        console.log('No se pudo copiar el enlace')
+      })
+    }
     setToast(`Enlace copiado: "${publicacion.titulo.slice(0, 40)}..."`)
   }
 
@@ -385,11 +387,12 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
 
               {publicacionesList.map((publicacion) => {
                 const id = publicacion.id
-                const liked = Boolean(likesActivos[id])
-                const comentarios = contarComentarios(publicacion) + (comentariosNuevos[id]?.length || 0)
-                const lista = [...listaBaseComentarios(publicacion), ...(comentariosNuevos[id] || [])]
-                const abierto = Boolean(comentariosAbiertos[id])
-                const cuerpo = publicacion.cuerpo ?? publicacion.contenido ?? ''
+                const liked = likesActivos[id]
+                const nuevos = comentariosNuevos[id] || []
+                const comentarios = contarComentarios(publicacion) + nuevos.length
+                const lista = [...listaBaseComentarios(publicacion), ...nuevos]
+                const abierto = comentariosAbiertos[id]
+                const cuerpo = publicacion.cuerpo || publicacion.contenido || ''
 
                 return (
                   <article className="perfil-post" key={id}>

@@ -1,5 +1,9 @@
 export function route(path) {
-    return `#/${String(path || '').replace(/^\/+/, '')}`
+    let limpio = String(path || '')
+    while (limpio.charAt(0) === '/') {
+        limpio = limpio.substring(1)
+    }
+    return `#/${limpio}`
 }
 
 // Navegación interna compartida por los layouts: usa el onNavigate de la
@@ -17,7 +21,11 @@ export function navigateTo(path, onNavigate) {
 }
 
 export function asset(path) {
-    return `/${path.replace(/^\//, '')}`
+    let limpio = String(path || '')
+    if (limpio.charAt(0) === '/') {
+        limpio = limpio.substring(1)
+    }
+    return `/${limpio}`
 }
 
 export function formatCurrency(value) {
@@ -27,8 +35,11 @@ export function formatCurrency(value) {
 }
 
 export function avatarUrl(user, size = 100) {
-    const seed = user?.username || user?.email || user?.nombre || 'aegis'
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(seed)}&size=${size}`
+    let semilla = 'aegis'
+    if (user && user.username) semilla = user.username
+    else if (user && user.email) semilla = user.email
+    else if (user && user.nombre) semilla = user.nombre
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(semilla)}&size=${size}`
 }
 
 export function imageUrl(filename, fallback = 'https://via.placeholder.com/300x230?text=Sin+Imagen') {
