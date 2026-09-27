@@ -1,150 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { formatCurrency, imageUrl, avatarUrl } from '../../shared/presentation'
+import { useState, useEffect } from 'react'
+import { formatCurrency, imageUrl } from '../../shared/presentation'
+import Header from '../../layouts/Header'
+import Footer from '../../layouts/Footer'
 import '../css/home.css'
-
-// --- COMPONENTE HEADER ---
-export function Header({ auth, onNavigate }) {
-  const [profileOpen, setProfileOpen] = useState(false)
-  const [busqueda, setBusqueda] = useState('')
-  const profileRef = useRef(null)
-
-  // Cierra el menú desplegable al hacer clic fuera de él
-  useEffect(() => {
-    if (!profileOpen) return
-    const handleClickOutside = (event) => {
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
-        setProfileOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [profileOpen])
-
-  const go = (event, path) => {
-    event.preventDefault()
-    if (onNavigate) onNavigate(path)
-  }
-
-  const buscar = (event) => {
-    if (event) event.preventDefault()
-    const termino = busqueda.trim()
-    if (onNavigate) onNavigate(termino ? `/productos?buscar=${encodeURIComponent(termino)}` : '/productos')
-  }
-
-  return (
-    <header className="main-header">
-      <div className="header-container">
-        {/* Logo */}
-        <div className="header-logo" onClick={() => onNavigate && onNavigate('/')}>
-          <img src="/favicon.svg" alt="AEGIS" className="logo-img" />
-          <span className="logo-text">AEGIS</span>
-        </div>
-
-        <nav className="header-nav">
-          <a href="#" onClick={(e) => go(e, '/productos/crear')}>Publicar Producto</a>
-          <a href="#" onClick={(e) => go(e, '/foro')}>Foro</a>
-          <a href="#" onClick={(e) => go(e, '/puntos-fisicos')}>Puntos Físicos</a>
-        </nav>
-
-        {/* Buscador */}
-        <div className="header-search">
-          <input
-            type="text"
-            placeholder="Busca tu producto aquí..."
-            value={busqueda}
-            onChange={(e) => setBusqueda(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') buscar(e) }}
-          />
-          <button className="search-btn" type="button" aria-label="Buscar" onClick={buscar}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-              <circle cx="11" cy="11" r="7" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-          </button>
-        </div>
-
-        <div className="header-user-actions">
-          <div className="profile-dropdown-container" ref={profileRef}>
-            <button
-              className="profile-btn"
-              aria-haspopup="true"
-              aria-expanded={profileOpen}
-              onClick={() => setProfileOpen(!profileOpen)}
-              type="button"
-            >
-              <img src={auth?.user?.avatar || avatarUrl(auth?.user)} alt="Perfil" className="profile-img" />
-              <span className="profile-caret" aria-hidden="true">▼</span>
-            </button>
-
-            {profileOpen && (
-              <div className="profile-menu">
-                <a href="#" onClick={(e) => go(e, '/perfil')}>Mi Perfil</a>
-                <a href="#" onClick={(e) => go(e, '/plantilla?origen=mis-compras')}>Mis Compras</a>
-                <a href="#" onClick={(e) => go(e, '/plantilla?origen=configuracion')}>Configuración</a>
-                <hr />
-                <a href="#" onClick={(e) => go(e, '/login')} className="logout-link">Cerrar Sesión</a>
-              </div>
-            )}
-          </div>
-
-          <button className="cart-btn" aria-label="Carrito de compras" type="button">
-            🛒
-            <span className="cart-badge">0</span>
-          </button>
-        </div>
-      </div>
-    </header>
-  )
-}
-
-export function Footer({ onNavigate }) {
-  return (
-    <footer className="main-footer">
-      <div className="footer-container">
-        <div className="footer-brand">
-          <div className="footer-logo">
-            <img src="/favicon.svg" alt="AEGIS" className="logo-img" />
-            <span className="logo-text">AEGIS</span>
-          </div>
-          <p className="footer-description">
-            Tu plataforma de confianza para comprar, vender y gestionar productos de tecnología y componentes.
-          </p>
-        </div>
-
-        <div className="footer-links-group">
-          <div className="footer-column">
-            <h4>Navegación</h4>
-            <ul>
-              <li><a href="#" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('/puntos-fisicos'); }}>Puntos Verificados</a></li>
-              <li><a href="#" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('/foro'); }}>Foro</a></li>
-            </ul>
-          </div>
-
-          <div className="footer-column">
-            <h4>Soporte</h4>
-            <ul>
-              <li><a href="#">Centro de Ayuda</a></li>
-              <li><a href="#">Preguntas Frecuentes</a></li>
-              <li><a href="#">Términos y Condiciones</a></li>
-              <li><a href="#">Políticas de Privacidad</a></li>
-            </ul>
-          </div>
-
-          <div className="footer-column">
-            <h4>Contacto</h4>
-            <p>Email: soporte@aegis.com</p>
-            <p>Tel: +57 (602) 800-0000</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="footer-bottom">
-        <p>&copy; {new Date().getFullYear()} AEGIS. Todos los derechos reservados.</p>
-      </div>
-    </footer>
-  )
-}
-
 
 const BANNER_SLIDES = [
   {
@@ -242,7 +100,7 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
 
   return (
     <div className="page-layout">
-      <Header auth={auth} onNavigate={onNavigate} />
+      <Header title="AEGIS | Home" auth={auth} onNavigate={onNavigate} />
 
       {/* Subnavegación */}
       <section className="subnav">

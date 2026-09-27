@@ -2,6 +2,20 @@ export function route(path) {
     return `#/${String(path || '').replace(/^\/+/, '')}`
 }
 
+// Navegación interna compartida por los layouts: usa el onNavigate de la
+// página cuando existe y, si la página aún no lo pasa, navega por hash.
+export function navigateTo(path, onNavigate) {
+    if (onNavigate) {
+        onNavigate(path)
+        return
+    }
+    const target = route(path)
+    if (window.location.hash !== target) {
+        window.location.hash = target
+    }
+    window.scrollTo(0, 0)
+}
+
 export function asset(path) {
     return `/${path.replace(/^\//, '')}`
 }

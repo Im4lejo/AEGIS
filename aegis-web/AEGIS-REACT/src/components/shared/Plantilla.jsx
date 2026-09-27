@@ -1,4 +1,4 @@
-import { Header } from '../home/views/Home'
+import Header from '../layouts/Header'
 
 /**
  * Plantilla base para páginas todavía no asignadas.
@@ -8,7 +8,7 @@ import { Header } from '../home/views/Home'
 export default function Plantilla({ origen = 'Página', auth, onNavigate }) {
   return (
     <div className="page-layout">
-      <Header auth={auth} onNavigate={onNavigate} />
+      <Header title={`AEGIS | ${String(origen || 'Página').replace(/-/g, ' ').replace(/^./, (c) => c.toUpperCase())}`} auth={auth} onNavigate={onNavigate} />
 
       <main className="plantilla-container">
         <div className="plantilla-card">
