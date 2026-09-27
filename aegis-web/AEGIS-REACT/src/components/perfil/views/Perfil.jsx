@@ -1,17 +1,563 @@
-import { useState } from 'react'
-import PageFrame from '../../shared/PageFrame'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import Header from '../../layouts/Header'
+import Footer from '../../layouts/Footer'
 import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
+import '../css/perfil.css'
 
-export default function Perfil({ usuario = {}, publicaciones = [], productos = [], esPropio = false, auth }) {
-    const [avatar, setAvatar] = useState(usuario.avatar || avatarUrl(usuario, 140))
-    const handleAvatarChange = (event) => {
-        const [file] = event.target.files
-        if (!file) return
-        const reader = new FileReader()
-        reader.onload = (loadEvent) => setAvatar(loadEvent.target.result)
-        reader.readAsDataURL(file)
-        event.currentTarget.form?.requestSubmit()
+// --- ICONOS (SVG inline, mismo estilo que Home y Foro) ---
+const IconPencil = ({ size = 15 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z" />
+  </svg>
+)
+
+const IconCrown = () => (
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M3 8l4 4 5-7 5 7 4-4-1.6 9.5H4.6L3 8z" />
+  </svg>
+)
+
+const IconDollar = () => (
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 2.5v19" />
+    <path d="M16.5 7.5c0-1.8-2-2.9-4.5-2.9s-4.5 1.2-4.5 3.1c0 4.3 9 2.4 9 6.7 0 2-2 3.3-4.5 3.3s-4.5-1.3-4.5-3.3" />
+  </svg>
+)
+
+const IconStar = ({ size = 28 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 2.5l2.94 5.96 6.58.96-4.76 4.64 1.12 6.55L12 17.5l-5.88 3.11 1.12-6.55L2.48 9.42l6.58-.96L12 2.5z" />
+  </svg>
+)
+
+const IconChevron = ({ size = 14 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="6 9 12 15 18 9" />
+  </svg>
+)
+
+const IconFilter = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" />
+  </svg>
+)
+
+const IconCheck = ({ size = 14 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="20 6 9 17 4 12" />
+  </svg>
+)
+
+const IconHeart = ({ filled }) => (
+  <svg width="17" height="17" viewBox="0 0 24 24" fill={filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+  </svg>
+)
+
+const IconComment = () => (
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+  </svg>
+)
+
+const IconShare = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="18" cy="5" r="3" />
+    <circle cx="6" cy="12" r="3" />
+    <circle cx="18" cy="19" r="3" />
+    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+  </svg>
+)
+
+const IconFlag = () => (
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+    <line x1="4" y1="22" x2="4" y2="15" />
+  </svg>
+)
+
+const IconClose = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
+  </svg>
+)
+
+// --- DATOS DE EJEMPLO (mismo contenido de las imágenes de diseño) ---
+const USUARIO_EJEMPLO = {
+  nombre: 'Luis Alejandro',
+  apellido: 'Montenegro Ojeda',
+  descripcion: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus tempor elementum justo finibus tempus.',
+  lugar: 'Popayán, Caucá',
+  fechaNacimiento: '29 de marzo del 2008',
+  fechaRegistro: '30/04/2026',
+  productosVendidos: 'Tarjetas Gráficas',
+}
+
+const PUBLICACIONES_EJEMPLO = [
+  {
+    id: 1,
+    autor: 'TheDarkMoon7456',
+    fecha: 'Hace 2 h',
+    titulo: '¿Alguien sabe si mi GTX 1050 puede correr Cyberpunk 2077 en ultra?',
+    cuerpo: 'He visto vídeos dispares y quiero asegurarme antes de comprarlo.\nTengo un i5 y 16GB de RAM.\n\n¿Alguna sugerencia sobre rendimiento?',
+    imagen: null,
+    likes: 892,
+    comentarios: 100,
+    lista: [
+      { autor: 'TechFan01', texto: 'En ultra te va a costar, mejor bajos-medios con DLSS.' },
+      { autor: 'GamerCol', texto: 'Con ese setup mejor medium, ¡pero va a ir fluido!' },
+    ],
+  },
+  {
+    id: 2,
+    autor: 'TheDarkMoon7456',
+    fecha: 'Hace 5 h',
+    titulo: '¿Alguien sabe cómo arreglar mi PC? Se queda en pantalla azul (BSOD) constantemente y no arranca.',
+    cuerpo: 'Pasa desde que actualicé los controladores. ¿Alguna idea de por dónde empezar?',
+    imagen: '/bsod-demo.svg',
+    likes: 341,
+    comentarios: 57,
+    lista: [
+      { autor: 'SoporteAegis', texto: 'Prueba entrando en modo seguro y desinstalando el último controlador.' },
+    ],
+  },
+  {
+    id: 3,
+    autor: 'NovaKatana',
+    fecha: 'Hace 1 d',
+    titulo: 'Recomendación de laptop para programar y estudiar',
+    cuerpo: 'Necesito una laptop con buen rendimiento para desarrollo (VS Code, Docker, React) y que la batería dure bastante.\n\n¿Alguna recomendación por menos de $3.000.000?',
+    imagen: null,
+    likes: 127,
+    comentarios: 24,
+    lista: [],
+  },
+]
+
+const PRODUCTOS_EJEMPLO = [
+  { id: 1, titulo: 'Xiaomi Redmi 13C 4GB-64GB - Negro', precio: 1085999, precioAnterior: 1299999, imagen: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=600' },
+  { id: 2, titulo: 'Xiaomi Redmi Note 13 Pro 8GB-256GB - Azul', precio: 1085999, precioAnterior: 1399999, imagen: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?q=80&w=600' },
+  { id: 3, titulo: 'Xiaomi Redmi 12 5G 8GB-256GB - Verde', precio: 1085999, precioAnterior: 1259999, imagen: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?q=80&w=600' },
+  { id: 4, titulo: 'Xiaomi Poco X6 8GB-256GB - Blanco', precio: 1085999, precioAnterior: 1499999, imagen: 'https://images.unsplash.com/photo-1567581935884-3349723552ca?q=80&w=600' },
+  { id: 5, titulo: 'Xiaomi Redmi Note 12 6GB-128GB - Gris', precio: 1085999, precioAnterior: 1199999, imagen: 'https://images.unsplash.com/photo-1580910051074-3eb694886505?q=80&w=600' },
+]
+
+const ORDENES = [
+  { id: 'recientes', label: 'Más recientes' },
+  { id: 'populares', label: 'Más populares' },
+  { id: 'comentados', label: 'Más comentados' },
+]
+
+const FILTROS = [
+  { id: 'todas', label: 'Todas las publicaciones' },
+  { id: 'con-imagen', label: 'Solo con imagen' },
+]
+
+const contarComentarios = (publicacion) => {
+  if (typeof publicacion.comentarios === 'number') return publicacion.comentarios
+  if (Array.isArray(publicacion.comentarios)) return publicacion.comentarios.length
+  return 0
+}
+
+const listaBaseComentarios = (publicacion) => {
+  if (Array.isArray(publicacion.lista)) return publicacion.lista
+  if (Array.isArray(publicacion.comentarios)) return publicacion.comentarios
+  return []
+}
+
+// --- MENÚ DESPLEABLE REUTILIZABLE (click fuera para cerrar) ---
+function MenuOpciones({ trigger, triggerClass = 'perfil-menu-btn', valor, opciones, onSelect }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    if (!open) return
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) setOpen(false)
     }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [open])
 
-    return <PageFrame title="AEGIS | Perfil" auth={auth}><main className="page"><section className="profile-card"><div className="cover" /><div className="profile-body"><div className="profile-row"><form method="POST" action={route('/perfil/editar')} encType="multipart/form-data"><img className="avatar-profile" src={avatar} alt="Foto de perfil" />{esPropio && <><label htmlFor="fotoPerfilInput" className="avatar-edit-btn" title="Cambiar foto de perfil"><i className="fa-solid fa-camera" /></label><input id="fotoPerfilInput" type="file" name="foto_perfil" accept="image/*" hidden onChange={handleAvatarChange} /></>}</form><div className="profile-info"><div className="profile-name">{usuario.nombre} {usuario.apellido}</div><div className="profile-handle">@{usuario.username || usuario.email || 'usuario'}</div><span className="chip">Reputación: {Number(usuario.reputacion || 5).toFixed(1)}</span>{esPropio && <a href={route('/perfil/editar')} className="btn-alt">Editar perfil</a>}</div></div></div></section><div className="content"><div className="left-col"><section className="info-card"><h3>Descripción</h3><p>{usuario.descripcion || 'Sin descripción disponible.'}</p><div className="info-row"><span>Ciudad</span><strong>{usuario.ciudad || 'No definida'}</strong></div><div className="info-row"><span>Correo</span><strong>{usuario.email || '-'}</strong></div></section><section className="pub-card"><h3>Publicaciones</h3>{publicaciones.length === 0 && <p>No hay publicaciones para este perfil.</p>}{publicaciones.map((publication) => <a href={route('/foro')} className="pub-item" key={publication.id}><div><strong>{publication.titulo}</strong><p>{publication.contenido}</p></div></a>)}</section></div><div className="right-col"><section className="profile-products-card"><h3>Productos del Vendedor</h3>{productos.map((product) => <a href={route(`/productos/detalle?id=${product.id}`)} className="profile-product-card" key={product.id}><h4>{product.titulo}</h4><span>COP {formatCurrency(product.precio)}</span></a>)}</section></div></div></main></PageFrame>
+  return (
+    <div className="perfil-menu-wrap" ref={ref}>
+      <button type="button" className={triggerClass} onClick={() => setOpen(!open)} aria-expanded={open} aria-haspopup="true">
+        {trigger}
+      </button>
+      {open && (
+        <div className="perfil-menu" role="menu">
+          {opciones.map((opcion) => (
+            <button
+              key={opcion.id}
+              type="button"
+              className={opcion.id === valor ? 'active' : ''}
+              role="menuitem"
+              onClick={() => {
+                onSelect(opcion.id)
+                setOpen(false)
+              }}
+            >
+              {opcion.label}
+              {opcion.id === valor && <IconCheck />}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// --- PÁGINA DE PERFIL ---
+export default function Perfil({ usuario = {}, publicaciones, productos, esPropio = true, auth, onNavigate }) {
+  const yo = { ...USUARIO_EJEMPLO, ...usuario }
+  const pubsDemo = publicaciones && publicaciones.length > 0 ? publicaciones : PUBLICACIONES_EJEMPLO
+  const prodsDemo = productos && productos.length > 0 ? productos : PRODUCTOS_EJEMPLO
+
+  const [avatar, setAvatar] = useState(yo.avatar || avatarUrl(yo, 160))
+  const [orden, setOrden] = useState('recientes')
+  const [filtro, setFiltro] = useState('todas')
+  const [likesActivos, setLikesActivos] = useState({})
+  const [reportadas, setReportadas] = useState({})
+  const [comentariosAbiertos, setComentariosAbiertos] = useState({})
+  const [textosComentario, setTextosComentario] = useState({})
+  const [comentariosNuevos, setComentariosNuevos] = useState({})
+  const [lightbox, setLightbox] = useState(null)
+  const [toast, setToast] = useState(null)
+
+  useEffect(() => {
+    if (!toast) return
+    const timer = setTimeout(() => setToast(null), 2600)
+    return () => clearTimeout(timer)
+  }, [toast])
+
+  useEffect(() => {
+    if (!lightbox) return
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') setLightbox(null)
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [lightbox])
+
+  const handleAvatarChange = (event) => {
+    const [file] = event.target.files
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = (loadEvent) => setAvatar(loadEvent.target.result)
+    reader.readAsDataURL(file)
+  }
+
+  const irPlantilla = (origen) => onNavigate && onNavigate(`/plantilla?origen=${origen}`)
+
+  const publicacionesList = useMemo(() => {
+    let lista = [...pubsDemo]
+    if (filtro === 'con-imagen') lista = lista.filter((item) => Boolean(item.imagen))
+    if (orden === 'populares') lista.sort((a, b) => Number(b.likes || 0) - Number(a.likes || 0))
+    if (orden === 'comentados') lista.sort((a, b) => contarComentarios(b) - contarComentarios(a))
+    return lista
+  }, [pubsDemo, orden, filtro])
+
+  const alternarLike = (id) => setLikesActivos((prev) => ({ ...prev, [id]: !prev[id] }))
+
+  const alternarComentarios = (id) => setComentariosAbiertos((prev) => ({ ...prev, [id]: !prev[id] }))
+
+  const publicarComentario = (id) => {
+    const texto = (textosComentario[id] || '').trim()
+    if (!texto) return
+    setComentariosNuevos((prev) => ({
+      ...prev,
+      [id]: [...(prev[id] || []), { autor: 'Tu cuenta', texto }],
+    }))
+    setTextosComentario((prev) => ({ ...prev, [id]: '' }))
+    setToast('Comentario publicado')
+  }
+
+  const compartir = (publicacion) => {
+    if (navigator.clipboard) navigator.clipboard.writeText(window.location.href).catch(() => {})
+    setToast(`Enlace copiado: "${publicacion.titulo.slice(0, 40)}..."`)
+  }
+
+  const reportar = (publicacion) => {
+    setReportadas((prev) => ({ ...prev, [publicacion.id]: true }))
+    setToast('Gracias, la publicación fue reportada')
+  }
+
+  return (
+    <div className="page-layout">
+      <Header title="AEGIS | Mi Perfil" auth={auth} onNavigate={onNavigate} />
+
+      <main className="perfil-page">
+        {/* ============ TARJETA DE IDENTIDAD ============ */}
+        <section className="perfil-card">
+          <div className="perfil-cover">
+            <button type="button" className="perfil-cover-btn" onClick={() => irPlantilla('editar-portada')}>
+              <IconPencil /> Editar Portada
+            </button>
+          </div>
+
+          <div className="perfil-identity">
+            <div className="perfil-id-left">
+              <div className="perfil-avatar-wrap">
+                <img className="perfil-avatar" src={avatar} alt="Foto de perfil" />
+                {esPropio && (
+                  <>
+                    <label htmlFor="fotoPerfilInput" className="perfil-avatar-edit" title="Cambiar foto de perfil">
+                      <IconPencil size={14} />
+                    </label>
+                    <input id="fotoPerfilInput" type="file" accept="image/*" hidden onChange={handleAvatarChange} />
+                  </>
+                )}
+              </div>
+              <h1 className="perfil-name">{yo.nombre} {yo.apellido}</h1>
+            </div>
+
+            <div className="perfil-stats">
+              <div className="perfil-stat">
+                <span className="perfil-stat-icon blue"><IconCrown /></span>
+                <span className="perfil-stat-label">Nivel de Servicio</span>
+                <span className="perfil-stat-badge blue">Plataforma</span>
+              </div>
+              <div className="perfil-stat">
+                <span className="perfil-stat-icon purple"><IconDollar /></span>
+                <span className="perfil-stat-label">Vendedor Estrella</span>
+                <span className="perfil-stat-badge purple">Nivel 3</span>
+              </div>
+              <div className="perfil-stat">
+                <span className="perfil-stat-rating">
+                  <IconStar />
+                  <strong>4.7</strong>
+                </span>
+                <span className="perfil-stat-label">Reseñas</span>
+                <span className="perfil-stat-stars">
+                  ★★★★<span className="perfil-star-half">★</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ============ BARRA ORDENAR / FILTRAR ============ */}
+        <div className="perfil-sortbar">
+          <MenuOpciones
+            triggerClass="perfil-menu-btn"
+            trigger={<>Ordenar por <IconChevron /></>}
+            valor={orden}
+            opciones={ORDENES}
+            onSelect={setOrden}
+          />
+          <span className="perfil-sortbar-sep" />
+          <MenuOpciones
+            triggerClass="perfil-menu-btn icon"
+            trigger={<IconFilter />}
+            valor={filtro}
+            opciones={FILTROS}
+            onSelect={setFiltro}
+          />
+        </div>
+
+        {/* ============ CONTENIDO EN DOS COLUMNAS ============ */}
+        <div className="perfil-grid">
+          <div className="perfil-col">
+            {/* Descripción */}
+            <section className="perfil-panel">
+              <h2 className="perfil-panel-title">Descripción</h2>
+              <p className="perfil-desc-text">{yo.descripcion || 'Sin descripción disponible.'}</p>
+              <div className="perfil-info-row">
+                <span className="perfil-info-label">Lugar de residencia</span>
+                <span className="perfil-info-value">{yo.lugar || yo.ciudad || 'Popayán, Caucá'}</span>
+              </div>
+              <div className="perfil-info-row">
+                <span className="perfil-info-label">Fecha de nacimiento</span>
+                <span className="perfil-info-value">{yo.fechaNacimiento || '29 de marzo del 2008'}</span>
+              </div>
+              <div className="perfil-info-row">
+                <span className="perfil-info-label">Fecha de registro de cuenta</span>
+                <span className="perfil-info-value">{yo.fechaRegistro || '30/04/2026'}</span>
+              </div>
+              <div className="perfil-info-row">
+                <span className="perfil-info-label">Productos más vendidos</span>
+                <span className="perfil-info-value">
+                  <span className="perfil-chip">{yo.productosVendidos || 'Tarjetas Gráficas'}</span>
+                </span>
+              </div>
+            </section>
+
+            {/* Publicaciones */}
+            <section className="perfil-panel">
+              <div className="perfil-pub-head">
+                <h2 className="perfil-panel-title">Publicaciones</h2>
+                <MenuOpciones
+                  triggerClass="perfil-pill"
+                  trigger={<>Ordenar Por <IconChevron /></>}
+                  valor={orden}
+                  opciones={ORDENES}
+                  onSelect={setOrden}
+                />
+              </div>
+
+              {publicacionesList.length === 0 && (
+                <p className="perfil-empty">No hay publicaciones para este perfil.</p>
+              )}
+
+              {publicacionesList.map((publicacion) => {
+                const id = publicacion.id
+                const liked = Boolean(likesActivos[id])
+                const comentarios = contarComentarios(publicacion) + (comentariosNuevos[id]?.length || 0)
+                const lista = [...listaBaseComentarios(publicacion), ...(comentariosNuevos[id] || [])]
+                const abierto = Boolean(comentariosAbiertos[id])
+                const cuerpo = publicacion.cuerpo ?? publicacion.contenido ?? ''
+
+                return (
+                  <article className="perfil-post" key={id}>
+                    <div className="perfil-post-head">
+                      <img
+                        className="perfil-post-avatar"
+                        src={avatarUrl({ username: publicacion.autor }, 80)}
+                        alt={publicacion.autor}
+                      />
+                      <div>
+                        <div className="perfil-post-author">{publicacion.autor}</div>
+                        <div className="perfil-post-date">{publicacion.fecha}</div>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      className="perfil-post-title"
+                      onClick={() => onNavigate && onNavigate('/foro')}
+                    >
+                      {publicacion.titulo}
+                    </button>
+
+                    {cuerpo && <p className="perfil-post-body">{cuerpo}</p>}
+
+                    {publicacion.imagen && (
+                      <button
+                        type="button"
+                        className="perfil-post-image"
+                        title="Ver imagen"
+                        onClick={() => setLightbox(publicacion.imagen)}
+                      >
+                        <img src={publicacion.imagen} alt={publicacion.titulo} />
+                      </button>
+                    )}
+
+                    <div className="perfil-post-actions">
+                      <button
+                        type="button"
+                        className={`perfil-action ${liked ? 'active' : ''}`}
+                        onClick={() => alternarLike(id)}
+                      >
+                        <IconHeart filled={liked} />
+                        {Number(publicacion.likes || 0) + (liked ? 1 : 0)} Likes
+                      </button>
+                      <button
+                        type="button"
+                        className={`perfil-action ${abierto ? 'active' : ''}`}
+                        onClick={() => alternarComentarios(id)}
+                      >
+                        <IconComment />
+                        {comentarios} Comentarios
+                      </button>
+                      <button type="button" className="perfil-action" onClick={() => compartir(publicacion)}>
+                        <IconShare />
+                      </button>
+                      <button
+                        type="button"
+                        className={`perfil-action perfil-action-flag ${reportadas[id] ? 'active' : ''}`}
+                        title="Reportar publicación"
+                        onClick={() => reportar(publicacion)}
+                      >
+                        <IconFlag />
+                      </button>
+                    </div>
+
+                    {abierto && (
+                      <div className="perfil-comments">
+                        {lista.length === 0 && <p className="perfil-empty">Sé el primero en comentar.</p>}
+                        {lista.map((comentario, index) => (
+                          <div className="perfil-comment" key={index}>
+                            <img
+                              className="perfil-comment-avatar"
+                              src={avatarUrl({ username: comentario.autor }, 60)}
+                              alt={comentario.autor}
+                            />
+                            <div>
+                              <strong>{comentario.autor}</strong>
+                              <p>{comentario.texto}</p>
+                            </div>
+                          </div>
+                        ))}
+                        <form
+                          className="perfil-comment-form"
+                          onSubmit={(event) => {
+                            event.preventDefault()
+                            publicarComentario(id)
+                          }}
+                        >
+                          <input
+                            type="text"
+                            placeholder="Escribe un comentario..."
+                            value={textosComentario[id] || ''}
+                            onChange={(event) =>
+                              setTextosComentario((prev) => ({ ...prev, [id]: event.target.value }))
+                            }
+                          />
+                          <button type="submit">Comentar</button>
+                        </form>
+                      </div>
+                    )}
+                  </article>
+                )
+              })}
+            </section>
+          </div>
+
+          {/* Productos del Vendedor */}
+          <div className="perfil-col">
+            <section className="perfil-panel">
+              <h2 className="perfil-panel-title">Productos del Vendedor</h2>
+              <div className="perfil-products">
+                {prodsDemo.map((producto) => (
+                  <a
+                    key={producto.id}
+                    className="perfil-product"
+                    href={route(`/productos/detalle?id=${producto.id}`)}
+                    onClick={(event) => {
+                      event.preventDefault()
+                      onNavigate && onNavigate(`/productos/detalle?id=${producto.id}`)
+                    }}
+                  >
+                    <span className="perfil-product-img">
+                      <img src={producto.imagen} alt={producto.titulo} />
+                    </span>
+                    <span className="perfil-product-body">
+                      <span className="perfil-product-name">{producto.titulo}</span>
+                      <span className="perfil-product-old">COP {formatCurrency(producto.precioAnterior || producto.precio)}</span>
+                      <span className="perfil-product-price">COP {formatCurrency(producto.precio)}</span>
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+
+      <Footer onNavigate={onNavigate} />
+
+      {lightbox && (
+        <div className="perfil-lightbox" role="dialog" aria-label="Vista de imagen" onClick={() => setLightbox(null)}>
+          <button type="button" className="perfil-lightbox-close" aria-label="Cerrar" onClick={() => setLightbox(null)}>
+            <IconClose />
+          </button>
+          <img src={lightbox} alt="Vista ampliada" onClick={(event) => event.stopPropagation()} />
+        </div>
+      )}
+
+      {toast && <div className="perfil-toast">{toast}</div>}
+    </div>
+  )
 }
