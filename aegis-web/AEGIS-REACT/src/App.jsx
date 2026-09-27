@@ -1,3 +1,4 @@
+import './App.css'
 import { useEffect, useState } from 'react'
 import { route } from './components/shared/presentation'
 import Home from './components/home/views/Home'
@@ -13,8 +14,6 @@ import Register from './components/auth/views/Register'
 import PuntosFisicos from './components/puntosFisicos/views/Index'
 import Admin from './components/admin/views/Dashboard'
 import Plantilla from './components/shared/Plantilla'
-import './components/home/css/home.css'
-import './App.css'
 
 // Sesión de demostración mientras no exista backend conectado.
 const DEFAULT_AUTH = {
