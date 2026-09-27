@@ -1,0 +1,705 @@
+
+
+.editar-page {
+  display: grid;
+  grid-template-columns: 275px minmax(0, 1fr);
+  gap: 26px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 24px 24px 48px;
+}
+
+/* --- MENÚ LATERAL --- */
+.editar-nav {
+  align-self: start;
+  position: sticky;
+  top: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
+  padding: 18px 14px;
+}
+
+.editar-nav-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 10px 14px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.editar-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.editar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 11px 16px;
+  border: none;
+  border-radius: 999px;
+  background: none;
+  color: #55596b;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.editar-nav-item:hover {
+  background: #f1f3f5;
+  color: #1f2937;
+}
+
+.editar-nav-item.active {
+  background: linear-gradient(90deg, #4f7cf7, #7c3aed);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(79, 124, 247, 0.35);
+}
+
+.editar-nav-item.active:hover {
+  background: linear-gradient(90deg, #4f7cf7, #7c3aed);
+  color: #fff;
+}
+
+.editar-nav-icon {
+  display: grid;
+  place-items: center;
+}
+
+/* --- CONTENIDO --- */
+.editar-main {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-width: 0;
+}
+
+.editar-back {
+  align-self: flex-start;
+  padding: 7px 14px;
+  border: 1px solid #e9edf2;
+  border-radius: 999px;
+  background: #fff;
+  color: #364152;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.editar-back:hover {
+  background: #f1f3f5;
+}
+
+/* --- TARJETA DE PERSONALIZACIÓN --- */
+.editar-hero {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
+  padding: 16px;
+}
+
+.editar-hero-portada {
+  height: 130px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  background-size: cover;
+  background-position: center;
+}
+
+.editar-hero-box {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  padding: 26px 30px;
+  border-radius: 12px;
+  background: #e8e9ee;
+}
+
+.editar-hero-avatar {
+  flex-shrink: 0;
+}
+
+.editar-hero-avatar img {
+  display: block;
+  width: 116px;
+  height: 116px;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  object-fit: cover;
+  background: #f1f3f5;
+  box-shadow: 0 2px 6px rgba(16, 24, 40, 0.16);
+}
+
+.editar-hero-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.editar-hero-hint {
+  margin: 0;
+  max-width: 430px;
+  color: #3a4051;
+  font-size: 15px;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.editar-hero-hint:hover {
+  color: #4f46e5;
+}
+
+.editar-hero-desc {
+  margin: 0;
+  max-width: 430px;
+  color: #55596b;
+  font-size: 13.5px;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.editar-hero-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 20px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4f7cf7, #7c3aed);
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.32);
+  transition: filter 0.15s ease;
+}
+
+.editar-hero-btn:hover {
+  filter: brightness(1.06);
+}
+
+/* --- SECCIONES --- */
+.editar-section-title {
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.editar-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
+  padding: 4px 22px;
+}
+
+/* --- FILAS EDITABLES (Información básica) --- */
+.editar-row {
+  display: grid;
+  grid-template-columns: 210px minmax(140px, 1fr) 235px 78px;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid #eef1f5;
+}
+
+.editar-row:last-child {
+  border-bottom: none;
+}
+
+.editar-row-label {
+  font-size: 14px;
+  color: #3a4051;
+}
+
+.editar-row-value {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.editar-row-help {
+  font-size: 11.5px;
+  color: #98a2b3;
+  line-height: 1.45;
+}
+
+.editar-row-btn {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 0;
+  border: none;
+  background: none;
+  color: #2563eb;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.editar-row-btn:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+.editar-row-form {
+  grid-column: 2 / 5;
+  display: flex;
+  gap: 8px;
+}
+
+.editar-row-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 13px;
+  border: 1px solid #dfe3e9;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13.5px;
+}
+
+.editar-row-form input:focus {
+  outline: 2px solid #b4c3f5;
+  border-color: #8ea8f0;
+}
+
+/* --- BOTONES --- */
+.editar-btn-primary {
+  padding: 9px 18px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #4f7cf7, #7c3aed);
+  color: #fff;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.editar-btn-primary:hover {
+  filter: brightness(1.06);
+}
+
+.editar-btn-ghost {
+  padding: 9px 18px;
+  border: 1px solid #e9edf2;
+  border-radius: 8px;
+  background: #f1f3f5;
+  color: #364152;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.editar-btn-ghost:hover {
+  background: #e8ebf0;
+}
+
+.editar-btn-sm {
+  padding: 9px 14px;
+}
+
+/* --- INTERRUPTORES --- */
+.editar-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid #eef1f5;
+}
+
+.editar-toggle-row:last-child {
+  border-bottom: none;
+}
+
+.editar-toggle-label {
+  font-size: 14px;
+  color: #3a4051;
+}
+
+.editar-switch {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px;
+  height: 25px;
+  border: none;
+  border-radius: 999px;
+  background: #d5d9e0;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+
+.editar-switch-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.3);
+  transition: transform 0.18s ease;
+}
+
+.editar-switch.on {
+  background: linear-gradient(90deg, #4f7cf7, #7c3aed);
+}
+
+.editar-switch.on .editar-switch-knob {
+  transform: translateX(19px);
+}
+
+/* --- ESTADÍSTICAS --- */
+.editar-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.editar-stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 12px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
+  text-align: center;
+}
+
+.editar-stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+}
+
+.editar-stat-icon.blue {
+  background: #3b82f6;
+}
+
+.editar-stat-icon.purple {
+  background: #8b5cf6;
+}
+
+.editar-stat-valor {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+.editar-stat-label {
+  font-size: 12.5px;
+  color: #55596b;
+}
+
+/* --- MENÚ FLOTANTE --- */
+.editar-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(10, 14, 25, 0.6);
+}
+
+.editar-modal-card {
+  width: min(560px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 30px 80px rgba(10, 14, 25, 0.45);
+}
+
+.editar-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eef1f5;
+}
+
+.editar-modal-head h3 {
+  margin: 0;
+  font-size: 15.5px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.editar-modal-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: #f1f3f5;
+  color: #55596b;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.editar-modal-close:hover {
+  background: #e8ebf0;
+  color: #1f2937;
+}
+
+.editar-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  background: #f8f9fb;
+}
+
+/* Portada del menú flotante */
+.editar-modal-cover {
+  position: relative;
+  display: grid;
+  place-items: center;
+  align-content: start;
+  height: 200px;
+  padding-top: 28px;
+  border-radius: 16px;
+  background: #e6e7ec;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.editar-modal-cover.con-foto {
+  background: #d9dae1;
+}
+
+.editar-modal-cover img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.editar-modal-cover-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #55596b;
+}
+
+.editar-modal-cover-placeholder em {
+  font-style: normal;
+  font-size: 14.5px;
+}
+
+.editar-modal-cover-hint {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  background: rgba(11, 32, 80, 0.82);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.editar-modal-cover:hover .editar-modal-cover-hint,
+.editar-modal-cover.con-foto .editar-modal-cover-hint {
+  opacity: 1;
+}
+
+/* Foto de perfil del menú flotante */
+.editar-modal-avatar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: -95px;
+}
+
+.editar-modal-avatar {
+  position: relative;
+  display: block;
+  width: 140px;
+  height: 140px;
+  cursor: pointer;
+}
+
+.editar-modal-avatar img {
+  display: block;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  object-fit: cover;
+  background: linear-gradient(135deg, #5b2be6, #a020e0);
+  box-shadow: 0 4px 12px rgba(16, 24, 40, 0.22);
+}
+
+.editar-modal-avatar-edit {
+  position: absolute;
+  right: 4px;
+  bottom: 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #e53935;
+  border: 3px solid #fff;
+  color: #fff;
+  display: grid;
+  place-items: center;
+}
+
+.editar-modal-avatar:hover .editar-modal-avatar-edit {
+  background: #d32f2f;
+}
+
+.editar-modal-avatar-label {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+/* Descripción del menú flotante */
+.editar-modal-desc {
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.editar-modal-desc h4 {
+  margin: 0 0 10px;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.editar-modal-desc textarea {
+  width: 100%;
+  min-height: 92px;
+  resize: vertical;
+  padding: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: #fff;
+  font-family: inherit;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #1f2937;
+}
+
+.editar-modal-desc textarea:focus {
+  outline: none;
+  border-color: #8ea8f0;
+  box-shadow: 0 0 0 2px rgba(142, 168, 240, 0.35);
+}
+
+.editar-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 20px;
+  border-top: 1px solid #eef1f5;
+}
+
+/* --- TOAST --- */
+.editar-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  z-index: 120;
+  padding: 11px 18px;
+  border-radius: 10px;
+  background: #101828;
+  color: #fff;
+  font-size: 13.5px;
+  box-shadow: 0 12px 30px rgba(16, 24, 40, 0.3);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1000px) {
+  .editar-row {
+    grid-template-columns: 170px minmax(120px, 1fr) 78px;
+  }
+
+  .editar-row-help {
+    display: none;
+  }
+
+  .editar-row-form {
+    grid-column: 2 / 4;
+  }
+
+  .editar-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
+  .editar-page {
+    grid-template-columns: 1fr;
+  }
+
+  .editar-nav {
+    position: static;
+  }
+
+  .editar-nav-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .editar-nav-item {
+    width: auto;
+  }
+
+  .editar-hero-box {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 22px;
+  }
+}
+
+@media (max-width: 560px) {
+  .editar-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .editar-row-btn {
+    justify-self: start;
+  }
+
+  .editar-row-form {
+    grid-column: 1;
+  }
+
+  .editar-stats {
+    grid-template-columns: 1fr;
+  }
+}
