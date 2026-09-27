@@ -61,7 +61,7 @@ export default function Vendedor({ id, auth, onNavigate }) {
           <div className="perfil-identity">
             <div className="perfil-id-left">
               <div className="perfil-avatar-wrap">
-                <img className="perfil-avatar" src={avatarUrl(vendedor, 160)} alt={vendedor.nombre || 'Vendedor'} />
+                <img className="perfil-avatar" src={vendedor.avatar || avatarUrl(vendedor, 160)} alt={vendedor.nombre || 'Vendedor'} />
               </div>
               <h1 className="perfil-name">{vendedor.nombre || 'Vendedor'}</h1>
             </div>

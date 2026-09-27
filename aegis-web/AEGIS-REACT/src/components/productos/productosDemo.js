@@ -37,7 +37,7 @@ export const PRODUCTOS_DESTACADOS = [
     marca: 'Apple',
     precio: 4999999,
     descuento: 10,
-    vendedor: { id: 3, nombre: 'Charlie Kit', reputacion: 4.3 },
+    vendedor: { id: 3, nombre: 'Charlie Kirk', reputacion: 4.3, avatar: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Charlie_Kirk_%2849271286182%29_%28cropped%29.jpg/960px-Charlie_Kirk_%2849271286182%29_%28cropped%29.jpg' },
     imagen: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?q=80&w=800'
   }
 ]
@@ -156,8 +156,9 @@ export const VENDEDORES = [
   },
   {
     id: 3,
-    nombre: 'Charlie Kit',
+    nombre: 'Charlie Kirk',
     reputacion: 4.3,
+    avatar: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Charlie_Kirk_%2849271286182%29_%28cropped%29.jpg/960px-Charlie_Kirk_%2849271286182%29_%28cropped%29.jpg',
     descripcion: 'Venta de celulares y equipos Apple reacondicionados, con pruebas de funcionamiento y garantía por 3 meses.',
     lugar: 'Cali, Valle del Cauca',
     fechaRegistro: '18/09/2024',

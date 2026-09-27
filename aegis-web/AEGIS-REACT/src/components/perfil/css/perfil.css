@@ -1,6 +1,7 @@
 
+/* Igual que el detalle: contenido más pequeño y centrado */
 .perfil-page {
-  max-width: 1240px;
+  max-width: 75%;
   margin: 0 auto;
   padding: 24px 24px 48px;
 }

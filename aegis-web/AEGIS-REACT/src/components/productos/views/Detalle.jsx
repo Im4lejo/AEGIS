@@ -105,7 +105,7 @@ export default function Detalle({ id, auth, onNavigate }) {
                 if (event.key === 'Enter') onNavigate && onNavigate(`/vendedor?id=${vendedor.id}`)
               }}
             >
-              <img className="detail-seller-avatar" src={avatarUrl(vendedor, 100)} alt={vendedor.nombre} />
+              <img className="detail-seller-avatar" src={vendedor.avatar || avatarUrl(vendedor, 100)} alt={vendedor.nombre} />
               <div className="detail-seller-data">
                 <strong className="detail-seller-name">{vendedor.nombre}</strong>
                 <div className="detail-badges">
@@ -164,7 +164,7 @@ export default function Detalle({ id, auth, onNavigate }) {
           <div className="seller-info-grid">
             <img
               className="seller-info-avatar"
-              src={avatarUrl(vendedor, 160)}
+              src={vendedor.avatar || avatarUrl(vendedor, 160)}
               alt={vendedor.nombre}
               title="Ver perfil del vendedor"
               onClick={() => onNavigate && onNavigate(`/vendedor?id=${vendedor.id}`)}

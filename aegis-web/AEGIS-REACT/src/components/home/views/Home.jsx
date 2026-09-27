@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { formatCurrency, imageUrl } from '../../shared/presentation'
+import { PRODUCTOS_DESTACADOS } from '../../productos/productosDemo'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import '../css/home.css'
@@ -14,7 +15,8 @@ const BANNER_SLIDES = [
     price: "€829.00",
     oldPrice: "€829.99",
     btnText: "¡CÓMPRALA YA!",
-    image: "/rtx-4070.jpg"
+    image: "/rtx-4070.jpg",
+    productoId: 9
   },
   {
     id: 2,
@@ -25,40 +27,8 @@ const BANNER_SLIDES = [
     price: "$1.899.900",
     oldPrice: "$3.799.800",
     btnText: "COMPRAR AHORA!",
-    image: "/hp-victus.jpg"
-  }
-]
-
-const productosEjemplo = [
-  {
-    id: 1,
-    nombre: 'Televisor LG OLED 55" 4K Smart TV AI ThinQ',
-    descripcion: 'Procesador α9 Gen6 - 120Hz Refresh Rate - Dolby Vision / Atmos',
-    estado: 'nuevo',
-    precio: 3899999,
-    descuento: 15,
-    vendedor: 'LG Store Oficial',
-    imagen: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?q=80&w=800'
-  },
-  {
-    id: 2,
-    nombre: 'Laptop Lenovo IdeaPad Slim 5 16" AMD Ryzen 7',
-    descripcion: 'Almacenamiento: 512GB SSD - RAM: 16GB DDR5 - Pantalla FHD+',
-    estado: 'nuevo',
-    precio: 2899999,
-    descuento: 20,
-    vendedor: 'Lenovo Colombia',
-    imagen: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=800'
-  },
-  {
-    id: 3,
-    nombre: 'iPhone 15 Pro Max 256GB Titanio Natural',
-    descripcion: 'Pantalla Super Retina XDR 6.7" - Chip A17 Pro - Cámara 48MP',
-    estado: 'reacondicionado',
-    precio: 4999999,
-    descuento: 10,
-    vendedor: 'Charlie Kit',
-    imagen: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?q=80&w=800'
+    image: "/hp-victus.jpg",
+    productoId: 10
   }
 ]
 
@@ -94,8 +64,12 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
     if (onNavigate) onNavigate(`/plantilla?origen=${encodeURIComponent(origen)}`)
   }
 
+  const openProductoId = (id) => {
+    if (onNavigate) onNavigate(`/productos/detalle?id=${id}`)
+  }
+
   const openProducto = (prod) => {
-    if (onNavigate) onNavigate(`/plantilla?origen=producto-${prod.id}`)
+    openProductoId(prod.id)
   }
 
   return (
@@ -137,7 +111,7 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
 
         <section className="hero-section">
 
-          <div className="hero-main">
+          <div className="hero-main" onClick={() => openProductoId(slide.productoId)}>
             <img
               src={slide.image}
               alt={slide.title}
@@ -162,11 +136,19 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
               </div>
             </div>
 
-            <button className="carousel-arrow left" onClick={handlePrev} type="button">
+            <button
+              className="carousel-arrow left"
+              onClick={(event) => { event.stopPropagation(); handlePrev() }}
+              type="button"
+            >
               &#10094;
             </button>
 
-            <button className="carousel-arrow right" onClick={handleNext} type="button">
+            <button
+              className="carousel-arrow right"
+              onClick={(event) => { event.stopPropagation(); handleNext() }}
+              type="button"
+            >
               &#10095;
             </button>
 
@@ -175,7 +157,7 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
                 <button
                   key={index}
                   className={`dot ${index === currentIndex ? 'active' : ''}`}
-                  onClick={() => setCurrentIndex(index)}
+                  onClick={(event) => { event.stopPropagation(); setCurrentIndex(index) }}
                   type="button"
                 />
               ))}
@@ -187,9 +169,9 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
             <div className="side-banner-card">
               <a
                 className="side-banner-link"
-                href="#"
-                title="Ver plantilla: Banner HP Victus"
-                onClick={(e) => openPlantilla(e, 'banner-hp-victus')}
+                href="#/productos/detalle?id=10"
+                title="Ver producto: Portátil HP Victus"
+                onClick={(event) => { event.preventDefault(); openProductoId(10) }}
               >
                 <img src="/hp-victus.jpg" alt="OFERTA HOT: PORTÁTIL HP VICTUS GAMING" className="side-banner-img" />
               </a>
@@ -232,7 +214,7 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
               />
             </a>
 
-            {(productos.length > 0 ? productos : productosEjemplo).map((prod) => {
+            {(productos.length > 0 ? productos : PRODUCTOS_DESTACADOS).map((prod) => {
               const stateInfo = productState(prod.estado)
               const srcImagen = prod.imagen && prod.imagen.startsWith('http')
                 ? prod.imagen
