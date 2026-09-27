@@ -1,2 +1,517 @@
-/* Estilos de la vista Detalle.jsx (detalle de producto) */
-/* Pendiente: se agregan los estilos cuando se trabaje esta página. */
+/* ============================================================
+   Estilos de la vista Detalle.jsx (detalle de producto)
+   Basado en la referencia VerProducto, distribuido hacia abajo
+   para que la página no quede saturada.
+   ============================================================ */
+
+/* --- PÁGINA --- */
+.product-detail-page {
+  background: #f0f2f5;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Contenido centrado (máximo 1400px) */
+.product-detail-page > section {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Tarjetas blancas */
+.detail-gallery,
+.detail-info,
+.detail-section {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  padding: 24px;
+}
+
+/* --- FILA SUPERIOR: galería + info --- */
+.detail-top {
+  display: grid;
+  grid-template-columns: 1.7fr 0.8fr;
+  gap: 24px;
+}
+
+/* Galería */
+.detail-gallery {
+  display: flex;
+  gap: 16px;
+}
+
+.detail-thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-thumb {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  background: #f9fafb;
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 0.2s ease;
+}
+
+.detail-thumb.active {
+  border-color: #315bff;
+}
+
+.detail-thumb img,
+.detail-main-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.detail-thumb i {
+  font-size: 26px;
+  color: #9ca3af;
+}
+
+.detail-main-image {
+  flex: 1;
+  min-height: 460px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-main-image i {
+  font-size: 60px;
+  color: #9ca3af;
+}
+
+/* Información esencial (sección más compacta) */
+.detail-info {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.detail-title {
+  font-size: 22px;
+  line-height: 1.3;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Vista del vendedor (clic para abrir su perfil) */
+.detail-seller {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #e5e7eb;
+  cursor: pointer;
+}
+
+.detail-seller-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 3px solid #111827;
+  object-fit: cover;
+}
+
+.detail-seller-data {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detail-seller-name {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.detail-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-badge {
+  min-width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 0 5px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.detail-badge.blue {
+  background: #315bff;
+}
+
+.detail-badge.purple {
+  background: #7c3aed;
+}
+
+.detail-badge.rating {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  color: #6366f1;
+}
+
+.detail-seller-arrow {
+  margin-left: auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid #111827;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.detail-seller-arrow:hover {
+  background: #f0f2f5;
+}
+
+/* Precio (en un solo renglón) */
+.detail-price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 16px 0 12px;
+  flex-wrap: nowrap;
+}
+
+.detail-price h2 {
+  font-size: 24px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.detail-price span {
+  color: #9ca3af;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Especificaciones */
+.detail-specs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detail-specs-row {
+  display: flex;
+  gap: 24px;
+}
+
+.detail-specs-row p {
+  font-size: 13px;
+}
+
+.detail-specs-row span {
+  color: #6b7280;
+}
+
+.detail-specs-row strong {
+  color: #111827;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+/* Botones de acción */
+.detail-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 40px;
+  padding-top: 0;
+}
+
+.detail-btn {
+  flex: 1;
+  height: 42px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-btn.primary {
+  background: #315bff;
+  color: #fff;
+}
+
+.detail-btn.primary:hover {
+  background: #2546cc;
+}
+
+.detail-btn.outline {
+  background: #fff;
+  border: 2px solid #315bff;
+  color: #315bff;
+}
+
+.detail-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* --- SECCIONES INFERIORES --- */
+/* Ancho determinado (~66%) y centradas para que no ocupen toda la página */
+.product-detail-page > section.detail-section {
+  width: 100%;
+  max-width: 66%;
+  margin: 0 auto;
+}
+
+.detail-section h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.detail-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #374151;
+}
+
+/* Más información del vendedor */
+.seller-info-grid {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.seller-info-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 5px solid #111827;
+  object-fit: cover;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.seller-info-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  border-left: 1px solid #e5e7eb;
+  padding-left: 24px;
+}
+
+.seller-info-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 16px;
+}
+
+.seller-info-icon.blue {
+  background: #315bff;
+}
+
+.seller-info-icon.purple {
+  background: #7c3aed;
+}
+
+.seller-info-icon.light {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  color: #6366f1;
+  font-weight: 700;
+}
+
+.seller-info-stat h4 {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.seller-info-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.seller-info-badge.blue {
+  background: #eef2ff;
+  color: #315bff;
+}
+
+.seller-info-badge.purple {
+  background: #f3e8ff;
+  color: #7c3aed;
+}
+
+.seller-info-stars {
+  font-size: 12px;
+  color: #315bff;
+  letter-spacing: 2px;
+}
+
+/* Comentarios */
+.detail-comments-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 16px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.detail-comments-head h2 {
+  margin-bottom: 0;
+}
+
+.detail-comments-filter {
+  border: 1px solid #6b7280;
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  color: #111827;
+  outline: none;
+  cursor: pointer;
+}
+
+.detail-comment {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.detail-comment:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.detail-comment-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-comment-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.detail-comment-user i {
+  font-size: 18px;
+  color: #6b7280;
+}
+
+.detail-comment-user strong {
+  font-weight: 700;
+}
+
+.detail-comment-user span {
+  color: #9ca3af;
+}
+
+.detail-comment-verified {
+  font-size: 12px;
+  font-weight: 600;
+  color: #315bff;
+}
+
+.detail-comment p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #374151;
+}
+
+.detail-comment small {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1200px) {
+  .detail-top {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .detail-gallery {
+    flex-direction: column-reverse;
+  }
+
+  .detail-thumbs {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .detail-main-image {
+    min-height: 300px;
+  }
+
+  .detail-specs-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .detail-actions {
+    flex-direction: column;
+  }
+
+  .detail-comments-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .seller-info-grid {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .seller-info-stat {
+    border-left: none;
+    border-top: 1px solid #e5e7eb;
+    padding-left: 0;
+    padding-top: 16px;
+    width: 100%;
+  }
+}

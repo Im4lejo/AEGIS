@@ -8,6 +8,7 @@ import PublicarProducto from './components/productos/views/PublicarProducto'
 import DetalleProducto from './components/productos/views/Detalle'
 import MisProductos from './components/productos/views/MisProductos'
 import Perfil from './components/perfil/views/Perfil'
+import Vendedor from './components/perfil/views/Vendedor'
 import EditarPerfil from './components/perfil/views/Editar'
 import Login from './components/auth/views/Login'
 import Register from './components/auth/views/Register'
@@ -36,6 +37,7 @@ const PAGES = {
   '/productos/mis-productos': MisProductos,
   '/perfil': Perfil,
   '/perfil/editar': EditarPerfil,
+  '/vendedor': Vendedor,
   '/puntos-fisicos': PuntosFisicos,
   '/admin': Admin,
   '/login': Login,
@@ -99,6 +101,8 @@ function App() {
       onNavigate={navigate}
       origen={params.origen || path || '/'}
       filtros={{ busqueda: params.buscar || '' }}
+      /* id del producto en la URL: /productos/detalle?id=1 */
+      id={params.id}
     />
   )
 }
