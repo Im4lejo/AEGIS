@@ -72,13 +72,6 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [categoryOpen, setCategoryOpen] = useState(false)
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      handleNext()
-    }, 6000)
-    return () => clearInterval(interval)
-  }, [currentIndex])
-
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev === 0 ? BANNER_SLIDES.length - 1 : prev - 1))
   }
@@ -87,6 +80,13 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
     setCurrentIndex((prev) => (prev === BANNER_SLIDES.length - 1 ? 0 : prev + 1))
   }
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleNext()
+    }, 6000)
+    return () => clearInterval(interval)
+  }, [currentIndex])
+
   const slide = BANNER_SLIDES[currentIndex]
 
   const openPlantilla = (event, origen) => {
@@ -94,7 +94,7 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
     if (onNavigate) onNavigate(`/plantilla?origen=${encodeURIComponent(origen)}`)
   }
 
-  const openProducto = (event, prod) => {
+  const openProducto = (prod) => {
     if (onNavigate) onNavigate(`/plantilla?origen=producto-${prod.id}`)
   }
 
@@ -234,9 +234,13 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
 
             {(productos.length > 0 ? productos : productosEjemplo).map((prod) => {
               const stateInfo = productState(prod.estado)
-              const srcImagen = prod.imagen?.startsWith('http')
+              const srcImagen = prod.imagen && prod.imagen.startsWith('http')
                 ? prod.imagen
                 : imageUrl(prod.imagen)
+
+              let vendedor = prod.vendedor
+              if (vendedor && vendedor.nombre) vendedor = vendedor.nombre
+              if (!vendedor) vendedor = 'Charlie Kirk'
 
               return (
                 <div
@@ -245,11 +249,11 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
                   role="button"
                   tabIndex={0}
                   title="Ver detalle del producto"
-                  onClick={() => openProducto(null, prod)}
+                  onClick={() => openProducto(prod)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault()
-                      openProducto(null, prod)
+                      openProducto(prod)
                     }
                   }}
                 >
@@ -265,7 +269,7 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
                     <p className="product-description">{prod.descripcion}</p>
 
                     <p className="product-seller">
-                      Vendido por: <span>{prod.vendedor?.nombre || prod.vendedor || 'Charlie Kirk'}</span>
+                      Vendido por: <span>{vendedor}</span>
                     </p>
 
                     <div className="product-price-row">
