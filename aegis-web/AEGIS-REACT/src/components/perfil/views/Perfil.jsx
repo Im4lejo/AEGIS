@@ -215,7 +215,7 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
   const pubsDemo = publicaciones && publicaciones.length > 0 ? publicaciones : PUBLICACIONES_EJEMPLO
   const prodsDemo = productos && productos.length > 0 ? productos : PRODUCTOS_EJEMPLO
 
-  const [avatar, setAvatar] = useState(yo.avatar || avatarUrl(yo, 160))
+  const avatar = yo.avatar || avatarUrl(yo, 160)
   const [orden, setOrden] = useState('recientes')
   const [filtro, setFiltro] = useState('todas')
   const [likesActivos, setLikesActivos] = useState({})
@@ -240,16 +240,6 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
     document.addEventListener('keydown', onKeyDown)
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [lightbox])
-
-  const handleAvatarChange = (event) => {
-    const [file] = event.target.files
-    if (!file) return
-    const reader = new FileReader()
-    reader.onload = (loadEvent) => setAvatar(loadEvent.target.result)
-    reader.readAsDataURL(file)
-  }
-
-  const irPlantilla = (origen) => onNavigate && onNavigate(`/plantilla?origen=${origen}`)
 
   const publicacionesList = useMemo(() => {
     let lista = [...pubsDemo]
@@ -292,8 +282,8 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
         {/* ============ TARJETA DE IDENTIDAD ============ */}
         <section className="perfil-card">
           <div className="perfil-cover">
-            <button type="button" className="perfil-cover-btn" onClick={() => irPlantilla('editar-portada')}>
-              <IconPencil /> Editar Portada
+            <button type="button" className="perfil-cover-btn" onClick={() => onNavigate && onNavigate('/perfil/editar')}>
+              <IconPencil /> Editar Perfil
             </button>
           </div>
 
@@ -301,14 +291,6 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
             <div className="perfil-id-left">
               <div className="perfil-avatar-wrap">
                 <img className="perfil-avatar" src={avatar} alt="Foto de perfil" />
-                {esPropio && (
-                  <>
-                    <label htmlFor="fotoPerfilInput" className="perfil-avatar-edit" title="Cambiar foto de perfil">
-                      <IconPencil size={14} />
-                    </label>
-                    <input id="fotoPerfilInput" type="file" accept="image/*" hidden onChange={handleAvatarChange} />
-                  </>
-                )}
               </div>
               <h1 className="perfil-name">{yo.nombre} {yo.apellido}</h1>
             </div>
