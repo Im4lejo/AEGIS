@@ -1,4 +1,6 @@
 import { navigateTo, route } from '../shared/presentation'
+import './css/footer.css'
+
 
 // Pie de página del sitio.
 export default function Footer({ onNavigate }) {
