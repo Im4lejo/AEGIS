@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
-import { avatarUrl, formatCurrency } from '../../shared/presentation'
+import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
 import { buscarProducto } from '../productosDemo'
 import '../css/detalle.css'
 
@@ -52,6 +52,29 @@ function etiquetaEstado(estado) {
   return 'Usado - En buen estado'
 }
 
+// Etiquetas de las fichas técnicas que se muestran
+// debajo de la galería (como "Características principales").
+const CAMPOS_FICHAS = {
+  cpu: 'Procesador (CPU)',
+  gpu: 'Tarjeta gráfica',
+  ram: 'Memoria RAM',
+  almacenamiento: 'Almacenamiento',
+  almacenamientoTipo: 'Tipo de almacenamiento',
+  pulgadas: 'Tamaño de pantalla',
+  resolucion: 'Resolución',
+  panel: 'Panel',
+  refresco: 'Tasa de refresco',
+  sistema: 'Sistema operativo / Smart TV',
+  so: 'Sistema operativo',
+  camara: 'Cámara principal',
+  vram: 'Memoria VRAM',
+  uso: 'Uso principal',
+  tipo: 'Tipo',
+  conectividad: 'Conectividad',
+  iluminacion: 'Iluminación',
+  switch: 'Switch',
+}
+
 export default function Detalle({ id, auth, onNavigate }) {
   const producto = buscarProducto(id) || {}
   const titulo = producto.nombre || producto.titulo || 'Producto'
@@ -62,39 +85,184 @@ export default function Detalle({ id, auth, onNavigate }) {
 
   const insignia = insigniasVendedor(vendedor.reputacion)
 
-  // La captura muestra 4 miniaturas (misma foto principal).
+  // Galería con miniaturas (misma foto principal en la demo).
   const [imagenActiva, setImagenActiva] = useState(0)
   const miniaturas = [0, 1, 2, 3]
+
+  const imagenAnterior = () =>
+    setImagenActiva((i) => (i === 0 ? miniaturas.length - 1 : i - 1))
+  const imagenSiguiente = () =>
+    setImagenActiva((i) => (i === miniaturas.length - 1 ? 0 : i + 1))
+
+  // Solo los campos con dato del producto aparecen en la lista.
+  const caracteristicas = Object.keys(CAMPOS_FICHAS).filter((campo) => producto[campo])
 
   return (
     <div className="page-layout">
       <Header title={`AEGIS | ${titulo}`} auth={auth} onNavigate={onNavigate} />
 
       <main className="product-detail-page">
-        {/* ===== FILA SUPERIOR: galería + información esencial ===== */}
-        <section className="detail-top">
-          <article className="detail-gallery">
-            <div className="detail-thumbs">
-              {miniaturas.map((indice) => (
-                <button
-                  key={indice}
-                  type="button"
-                  className={'detail-thumb' + (imagenActiva === indice ? ' active' : '')}
-                  onClick={() => setImagenActiva(indice)}
-                >
-                  {imagen
-                    ? <img src={imagen} alt={`Vista ${indice + 1} de ${titulo}`} />
-                    : <i className="fa-regular fa-image" />}
-                </button>
-              ))}
-            </div>
-            <div className="detail-main-image">
-              {imagen ? <img src={imagen} alt={titulo} /> : <i className="fa-regular fa-image" />}
-            </div>
-          </article>
+        {/* Migajas de pan: Inicio / Categoría / producto */}
+        <nav className="detail-breadcrumb" aria-label="Ruta de navegación">
+          <a
+            href={route('/')}
+            onClick={(e) => { e.preventDefault(); if (onNavigate) onNavigate('/') }}
+          >
+            Inicio
+          </a>
+          <span>/</span>
+          {producto.categoria && (
+            <>
+              <a
+                href={route(`/productos?categoria=${producto.categoria}`)}
+                onClick={(e) => {
+                  e.preventDefault()
+                  if (onNavigate) onNavigate(`/productos?categoria=${producto.categoria}`)
+                }}
+              >
+                {producto.categoria}
+              </a>
+              <span>/</span>
+            </>
+          )}
+          <strong>{titulo}</strong>
+        </nav>
 
-          <article className="detail-info">
+        <section className="detail-top">
+          {/* ===== COLUMNA IZQUIERDA: galería + todo el contenido ===== */}
+          <div className="detail-left">
+            <article className="detail-gallery">
+              <div className="detail-thumbs">
+                {miniaturas.map((indice) => (
+                  <button
+                    key={indice}
+                    type="button"
+                    className={'detail-thumb' + (imagenActiva === indice ? ' active' : '')}
+                    onClick={() => setImagenActiva(indice)}
+                  >
+                    {imagen
+                      ? <img src={imagen} alt={`Vista ${indice + 1} de ${titulo}`} />
+                      : <i className="fa-regular fa-image" />}
+                  </button>
+                ))}
+              </div>
+              <div className="detail-main-image">
+                <span className="detail-counter">
+                  {imagenActiva + 1}/{miniaturas.length}
+                </span>
+                <button
+                  type="button"
+                  className="detail-arrow left"
+                  aria-label="Imagen anterior"
+                  onClick={imagenAnterior}
+                >
+                  <i className="fa-solid fa-chevron-left" />
+                </button>
+                {imagen ? <img src={imagen} alt={titulo} /> : <i className="fa-regular fa-image" />}
+                <button
+                  type="button"
+                  className="detail-arrow right"
+                  aria-label="Imagen siguiente"
+                  onClick={imagenSiguiente}
+                >
+                  <i className="fa-solid fa-chevron-right" />
+                </button>
+              </div>
+            </article>
+
+            {/* Características principales (idea de la referencia) */}
+            {caracteristicas.length > 0 && (
+              <section className="detail-section">
+                <h2>Características principales</h2>
+                <ul className="detail-features">
+                  {caracteristicas.map((campo) => (
+                    <li key={campo}>
+                      <span>{CAMPOS_FICHAS[campo]}:</span> <strong>{producto[campo]}</strong>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            <section className="detail-section">
+              <h2>Descripción</h2>
+              <p className="detail-text">{producto.descripcion || 'Sin descripción disponible'}</p>
+            </section>
+
+            <section className="detail-section">
+              <h2>Más información sobre este vendedor</h2>
+              <div className="seller-info-grid">
+                <img
+                  className="seller-info-avatar"
+                  src={vendedor.avatar || avatarUrl(vendedor, 160)}
+                  alt={vendedor.nombre}
+                  title="Ver perfil del vendedor"
+                  onClick={() => onNavigate && onNavigate(`/vendedor?id=${vendedor.id}`)}
+                />
+                <div className="seller-info-stat">
+                  <span className="seller-info-icon blue"><i className="fa-solid fa-crown" /></span>
+                  <h4>Nivel de Servicio</h4>
+                  <span className="seller-info-badge blue">{insignia.servicio}</span>
+                </div>
+                <div className="seller-info-stat">
+                  <span className="seller-info-icon purple"><i className="fa-solid fa-shield" /></span>
+                  <h4>Vendedor Estrella</h4>
+                  <span className="seller-info-badge purple">{insignia.estrella}</span>
+                </div>
+                <div className="seller-info-stat">
+                  <span className="seller-info-icon light"><i className="fa-regular fa-star" /> {insignia.rating}</span>
+                  <h4>Reseñas</h4>
+                  <span className="seller-info-stars">{insignia.estrellas}</span>
+                </div>
+              </div>
+            </section>
+
+            <section className="detail-section">
+              <div className="detail-comments-head">
+                <h2>Comentarios del Vendedor ({COMENTARIOS.length})</h2>
+                <select className="detail-comments-filter">
+                  <option>Filtro: Todas las valoraciones</option>
+                </select>
+              </div>
+
+              {COMENTARIOS.map((comentario) => (
+                <article className="detail-comment" key={comentario.id}>
+                  <div className="detail-comment-head">
+                    <span className="detail-comment-user">
+                      <i className="fa-solid fa-circle-user" />
+                      <strong>{comentario.autor}</strong>
+                      <span>• {comentario.fecha}</span>
+                    </span>
+                    {comentario.verificado && (
+                      <span className="detail-comment-verified">Compra Verificada</span>
+                    )}
+                  </div>
+                  <p>{comentario.texto}</p>
+                  <small>{titulo}</small>
+                </article>
+              ))}
+            </section>
+          </div>
+
+          {/* ===== PANEL DERECHO: se queda fijo al hacer scroll ===== */}
+          <aside className="detail-info">
+            <p className="detail-code">Código de producto: {producto.id}</p>
+
             <h1 className="detail-title">{titulo}</h1>
+            <p className="detail-brand">{producto.marca || 'Sin marca'}</p>
+
+            <div className="detail-price">
+              {producto.descuento > 0 && (
+                <span className="detail-discount">-{producto.descuento}%</span>
+              )}
+              <strong className="detail-price-now">COP {formatCurrency(producto.precio)}</strong>
+              {producto.precioAnterior && (
+                <span className="detail-price-old">COP {formatCurrency(producto.precioAnterior)}</span>
+              )}
+            </div>
+            <p className="detail-stock">
+              {producto.stock === false ? '(Agotado)' : '(Único Disponible)'}
+            </p>
 
             <div
               className="detail-seller"
@@ -130,88 +298,23 @@ export default function Detalle({ id, auth, onNavigate }) {
               </button>
             </div>
 
-            <div className="detail-price">
-              <h2>COP {formatCurrency(producto.precio)}</h2>
-              <span>(Único Disponible)</span>
-            </div>
-
             <div className="detail-specs">
               <div className="detail-specs-row">
                 <p><span>Categoría:</span> <strong>{producto.categoria || 'Sin categoría'}</strong></p>
-                <p><span>Marca:</span> <strong>{producto.marca || 'Sin marca'}</strong></p>
-              </div>
-              <div className="detail-specs-row">
                 <p><span>Estado:</span> <strong>{etiquetaEstado(producto.estado)}</strong></p>
               </div>
             </div>
+
+            <p className="detail-shipping">
+              <i className="fa-solid fa-truck-fast" />
+              <span>{producto.envioRapido ? 'Envío rápido disponible' : 'Envío estándar a domicilio'}</span>
+            </p>
 
             <div className="detail-actions">
               <button type="button" className="detail-btn primary">Contactar</button>
               <button type="button" className="detail-btn outline">Agregar al Carrito</button>
             </div>
-          </article>
-        </section>
-
-        {/* ===== DESCRIPCIÓN (hacia abajo) ===== */}
-        <section className="detail-section">
-          <h2>Descripción</h2>
-          <p className="detail-text">{producto.descripcion || 'Sin descripción disponible'}</p>
-        </section>
-
-        {/* ===== MÁS INFORMACIÓN DEL VENDEDOR (hacia abajo) ===== */}
-        <section className="detail-section">
-          <h2>Más información sobre este vendedor</h2>
-          <div className="seller-info-grid">
-            <img
-              className="seller-info-avatar"
-              src={vendedor.avatar || avatarUrl(vendedor, 160)}
-              alt={vendedor.nombre}
-              title="Ver perfil del vendedor"
-              onClick={() => onNavigate && onNavigate(`/vendedor?id=${vendedor.id}`)}
-            />
-            <div className="seller-info-stat">
-              <span className="seller-info-icon blue"><i className="fa-solid fa-crown" /></span>
-              <h4>Nivel de Servicio</h4>
-              <span className="seller-info-badge blue">{insignia.servicio}</span>
-            </div>
-            <div className="seller-info-stat">
-              <span className="seller-info-icon purple"><i className="fa-solid fa-shield" /></span>
-              <h4>Vendedor Estrella</h4>
-              <span className="seller-info-badge purple">{insignia.estrella}</span>
-            </div>
-            <div className="seller-info-stat">
-              <span className="seller-info-icon light"><i className="fa-regular fa-star" /> {insignia.rating}</span>
-              <h4>Reseñas</h4>
-              <span className="seller-info-stars">{insignia.estrellas}</span>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== COMENTARIOS (hacia abajo) ===== */}
-        <section className="detail-section">
-          <div className="detail-comments-head">
-            <h2>Comentarios del Vendedor ({COMENTARIOS.length})</h2>
-            <select className="detail-comments-filter">
-              <option>Filtro: Todas las valoraciones</option>
-            </select>
-          </div>
-
-          {COMENTARIOS.map((comentario) => (
-            <article className="detail-comment" key={comentario.id}>
-              <div className="detail-comment-head">
-                <span className="detail-comment-user">
-                  <i className="fa-solid fa-circle-user" />
-                  <strong>{comentario.autor}</strong>
-                  <span>• {comentario.fecha}</span>
-                </span>
-                {comentario.verificado && (
-                  <span className="detail-comment-verified">Compra Verificada</span>
-                )}
-              </div>
-              <p>{comentario.texto}</p>
-              <small>{titulo}</small>
-            </article>
-          ))}
+          </aside>
         </section>
       </main>
 
