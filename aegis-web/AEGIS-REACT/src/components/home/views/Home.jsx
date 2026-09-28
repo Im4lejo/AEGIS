@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { formatCurrency, imageUrl } from '../../shared/presentation'
+import { formatCurrency, imageUrl, route } from '../../shared/presentation'
 import { PRODUCTOS_DESTACADOS } from '../../productos/productosDemo'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
@@ -59,17 +59,18 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
 
   const slide = BANNER_SLIDES[currentIndex]
 
-  const openPlantilla = (event, origen) => {
-    if (event) event.preventDefault()
-    if (onNavigate) onNavigate(`/plantilla?origen=${encodeURIComponent(origen)}`)
-  }
-
   const openProductoId = (id) => {
     if (onNavigate) onNavigate(`/productos/detalle?id=${id}`)
   }
 
   const openProducto = (prod) => {
     openProductoId(prod.id)
+  }
+
+  // Abre la página de listado de productos con un filtro del subnav.
+  const abrirCatalogo = (consulta) => {
+    setCategoryOpen(false)
+    if (onNavigate) onNavigate('/productos' + consulta)
   }
 
   return (
@@ -89,17 +90,17 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
 
           {categoryOpen && (
             <div className="dropdown-menu">
-              <a href="#">Celulares</a>
-              <a href="#">Componentes PC</a>
-              <a href="#">Laptops</a>
-              <a href="#">Consolas & Juegos</a>
-              <a href="#">Periféricos</a>
+              <a href={route('/productos?categoria=Celulares')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Celulares') }}>Celulares</a>
+              <a href={route('/productos?categoria=Componentes PC')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Componentes PC') }}>Componentes PC</a>
+              <a href={route('/productos?categoria=Laptops')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Laptops') }}>Laptops</a>
+              <a href={route('/productos?categoria=Consolas & Juegos')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Consolas & Juegos') }}>Consolas & Juegos</a>
+              <a href={route('/productos?categoria=Periféricos')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Periféricos') }}>Periféricos</a>
             </div>
           )}
         </div>
-        <a href="#">Ofertas</a>
-        <a href="#">Gaming</a>
-        <a href="#">Reacondicionado</a>
+        <a href={route('/productos?filtro=ofertas')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?filtro=ofertas') }}>Ofertas</a>
+        <a href={route('/productos?filtro=gaming')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?filtro=gaming') }}>Gaming</a>
+        <a href={route('/productos?filtro=reacondicionado')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?filtro=reacondicionado') }}>Reacondicionado</a>
       </section>
 
       <main className="home-container">
@@ -180,9 +181,9 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
             <div className="side-banner-card">
               <a
                 className="side-banner-link"
-                href="#"
-                title="Ver plantilla: Banner Black Friday"
-                onClick={(e) => openPlantilla(e, 'banner-black-friday')}
+                href={route('/productos?filtro=blackfriday')}
+                title="Ver productos en Black Friday"
+                onClick={(e) => { e.preventDefault(); if (onNavigate) onNavigate('/productos?filtro=blackfriday') }}
               >
                 <img
                   src="/blackfriday.jpg"
@@ -203,9 +204,9 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
 
             <a
               className="promo-product-card"
-              href="#"
-              title="Ver plantilla: Banner Celulares"
-              onClick={(e) => openPlantilla(e, 'banner-celulares')}
+              href={route('/productos?categoria=Celulares')}
+              title="Ver productos de la categoría Celulares"
+              onClick={(e) => { e.preventDefault(); if (onNavigate) onNavigate('/productos?categoria=Celulares') }}
             >
               <img
                 src="/celulares-banner.png"

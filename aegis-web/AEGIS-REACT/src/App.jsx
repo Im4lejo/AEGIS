@@ -71,6 +71,9 @@ const getHashParams = () => {
 function App() {
   const [path, setPath] = useState(getHashPath())
   const [params, setParams] = useState(getHashParams())
+  // Cuenta cada navegación para que las páginas vuelvan a leer la URL
+  // aunque el link no cambie (por ejemplo, repetir la misma búsqueda).
+  const [navegacion, setNavegacion] = useState(0)
 
   useEffect(() => {
     const onHashChange = () => {
@@ -86,6 +89,7 @@ function App() {
     if (window.location.hash === target) {
       setPath(getHashPath())
       setParams(getHashParams())
+      setNavegacion((n) => n + 1)
     } else {
       window.location.hash = target
     }
@@ -100,7 +104,12 @@ function App() {
       auth={DEFAULT_AUTH}
       onNavigate={navigate}
       origen={params.origen || path || '/'}
-      filtros={{ busqueda: params.buscar || '' }}
+      filtros={{
+        busqueda: params.buscar || '',
+        categoria: params.categoria || '',
+        filtro: params.filtro || '',
+        navegacion: navegacion,
+      }}
       /* id del producto en la URL: /productos/detalle?id=1 */
       id={params.id}
     />
