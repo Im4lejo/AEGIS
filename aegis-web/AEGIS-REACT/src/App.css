@@ -50,6 +50,7 @@ textarea {
   align-items: center;
   gap: 8px;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .logo-img {
@@ -66,14 +67,18 @@ textarea {
 
 .header-nav {
   display: flex;
-  gap: 18px;
+  gap: 40px;
+  /* Espacio grande y fijo entre el logo y los enlaces, como la imagen. */
+  margin-left: 8%;
+  flex-shrink: 0;
 }
 
 .header-nav a {
   color: white;
   text-decoration: none;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 700;
+  white-space: nowrap;
   transition: opacity 0.2s;
 }
 
@@ -83,8 +88,11 @@ textarea {
 
 .header-search {
   position: relative;
-  flex: 1;
-  max-width: 320px;
+  /* Pegado a los enlaces (como la imagen); el espacio que sobra queda
+     entre el buscador y los iconos de la derecha. */
+  flex: 0 1 360px;
+  margin-left: 12px;
+  margin-right: auto;
 }
 
 .header-search input {
@@ -115,6 +123,7 @@ textarea {
   display: flex;
   align-items: center;
   gap: 16px;
+  flex-shrink: 0;
 }
 
 .profile-dropdown-container {
