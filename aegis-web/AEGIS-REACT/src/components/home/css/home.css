@@ -337,6 +337,141 @@
   pointer-events: none;
 }
 
+/* --- BANNER GRAN PROMOCIÓN DE TELEVISORES --- */
+.tv-banner {
+  width: calc(100% + 40px);
+  margin: 10px -20px 28px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(115deg, #1d4ed8 0%, #6d28d9 55%, #db2777 100%);
+  box-shadow: 0 6px 20px rgba(109, 40, 217, 0.35);
+}
+
+/* Tiras de texto repetido arriba y abajo */
+.tv-banner-strip {
+  display: flex;
+  gap: 30px;
+  padding: 9px 18px;
+  background-color: rgba(6, 12, 45, 0.4);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.tv-banner-palabra {
+  flex-shrink: 0;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.tv-banner-palabra.rojo { color: #ff3eb5; }
+.tv-banner-palabra.negro { color: #0a0f2d; }
+.tv-banner-palabra.blanco { color: #ffffff; }
+
+/* Cuerpo: imágenes a la izquierda, texto a la derecha */
+.tv-banner-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 34px 46px;
+}
+
+.tv-banner-imgs {
+  display: flex;
+  gap: 18px;
+}
+
+.tv-banner-imgs img {
+  width: 250px;
+  height: 175px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35);
+}
+
+.tv-banner-imgs img:first-child { transform: rotate(-2deg); }
+.tv-banner-imgs img:last-child { transform: rotate(2deg); }
+
+.tv-banner-text {
+  flex: 1;
+  color: #ffffff;
+  text-align: right;
+}
+
+.tv-banner-tag {
+  display: inline-block;
+  background-color: #ff3eb5;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.tv-banner-text h2 {
+  margin: 0 0 8px;
+  font-size: 46px;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+}
+
+.tv-banner-destacado { color: #ffe14d; }
+
+.tv-banner-text p {
+  margin: 0 0 18px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #ffd9f0;
+}
+
+.tv-banner-btn {
+  display: inline-block;
+  background-color: #ffffff;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 12px 28px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tv-banner-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 1100px) {
+  .tv-banner-body {
+    padding: 26px 28px;
+    gap: 22px;
+  }
+
+  .tv-banner-imgs img {
+    width: 200px;
+    height: 145px;
+  }
+
+  .tv-banner-text h2 { font-size: 36px; }
+}
+
+@media (max-width: 768px) {
+  .tv-banner-body {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .tv-banner-text { text-align: center; }
+}
+
 
 
 
