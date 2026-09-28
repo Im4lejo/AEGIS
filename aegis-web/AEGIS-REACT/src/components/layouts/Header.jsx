@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { avatarUrl, navigateTo, route } from '../shared/presentation'
 import Head from './Head'
 import Navbar from './Navbar'
+import './css/header.css'
+
 
 // Encabezado del sitio: título/meta (Head), logo, navegación, buscador y menú de usuario.
 export default function Header({ title, stylesheet, auth, onNavigate }) {

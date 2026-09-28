@@ -1,0 +1,56 @@
+@media (max-width: 768px) {
+  /* Scroll horizontal SOLO en la barra azul */
+.main-header {
+    display: flex;
+    overflow-x: auto;      /* habilita scroll lateral */
+    overflow-y: hidden;    /* evita que se arrastre vertical */
+    white-space: nowrap;   /* mantiene los elementos en una sola fila */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* oculta scrollbar en Firefox */
+}
+
+.main-header::-webkit-scrollbar {
+    display: none;         /* oculta scrollbar en Chrome/Safari */
+}
+
+.main-header .header-container {
+    flex: 0 0 auto;        /* cada bloque ocupa su espacio */
+}
+}
+
+/* Bloquea scroll lateral en el resto del contenido */
+body {
+overflow-x: hidden;
+}
+
+
+@media (max-width: 768px) {
+  .main-header {
+    position: fixed;         /* fijo arriba, independiente del contenido */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: #1e3a8a; /* color de fondo sólido */
+    display: flex;
+    overflow-x: auto;        /* scroll horizontal solo aquí */
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .main-header::-webkit-scrollbar {
+    display: none;
+  }
+
+  .main-header .header-container {
+    flex: 0 0 auto;
+  }
+
+  /* Para que el contenido no quede tapado por el header fijo */
+  body {
+    padding-top: 60px; /* ajusta según la altura real del header */
+    overflow-x: hidden; /* bloquea scroll lateral en el resto */
+  }
+}
