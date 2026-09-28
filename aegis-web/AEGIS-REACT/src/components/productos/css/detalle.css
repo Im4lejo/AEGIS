@@ -36,6 +36,43 @@
   display: grid;
   grid-template-columns: 1.7fr 0.8fr;
   gap: 24px;
+  align-items: start;
+}
+
+/* Columna izquierda: galería y secciones de contenido juntas */
+.detail-left {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+/* --- MIGAJAS DE PAN (Inicio / Categoría / producto) --- */
+.detail-breadcrumb {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.detail-breadcrumb a {
+  color: #315bff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.detail-breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.detail-breadcrumb strong {
+  color: #111827;
+  font-weight: 600;
 }
 
 /* Galería */
@@ -80,6 +117,7 @@
 }
 
 .detail-main-image {
+  position: relative;
   flex: 1;
   min-height: 460px;
   border-radius: 14px;
@@ -95,20 +133,76 @@
   color: #9ca3af;
 }
 
-/* Información esencial (sección más compacta) */
+/* Contador de imágenes (estilo "1/9" de la referencia) */
+.detail-counter {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  background: #315bff;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+/* Flechas para moverse por la galería */
+.detail-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #111827;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.2s ease;
+}
+
+.detail-arrow:hover {
+  background: #f0f2f5;
+}
+
+.detail-arrow.left { left: 12px; }
+.detail-arrow.right { right: 12px; }
+
+/* Información esencial: panel derecho que se queda fijo al hacer scroll */
 .detail-info {
   display: flex;
   flex-direction: column;
   padding: 20px;
+  position: sticky;
+  top: 16px;
+  align-self: start;
+}
+
+.detail-code {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #9ca3af;
 }
 
 .detail-title {
-  font-size: 22px;
-  line-height: 1.3;
+  font-size: 25px;
+  line-height: 1.25;
   font-weight: 800;
-  text-transform: uppercase;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #e5e7eb;
+  margin: 0;
+}
+
+.detail-brand {
+  margin: 6px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #6b7280;
 }
 
 /* Vista del vendedor (clic para abrir su perfil) */
@@ -193,26 +287,42 @@
   background: #f0f2f5;
 }
 
-/* Precio (en un solo renglón) */
+/* Precio con badge de descuento y precio anterior tachado */
 .detail-price {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
-  padding: 16px 0 12px;
-  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 16px 0 4px;
 }
 
-.detail-price h2 {
-  font-size: 24px;
+.detail-discount {
+  background: #fde047;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+.detail-price-now {
+  font-size: 27px;
   font-weight: 900;
   white-space: nowrap;
 }
 
-.detail-price span {
+.detail-price-old {
+  font-size: 15px;
   color: #9ca3af;
-  font-size: 12px;
-  font-weight: 500;
+  text-decoration: line-through;
   white-space: nowrap;
+}
+
+.detail-stock {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #9ca3af;
 }
 
 /* Especificaciones */
@@ -241,11 +351,25 @@
   margin-left: 4px;
 }
 
+/* Aviso de envío */
+.detail-shipping {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin: 14px 0 0;
+}
+
 /* Botones de acción */
 .detail-actions {
   display: flex;
   gap: 12px;
-  margin-top: 40px;
+  margin-top: 16px;
   padding-top: 0;
 }
 
@@ -282,11 +406,31 @@
 }
 
 /* --- SECCIONES INFERIORES --- */
-/* Ancho determinado (~66%) y centradas para que no ocupen toda la página */
-.product-detail-page > section.detail-section {
-  width: 100%;
-  max-width: 66%;
-  margin: 0 auto;
+/* Ahora viven dentro de la columna izquierda (ancho completo del grid) */
+.detail-features {
+  list-style: disc;
+  padding-left: 22px;
+  margin: 0;
+}
+
+.detail-features li {
+  font-size: 14px;
+  color: #374151;
+  margin-bottom: 10px;
+}
+
+.detail-features li:last-child {
+  margin-bottom: 0;
+}
+
+.detail-features li span {
+  color: #6b7280;
+}
+
+.detail-features li strong {
+  color: #111827;
+  font-weight: 600;
+  margin-left: 4px;
 }
 
 .detail-section h2 {
@@ -471,6 +615,20 @@
 @media (max-width: 1200px) {
   .detail-top {
     grid-template-columns: 1fr;
+  }
+
+  /* En una sola columna: galería, luego el panel, luego el resto */
+  .detail-left {
+    display: contents;
+  }
+
+  .detail-info {
+    position: static;
+    order: 1;
+  }
+
+  .detail-left > .detail-section {
+    order: 2;
   }
 }
 

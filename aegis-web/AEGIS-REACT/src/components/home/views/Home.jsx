@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { formatCurrency, imageUrl, route } from '../../shared/presentation'
 import { PRODUCTOS_DESTACADOS, PRODUCTOS_PROMOCION } from '../../productos/productosDemo'
 import Header from '../../layouts/Header'
@@ -110,6 +110,19 @@ const MAS_PRODUCTOS = IDS_MAS_PRODUCTOS.map((id) => PRODUCTOS_PROMOCION.find((pr
 export default function Home({ productos = [], auth, message, onNavigate }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [categoryOpen, setCategoryOpen] = useState(false)
+  const categoryRef = useRef(null)
+
+  // Cierra el desplegable de categorías al hacer clic fuera de él
+  useEffect(() => {
+    if (!categoryOpen) return
+    const handleClickOutside = (event) => {
+      if (categoryRef.current && !categoryRef.current.contains(event.target)) {
+        setCategoryOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [categoryOpen])
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev === 0 ? BANNER_SLIDES.length - 1 : prev - 1))
@@ -148,7 +161,7 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
 
       {/* Subnavegación */}
       <section className="subnav">
-        <div className="dropdown-container">
+        <div className="dropdown-container" ref={categoryRef}>
           <button
             className="dropdown-btn"
             onClick={() => setCategoryOpen(!categoryOpen)}
