@@ -1,8 +1,9 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import aegisLogo from "../icon.png";
 import { LinearGradient } from 'expo-linear-gradient';
-
-export default function Authenticator() {
+import { useNavigation } from "@react-navigation/native";
+export default function Authenticator({ setLog }) {
+    const navigation = useNavigation();
     return (
         <View style={styles.container}>
             <LinearGradient
@@ -25,7 +26,9 @@ export default function Authenticator() {
 
                     <View style={styles.actions}>
                         <Pressable
-                            onPress={() => { }}
+                            onPress={() => {
+                                navigation.navigate("Login")
+                            }}
                             style={({ pressed }) => [styles.login, pressed && styles.pressed]}
                         >
                             <Text style={styles.loginText}>Iniciar sesión</Text>
@@ -38,7 +41,9 @@ export default function Authenticator() {
                         </View>
 
                         <Pressable
-                            onPress={() => { }}
+                            onPress={() => {
+                                navigation.navigate("Register")
+                            }}
                             style={({ pressed }) => [styles.register, pressed && styles.pressed]}
                         >
                             <Text style={styles.registerText}>Regístrate</Text>
@@ -46,7 +51,14 @@ export default function Authenticator() {
 
                         <View style={styles.divider}>
                             <View style={styles.dividerLine} />
-                            <Text style={styles.dividerText}>Seguir navegando como invitado</Text>
+                            <Text style={styles.skipText}
+                                onPress={() => {
+                                    navigation.navigate("Index", {
+                                        screen: "Inicio"
+                                    });
+                                    setLog(false)
+                                }}>
+                                Seguir navegando como invitado</Text>
                             <View style={styles.dividerLine} />
                         </View>
                     </View>
@@ -151,6 +163,13 @@ const styles = StyleSheet.create({
         color: 'rgba(255, 255, 255, 0.72)',
         fontSize: 13,
         fontWeight: '600',
+    },
+    skipText: {
+        color: 'rgba(255, 255, 255, 0.72)',
+        fontSize: 13,
+        fontWeight: '600',
+        borderBottomWidth: 1,
+        borderBottomColor: "rgba(255, 255, 255, 0.72)"
     },
     register: {
         alignItems: 'center',

@@ -2,11 +2,13 @@ import { Image, Pressable, StyleSheet, Text, View, TextInput } from "react-nativ
 import aegisLogo from "../icon.png";
 import { LinearGradient } from 'expo-linear-gradient';
 import Index from "../screens/Inicio";
-import { Ionicons} from '@expo/vector-icons';
-export default function Authenticator() {
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+export default function Authenticator({ isLogged, setLog }) {
+    const navigation = useNavigation();
     return (
         <View style={styles.container}>
-            
+
             <LinearGradient
                 colors={['#196EDE', '#131EBB', '#371174']}
                 locations={[0, 0.52, 1]}
@@ -15,12 +17,12 @@ export default function Authenticator() {
                 style={styles.background}
             >
                 <Pressable
-                    onPress={() => { }}
+                    onPress={() => { navigation.navigate("Authenticator") }}
                     style={styles.indexButton}
-                >   
-                    
+                >
+
                     <Text style={styles.comeBackText}><Ionicons name="arrow-back" size={13} color="white" /> Regresar al inicio</Text>
-                </Pressable>  
+                </Pressable>
                 <View style={styles.content}>
                     <View style={styles.logoFrame}>
                         <Image source={aegisLogo} style={styles.logo} />
@@ -51,7 +53,12 @@ export default function Authenticator() {
                             //autoCorrect={false} 
                             />
                             <Pressable
-                                onPress={() => { }}
+                                onPress={() => {
+                                    navigation.navigate("Index", {
+                                        screen: "Inicio"
+                                    });
+                                    setLog(!isLogged)
+                                }}
                                 style={({ pressed }) => [styles.login, pressed && styles.pressed]}
                             >
                                 <Text style={styles.loginButtonText}>Iniciar sesión</Text>
@@ -166,7 +173,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         minHeight: 20,
         borderRadius: 25,
-        padding:5,
+        padding: 5,
         backgroundColor: 'rgba(255, 255, 255, 0)',
         borderColor: "#f1efef",
         borderWidth: 1,
@@ -219,7 +226,7 @@ const styles = StyleSheet.create({
         color: 'rgb(255, 255, 255)',
         fontSize: 13,
         fontWeight: '600',
-        margin:5,
+        margin: 5,
         alignSelf: "flex-start"
     },
     register: {

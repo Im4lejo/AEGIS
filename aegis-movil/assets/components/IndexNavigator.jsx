@@ -3,12 +3,16 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Productos from './ProductList';
 import Inicio from "../screens/Inicio"
-export default function BottomBar() {
+import Authenticator from './AuthIndex';
+import Profile from './Profile';
+import { useNavigation } from "@react-navigation/native";
+export default function BottomBar({ isLogged }) {
+    const navigation = useNavigation();
     const Tab = createBottomTabNavigator();
     return (
 
-        <NavigationContainer>
-            <Tab.Navigator
+ 
+        <Tab.Navigator
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ focused, color, size }) => {
 
@@ -23,7 +27,12 @@ export default function BottomBar() {
                     tabBarActiveTintColor: '#3b82f6',
                     tabBarInactiveTintColor: '#94a3b8',
                     headerShown: false, // Oculta el header por defecto
-                })}
+            }
+               
+            )
+            
+            }
+
             >
                 <Tab.Screen
 
@@ -33,16 +42,19 @@ export default function BottomBar() {
                 />
                 <Tab.Screen
                     name="Ajustes"
-                    component={Productos}
+                component={isLogged == true ? Productos : Auth }
                     options={{ title: 'Ajustes' }}
                 />
                 <Tab.Screen
                     name="Perfil"
-                    component={Productos}
+                component={isLogged == true ? Profile : Auth}
                     options={{ title: 'Perfil' }}
                 />
             </Tab.Navigator>
-        </NavigationContainer>
+      
 
     )
+}
+const Auth = () => {
+    return navigation.navigate("Authenticator", { screen: "Authenticator" })
 }
