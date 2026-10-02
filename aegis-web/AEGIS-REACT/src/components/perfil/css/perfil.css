@@ -1,15 +1,13 @@
 
+/* Igual que el detalle: contenido más pequeño y centrado */
 .perfil-page {
-  max-width: 1240px;
+  max-width: 75%;
   margin: 0 auto;
   padding: 24px 24px 48px;
 }
 
 /* --- TARJETA DE IDENTIDAD --- */
 .perfil-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
   padding-bottom: 6px;
 }
 
@@ -167,6 +165,11 @@
 }
 
 /* --- BARRA ORDENAR / FILTRAR --- */
+.perfil-sortbar,
+.perfil-panel {
+  border-radius: 10px;
+}
+
 .perfil-sortbar {
   display: flex;
   align-items: center;
@@ -176,7 +179,6 @@
   margin-top: 12px;
   padding: 7px clamp(16px, 26%, 240px) 7px 18px;
   background: #fff;
-  border-radius: 10px;
   box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
 }
 
@@ -271,7 +273,6 @@
 
 .perfil-panel {
   background: #fff;
-  border-radius: 10px;
   box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
   padding: 20px 22px;
 }
@@ -361,12 +362,6 @@
 .perfil-post:last-child {
   border-bottom: none;
   padding-bottom: 4px;
-}
-
-.perfil-post-head {
-  display: flex;
-  align-items: center;
-  gap: 11px;
 }
 
 .perfil-post-avatar {
@@ -487,12 +482,6 @@
   background: #f8f9fb;
 }
 
-.perfil-comment {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
-
 .perfil-comment-avatar {
   width: 32px;
   height: 32px;
@@ -527,11 +516,6 @@
   font-family: inherit;
   font-size: 13px;
   background: #fff;
-}
-
-.perfil-comment-form input:focus {
-  outline: 2px solid #b4c3f5;
-  border-color: #8ea8f0;
 }
 
 .perfil-comment-form button {
@@ -620,7 +604,6 @@
   color: #e11d48;
 }
 
-/* --- LIGHTBOX Y TOAST --- */
 .perfil-lightbox {
   position: fixed;
   inset: 0;
@@ -657,20 +640,6 @@
 
 .perfil-lightbox-close:hover {
   background: rgba(255, 255, 255, 0.3);
-}
-
-.perfil-toast {
-  position: fixed;
-  left: 50%;
-  bottom: 28px;
-  transform: translateX(-50%);
-  z-index: 120;
-  padding: 11px 18px;
-  border-radius: 10px;
-  background: #101828;
-  color: #fff;
-  font-size: 13.5px;
-  box-shadow: 0 12px 30px rgba(16, 24, 40, 0.3);
 }
 
 /* --- RESPONSIVE --- */

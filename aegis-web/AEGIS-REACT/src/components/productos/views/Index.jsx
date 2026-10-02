@@ -1,5 +1,565 @@
-import { useState } from 'react'
-import PageFrame from '../../shared/PageFrame'
+import { useEffect, useState } from 'react'
+import Header from '../../layouts/Header'
+import Footer from '../../layouts/Footer'
 import { formatCurrency, imageUrl, route } from '../../shared/presentation'
+import { PRODUCTOS_DESTACADOS, PRODUCTOS_PERFIL, PRODUCTOS_PROMOCION } from '../productosDemo'
+import '../css/index.css'
 
-export default function Index({ filtros = {}, categorias = [], productos = [], auth }) { const [layout, setLayout] = useState('grid'); const [search, setSearch] = useState(filtros.busqueda || ''); return <PageFrame title="AEGIS | Productos" auth={auth}><main className="products-main-container"><aside className="filters-sidebar"><h2>Filtros</h2><div className="filter-group"><span>Precio Máximo</span><input type="range" min="0" max="5000000" defaultValue={filtros.precio_max || 5000000} /></div><div className="filter-group"><span>Estado del Producto</span>{['todo', 'nuevo', 'casi-nuevo', 'usado-buen-estado', 'usado-detalles', 'usado-mal-estado'].map((state) => <label className="radio-label" key={state}><input type="radio" name="estado" value={state} defaultChecked={(filtros.estado || 'todo') === state} /> {state}</label>)}</div>{categorias.length > 0 && <div className="filter-group"><span>Categoría</span>{categorias.map((category) => <label className="radio-label" key={category.id}><input type="radio" name="categoria" value={category.nombre} /> {category.nombre}</label>)}</div>}</aside><section className="content-section"><div className="search-utilities-bar"><span>{productos.length} Productos Encontrados</span><input value={search} onChange={(event) => setSearch(event.target.value)} onKeyDown={(event) => event.key === 'Enter' && event.currentTarget.form?.submit()} placeholder="Busca tu producto aquí..." /><div className="layout-toggle-buttons"><button type="button" className={layout === 'grid' ? 'active' : ''} onClick={() => setLayout('grid')}>Cuadrícula</button><button type="button" className={layout === 'list' ? 'active' : ''} onClick={() => setLayout('list')}>Lista</button></div></div><div className={layout === 'list' ? 'products-list-container' : 'products-grid-container'}>{productos.length === 0 ? <div className="no-products-message">No se encontraron productos con los filtros seleccionados.</div> : productos.map((product) => <article className="product-card" key={product.id}><a href={route(`/productos/detalle?id=${product.id}`)}><div className="product-image-container"><div className="product-image" style={{ backgroundImage: `url('${imageUrl(product.imagen_principal)}')` }} /><span className="product-tag">{product.estado_producto || 'Producto'}</span></div><div className="product-details"><h3>{product.titulo}</h3><span>{product.categoria_nombre || 'Producto'}</span><strong>COP {formatCurrency(product.precio)}</strong><span>{product.vendedor_nombre || 'Vendedor verificado'}</span></div></a></article>)}</div></section></main></PageFrame> }
+// Tipos de producto del catálogo (los mismos del subnav del Home).
+const CATEGORIAS = ['Televisores', 'Laptops', 'Celulares', 'Componentes PC']
+
+// Opciones del filtro general de calificación (estrellas).
+const CALIFICACIONES = [
+  { valor: 4, label: '4★ o más' },
+  { valor: 3, label: '3★ o más' },
+]
+
+const ESTADOS = [
+  { id: 'todo', label: 'Todo' },
+  { id: 'nuevo', label: 'Nuevo' },
+  { id: 'reacondicionado', label: 'Reacondicionado' },
+  { id: 'usado', label: 'Usado' },
+]
+
+const PRECIO_MAXIMO = 5000000
+
+// Filtros especiales que aparecen según la categoría seleccionada.
+// Si un grupo trae "rangos", sus opciones son rangos numéricos (ej. pulgadas).
+const FILTROS_CATEGORIA = {
+  Celulares: [
+    { campo: 'so', titulo: 'Sistema operativo' },
+    { campo: 'almacenamiento', titulo: 'Almacenamiento' },
+    { campo: 'ram', titulo: 'RAM' },
+    {
+      campo: 'pulgadas',
+      titulo: 'Tamaño de pantalla',
+      rangos: [
+        { label: 'Menos de 6.7"', min: 0, max: 6.7 },
+        { label: '6.7" a 6.75"', min: 6.7, max: 6.75 },
+        { label: 'Más de 6.75"', min: 6.75, max: 10 },
+      ],
+    },
+    { campo: 'camara', titulo: 'Cámara principal' },
+  ],
+  Televisores: [
+    {
+      campo: 'pulgadas',
+      titulo: 'Tamaño de pantalla',
+      rangos: [
+        { label: '32" a 43"', min: 32, max: 44 },
+        { label: '50" a 55"', min: 50, max: 56 },
+        { label: '65" en adelante', min: 65, max: 100 },
+      ],
+    },
+    { campo: 'resolucion', titulo: 'Resolución' },
+    { campo: 'panel', titulo: 'Tecnología del panel' },
+    { campo: 'sistema', titulo: 'Smart TV / Sistema' },
+    { campo: 'refresco', titulo: 'Tasa de refresco' },
+  ],
+  Laptops: [
+    { campo: 'cpu', titulo: 'Procesador (CPU)' },
+    { campo: 'ram', titulo: 'RAM' },
+    { campo: 'almacenamientoTipo', titulo: 'Tipo de almacenamiento' },
+    { campo: 'almacenamiento', titulo: 'Capacidad de almacenamiento' },
+    { campo: 'gpu', titulo: 'Tarjeta gráfica' },
+    { campo: 'uso', titulo: 'Uso principal / Gama' },
+    { campo: 'pulgadas', titulo: 'Pulgadas' },
+  ],
+  'Componentes PC': [
+    { campo: 'vram', titulo: 'Memoria VRAM' },
+    { campo: 'pulgadas', titulo: 'Pulgadas' },
+  ],
+  Periféricos: [
+    { campo: 'tipo', titulo: 'Tipo de periférico' },
+    { campo: 'conectividad', titulo: 'Conectividad' },
+    { campo: 'iluminacion', titulo: 'Iluminación' },
+    { campo: 'switch', titulo: 'Tipo de switch' },
+  ],
+}
+
+// Quita las tildes para que "portatil" encuentre "Portátil".
+function sinTildes(texto) {
+  const conTilde = 'áéíóúüñ'
+  const normal = 'aeiouun'
+  let salida = ''
+  for (let i = 0; i < texto.length; i++) {
+    const letra = texto.charAt(i)
+    const pos = conTilde.indexOf(letra)
+    salida += pos === -1 ? letra : normal.charAt(pos)
+  }
+  return salida
+}
+
+// Busca el grupo de filtro de un campo dentro de la categoría activa.
+function buscarGrupo(categoria, campo) {
+  const grupos = FILTROS_CATEGORIA[categoria] || []
+  for (let i = 0; i < grupos.length; i++) {
+    if (grupos[i].campo === campo) return grupos[i]
+  }
+  return null
+}
+
+// Opciones de un grupo: los rangos del config o los valores de los productos.
+function opcionesDeGrupo(todos, categoria, grupo) {
+  if (grupo.rangos) return grupo.rangos.map((rango) => rango.label)
+  const valores = []
+  todos.forEach((prod) => {
+    if (prod.categoria === categoria && prod[grupo.campo] && valores.indexOf(prod[grupo.campo]) === -1) {
+      valores.push(prod[grupo.campo])
+    }
+  })
+  return valores
+}
+
+// Los productos del Perfil usan "titulo" en lugar de "nombre".
+function nombreDe(prod) {
+  return prod.nombre || prod.titulo || ''
+}
+
+function etiquetaEstado(estado) {
+  if (estado === 'nuevo') return 'Nuevo'
+  if (estado === 'reacondicionado') return 'Reacondicionado'
+  return 'Usado'
+}
+
+function badgeEstado(estado) {
+  if (estado === 'nuevo') return 'badge-new'
+  if (estado === 'reacondicionado') return 'badge-refurbished'
+  return 'badge-used'
+}
+
+// Página de listado de productos (se entra desde el buscador del Header
+// o desde el subnav del Home). Mismo estilo que las demás páginas.
+export default function Index({ filtros = {}, auth, onNavigate }) {
+  const [busqueda, setBusqueda] = useState(filtros.busqueda || '')
+  const [categoria, setCategoria] = useState(filtros.categoria || '')
+  const [estado, setEstado] = useState(filtros.filtro === 'reacondicionado' ? 'reacondicionado' : 'todo')
+  const [soloOfertas, setSoloOfertas] = useState(filtros.filtro === 'ofertas')
+  const [soloBlackFriday, setSoloBlackFriday] = useState(filtros.filtro === 'blackfriday')
+  const [soloGaming, setSoloGaming] = useState(filtros.filtro === 'gaming')
+  const [marcas, setMarcas] = useState([])
+  const [specs, setSpecs] = useState({})
+  const [califMin, setCalifMin] = useState(0)
+  const [soloStock, setSoloStock] = useState(false)
+  const [soloEnvio, setSoloEnvio] = useState(false)
+  const [precioMax, setPrecioMax] = useState(PRECIO_MAXIMO)
+  const [orden, setOrden] = useState('recomendados')
+
+  // Cuando cambia la URL (buscador o subnav) se aplican los filtros de entrada.
+  useEffect(() => {
+    setBusqueda(filtros.busqueda || '')
+    setCategoria(filtros.categoria || '')
+    setEstado(filtros.filtro === 'reacondicionado' ? 'reacondicionado' : 'todo')
+    setSoloOfertas(filtros.filtro === 'ofertas')
+    setSoloBlackFriday(filtros.filtro === 'blackfriday')
+    setSoloGaming(filtros.filtro === 'gaming')
+    setMarcas([])
+    setSpecs({})
+    setCalifMin(0)
+    setSoloStock(false)
+    setSoloEnvio(false)
+    setPrecioMax(PRECIO_MAXIMO)
+    // Se usa el objeto completo para que cada navegación (aunque sea
+    // al mismo link) vuelva a aplicar los filtros de la URL.
+  }, [filtros])
+
+  const todos = [...PRODUCTOS_DESTACADOS, ...PRODUCTOS_PROMOCION, ...PRODUCTOS_PERFIL]
+
+  // Marcas disponibles: las de la categoría (o de todo el catálogo).
+  let marcasDisponibles = []
+  todos.forEach((prod) => {
+    const coincide = !categoria || prod.categoria === categoria
+    if (coincide && marcasDisponibles.indexOf(prod.marca) === -1) {
+      marcasDisponibles.push(prod.marca)
+    }
+  })
+
+  // --- Aplicando filtros ---
+  let lista = todos
+
+  const termino = sinTildes(busqueda.trim().toLowerCase())
+  if (termino) {
+    // Se busca por cada palabra y también en el nombre, la descripción,
+    // la categoría y la marca para que "celulares" o "laptops" encuentre productos.
+    const palabras = termino.split(' ')
+    lista = lista.filter((prod) => {
+      const texto = sinTildes(`${nombreDe(prod)} ${prod.descripcion || ''} ${prod.categoria || ''} ${prod.marca || ''}`.toLowerCase())
+      return palabras.every((palabra) => {
+        if (texto.indexOf(palabra) !== -1) return true
+        // Si escribieron en plural ("teclados"), probamos sin la "s" final.
+        if (palabra.length > 2 && palabra.charAt(palabra.length - 1) === 's') {
+          return texto.indexOf(palabra.substring(0, palabra.length - 1)) !== -1
+        }
+        return false
+      })
+    })
+  }
+  if (categoria) lista = lista.filter((prod) => prod.categoria === categoria)
+  if (marcas.length > 0) lista = lista.filter((prod) => marcas.indexOf(prod.marca) !== -1)
+  if (estado !== 'todo') lista = lista.filter((prod) => prod.estado === estado)
+  if (soloOfertas) lista = lista.filter((prod) => prod.descuento > 0 || prod.precioAnterior)
+  if (soloBlackFriday) lista = lista.filter((prod) => prod.blackFriday)
+  if (soloGaming) lista = lista.filter((prod) => prod.gaming)
+  if (precioMax < PRECIO_MAXIMO) lista = lista.filter((prod) => prod.precio <= precioMax)
+  if (califMin > 0) lista = lista.filter((prod) => prod.calificacion >= califMin)
+  if (soloStock) lista = lista.filter((prod) => prod.stock !== false)
+  if (soloEnvio) lista = lista.filter((prod) => prod.envioRapido === true)
+
+  // Si se buscó por la barra y todos los resultados son de una sola
+  // categoría (ej: "iphone" → Celulares), se muestran los filtros de esa
+  // categoría aunque no se haya elegido en el menú.
+  let categoriaVista = categoria
+  if (!categoriaVista && termino && lista.length > 0) {
+    let unica = lista[0].categoria
+    let todosIguales = true
+    lista.forEach((prod) => {
+      if (prod.categoria !== unica) todosIguales = false
+    })
+    if (todosIguales) categoriaVista = unica
+  }
+
+  // Filtros dinámicos (almacenamiento, RAM, pulgadas, etc.) en selección múltiple.
+  Object.keys(specs).forEach((campo) => {
+    const seleccion = specs[campo]
+    if (seleccion && seleccion.length > 0) {
+      const grupo = buscarGrupo(categoriaVista, campo)
+      if (grupo && grupo.rangos) {
+        lista = lista.filter((prod) => {
+          const numero = prod[campo]
+          return seleccion.some((label) => {
+            const rango = grupo.rangos.find((r) => r.label === label)
+            return rango && numero >= rango.min && numero < rango.max
+          })
+        })
+      } else {
+        lista = lista.filter((prod) => seleccion.indexOf(prod[campo]) !== -1)
+      }
+    }
+  })
+
+  // --- Ordenamiento ---
+  if (orden === 'precio-asc') lista = [...lista].sort((a, b) => a.precio - b.precio)
+  if (orden === 'precio-desc') lista = [...lista].sort((a, b) => b.precio - a.precio)
+
+  // Título de arriba a la izquierda (estilo Jumbo).
+  let titulo = 'Productos'
+  if (termino) titulo = `Resultados para "${busqueda.trim()}"`
+  else if (categoria) titulo = categoria
+  else if (soloBlackFriday) titulo = 'Black Friday'
+  else if (soloGaming) titulo = 'Gaming'
+  else if (soloOfertas) titulo = 'Ofertas'
+  else if (estado === 'reacondicionado') titulo = 'Reacondicionado'
+
+  // Chips de los filtros activos (estilo Jumbo: "Filtros seleccionados").
+  const chips = []
+  if (termino) chips.push({ label: `Búsqueda: ${busqueda.trim()}`, quitar: () => { setBusqueda(''); setSpecs({}) } })
+  if (categoria) chips.push({ label: categoria, quitar: () => { setCategoria(''); setSpecs({}); setMarcas([]) } })
+  Object.keys(specs).forEach((campo) => {
+    const seleccion = specs[campo] || []
+    const grupo = buscarGrupo(categoriaVista, campo)
+    const titulo = grupo ? grupo.titulo : campo
+    seleccion.forEach((valor) => {
+      chips.push({ label: `${titulo}: ${valor}`, quitar: () => quitarSpec(campo, valor) })
+    })
+  })
+  marcas.forEach((m) => chips.push({ label: `Marca: ${m}`, quitar: () => setMarcas(marcas.filter((x) => x !== m)) }))
+  if (califMin > 0) chips.push({ label: `${califMin}★ o más`, quitar: () => setCalifMin(0) })
+  if (soloStock) chips.push({ label: 'En stock', quitar: () => setSoloStock(false) })
+  if (soloEnvio) chips.push({ label: 'Envío rápido', quitar: () => setSoloEnvio(false) })
+  if (estado !== 'todo') chips.push({ label: etiquetaEstado(estado), quitar: () => setEstado('todo') })
+  if (soloOfertas) chips.push({ label: 'Solo ofertas', quitar: () => setSoloOfertas(false) })
+  if (soloBlackFriday) chips.push({ label: 'Black Friday', quitar: () => setSoloBlackFriday(false) })
+  if (soloGaming) chips.push({ label: 'Gaming', quitar: () => setSoloGaming(false) })
+  if (precioMax < PRECIO_MAXIMO) chips.push({ label: `Hasta COP ${formatCurrency(precioMax)}`, quitar: () => setPrecioMax(PRECIO_MAXIMO) })
+
+  const limpiarFiltros = () => {
+    setBusqueda('')
+    setCategoria('')
+    setEstado('todo')
+    setSoloOfertas(false)
+    setSoloBlackFriday(false)
+    setSoloGaming(false)
+    setMarcas([])
+    setSpecs({})
+    setCalifMin(0)
+    setSoloStock(false)
+    setSoloEnvio(false)
+    setPrecioMax(PRECIO_MAXIMO)
+  }
+
+  // Agrega o quita un valor de un filtro dinámico (selección múltiple).
+  const alternarSpec = (campo, valor) => {
+    const seleccion = specs[campo] || []
+    if (seleccion.indexOf(valor) !== -1) {
+      setSpecs({ ...specs, [campo]: seleccion.filter((v) => v !== valor) })
+    } else {
+      setSpecs({ ...specs, [campo]: seleccion.concat(valor) })
+    }
+  }
+
+  // Quita un valor suelto de un filtro dinámico (desde su chip).
+  const quitarSpec = (campo, valor) => {
+    const seleccion = specs[campo] || []
+    setSpecs({ ...specs, [campo]: seleccion.filter((v) => v !== valor) })
+  }
+
+  // Marca en selección múltiple (casillas de verificación).
+  const alternarMarca = (m) => {
+    if (marcas.indexOf(m) !== -1) {
+      setMarcas(marcas.filter((x) => x !== m))
+    } else {
+      setMarcas(marcas.concat(m))
+    }
+  }
+
+  const abrirProducto = (prod) => {
+    if (onNavigate) onNavigate(`/productos/detalle?id=${prod.id}`)
+  }
+
+  return (
+    <div className="page-layout">
+      <Header title="AEGIS | Productos" auth={auth} onNavigate={onNavigate} />
+
+      <main className="products-page">
+        {/* Barra superior: título + contador + orden (estilo Jumbo) */}
+        <div className="products-topbar">
+          <div className="products-title-row">
+            <h1>{titulo}</h1>
+            <span className="products-count">{lista.length} {lista.length === 1 ? 'producto' : 'productos'}</span>
+          </div>
+
+          <div className="products-sort">
+            <span>Ordenar por</span>
+            <select value={orden} onChange={(event) => setOrden(event.target.value)}>
+              <option value="recomendados">Recomendados</option>
+              <option value="precio-asc">Menor precio</option>
+              <option value="precio-desc">Mayor precio</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="products-body">
+          {/* Columna izquierda: filtros */}
+          <aside className="products-filters">
+            <div className="filters-head">
+              <strong>Filtros seleccionados</strong>
+              <button type="button" onClick={limpiarFiltros}>Limpiar filtros</button>
+            </div>
+
+            {chips.length === 0 ? (
+              <p className="filters-empty">Ningún filtro activo</p>
+            ) : (
+              <div className="filters-chips">
+                {chips.map((chip) => (
+                  <span className="filter-chip" key={chip.label}>
+                    {chip.label}
+                    <button type="button" onClick={chip.quitar} aria-label={`Quitar filtro ${chip.label}`}>✕</button>
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <div className="filter-group">
+              <span className="filter-group-title">Promociones</span>
+              <label className="filter-check">
+                <input type="checkbox" checked={soloBlackFriday} onChange={(event) => setSoloBlackFriday(event.target.checked)} />
+                Black Friday
+              </label>
+              <label className="filter-check">
+                <input type="checkbox" checked={soloOfertas} onChange={(event) => setSoloOfertas(event.target.checked)} />
+                Solo ofertas
+              </label>
+              <label className="filter-check">
+                <input type="checkbox" checked={soloGaming} onChange={(event) => setSoloGaming(event.target.checked)} />
+                Gaming
+              </label>
+            </div>
+
+            <div className="filter-group">
+              <span className="filter-group-title">Precio máximo</span>
+              <input
+                type="range"
+                min="0"
+                max={PRECIO_MAXIMO}
+                step="50000"
+                value={precioMax}
+                onChange={(event) => setPrecioMax(Number(event.target.value))}
+              />
+              <div className="filter-price-labels">
+                <span>COP 0</span>
+                <span>COP {formatCurrency(precioMax)}</span>
+              </div>
+            </div>
+
+            <div className="filter-group">
+              <span className="filter-group-title">Estado</span>
+              {ESTADOS.map((op) => (
+                <label className="filter-radio" key={op.id}>
+                  <input
+                    type="radio"
+                    name="estado-producto"
+                    checked={estado === op.id}
+                    onChange={() => setEstado(op.id)}
+                  />
+                  {op.label}
+                </label>
+              ))}
+            </div>
+
+            <div className="filter-group">
+              <span className="filter-group-title">Categoría</span>
+              <div className="filter-tags">
+                {CATEGORIAS.map((cat) => (
+                  <button
+                    type="button"
+                    key={cat}
+                    className={categoria === cat ? 'filter-tag active' : 'filter-tag'}
+                    onClick={() => {
+                      setCategoria(categoria === cat ? '' : cat)
+                      setSpecs({})
+                      setMarcas([])
+                    }}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Filtros dinámicos: cambian según la categoría (elegida o deducida de la búsqueda) */}
+            {(!categoriaVista || !FILTROS_CATEGORIA[categoriaVista]) && (
+              <p className="filters-hint">
+                Elige una categoría para ver filtros según el tipo de producto (almacenamiento, pulgadas, etc.).
+              </p>
+            )}
+
+            {categoriaVista && FILTROS_CATEGORIA[categoriaVista] && FILTROS_CATEGORIA[categoriaVista].map((grupo) => {
+              const opciones = opcionesDeGrupo(todos, categoriaVista, grupo)
+              const seleccion = specs[grupo.campo] || []
+              if (opciones.length === 0) return null
+              return (
+                <div className="filter-group" key={grupo.campo}>
+                  <span className="filter-group-title">{grupo.titulo}</span>
+                  <div className="filter-tags">
+                    {opciones.map((valor) => (
+                      <button
+                        type="button"
+                        key={valor}
+                        className={seleccion.indexOf(valor) !== -1 ? 'filter-tag active' : 'filter-tag'}
+                        onClick={() => alternarSpec(grupo.campo, valor)}
+                      >
+                        {valor}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )
+            })}
+
+            <div className="filter-group">
+              <span className="filter-group-title">Marca</span>
+              {marcasDisponibles.map((m) => (
+                <label className="filter-check" key={m}>
+                  <input type="checkbox" checked={marcas.indexOf(m) !== -1} onChange={() => alternarMarca(m)} />
+                  {m}
+                </label>
+              ))}
+            </div>
+
+            <div className="filter-group">
+              <span className="filter-group-title">Calificación</span>
+              <div className="filter-tags">
+                {CALIFICACIONES.map((op) => (
+                  <button
+                    type="button"
+                    key={op.valor}
+                    className={califMin === op.valor ? 'filter-tag active' : 'filter-tag'}
+                    onClick={() => setCalifMin(califMin === op.valor ? 0 : op.valor)}
+                  >
+                    {op.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="filter-group">
+              <span className="filter-group-title">Disponibilidad</span>
+              <label className="filter-check">
+                <input type="checkbox" checked={soloStock} onChange={(event) => setSoloStock(event.target.checked)} />
+                En stock
+              </label>
+              <label className="filter-check">
+                <input type="checkbox" checked={soloEnvio} onChange={(event) => setSoloEnvio(event.target.checked)} />
+                Envío rápido
+              </label>
+            </div>
+          </aside>
+
+          {/* Columna derecha: tarjetas de productos */}
+          <section className="products-results">
+            {lista.length === 0 ? (
+              <div className="no-products-message">
+                No se encontraron productos con los filtros seleccionados.
+              </div>
+            ) : (
+              <div className="products-grid-container">
+                {lista.map((prod) => {
+                  // http = URL externa, / = archivo en public, lo otro va a imageUrl.
+                  let srcImagen = prod.imagen || ''
+                  if (srcImagen.indexOf('http') !== 0 && srcImagen.indexOf('/') !== 0) {
+                    srcImagen = imageUrl(srcImagen)
+                  }
+
+                  return (
+                    <article
+                      className={prod.blackFriday ? 'product-card con-blackfriday' : 'product-card'}
+                      key={prod.id}
+                      role="button"
+                      tabIndex={0}
+                      title="Ver detalle del producto"
+                      onClick={() => abrirProducto(prod)}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter') abrirProducto(prod)
+                      }}
+                    >
+                      <div className="product-image-container">
+                        <img src={srcImagen} alt={nombreDe(prod)} />
+                        <span className={`product-state-tag ${badgeEstado(prod.estado)}`}>
+                          {etiquetaEstado(prod.estado)}
+                        </span>
+                        {prod.blackFriday && (
+                          <span className="product-blackfriday-tag">Black Friday</span>
+                        )}
+                      </div>
+
+                      <div className="product-info">
+                        <span className="product-brand">{prod.marca}</span>
+                        <h3 className="product-name">{nombreDe(prod)}</h3>
+
+                        <div className="product-price-row">
+                          <span className="product-current-price">COP {formatCurrency(prod.precio)}</span>
+                          {prod.precioAnterior && (
+                            <span className="product-old-price">COP {formatCurrency(prod.precioAnterior)}</span>
+                          )}
+                          {prod.descuento > 0 && (
+                            <span className="product-discount">-{prod.descuento}%</span>
+                          )}
+                        </div>
+
+                        <p className="product-seller">
+                          Vendido por: <span>{prod.vendedor ? prod.vendedor.nombre : 'AEGIS'}</span>
+                        </p>
+                      </div>
+                    </article>
+                  )
+                })}
+              </div>
+            )}
+          </section>
+        </div>
+      </main>
+
+      <Footer onNavigate={onNavigate} />
+    </div>
+  )
+}

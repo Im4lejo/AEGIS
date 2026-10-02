@@ -209,6 +209,8 @@ export default function Editar({ auth, onNavigate }) {
 
   const alternarAjuste = (id) => setAjustes((prev) => ({ ...prev, [id]: !prev[id] }))
 
+  const seccionActual = SECCIONES.find((item) => item.id === seccion)
+
   return (
     <div className="page-layout">
       <Header title="AEGIS | Editar Perfil" auth={auth} onNavigate={onNavigate} />
@@ -312,7 +314,7 @@ export default function Editar({ auth, onNavigate }) {
           {/* Opciones del usuario / Privacidad / Negocio */}
           {AJUSTES[seccion] && (
             <section className="editar-section">
-              <h2 className="editar-section-title">{SECCIONES.find((item) => item.id === seccion)?.label}</h2>
+              <h2 className="editar-section-title">{seccionActual ? seccionActual.label : ''}</h2>
               <div className="editar-card">
                 {AJUSTES[seccion].map((item) => (
                   <div className="editar-toggle-row" key={item.id}>
@@ -320,7 +322,7 @@ export default function Editar({ auth, onNavigate }) {
                     <button
                       type="button"
                       role="switch"
-                      aria-checked={Boolean(ajustes[item.id])}
+                      aria-checked={ajustes[item.id]}
                       aria-label={item.label}
                       className={`editar-switch ${ajustes[item.id] ? 'on' : ''}`}
                       onClick={() => alternarAjuste(item.id)}

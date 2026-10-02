@@ -1,0 +1,675 @@
+/* ============================================================
+   Estilos de la vista Detalle.jsx (detalle de producto)
+   Basado en la referencia VerProducto, distribuido hacia abajo
+   para que la página no quede saturada.
+   ============================================================ */
+
+/* --- PÁGINA --- */
+.product-detail-page {
+  background: #f0f2f5;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Contenido centrado (máximo 1400px) */
+.product-detail-page > section {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Tarjetas blancas */
+.detail-gallery,
+.detail-info,
+.detail-section {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  padding: 24px;
+}
+
+/* --- FILA SUPERIOR: galería + info --- */
+.detail-top {
+  display: grid;
+  grid-template-columns: 1.7fr 0.8fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* Columna izquierda: galería y secciones de contenido juntas */
+.detail-left {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+/* --- MIGAJAS DE PAN (Inicio / Categoría / producto) --- */
+.detail-breadcrumb {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.detail-breadcrumb a {
+  color: #315bff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.detail-breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.detail-breadcrumb strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+/* Galería */
+.detail-gallery {
+  display: flex;
+  gap: 16px;
+}
+
+.detail-thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-thumb {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  background: #f9fafb;
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 0.2s ease;
+}
+
+.detail-thumb.active {
+  border-color: #315bff;
+}
+
+.detail-thumb img,
+.detail-main-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.detail-thumb i {
+  font-size: 26px;
+  color: #9ca3af;
+}
+
+.detail-main-image {
+  position: relative;
+  flex: 1;
+  min-height: 460px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-main-image i {
+  font-size: 60px;
+  color: #9ca3af;
+}
+
+/* Contador de imágenes (estilo "1/9" de la referencia) */
+.detail-counter {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  background: #315bff;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+/* Flechas para moverse por la galería */
+.detail-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #111827;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.2s ease;
+}
+
+.detail-arrow:hover {
+  background: #f0f2f5;
+}
+
+.detail-arrow.left { left: 12px; }
+.detail-arrow.right { right: 12px; }
+
+/* Información esencial: panel derecho que se queda fijo al hacer scroll */
+.detail-info {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  position: sticky;
+  top: 16px;
+  align-self: start;
+}
+
+.detail-code {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.detail-title {
+  font-size: 25px;
+  line-height: 1.25;
+  font-weight: 800;
+  margin: 0;
+}
+
+.detail-brand {
+  margin: 6px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+/* Vista del vendedor (clic para abrir su perfil) */
+.detail-seller {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #e5e7eb;
+  cursor: pointer;
+}
+
+.detail-seller-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 3px solid #111827;
+  object-fit: cover;
+}
+
+.detail-seller-data {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detail-seller-name {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.detail-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-badge {
+  min-width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 0 5px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.detail-badge.blue {
+  background: #315bff;
+}
+
+.detail-badge.purple {
+  background: #7c3aed;
+}
+
+.detail-badge.rating {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  color: #6366f1;
+}
+
+.detail-seller-arrow {
+  margin-left: auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid #111827;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.detail-seller-arrow:hover {
+  background: #f0f2f5;
+}
+
+/* Precio con badge de descuento y precio anterior tachado */
+.detail-price {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 16px 0 4px;
+}
+
+.detail-discount {
+  background: #fde047;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+.detail-price-now {
+  font-size: 27px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.detail-price-old {
+  font-size: 15px;
+  color: #9ca3af;
+  text-decoration: line-through;
+  white-space: nowrap;
+}
+
+.detail-stock {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #9ca3af;
+}
+
+/* Especificaciones */
+.detail-specs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detail-specs-row {
+  display: flex;
+  gap: 24px;
+}
+
+.detail-specs-row p {
+  font-size: 13px;
+}
+
+.detail-specs-row span {
+  color: #6b7280;
+}
+
+.detail-specs-row strong {
+  color: #111827;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+/* Aviso de envío */
+.detail-shipping {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin: 14px 0 0;
+}
+
+/* Botones de acción */
+.detail-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 0;
+}
+
+.detail-btn {
+  flex: 1;
+  height: 42px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-btn.primary {
+  background: #315bff;
+  color: #fff;
+}
+
+.detail-btn.primary:hover {
+  background: #2546cc;
+}
+
+.detail-btn.outline {
+  background: #fff;
+  border: 2px solid #315bff;
+  color: #315bff;
+}
+
+.detail-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* --- SECCIONES INFERIORES --- */
+/* Ahora viven dentro de la columna izquierda (ancho completo del grid) */
+.detail-features {
+  list-style: disc;
+  padding-left: 22px;
+  margin: 0;
+}
+
+.detail-features li {
+  font-size: 14px;
+  color: #374151;
+  margin-bottom: 10px;
+}
+
+.detail-features li:last-child {
+  margin-bottom: 0;
+}
+
+.detail-features li span {
+  color: #6b7280;
+}
+
+.detail-features li strong {
+  color: #111827;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+.detail-section h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.detail-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #374151;
+}
+
+/* Más información del vendedor */
+.seller-info-grid {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.seller-info-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 5px solid #111827;
+  object-fit: cover;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.seller-info-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  border-left: 1px solid #e5e7eb;
+  padding-left: 24px;
+}
+
+.seller-info-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 16px;
+}
+
+.seller-info-icon.blue {
+  background: #315bff;
+}
+
+.seller-info-icon.purple {
+  background: #7c3aed;
+}
+
+.seller-info-icon.light {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  color: #6366f1;
+  font-weight: 700;
+}
+
+.seller-info-stat h4 {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.seller-info-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.seller-info-badge.blue {
+  background: #eef2ff;
+  color: #315bff;
+}
+
+.seller-info-badge.purple {
+  background: #f3e8ff;
+  color: #7c3aed;
+}
+
+.seller-info-stars {
+  font-size: 12px;
+  color: #315bff;
+  letter-spacing: 2px;
+}
+
+/* Comentarios */
+.detail-comments-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 16px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.detail-comments-head h2 {
+  margin-bottom: 0;
+}
+
+.detail-comments-filter {
+  border: 1px solid #6b7280;
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  color: #111827;
+  outline: none;
+  cursor: pointer;
+}
+
+.detail-comment {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.detail-comment:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.detail-comment-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-comment-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.detail-comment-user i {
+  font-size: 18px;
+  color: #6b7280;
+}
+
+.detail-comment-user strong {
+  font-weight: 700;
+}
+
+.detail-comment-user span {
+  color: #9ca3af;
+}
+
+.detail-comment-verified {
+  font-size: 12px;
+  font-weight: 600;
+  color: #315bff;
+}
+
+.detail-comment p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #374151;
+}
+
+.detail-comment small {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1200px) {
+  .detail-top {
+    grid-template-columns: 1fr;
+  }
+
+  /* En una sola columna: galería, luego el panel, luego el resto */
+  .detail-left {
+    display: contents;
+  }
+
+  .detail-info {
+    position: static;
+    order: 1;
+  }
+
+  .detail-left > .detail-section {
+    order: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .detail-gallery {
+    flex-direction: column-reverse;
+  }
+
+  .detail-thumbs {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .detail-main-image {
+    min-height: 300px;
+  }
+
+  .detail-specs-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .detail-actions {
+    flex-direction: column;
+  }
+
+  .detail-comments-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .seller-info-grid {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .seller-info-stat {
+    border-left: none;
+    border-top: 1px solid #e5e7eb;
+    padding-left: 0;
+    padding-top: 16px;
+    width: 100%;
+  }
+}

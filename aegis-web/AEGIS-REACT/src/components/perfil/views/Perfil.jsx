@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
+import { PRODUCTOS_PERFIL } from '../../productos/productosDemo'
 import '../css/perfil.css'
 
 // --- ICONOS (SVG inline, mismo estilo que Home y Foro) ---
@@ -136,14 +137,6 @@ const PUBLICACIONES_EJEMPLO = [
   },
 ]
 
-const PRODUCTOS_EJEMPLO = [
-  { id: 1, titulo: 'Xiaomi Redmi 13C 4GB-64GB - Negro', precio: 1085999, precioAnterior: 1299999, imagen: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=600' },
-  { id: 2, titulo: 'Xiaomi Redmi Note 13 Pro 8GB-256GB - Azul', precio: 1085999, precioAnterior: 1399999, imagen: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?q=80&w=600' },
-  { id: 3, titulo: 'Xiaomi Redmi 12 5G 8GB-256GB - Verde', precio: 1085999, precioAnterior: 1259999, imagen: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?q=80&w=600' },
-  { id: 4, titulo: 'Xiaomi Poco X6 8GB-256GB - Blanco', precio: 1085999, precioAnterior: 1499999, imagen: 'https://images.unsplash.com/photo-1567581935884-3349723552ca?q=80&w=600' },
-  { id: 5, titulo: 'Xiaomi Redmi Note 12 6GB-128GB - Gris', precio: 1085999, precioAnterior: 1199999, imagen: 'https://images.unsplash.com/photo-1580910051074-3eb694886505?q=80&w=600' },
-]
-
 const ORDENES = [
   { id: 'recientes', label: 'Más recientes' },
   { id: 'populares', label: 'Más populares' },
@@ -213,7 +206,7 @@ function MenuOpciones({ trigger, triggerClass = 'perfil-menu-btn', valor, opcion
 export default function Perfil({ usuario = {}, publicaciones, productos, esPropio = true, auth, onNavigate }) {
   const yo = { ...USUARIO_EJEMPLO, ...usuario }
   const pubsDemo = publicaciones && publicaciones.length > 0 ? publicaciones : PUBLICACIONES_EJEMPLO
-  const prodsDemo = productos && productos.length > 0 ? productos : PRODUCTOS_EJEMPLO
+  const prodsDemo = productos && productos.length > 0 ? productos : PRODUCTOS_PERFIL
 
   const avatar = yo.avatar || avatarUrl(yo, 160)
   const [orden, setOrden] = useState('recientes')
@@ -241,13 +234,11 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [lightbox])
 
-  const publicacionesList = useMemo(() => {
-    let lista = [...pubsDemo]
-    if (filtro === 'con-imagen') lista = lista.filter((item) => Boolean(item.imagen))
-    if (orden === 'populares') lista.sort((a, b) => Number(b.likes || 0) - Number(a.likes || 0))
-    if (orden === 'comentados') lista.sort((a, b) => contarComentarios(b) - contarComentarios(a))
-    return lista
-  }, [pubsDemo, orden, filtro])
+  // Filtrado y ordenamiento de publicaciones
+  let publicacionesList = [...pubsDemo]
+  if (filtro === 'con-imagen') publicacionesList = publicacionesList.filter((item) => item.imagen)
+  if (orden === 'populares') publicacionesList.sort((a, b) => Number(b.likes || 0) - Number(a.likes || 0))
+  if (orden === 'comentados') publicacionesList.sort((a, b) => contarComentarios(b) - contarComentarios(a))
 
   const alternarLike = (id) => setLikesActivos((prev) => ({ ...prev, [id]: !prev[id] }))
 
@@ -265,7 +256,11 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
   }
 
   const compartir = (publicacion) => {
-    if (navigator.clipboard) navigator.clipboard.writeText(window.location.href).catch(() => {})
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href).catch(function () {
+        console.log('No se pudo copiar el enlace')
+      })
+    }
     setToast(`Enlace copiado: "${publicacion.titulo.slice(0, 40)}..."`)
   }
 
@@ -385,11 +380,12 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
 
               {publicacionesList.map((publicacion) => {
                 const id = publicacion.id
-                const liked = Boolean(likesActivos[id])
-                const comentarios = contarComentarios(publicacion) + (comentariosNuevos[id]?.length || 0)
-                const lista = [...listaBaseComentarios(publicacion), ...(comentariosNuevos[id] || [])]
-                const abierto = Boolean(comentariosAbiertos[id])
-                const cuerpo = publicacion.cuerpo ?? publicacion.contenido ?? ''
+                const liked = likesActivos[id]
+                const nuevos = comentariosNuevos[id] || []
+                const comentarios = contarComentarios(publicacion) + nuevos.length
+                const lista = [...listaBaseComentarios(publicacion), ...nuevos]
+                const abierto = comentariosAbiertos[id]
+                const cuerpo = publicacion.cuerpo || publicacion.contenido || ''
 
                 return (
                   <article className="perfil-post" key={id}>

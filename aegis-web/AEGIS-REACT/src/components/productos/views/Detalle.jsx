@@ -1,5 +1,324 @@
-import PageFrame from '../../shared/PageFrame'
-import { avatarUrl, formatCurrency } from '../../shared/presentation'
-import '../css/productos.css'
+import { useState } from 'react'
+import Header from '../../layouts/Header'
+import Footer from '../../layouts/Footer'
+import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
+import { buscarProducto } from '../productosDemo'
+import '../css/detalle.css'
 
-export default function Detalle({ producto = {}, usuario = {}, imagenPrincipal, auth }) { const sellerAvatar = usuario.avatar || avatarUrl(usuario, 120); return <PageFrame title={`AEGIS | ${producto.titulo || 'Producto'}`} auth={auth}><main className="product-detail-page"><section className="product-detail__top-section"><article className="gallery card"><div className="gallery__main">{imagenPrincipal ? <img src={imagenPrincipal} alt={producto.titulo} /> : <i className="fa-regular fa-image" />}</div></article><article className="product-info card"><h1>{producto.titulo}</h1><div className="seller-preview"><img src={sellerAvatar} alt={usuario.nombre || 'Vendedor'} /><strong>{usuario.nombre || 'Usuario'}</strong><span>★ {Number(usuario.reputacion || 5).toFixed(2)}</span></div><h2>COP ${formatCurrency(producto.precio)}</h2><div className="product-specs"><p>Categoría: <strong>{producto.categoria_nombre || 'Sin categoría'}</strong></p><p>Ciudad: <strong>{producto.ciudad || 'No definida'}</strong></p><p>Estado: <strong>{producto.estado_producto || 'Usado'}</strong></p></div><h4>Descripción</h4><p>{producto.descripcion || 'Sin descripción disponible'}</p><div className="action-buttons"><button type="button">Contactar</button><button type="button">Agregar a Favoritos</button></div></article></section><section className="seller-stats card"><h2>Más información sobre este vendedor</h2><p>{usuario.descripcion || 'Vendedor confiable con excelentes referencias.'}</p></section></main></PageFrame> }
+// Comentarios de ejemplo del vendedor.
+const COMENTARIOS = [
+  {
+    id: 1,
+    autor: 'Timmy Turner',
+    fecha: 'Mes Pasado',
+    verificado: true,
+    texto: 'El producto llegó tal como se describía, sin daños y a tiempo. El vendedor respondió rápido todas mis preguntas. Volvería a comprarles en el futuro.',
+  },
+  {
+    id: 2,
+    autor: 'Marta Ruiz',
+    fecha: 'Hace 2 semanas',
+    verificado: true,
+    texto: 'Muy buena experiencia, el producto es tal cual las fotos y el precio estuvo bien. Atención amable por parte del vendedor.',
+  },
+  {
+    id: 3,
+    autor: 'Andrés Gómez',
+    fecha: 'Hace 1 mes',
+    verificado: false,
+    texto: 'La entrega se demoró un poco pero todo llegó completo y funcionando. Recomendado.',
+  },
+]
+
+// Insignias del vendedor calculadas con su reputación
+// (mismas insignias de la página de Perfil).
+function insigniasVendedor(reputacion) {
+  const rep = Number(reputacion || 0)
+  let nivel = 'Nivel 1'
+  if (rep >= 4.5) nivel = 'Nivel 3'
+  else if (rep >= 3.5) nivel = 'Nivel 2'
+
+  return {
+    servicio: 'Plataforma',
+    estrella: nivel,
+    rating: rep.toFixed(1),
+    estrellas: rep > 0 ? '★'.repeat(Math.round(rep)) : '☆☆☆☆☆',
+  }
+}
+
+function etiquetaEstado(estado) {
+  if (estado === 'nuevo') return 'Nuevo'
+  if (estado === 'reacondicionado') return 'Reacondicionado'
+  return 'Usado - En buen estado'
+}
+
+// Etiquetas de las fichas técnicas que se muestran
+// debajo de la galería (como "Características principales").
+const CAMPOS_FICHAS = {
+  cpu: 'Procesador (CPU)',
+  gpu: 'Tarjeta gráfica',
+  ram: 'Memoria RAM',
+  almacenamiento: 'Almacenamiento',
+  almacenamientoTipo: 'Tipo de almacenamiento',
+  pulgadas: 'Tamaño de pantalla',
+  resolucion: 'Resolución',
+  panel: 'Panel',
+  refresco: 'Tasa de refresco',
+  sistema: 'Sistema operativo / Smart TV',
+  so: 'Sistema operativo',
+  camara: 'Cámara principal',
+  vram: 'Memoria VRAM',
+  uso: 'Uso principal',
+  tipo: 'Tipo',
+  conectividad: 'Conectividad',
+  iluminacion: 'Iluminación',
+  switch: 'Switch',
+}
+
+export default function Detalle({ id, auth, onNavigate }) {
+  const producto = buscarProducto(id) || {}
+  const titulo = producto.nombre || producto.titulo || 'Producto'
+  const imagen = producto.imagen || ''
+  const vendedor = producto.vendedor && producto.vendedor.nombre
+    ? producto.vendedor
+    : { nombre: 'Vendedor', reputacion: 0 }
+
+  const insignia = insigniasVendedor(vendedor.reputacion)
+
+  // Galería con miniaturas (misma foto principal en la demo).
+  const [imagenActiva, setImagenActiva] = useState(0)
+  const miniaturas = [0, 1, 2, 3]
+
+  const imagenAnterior = () =>
+    setImagenActiva((i) => (i === 0 ? miniaturas.length - 1 : i - 1))
+  const imagenSiguiente = () =>
+    setImagenActiva((i) => (i === miniaturas.length - 1 ? 0 : i + 1))
+
+  // Solo los campos con dato del producto aparecen en la lista.
+  const caracteristicas = Object.keys(CAMPOS_FICHAS).filter((campo) => producto[campo])
+
+  return (
+    <div className="page-layout">
+      <Header title={`AEGIS | ${titulo}`} auth={auth} onNavigate={onNavigate} />
+
+      <main className="product-detail-page">
+        {/* Migajas de pan: Inicio / Categoría / producto */}
+        <nav className="detail-breadcrumb" aria-label="Ruta de navegación">
+          <a
+            href={route('/')}
+            onClick={(e) => { e.preventDefault(); if (onNavigate) onNavigate('/') }}
+          >
+            Inicio
+          </a>
+          <span>/</span>
+          {producto.categoria && (
+            <>
+              <a
+                href={route(`/productos?categoria=${producto.categoria}`)}
+                onClick={(e) => {
+                  e.preventDefault()
+                  if (onNavigate) onNavigate(`/productos?categoria=${producto.categoria}`)
+                }}
+              >
+                {producto.categoria}
+              </a>
+              <span>/</span>
+            </>
+          )}
+          <strong>{titulo}</strong>
+        </nav>
+
+        <section className="detail-top">
+          {/* ===== COLUMNA IZQUIERDA: galería + todo el contenido ===== */}
+          <div className="detail-left">
+            <article className="detail-gallery">
+              <div className="detail-thumbs">
+                {miniaturas.map((indice) => (
+                  <button
+                    key={indice}
+                    type="button"
+                    className={'detail-thumb' + (imagenActiva === indice ? ' active' : '')}
+                    onClick={() => setImagenActiva(indice)}
+                  >
+                    {imagen
+                      ? <img src={imagen} alt={`Vista ${indice + 1} de ${titulo}`} />
+                      : <i className="fa-regular fa-image" />}
+                  </button>
+                ))}
+              </div>
+              <div className="detail-main-image">
+                <span className="detail-counter">
+                  {imagenActiva + 1}/{miniaturas.length}
+                </span>
+                <button
+                  type="button"
+                  className="detail-arrow left"
+                  aria-label="Imagen anterior"
+                  onClick={imagenAnterior}
+                >
+                  <i className="fa-solid fa-chevron-left" />
+                </button>
+                {imagen ? <img src={imagen} alt={titulo} /> : <i className="fa-regular fa-image" />}
+                <button
+                  type="button"
+                  className="detail-arrow right"
+                  aria-label="Imagen siguiente"
+                  onClick={imagenSiguiente}
+                >
+                  <i className="fa-solid fa-chevron-right" />
+                </button>
+              </div>
+            </article>
+
+            {/* Características principales (idea de la referencia) */}
+            {caracteristicas.length > 0 && (
+              <section className="detail-section">
+                <h2>Características principales</h2>
+                <ul className="detail-features">
+                  {caracteristicas.map((campo) => (
+                    <li key={campo}>
+                      <span>{CAMPOS_FICHAS[campo]}:</span> <strong>{producto[campo]}</strong>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            <section className="detail-section">
+              <h2>Descripción</h2>
+              <p className="detail-text">{producto.descripcion || 'Sin descripción disponible'}</p>
+            </section>
+
+            <section className="detail-section">
+              <h2>Más información sobre este vendedor</h2>
+              <div className="seller-info-grid">
+                <img
+                  className="seller-info-avatar"
+                  src={vendedor.avatar || avatarUrl(vendedor, 160)}
+                  alt={vendedor.nombre}
+                  title="Ver perfil del vendedor"
+                  onClick={() => onNavigate && onNavigate(`/vendedor?id=${vendedor.id}`)}
+                />
+                <div className="seller-info-stat">
+                  <span className="seller-info-icon blue"><i className="fa-solid fa-crown" /></span>
+                  <h4>Nivel de Servicio</h4>
+                  <span className="seller-info-badge blue">{insignia.servicio}</span>
+                </div>
+                <div className="seller-info-stat">
+                  <span className="seller-info-icon purple"><i className="fa-solid fa-shield" /></span>
+                  <h4>Vendedor Estrella</h4>
+                  <span className="seller-info-badge purple">{insignia.estrella}</span>
+                </div>
+                <div className="seller-info-stat">
+                  <span className="seller-info-icon light"><i className="fa-regular fa-star" /> {insignia.rating}</span>
+                  <h4>Reseñas</h4>
+                  <span className="seller-info-stars">{insignia.estrellas}</span>
+                </div>
+              </div>
+            </section>
+
+            <section className="detail-section">
+              <div className="detail-comments-head">
+                <h2>Comentarios del Vendedor ({COMENTARIOS.length})</h2>
+                <select className="detail-comments-filter">
+                  <option>Filtro: Todas las valoraciones</option>
+                </select>
+              </div>
+
+              {COMENTARIOS.map((comentario) => (
+                <article className="detail-comment" key={comentario.id}>
+                  <div className="detail-comment-head">
+                    <span className="detail-comment-user">
+                      <i className="fa-solid fa-circle-user" />
+                      <strong>{comentario.autor}</strong>
+                      <span>• {comentario.fecha}</span>
+                    </span>
+                    {comentario.verificado && (
+                      <span className="detail-comment-verified">Compra Verificada</span>
+                    )}
+                  </div>
+                  <p>{comentario.texto}</p>
+                  <small>{titulo}</small>
+                </article>
+              ))}
+            </section>
+          </div>
+
+          {/* ===== PANEL DERECHO: se queda fijo al hacer scroll ===== */}
+          <aside className="detail-info">
+            <p className="detail-code">Código de producto: {producto.id}</p>
+
+            <h1 className="detail-title">{titulo}</h1>
+            <p className="detail-brand">{producto.marca || 'Sin marca'}</p>
+
+            <div className="detail-price">
+              {producto.descuento > 0 && (
+                <span className="detail-discount">-{producto.descuento}%</span>
+              )}
+              <strong className="detail-price-now">COP {formatCurrency(producto.precio)}</strong>
+              {producto.precioAnterior && (
+                <span className="detail-price-old">COP {formatCurrency(producto.precioAnterior)}</span>
+              )}
+            </div>
+            <p className="detail-stock">
+              {producto.stock === false ? '(Agotado)' : '(Único Disponible)'}
+            </p>
+
+            <div
+              className="detail-seller"
+              role="button"
+              tabIndex={0}
+              onClick={() => onNavigate && onNavigate(`/vendedor?id=${vendedor.id}`)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') onNavigate && onNavigate(`/vendedor?id=${vendedor.id}`)
+              }}
+            >
+              <img className="detail-seller-avatar" src={vendedor.avatar || avatarUrl(vendedor, 100)} alt={vendedor.nombre} />
+              <div className="detail-seller-data">
+                <strong className="detail-seller-name">{vendedor.nombre}</strong>
+                <div className="detail-badges">
+                  <span className="detail-badge blue" title={`Nivel de Servicio: ${insignia.servicio}`}>
+                    <i className="fa-solid fa-crown" />
+                  </span>
+                  <span className="detail-badge purple" title={`Vendedor Estrella: ${insignia.estrella}`}>
+                    <i className="fa-solid fa-shield" />
+                  </span>
+                  <span className="detail-badge rating" title={`Reputación: ${insignia.rating}`}>
+                    <i className="fa-regular fa-star" /> {insignia.rating}
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                className="detail-seller-arrow"
+                aria-label="Ver perfil del vendedor"
+                onClick={() => onNavigate && onNavigate(`/vendedor?id=${vendedor.id}`)}
+              >
+                <i className="fa-solid fa-arrow-right" />
+              </button>
+            </div>
+
+            <div className="detail-specs">
+              <div className="detail-specs-row">
+                <p><span>Categoría:</span> <strong>{producto.categoria || 'Sin categoría'}</strong></p>
+                <p><span>Estado:</span> <strong>{etiquetaEstado(producto.estado)}</strong></p>
+              </div>
+            </div>
+
+            <p className="detail-shipping">
+              <i className="fa-solid fa-truck-fast" />
+              <span>{producto.envioRapido ? 'Envío rápido disponible' : 'Envío estándar a domicilio'}</span>
+            </p>
+
+            <div className="detail-actions">
+              <button type="button" className="detail-btn primary">Contactar</button>
+              <button type="button" className="detail-btn outline">Agregar al Carrito</button>
+            </div>
+          </aside>
+        </section>
+      </main>
+
+      <Footer onNavigate={onNavigate} />
+    </div>
+  )
+}

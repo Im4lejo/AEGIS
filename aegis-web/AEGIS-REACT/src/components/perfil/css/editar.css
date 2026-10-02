@@ -14,9 +14,6 @@
   align-self: start;
   position: sticky;
   top: 20px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
   padding: 18px 14px;
 }
 
@@ -28,12 +25,6 @@
   font-size: 14px;
   font-weight: 700;
   color: #1f2937;
-}
-
-.editar-nav-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
 }
 
 .editar-nav-item {
@@ -102,9 +93,6 @@
 
 /* --- TARJETA DE PERSONALIZACIÓN --- */
 .editar-hero {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
   padding: 16px;
 }
 
@@ -200,9 +188,6 @@
 }
 
 .editar-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
   padding: 4px 22px;
 }
 
@@ -271,11 +256,6 @@
   border-radius: 8px;
   font-family: inherit;
   font-size: 13.5px;
-}
-
-.editar-row-form input:focus {
-  outline: 2px solid #b4c3f5;
-  border-color: #8ea8f0;
 }
 
 /* --- BOTONES --- */
@@ -379,9 +359,6 @@
   align-items: center;
   gap: 6px;
   padding: 20px 12px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
   text-align: center;
 }
 
@@ -624,21 +601,6 @@
   gap: 10px;
   padding: 14px 20px;
   border-top: 1px solid #eef1f5;
-}
-
-/* --- TOAST --- */
-.editar-toast {
-  position: fixed;
-  left: 50%;
-  bottom: 28px;
-  transform: translateX(-50%);
-  z-index: 120;
-  padding: 11px 18px;
-  border-radius: 10px;
-  background: #101828;
-  color: #fff;
-  font-size: 13.5px;
-  box-shadow: 0 12px 30px rgba(16, 24, 40, 0.3);
 }
 
 /* --- RESPONSIVE --- */
