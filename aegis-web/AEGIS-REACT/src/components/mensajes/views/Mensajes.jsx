@@ -5,11 +5,33 @@ import { buscarProducto } from '../../productos/productosDemo'
 import { CHATS } from '../mensajesDemo'
 import '../css/mensajes.css'
 
-export default function Mensajes({ id, auth, onNavigate }) {
-  const chatInicial = CHATS.find((c) => String(c.productoId) === String(id))
+const moverArriba = (chat) => {
+  const posicion = CHATS.indexOf(chat)
+  if (posicion > 0) {
+    CHATS.splice(posicion, 1)
+    CHATS.unshift(chat)
+  }
+}
 
-  const [listaChats, setListaChats] = useState(CHATS)
-  const [activo, setActivo] = useState(chatInicial ? chatInicial.productoId : CHATS[0].productoId)
+export default function Mensajes({ id, auth, onNavigate }) {
+  const chatExistente = CHATS.find((c) => String(c.productoId) === String(id))
+  const productoNuevo = id && !chatExistente ? buscarProducto(id) : null
+
+  let activoInicial = CHATS[0].productoId
+  if (chatExistente) {
+    activoInicial = chatExistente.productoId
+  } else if (productoNuevo) {
+    CHATS.unshift({
+      productoId: productoNuevo.id,
+      hora: 'Ahora',
+      noLeidos: 0,
+      mensajes: [],
+    })
+    activoInicial = productoNuevo.id
+  }
+
+  const [listaChats, setListaChats] = useState(CHATS.slice())
+  const [activo, setActivo] = useState(activoInicial)
   const [texto, setTexto] = useState('')
   const [busqueda, setBusqueda] = useState('')
 
@@ -33,7 +55,11 @@ export default function Mensajes({ id, auth, onNavigate }) {
 
   const abrirChat = (productoId) => {
     setActivo(productoId)
-    setListaChats(listaChats.map((c) => (c.productoId === productoId ? { ...c, noLeidos: 0 } : c)))
+    const chat = listaChats.find((c) => c.productoId === productoId)
+    if (chat) {
+      chat.noLeidos = 0
+    }
+    setListaChats(CHATS.slice())
   }
 
   const enviar = (event) => {
@@ -43,11 +69,14 @@ export default function Mensajes({ id, auth, onNavigate }) {
 
     const hora = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })
 
-    setListaChats(listaChats.map((c) => {
-      if (c.productoId !== activo) return c
-      const nuevos = c.mensajes.concat({ id: c.mensajes.length + 1, mio: true, texto: mensaje, hora })
-      return { ...c, mensajes: nuevos, hora, noLeidos: 0 }
-    }))
+    const chat = listaChats.find((c) => c.productoId === activo)
+    if (chat) {
+      chat.mensajes = chat.mensajes.concat({ id: chat.mensajes.length + 1, mio: true, texto: mensaje, hora })
+      chat.hora = hora
+      chat.noLeidos = 0
+      moverArriba(chat)
+      setListaChats(CHATS.slice())
+    }
     setTexto('')
   }
 
@@ -58,11 +87,14 @@ export default function Mensajes({ id, auth, onNavigate }) {
     const url = URL.createObjectURL(archivo)
     const hora = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })
 
-    setListaChats(listaChats.map((c) => {
-      if (c.productoId !== activo) return c
-      const nuevos = c.mensajes.concat({ id: c.mensajes.length + 1, mio: true, texto: '', imagen: url, hora })
-      return { ...c, mensajes: nuevos, hora, noLeidos: 0 }
-    }))
+    const chat = listaChats.find((c) => c.productoId === activo)
+    if (chat) {
+      chat.mensajes = chat.mensajes.concat({ id: chat.mensajes.length + 1, mio: true, texto: '', imagen: url, hora })
+      chat.hora = hora
+      chat.noLeidos = 0
+      moverArriba(chat)
+      setListaChats(CHATS.slice())
+    }
     event.target.value = ''
   }
 
@@ -159,7 +191,7 @@ export default function Mensajes({ id, auth, onNavigate }) {
           </div>
 
           <div className="msg-zona" ref={zonaMensajes}>
-            <span className="msg-hoy">Hoy</span>
+            {chat.mensajes.length > 0 && <span className="msg-hoy">Hoy</span>}
 
             {chat.mensajes.map((m) => (
               <div
