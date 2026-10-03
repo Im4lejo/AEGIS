@@ -16,7 +16,6 @@ import PuntosFisicos from './components/puntosFisicos/views/Index'
 import Admin from './components/admin/views/Dashboard'
 import Plantilla from './components/shared/Plantilla'
 
-// Sesión de demostración mientras no exista backend conectado.
 const DEFAULT_AUTH = {
   isAuthenticated: true,
   isAdmin: false,
@@ -71,8 +70,6 @@ const getHashParams = () => {
 function App() {
   const [path, setPath] = useState(getHashPath())
   const [params, setParams] = useState(getHashParams())
-  // Cuenta cada navegación para que las páginas vuelvan a leer la URL
-  // aunque el link no cambie (por ejemplo, repetir la misma búsqueda).
   const [navegacion, setNavegacion] = useState(0)
 
   useEffect(() => {
@@ -96,7 +93,6 @@ function App() {
     window.scrollTo(0, 0)
   }
 
-  // Cualquier ruta que no exista todavía cae en la plantilla de "página en construcción".
   const Page = PAGES[path] || Plantilla
 
   return (
@@ -110,7 +106,6 @@ function App() {
         filtro: params.filtro || '',
         navegacion: navegacion,
       }}
-      /* id del producto en la URL: /productos/detalle?id=1 */
       id={params.id}
     />
   )

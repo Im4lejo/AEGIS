@@ -12,9 +12,6 @@
   box-sizing: border-box;
 }
 
-/* ======================================================
-   SIDEBAR IZQUIERDO (fijo al desplazar la página)
-====================================================== */
 .foro-sidebar {
   display: flex;
   flex-direction: column;
@@ -151,9 +148,6 @@
   color: #6d28d9;
 }
 
-/* ======================================================
-   FEED CENTRAL
-====================================================== */
 .foro-feed {
   display: flex;
   flex-direction: column;
@@ -161,7 +155,6 @@
   min-width: 0;
 }
 
-/* --- Compositor de publicación --- */
 .foro-composer {
   background: #ffffff;
   border: 2px solid #b7b9bd;
@@ -241,9 +234,6 @@
   transform: translateY(-50%) scale(1.08);
 }
 
-/* ======================================================
-   PANEL EXPANDIDO DEL COMPOSITOR
-====================================================== */
 .foro-composer-panel {
   background: #ffffff;
   border: 2px solid #3b82f6;
@@ -325,7 +315,6 @@
   background-color: #e5e7eb;
 }
 
-/* --- Barra "Ordenar Por" --- */
 .foro-toolbar {
   display: flex;
   justify-content: flex-end;
@@ -392,7 +381,6 @@
   background-color: #f5f3ff;
 }
 
-/* --- Posts --- */
 .foro-post {
   background: #ffffff;
   border: 1px solid #e5e7eb;
@@ -500,7 +488,6 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
-/* --- Acciones del post --- */
 .foro-post-actions {
   display: flex;
   align-items: center;
@@ -544,7 +531,6 @@
   flex-shrink: 0;
 }
 
-/* --- Comentarios --- */
 .foro-comments {
   border-top: 1px solid #f3f4f6;
   padding-top: 12px;
@@ -610,7 +596,6 @@
   box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
 }
 
-/* --- Estado vacío / mensajes --- */
 .foro-empty {
   background: #ffffff;
   border: 1px dashed #d1d5db;
@@ -638,9 +623,6 @@
   color: #991b1b;
 }
 
-/* ======================================================
-   SIDEBAR DERECHO (BANNERS)
-====================================================== */
 .foro-banners {
   display: flex;
   flex-direction: column;
@@ -672,9 +654,6 @@
   pointer-events: none;
 }
 
-/* ======================================================
-   LIGHTBOX (imagen a pantalla completa)
-====================================================== */
 .foro-lightbox {
   position: fixed;
   inset: 0;
@@ -721,9 +700,6 @@
   }
 }
 
-/* ======================================================
-   RESPONSIVE
-====================================================== */
 @media (max-width: 900px) {
   .foro-container {
     grid-template-columns: 205px minmax(0, 1fr);
@@ -742,5 +718,39 @@
 
   .foro-sidebar {
     order: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .foro-layout .header-container {
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+
+  .foro-layout .header-logo { order: 1; }
+  .foro-layout .header-user-actions { order: 2; }
+
+  .foro-layout .header-nav {
+    order: 3;
+    flex: 1 1 100%;
+    margin-left: 0;
+    gap: 24px;
+  }
+
+  .foro-layout .header-search {
+    order: 4;
+    flex: 1 1 100%;
+    margin: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .foro-layout .footer-container {
+    grid-template-columns: 1fr;
+  }
+
+  .foro-layout .footer-links-group {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
   }
 }

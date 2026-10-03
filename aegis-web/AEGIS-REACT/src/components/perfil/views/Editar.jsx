@@ -4,7 +4,6 @@ import Footer from '../../layouts/Footer'
 import { avatarUrl } from '../../shared/presentation'
 import '../css/editar.css'
 
-// --- ICONOS (SVG inline, mismo estilo que el resto del proyecto) ---
 const IconPencil = ({ size = 15 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z" />
@@ -77,7 +76,6 @@ const IconStar = () => (
   </svg>
 )
 
-// --- DATOS DE DEMOSTRACIÓN ---
 const USUARIO_EJEMPLO = {
   nombre: 'Luis Alejandro',
   apellido: 'Montenegro Ojeda',
@@ -136,30 +134,24 @@ const ESTADISTICAS = [
   { label: 'Valoración', valor: '4.7', tono: 'purple', icono: <IconStar /> },
 ]
 
-// --- PÁGINA DE EDICIÓN DEL PERFIL ---
 export default function Editar({ auth, onNavigate }) {
   const yo = USUARIO_EJEMPLO
 
-  // Perfil guardado
   const [avatar, setAvatar] = useState(yo.avatar || avatarUrl(yo, 160))
   const [portada, setPortada] = useState(null)
   const [descripcion, setDescripcion] = useState('')
 
-  // Borradores del menú flotante
   const [modalAbierto, setModalAbierto] = useState(false)
   const [borradorAvatar, setBorradorAvatar] = useState(avatar)
   const [borradorPortada, setBorradorPortada] = useState(null)
   const [borradorDesc, setBorradorDesc] = useState('')
 
-  // Sección del menú lateral
   const [seccion, setSeccion] = useState('info')
 
-  // Campos editables en línea
   const [campos, setCampos] = useState(CAMPOS_INICIALES)
   const [editando, setEditando] = useState(null)
   const [valorEdit, setValorEdit] = useState('')
 
-  // Interruptores
   const [ajustes, setAjustes] = useState(AJUSTES_INICIALES)
 
   const [toast, setToast] = useState(null)
@@ -216,7 +208,6 @@ export default function Editar({ auth, onNavigate }) {
       <Header title="AEGIS | Editar Perfil" auth={auth} onNavigate={onNavigate} />
 
       <main className="editar-page">
-        {/* ============ MENÚ LATERAL ============ */}
         <aside className="editar-nav">
           <div className="editar-nav-title">
             <IconSettings /> Ajustes de la cuenta
@@ -236,13 +227,11 @@ export default function Editar({ auth, onNavigate }) {
           </nav>
         </aside>
 
-        {/* ============ CONTENIDO ============ */}
         <section className="editar-main">
           <button type="button" className="editar-back" onClick={() => onNavigate && onNavigate('/perfil')}>
             ← Volver a mi perfil
           </button>
 
-          {/* Tarjeta de personalización */}
           <section className="editar-hero">
             {portada && (
               <div className="editar-hero-portada" style={{ backgroundImage: `url(${portada})` }} />
@@ -263,7 +252,6 @@ export default function Editar({ auth, onNavigate }) {
             </div>
           </section>
 
-          {/* Información básica */}
           {seccion === 'info' && (
             <section className="editar-section">
               <h2 className="editar-section-title">Información básica</h2>
@@ -311,7 +299,6 @@ export default function Editar({ auth, onNavigate }) {
             </section>
           )}
 
-          {/* Opciones del usuario / Privacidad / Negocio */}
           {AJUSTES[seccion] && (
             <section className="editar-section">
               <h2 className="editar-section-title">{seccionActual ? seccionActual.label : ''}</h2>
@@ -335,7 +322,6 @@ export default function Editar({ auth, onNavigate }) {
             </section>
           )}
 
-          {/* Estadísticas */}
           {seccion === 'estadisticas' && (
             <section className="editar-section">
               <h2 className="editar-section-title">Estadísticas</h2>
@@ -353,7 +339,6 @@ export default function Editar({ auth, onNavigate }) {
         </section>
       </main>
 
-      {/* ============ MENÚ FLOTANTE ============ */}
       {modalAbierto && (
         <div
           className="editar-modal"
@@ -370,7 +355,6 @@ export default function Editar({ auth, onNavigate }) {
             </div>
 
             <div className="editar-modal-body">
-              {/* Portada */}
               <label className={`editar-modal-cover ${borradorPortada ? 'con-foto' : ''}`}>
                 {borradorPortada ? (
                   <img src={borradorPortada} alt="Portada" />
@@ -384,7 +368,6 @@ export default function Editar({ auth, onNavigate }) {
                 <input type="file" accept="image/*" hidden onChange={(event) => leerImagen(event.target.files[0], setBorradorPortada)} />
               </label>
 
-              {/* Foto de perfil */}
               <div className="editar-modal-avatar-wrap">
                 <label className="editar-modal-avatar">
                   <img src={borradorAvatar} alt="Foto de perfil" />
@@ -396,7 +379,6 @@ export default function Editar({ auth, onNavigate }) {
                 <span className="editar-modal-avatar-label">Foto Perfil</span>
               </div>
 
-              {/* Descripción */}
               <div className="editar-modal-desc">
                 <h4>Descripción</h4>
                 <textarea

@@ -1,6 +1,5 @@
 import { navigateTo } from '../shared/presentation'
 
-// Iconos del panel lateral del foro (estilos en foro.css).
 const IconSearch = () => (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
         <circle cx="11" cy="11" r="7" />
@@ -24,7 +23,6 @@ const IconTrend = () => (
 
 const TEMAS = ['Celulares', 'Computadores', 'Televisores', 'Más']
 
-// Panel lateral del foro: buscador, navegación, temas y enlaces legales.
 export default function Sidebar({ busqueda, setBusqueda, orden, setOrden, temaActivo, setTemaActivo, onNavigate }) {
     const irPlantilla = (origen) => navigateTo(`/plantilla?origen=${origen}`, onNavigate)
 

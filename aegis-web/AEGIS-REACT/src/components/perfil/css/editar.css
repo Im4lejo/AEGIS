@@ -9,7 +9,6 @@
   padding: 24px 24px 48px;
 }
 
-/* --- MENÚ LATERAL --- */
 .editar-nav {
   align-self: start;
   position: sticky;
@@ -66,7 +65,6 @@
   place-items: center;
 }
 
-/* --- CONTENIDO --- */
 .editar-main {
   display: flex;
   flex-direction: column;
@@ -91,7 +89,6 @@
   background: #f1f3f5;
 }
 
-/* --- TARJETA DE PERSONALIZACIÓN --- */
 .editar-hero {
   padding: 16px;
 }
@@ -179,7 +176,6 @@
   filter: brightness(1.06);
 }
 
-/* --- SECCIONES --- */
 .editar-section-title {
   margin: 0 0 12px;
   font-size: 16px;
@@ -191,7 +187,6 @@
   padding: 4px 22px;
 }
 
-/* --- FILAS EDITABLES (Información básica) --- */
 .editar-row {
   display: grid;
   grid-template-columns: 210px minmax(140px, 1fr) 235px 78px;
@@ -258,7 +253,6 @@
   font-size: 13.5px;
 }
 
-/* --- BOTONES --- */
 .editar-btn-primary {
   padding: 9px 18px;
   border: none;
@@ -295,7 +289,6 @@
   padding: 9px 14px;
 }
 
-/* --- INTERRUPTORES --- */
 .editar-toggle-row {
   display: flex;
   align-items: center;
@@ -346,7 +339,6 @@
   transform: translateX(19px);
 }
 
-/* --- ESTADÍSTICAS --- */
 .editar-stats {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -390,7 +382,6 @@
   color: #55596b;
 }
 
-/* --- MENÚ FLOTANTE --- */
 .editar-modal {
   position: fixed;
   inset: 0;
@@ -451,7 +442,6 @@
   background: #f8f9fb;
 }
 
-/* Portada del menú flotante */
 .editar-modal-cover {
   position: relative;
   display: grid;
@@ -509,7 +499,6 @@
   opacity: 1;
 }
 
-/* Foto de perfil del menú flotante */
 .editar-modal-avatar-wrap {
   display: flex;
   flex-direction: column;
@@ -561,7 +550,6 @@
   color: #1f2937;
 }
 
-/* Descripción del menú flotante */
 .editar-modal-desc {
   background: #fff;
   border-radius: 12px;
@@ -603,7 +591,6 @@
   border-top: 1px solid #eef1f5;
 }
 
-/* --- RESPONSIVE --- */
 @media (max-width: 1000px) {
   .editar-row {
     grid-template-columns: 170px minmax(120px, 1fr) 78px;

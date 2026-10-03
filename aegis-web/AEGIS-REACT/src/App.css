@@ -13,14 +13,7 @@ textarea {
   font: inherit;
 }
 
-/* ============================================================
-   ESTILOS GLOBALES COMPARTIDOS ENTRE VISTAS
-   (movidos desde home / perfil / editar / foro / productos)
-   Cada vista conserva en su CSS solo sus diseños propios.
-   Orden de carga: index.css -> App.css -> CSS de cada vista.
-   ============================================================ */
 
-/* --- ESTRUCTURA GENERAL DE PÁGINA --- */
 .page-layout {
   display: flex;
   flex-direction: column;
@@ -29,7 +22,6 @@ textarea {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
-/* --- HEADER PRINCIPAL --- */
 .main-header {
   background-color: #0b2050;
   color: white;
@@ -68,7 +60,6 @@ textarea {
 .header-nav {
   display: flex;
   gap: 40px;
-  /* Espacio grande y fijo entre el logo y los enlaces, como la imagen. */
   margin-left: 8%;
   flex-shrink: 0;
 }
@@ -88,8 +79,6 @@ textarea {
 
 .header-search {
   position: relative;
-  /* Pegado a los enlaces (como la imagen); el espacio que sobra queda
-     entre el buscador y los iconos de la derecha. */
   flex: 0 1 360px;
   margin-left: 12px;
   margin-right: auto;
@@ -229,7 +218,6 @@ textarea {
   padding: 2px 6px;
 }
 
-/* --- FOOTER --- */
 .main-footer {
   background-color: #0b2050;
   color: #d1d5db;
@@ -315,7 +303,6 @@ textarea {
   color: #6b7280;
 }
 
-/* --- PLANTILLA: PÁGINA EN CONSTRUCCIÓN --- */
 .plantilla-container {
   flex: 1;
   display: flex;
@@ -382,7 +369,6 @@ textarea {
   transform: translateY(-2px);
 }
 
-/* ===== TARJETA BLANCA (perfil + editar) ===== */
 .perfil-card,
 .editar-nav,
 .editar-hero,
@@ -393,7 +379,6 @@ textarea {
   box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
 }
 
-/* ===== TOAST (perfil + editar) ===== */
 .perfil-toast,
 .editar-toast {
   position: fixed;
@@ -409,14 +394,12 @@ textarea {
   box-shadow: 0 12px 30px rgba(16, 24, 40, 0.3);
 }
 
-/* ===== FOCO EN INPUTS (perfil + editar) ===== */
 .perfil-comment-form input:focus,
 .editar-row-form input:focus {
   outline: 2px solid #b4c3f5;
   border-color: #8ea8f0;
 }
 
-/* ===== CABEZERA DE PUBLICACION (foro + perfil) ===== */
 .foro-post-header,
 .perfil-post-head {
   display: flex;
@@ -424,7 +407,6 @@ textarea {
   gap: 11px;
 }
 
-/* ===== COMENTARIOS (foro + perfil) ===== */
 .foro-comment,
 .perfil-comment {
   display: flex;
@@ -432,7 +414,6 @@ textarea {
   align-items: flex-start;
 }
 
-/* ===== NAVEGACION LATERAL (foro + editar) ===== */
 .foro-side-nav,
 .editar-nav-list {
   display: flex;
@@ -440,7 +421,6 @@ textarea {
   gap: 4px;
 }
 
-/* ===== TARJETA DE PRODUCTO (Home + Productos) ===== */
 .product-card {
   background: white;
   border: 1px solid #e5e7eb;
@@ -482,7 +462,6 @@ textarea {
   padding: 12px;
 }
 
-/* ===== PRECIO Y META (home + productos) ===== */
 .product-price-row,
 .product-meta span {
   display: flex;
@@ -490,7 +469,6 @@ textarea {
   gap: 8px;
 }
 
-/* ===== PRECIO DE PRODUCTO (fusion home+productos, gana productos) ===== */
 .product-price {
   font-size: 14px;
   font-weight: 800;
@@ -501,14 +479,12 @@ textarea {
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
-/* ===== CONTENEDOR PRINCIPAL (pagina Publicar) ===== */
 .main-content {
     max-width: 1000px;
     margin: 0 auto;
     padding: 40px 20px;
 }
 
-/* ===== FORMULARIOS input-group (Login + Registro + Publicar) ===== */
 .input-group {
     margin-bottom: 20px;
 }
@@ -536,7 +512,6 @@ textarea {
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-/* ===== LOGO auth (Registro) ===== */
 .logo {
     display: flex;
     align-items: center;

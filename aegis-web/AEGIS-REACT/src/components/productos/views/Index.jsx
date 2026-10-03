@@ -5,10 +5,8 @@ import { formatCurrency, imageUrl, route } from '../../shared/presentation'
 import { PRODUCTOS_DESTACADOS, PRODUCTOS_PERFIL, PRODUCTOS_PROMOCION } from '../productosDemo'
 import '../css/index.css'
 
-// Tipos de producto del catálogo (los mismos del subnav del Home).
 const CATEGORIAS = ['Televisores', 'Laptops', 'Celulares', 'Componentes PC']
 
-// Opciones del filtro general de calificación (estrellas).
 const CALIFICACIONES = [
   { valor: 4, label: '4★ o más' },
   { valor: 3, label: '3★ o más' },
@@ -23,8 +21,6 @@ const ESTADOS = [
 
 const PRECIO_MAXIMO = 5000000
 
-// Filtros especiales que aparecen según la categoría seleccionada.
-// Si un grupo trae "rangos", sus opciones son rangos numéricos (ej. pulgadas).
 const FILTROS_CATEGORIA = {
   Celulares: [
     { campo: 'so', titulo: 'Sistema operativo' },
@@ -77,7 +73,6 @@ const FILTROS_CATEGORIA = {
   ],
 }
 
-// Quita las tildes para que "portatil" encuentre "Portátil".
 function sinTildes(texto) {
   const conTilde = 'áéíóúüñ'
   const normal = 'aeiouun'
@@ -90,7 +85,6 @@ function sinTildes(texto) {
   return salida
 }
 
-// Busca el grupo de filtro de un campo dentro de la categoría activa.
 function buscarGrupo(categoria, campo) {
   const grupos = FILTROS_CATEGORIA[categoria] || []
   for (let i = 0; i < grupos.length; i++) {
@@ -99,7 +93,6 @@ function buscarGrupo(categoria, campo) {
   return null
 }
 
-// Opciones de un grupo: los rangos del config o los valores de los productos.
 function opcionesDeGrupo(todos, categoria, grupo) {
   if (grupo.rangos) return grupo.rangos.map((rango) => rango.label)
   const valores = []
@@ -111,7 +104,6 @@ function opcionesDeGrupo(todos, categoria, grupo) {
   return valores
 }
 
-// Los productos del Perfil usan "titulo" en lugar de "nombre".
 function nombreDe(prod) {
   return prod.nombre || prod.titulo || ''
 }
@@ -128,8 +120,6 @@ function badgeEstado(estado) {
   return 'badge-used'
 }
 
-// Página de listado de productos (se entra desde el buscador del Header
-// o desde el subnav del Home). Mismo estilo que las demás páginas.
 export default function Index({ filtros = {}, auth, onNavigate }) {
   const [busqueda, setBusqueda] = useState(filtros.busqueda || '')
   const [categoria, setCategoria] = useState(filtros.categoria || '')
@@ -145,7 +135,6 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
   const [precioMax, setPrecioMax] = useState(PRECIO_MAXIMO)
   const [orden, setOrden] = useState('recomendados')
 
-  // Cuando cambia la URL (buscador o subnav) se aplican los filtros de entrada.
   useEffect(() => {
     setBusqueda(filtros.busqueda || '')
     setCategoria(filtros.categoria || '')
@@ -159,13 +148,10 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
     setSoloStock(false)
     setSoloEnvio(false)
     setPrecioMax(PRECIO_MAXIMO)
-    // Se usa el objeto completo para que cada navegación (aunque sea
-    // al mismo link) vuelva a aplicar los filtros de la URL.
   }, [filtros])
 
   const todos = [...PRODUCTOS_DESTACADOS, ...PRODUCTOS_PROMOCION, ...PRODUCTOS_PERFIL]
 
-  // Marcas disponibles: las de la categoría (o de todo el catálogo).
   let marcasDisponibles = []
   todos.forEach((prod) => {
     const coincide = !categoria || prod.categoria === categoria
@@ -174,19 +160,15 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
     }
   })
 
-  // --- Aplicando filtros ---
   let lista = todos
 
   const termino = sinTildes(busqueda.trim().toLowerCase())
   if (termino) {
-    // Se busca por cada palabra y también en el nombre, la descripción,
-    // la categoría y la marca para que "celulares" o "laptops" encuentre productos.
     const palabras = termino.split(' ')
     lista = lista.filter((prod) => {
       const texto = sinTildes(`${nombreDe(prod)} ${prod.descripcion || ''} ${prod.categoria || ''} ${prod.marca || ''}`.toLowerCase())
       return palabras.every((palabra) => {
         if (texto.indexOf(palabra) !== -1) return true
-        // Si escribieron en plural ("teclados"), probamos sin la "s" final.
         if (palabra.length > 2 && palabra.charAt(palabra.length - 1) === 's') {
           return texto.indexOf(palabra.substring(0, palabra.length - 1)) !== -1
         }
@@ -205,9 +187,6 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
   if (soloStock) lista = lista.filter((prod) => prod.stock !== false)
   if (soloEnvio) lista = lista.filter((prod) => prod.envioRapido === true)
 
-  // Si se buscó por la barra y todos los resultados son de una sola
-  // categoría (ej: "iphone" → Celulares), se muestran los filtros de esa
-  // categoría aunque no se haya elegido en el menú.
   let categoriaVista = categoria
   if (!categoriaVista && termino && lista.length > 0) {
     let unica = lista[0].categoria
@@ -218,7 +197,6 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
     if (todosIguales) categoriaVista = unica
   }
 
-  // Filtros dinámicos (almacenamiento, RAM, pulgadas, etc.) en selección múltiple.
   Object.keys(specs).forEach((campo) => {
     const seleccion = specs[campo]
     if (seleccion && seleccion.length > 0) {
@@ -237,11 +215,9 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
     }
   })
 
-  // --- Ordenamiento ---
   if (orden === 'precio-asc') lista = [...lista].sort((a, b) => a.precio - b.precio)
   if (orden === 'precio-desc') lista = [...lista].sort((a, b) => b.precio - a.precio)
 
-  // Título de arriba a la izquierda (estilo Jumbo).
   let titulo = 'Productos'
   if (termino) titulo = `Resultados para "${busqueda.trim()}"`
   else if (categoria) titulo = categoria
@@ -250,7 +226,6 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
   else if (soloOfertas) titulo = 'Ofertas'
   else if (estado === 'reacondicionado') titulo = 'Reacondicionado'
 
-  // Chips de los filtros activos (estilo Jumbo: "Filtros seleccionados").
   const chips = []
   if (termino) chips.push({ label: `Búsqueda: ${busqueda.trim()}`, quitar: () => { setBusqueda(''); setSpecs({}) } })
   if (categoria) chips.push({ label: categoria, quitar: () => { setCategoria(''); setSpecs({}); setMarcas([]) } })
@@ -287,7 +262,6 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
     setPrecioMax(PRECIO_MAXIMO)
   }
 
-  // Agrega o quita un valor de un filtro dinámico (selección múltiple).
   const alternarSpec = (campo, valor) => {
     const seleccion = specs[campo] || []
     if (seleccion.indexOf(valor) !== -1) {
@@ -297,13 +271,11 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
     }
   }
 
-  // Quita un valor suelto de un filtro dinámico (desde su chip).
   const quitarSpec = (campo, valor) => {
     const seleccion = specs[campo] || []
     setSpecs({ ...specs, [campo]: seleccion.filter((v) => v !== valor) })
   }
 
-  // Marca en selección múltiple (casillas de verificación).
   const alternarMarca = (m) => {
     if (marcas.indexOf(m) !== -1) {
       setMarcas(marcas.filter((x) => x !== m))
@@ -321,7 +293,6 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
       <Header title="AEGIS | Productos" auth={auth} onNavigate={onNavigate} />
 
       <main className="products-page">
-        {/* Barra superior: título + contador + orden (estilo Jumbo) */}
         <div className="products-topbar">
           <div className="products-title-row">
             <h1>{titulo}</h1>
@@ -339,7 +310,6 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
         </div>
 
         <div className="products-body">
-          {/* Columna izquierda: filtros */}
           <aside className="products-filters">
             <div className="filters-head">
               <strong>Filtros seleccionados</strong>
@@ -426,7 +396,6 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
               </div>
             </div>
 
-            {/* Filtros dinámicos: cambian según la categoría (elegida o deducida de la búsqueda) */}
             {(!categoriaVista || !FILTROS_CATEGORIA[categoriaVista]) && (
               <p className="filters-hint">
                 Elige una categoría para ver filtros según el tipo de producto (almacenamiento, pulgadas, etc.).
@@ -495,7 +464,6 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
             </div>
           </aside>
 
-          {/* Columna derecha: tarjetas de productos */}
           <section className="products-results">
             {lista.length === 0 ? (
               <div className="no-products-message">
@@ -504,7 +472,6 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
             ) : (
               <div className="products-grid-container">
                 {lista.map((prod) => {
-                  // http = URL externa, / = archivo en public, lo otro va a imageUrl.
                   let srcImagen = prod.imagen || ''
                   if (srcImagen.indexOf('http') !== 0 && srcImagen.indexOf('/') !== 0) {
                     srcImagen = imageUrl(srcImagen)

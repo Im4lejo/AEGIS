@@ -1,7 +1,4 @@
-// Catálogo de productos de demostración (compartido).
-// El Home muestra los destacados, el Perfil muestra los del vendedor
-// y la vista de Detalle busca en ambos para que al abrir cualquier
-// tarjeta se vea el mismo producto, precio, vendedor y descripción.
+
 
 export const PRODUCTOS_DESTACADOS = [
   {
@@ -68,8 +65,7 @@ export const PRODUCTOS_DESTACADOS = [
   }
 ]
 
-// Productos que se ven en el Perfil ("Productos del Vendedor").
-// El vendedor es el usuario del perfil (misma reputación de su página).
+
 export const PRODUCTOS_PERFIL = [
   {
     id: 4,
@@ -165,7 +161,7 @@ export const PRODUCTOS_PERFIL = [
   }
 ]
 
-// Productos de los banners del Home (carrusel y promociones).
+
 export const PRODUCTOS_PROMOCION = [
   {
     id: 9,
@@ -399,8 +395,7 @@ export const PRODUCTOS_PROMOCION = [
   }
 ]
 
-// Vendedores del catálogo: cada producto apunta aquí por su id
-// y con eso se abre su página de perfil (/vendedor?id=N).
+
 export const VENDEDORES = [
   {
     id: 1,
@@ -468,21 +463,19 @@ export const VENDEDORES = [
   }
 ]
 
-// Busca un vendedor por su id (sin id se muestra el primero).
 export function buscarVendedor(id) {
   if (id === undefined || id === null || id === '') return VENDEDORES[0]
   const encontrado = VENDEDORES.find((item) => String(item.id) === String(id))
   return encontrado || null
 }
 
-// Productos publicados por un vendedor (para su página de perfil).
+
 export function productosDelVendedor(vendedor) {
   const todos = [...PRODUCTOS_DESTACADOS, ...PRODUCTOS_PROMOCION, ...PRODUCTOS_PERFIL]
   return todos.filter((item) => item.vendedor && vendedor && String(item.vendedor.id) === String(vendedor.id))
 }
 
-// Busca un producto por su id en todo el catálogo.
-// Sin id se muestra el primero (demo) y si no existe devuelve null.
+
 export function buscarProducto(id) {
   if (id === undefined || id === null || id === '') return PRODUCTOS_DESTACADOS[0]
   const todos = [...PRODUCTOS_DESTACADOS, ...PRODUCTOS_PROMOCION, ...PRODUCTOS_PERFIL]

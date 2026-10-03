@@ -5,7 +5,6 @@ import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
 import { PRODUCTOS_PERFIL } from '../../productos/productosDemo'
 import '../css/perfil.css'
 
-// --- ICONOS (SVG inline, mismo estilo que Home y Foro) ---
 const IconPencil = ({ size = 15 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z" />
@@ -85,7 +84,6 @@ const IconClose = ({ size = 20 }) => (
   </svg>
 )
 
-// --- DATOS DE EJEMPLO (mismo contenido de las imágenes de diseño) ---
 const USUARIO_EJEMPLO = {
   nombre: 'Luis Alejandro',
   apellido: 'Montenegro Ojeda',
@@ -160,7 +158,6 @@ const listaBaseComentarios = (publicacion) => {
   return []
 }
 
-// --- MENÚ DESPLEABLE REUTILIZABLE (click fuera para cerrar) ---
 function MenuOpciones({ trigger, triggerClass = 'perfil-menu-btn', valor, opciones, onSelect }) {
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
@@ -202,7 +199,6 @@ function MenuOpciones({ trigger, triggerClass = 'perfil-menu-btn', valor, opcion
   )
 }
 
-// --- PÁGINA DE PERFIL ---
 export default function Perfil({ usuario = {}, publicaciones, productos, esPropio = true, auth, onNavigate }) {
   const yo = { ...USUARIO_EJEMPLO, ...usuario }
   const pubsDemo = publicaciones && publicaciones.length > 0 ? publicaciones : PUBLICACIONES_EJEMPLO
@@ -234,7 +230,6 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [lightbox])
 
-  // Filtrado y ordenamiento de publicaciones
   let publicacionesList = [...pubsDemo]
   if (filtro === 'con-imagen') publicacionesList = publicacionesList.filter((item) => item.imagen)
   if (orden === 'populares') publicacionesList.sort((a, b) => Number(b.likes || 0) - Number(a.likes || 0))
@@ -274,7 +269,6 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
       <Header title="AEGIS | Mi Perfil" auth={auth} onNavigate={onNavigate} />
 
       <main className="perfil-page">
-        {/* ============ TARJETA DE IDENTIDAD ============ */}
         <section className="perfil-card">
           <div className="perfil-cover">
             <button type="button" className="perfil-cover-btn" onClick={() => onNavigate && onNavigate('/perfil/editar')}>
@@ -315,7 +309,6 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
           </div>
         </section>
 
-        {/* ============ BARRA ORDENAR / FILTRAR ============ */}
         <div className="perfil-sortbar">
           <MenuOpciones
             triggerClass="perfil-menu-btn"
@@ -334,10 +327,8 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
           />
         </div>
 
-        {/* ============ CONTENIDO EN DOS COLUMNAS ============ */}
         <div className="perfil-grid">
           <div className="perfil-col">
-            {/* Descripción */}
             <section className="perfil-panel">
               <h2 className="perfil-panel-title">Descripción</h2>
               <p className="perfil-desc-text">{yo.descripcion || 'Sin descripción disponible.'}</p>
@@ -361,7 +352,6 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
               </div>
             </section>
 
-            {/* Publicaciones */}
             <section className="perfil-panel">
               <div className="perfil-pub-head">
                 <h2 className="perfil-panel-title">Publicaciones</h2>
@@ -493,7 +483,6 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
             </section>
           </div>
 
-          {/* Productos del Vendedor */}
           <div className="perfil-col">
             <section className="perfil-panel">
               <h2 className="perfil-panel-title">Productos del Vendedor</h2>

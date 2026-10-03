@@ -1,6 +1,5 @@
 import { navigateTo, route } from '../shared/presentation'
 
-// Pie de página del sitio.
 export default function Footer({ onNavigate }) {
     const go = (event, path) => {
         if (event) event.preventDefault()

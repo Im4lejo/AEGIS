@@ -1,4 +1,3 @@
-/* ===== PÁGINA DE LISTADO DE PRODUCTOS (estilo Jumbo) ===== */
 
 .products-page {
   width: 100%;
@@ -7,7 +6,6 @@
   padding: 24px 24px 48px;
 }
 
-/* --- Barra superior: título + contador + orden --- */
 .products-topbar {
   display: flex;
   justify-content: space-between;
@@ -56,7 +54,6 @@
   font-family: inherit;
 }
 
-/* --- Cuerpo: filtros a la izquierda + tarjetas a la derecha --- */
 .products-body {
   display: flex;
   align-items: flex-start;
@@ -64,7 +61,6 @@
   margin-top: 20px;
 }
 
-/* --- Columna izquierda: filtros --- */
 .products-filters {
   width: 270px;
   flex-shrink: 0;
@@ -189,7 +185,6 @@
   color: #ffffff;
 }
 
-/* --- Columna derecha: tarjetas --- */
 .products-results {
   flex: 1;
   min-width: 0;
@@ -211,7 +206,6 @@
   font-size: 15px;
 }
 
-/* Detalles de la tarjeta en esta página */
 .products-grid-container .product-name {
   font-size: 14px;
   min-height: 36px;
@@ -239,7 +233,6 @@
   text-decoration: line-through;
 }
 
-/* --- Móvil: filtros arriba y tarjetas debajo --- */
 @media (max-width: 900px) {
   .products-body {
     flex-direction: column;
@@ -250,7 +243,6 @@
   }
 }
 
-/* --- Etiqueta Black Friday (arriba a la derecha de la tarjeta) --- */
 .product-blackfriday-tag {
   position: absolute;
   top: 8px;
@@ -266,12 +258,10 @@
   border-radius: 4px;
 }
 
-/* Si tiene Black Friday, el badge de estado baja para no taparse */
 .con-blackfriday .product-state-tag {
   top: 40px;
 }
 
-/* Aviso de filtros dinámicos (aparece si no hay categoría elegida) */
 .filters-hint {
   font-size: 12px;
   color: #9ca3af;
