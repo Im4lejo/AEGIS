@@ -5,7 +5,6 @@ import { buscarVendedor, productosDelVendedor } from '../../productos/productosD
 import { POSTS_EJEMPLO } from '../../foro/views/Foro'
 import '../css/perfil.css'
 
-// --- ICONOS (mismos de la página de Perfil) ---
 const IconCrown = () => (
   <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
     <path d="M3 8l4 4 5-7 5 7 4-4-1.6 9.5H4.6L3 8z" />
@@ -25,7 +24,6 @@ const IconStar = ({ size = 28 }) => (
   </svg>
 )
 
-// Insignias calculadas con la reputación (mismas del Perfil y del Detalle).
 function insigniasVendedor(reputacion) {
   const rep = Number(reputacion || 0)
   let nivel = 'Nivel 1'
@@ -40,12 +38,10 @@ function insigniasVendedor(reputacion) {
   }
 }
 
-// --- PÁGINA DE PERFIL DE UN VENDEDOR (mismo estilo que Perfil.jsx) ---
 export default function Vendedor({ id, auth, onNavigate }) {
   const vendedor = buscarVendedor(id) || {}
   const insignia = insigniasVendedor(vendedor.reputacion)
 
-  // Publicaciones del vendedor en el foro (por su usuario del foro).
   const publicaciones = POSTS_EJEMPLO.filter((post) => post.autor === vendedor.usuarioForo)
   const productos = productosDelVendedor(vendedor)
 
@@ -54,7 +50,6 @@ export default function Vendedor({ id, auth, onNavigate }) {
       <Header title={`AEGIS | ${vendedor.nombre || 'Vendedor'}`} auth={auth} onNavigate={onNavigate} />
 
       <main className="perfil-page">
-        {/* ============ TARJETA DE IDENTIDAD ============ */}
         <section className="perfil-card">
           <div className="perfil-cover" />
 
@@ -89,10 +84,8 @@ export default function Vendedor({ id, auth, onNavigate }) {
           </div>
         </section>
 
-        {/* ============ CONTENIDO EN DOS COLUMNAS ============ */}
         <div className="perfil-grid">
           <div className="perfil-col">
-            {/* Descripción */}
             <section className="perfil-panel">
               <h2 className="perfil-panel-title">Descripción</h2>
               <p className="perfil-desc-text">{vendedor.descripcion || 'Sin descripción disponible.'}</p>
@@ -112,7 +105,6 @@ export default function Vendedor({ id, auth, onNavigate }) {
               </div>
             </section>
 
-            {/* Publicaciones en el foro: ¿ha publicado o no? */}
             <section className="perfil-panel">
               <h2 className="perfil-panel-title">Publicaciones en el foro</h2>
 
@@ -155,7 +147,6 @@ export default function Vendedor({ id, auth, onNavigate }) {
             </section>
           </div>
 
-          {/* Productos del Vendedor */}
           <div className="perfil-col">
             <section className="perfil-panel">
               <h2 className="perfil-panel-title">Productos del Vendedor</h2>

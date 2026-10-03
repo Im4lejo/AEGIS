@@ -5,7 +5,6 @@ import Sidebar from '../../layouts/Sidebar'
 import { avatarUrl } from '../../shared/presentation'
 import '../css/foro.css'
 
-// --- ICONOS (SVG inline, mismo estilo que el resto del proyecto) ---
 const IconHeart = ({ filled }) => (
   <svg width="19" height="19" viewBox="0 0 24 24" fill={filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -49,7 +48,6 @@ const IconChevron = ({ open }) => (
   </svg>
 )
 
-// --- DATOS DE EJEMPLO (mismo contenido de la imagen) ---
 export const POSTS_EJEMPLO = [
   {
     id: 1,
@@ -94,7 +92,6 @@ const ORDENES = [
   { id: 'comentados', label: 'Más comentados' },
 ]
 
-// --- PÁGINA DEL FORO ---
 export default function Foro({ auth, onNavigate }) {
   const [posts, setPosts] = useState(POSTS_EJEMPLO)
   const [busqueda, setBusqueda] = useState('')
@@ -112,7 +109,6 @@ export default function Foro({ auth, onNavigate }) {
   const ordenRef = useRef(null)
   const fileInputRef = useRef(null)
 
-  // Cierra el menú "Ordenar Por" al hacer clic fuera
   useEffect(() => {
     if (!ordenOpen) return
     const handleClickOutside = (event) => {
@@ -122,7 +118,6 @@ export default function Foro({ auth, onNavigate }) {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [ordenOpen])
 
-  // Cierra el lightbox con la tecla ESC
   useEffect(() => {
     if (!lightbox) return
     const handleKey = (event) => {
@@ -132,14 +127,12 @@ export default function Foro({ auth, onNavigate }) {
     return () => document.removeEventListener('keydown', handleKey)
   }, [lightbox])
 
-  // Auto-oculta el toast después de 2.5s
   useEffect(() => {
     if (!toast) return
     const timer = setTimeout(() => setToast(null), 2500)
     return () => clearTimeout(timer)
   }, [toast])
 
-  // Filtrado y ordenamiento de publicaciones
   const termino = busqueda.trim().toLowerCase()
   let postsVisibles = posts.filter((post) => {
     if (!termino) return true
@@ -156,7 +149,6 @@ export default function Foro({ auth, onNavigate }) {
   let usuario = 'Usuario AEGIS'
   if (auth && auth.user && auth.user.nombre) usuario = auth.user.nombre
 
-  // --- ACCIONES ---
   const toggleLike = (id) => {
     setPosts((prev) =>
       prev.map((post) =>
@@ -248,16 +240,13 @@ export default function Foro({ auth, onNavigate }) {
   const irPlantilla = (origen) => onNavigate && onNavigate(`/plantilla?origen=${origen}`)
 
   return (
-    <div className="page-layout">
+    <div className="page-layout foro-layout">
       <Header title="AEGIS | Foro" auth={auth} onNavigate={onNavigate} />
 
       <div className="foro-container">
-        {/* ============ SIDEBAR IZQUIERDO ============ */}
         <Sidebar busqueda={busqueda} setBusqueda={setBusqueda} orden={orden} setOrden={setOrden} temaActivo={temaActivo} setTemaActivo={setTemaActivo} onNavigate={onNavigate} />
 
-        {/* ============ FEED CENTRAL ============ */}
         <main className="foro-feed">
-          {/* Compositor de publicación */}
           {!panelAbierto ? (
             <div className="foro-composer">
               <div className="foro-composer-avatar">?</div>
@@ -328,7 +317,6 @@ export default function Foro({ auth, onNavigate }) {
             onChange={seleccionarImagen}
           />
 
-          {/* Barra "Ordenar Por" */}
           <div className="foro-toolbar">
             <div className="foro-sort" ref={ordenRef}>
               <button className="foro-sort-btn" type="button" onClick={() => setOrdenOpen(!ordenOpen)}>
@@ -351,7 +339,6 @@ export default function Foro({ auth, onNavigate }) {
             </div>
           </div>
 
-          {/* Lista de publicaciones */}
           {postsVisibles.length === 0 ? (
             <div className="foro-empty">
               No se encontraron publicaciones que coincidan con tu búsqueda. 🔍
@@ -460,7 +447,6 @@ export default function Foro({ auth, onNavigate }) {
           )}
         </main>
 
-        {/* ============ SIDERECHO (BANNERS) ============ */}
         <aside className="foro-banners">
           <button className="foro-banner" type="button" onClick={() => irPlantilla('banner-ofertas-1')}>
             <img src="/ofertas-banner.svg" alt="OFERTAS INCREÍBLES HASTA -50% DTO." />
@@ -471,14 +457,12 @@ export default function Foro({ auth, onNavigate }) {
         </aside>
       </div>
 
-      {/* Lightbox de imagen */}
       {lightbox && (
         <div className="foro-lightbox" onClick={() => setLightbox(null)}>
           <img src={lightbox} alt="Imagen ampliada" />
         </div>
       )}
 
-      {/* Toast de notificación */}
       {toast && <div className="foro-toast">{toast}</div>}
 
       <Footer onNavigate={onNavigate} />

@@ -3,7 +3,7 @@ import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import '../css/publicarProducto.css'
 
-// Página de publicación de producto: formulario interactivo con vista previa de imágenes.
+
 export default function PublicarProducto({ auth, onNavigate }) {
     const [datos, setDatos] = useState({
         titulo: '',
@@ -19,14 +19,14 @@ export default function PublicarProducto({ auth, onNavigate }) {
     const [fotos, setFotos] = useState(['', '', '', ''])
     const [mensaje, setMensaje] = useState(null)
 
-    // Actualiza un campo del formulario
+
     const cambiarDato = (campo, valor) => {
         const nuevos = { ...datos }
         nuevos[campo] = valor
         setDatos(nuevos)
     }
 
-    // Vista previa de la foto principal
+   
     const elegirFotoPrincipal = (event) => {
         const archivo = event.target.files[0]
         if (!archivo) return
@@ -35,7 +35,7 @@ export default function PublicarProducto({ auth, onNavigate }) {
         lector.readAsDataURL(archivo)
     }
 
-    // Vista previa de cada foto secundaria
+ 
     const elegirFotoExtra = (event, indice) => {
         const archivo = event.target.files[0]
         if (!archivo) return
@@ -48,12 +48,12 @@ export default function PublicarProducto({ auth, onNavigate }) {
         lector.readAsDataURL(archivo)
     }
 
-    // Flecha de regreso al listado de productos
+   
     const volver = () => {
         if (onNavigate) onNavigate('/productos')
     }
 
-    // Envío del formulario: valida y muestra confirmación
+    
     const publicar = (event) => {
         event.preventDefault()
         const titulo = datos.titulo.trim()
@@ -71,7 +71,7 @@ export default function PublicarProducto({ auth, onNavigate }) {
 
             <main className="main-content publish-page">
                 <form onSubmit={publicar}>
-                    {/* Encabezado: volver + título + botón publicar */}
+                   
                     <div className="publish-header">
                         <div className="publish-title">
                             <button type="button" className="publish-back" onClick={volver} aria-label="Volver a productos">
@@ -88,7 +88,7 @@ export default function PublicarProducto({ auth, onNavigate }) {
                         </div>
                     )}
 
-                    {/* Card 1: imágenes + información básica */}
+                   
                     <section className="publish-card">
                         <div className="images-section">
                             <h2>1. Imágenes</h2>
@@ -146,7 +146,6 @@ export default function PublicarProducto({ auth, onNavigate }) {
                         </div>
                     </section>
 
-                    {/* Card 2: detalles del intercambio */}
                     <section className="details-card">
                         <h2>3. Detalles del Intercambio</h2>
 

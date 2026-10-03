@@ -1,6 +1,5 @@
 import { navigateTo, route } from '../shared/presentation'
 
-// Enlaces de navegación del encabezado principal.
 export default function Navbar({ onNavigate }) {
     const go = (event, path) => {
         if (event) event.preventDefault()

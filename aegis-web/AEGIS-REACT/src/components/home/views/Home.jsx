@@ -38,7 +38,6 @@ function productState(state) {
   return { label: 'Usado', className: 'badge-used' }
 }
 
-// Tira de texto repetido (arriba y abajo) del banner de televisores.
 function TiraBanner() {
   const palabras = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
   return (
@@ -52,7 +51,6 @@ function TiraBanner() {
   )
 }
 
-// Tarjeta de producto reutilizada por las dos grillas del Home.
 function TarjetaProducto({ prod, alAbrir }) {
   const stateInfo = productState(prod.estado)
   const srcImagen = prod.imagen && prod.imagen.startsWith('http')
@@ -103,7 +101,6 @@ function TarjetaProducto({ prod, alAbrir }) {
   )
 }
 
-// Productos de la sección "Teclados y Memorias RAM" del Home.
 const IDS_MAS_PRODUCTOS = [13, 20, 18, 19]
 const MAS_PRODUCTOS = IDS_MAS_PRODUCTOS.map((id) => PRODUCTOS_PROMOCION.find((prod) => prod.id === id))
 
@@ -112,7 +109,6 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
   const [categoryOpen, setCategoryOpen] = useState(false)
   const categoryRef = useRef(null)
 
-  // Cierra el desplegable de categorías al hacer clic fuera de él
   useEffect(() => {
     if (!categoryOpen) return
     const handleClickOutside = (event) => {
@@ -149,17 +145,15 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
     openProductoId(prod.id)
   }
 
-  // Abre la página de listado de productos con un filtro del subnav.
   const abrirCatalogo = (consulta) => {
     setCategoryOpen(false)
     if (onNavigate) onNavigate('/productos' + consulta)
   }
 
   return (
-    <div className="page-layout">
+    <div className="page-layout home-layout">
       <Header title="AEGIS | Home" auth={auth} onNavigate={onNavigate} />
 
-      {/* Subnavegación */}
       <section className="subnav">
         <div className="dropdown-container" ref={categoryRef}>
           <button
@@ -247,7 +241,6 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
             </div>
           </div>
 
-          {/* Tarjetas Laterales con Banners Integrados */}
           <div className="hero-side">
             <div className="side-banner-card">
               <a
@@ -303,7 +296,6 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
           </div>
         </section>
 
-        {/* Banner grande de la promoción de televisores */}
         <section className="tv-banner">
           <TiraBanner />
           <div className="tv-banner-body">
@@ -333,7 +325,6 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
           <TiraBanner />
         </section>
 
-        {/* Más productos: teclados y memorias RAM */}
         <section className="products-section">
           <div className="main-section-header">
             <h2>Teclados y Memorias RAM en Oferta</h2>

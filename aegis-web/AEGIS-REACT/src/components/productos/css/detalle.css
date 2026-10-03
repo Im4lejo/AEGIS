@@ -1,10 +1,4 @@
-/* ============================================================
-   Estilos de la vista Detalle.jsx (detalle de producto)
-   Basado en la referencia VerProducto, distribuido hacia abajo
-   para que la página no quede saturada.
-   ============================================================ */
 
-/* --- PÁGINA --- */
 .product-detail-page {
   background: #f0f2f5;
   padding: 24px;
@@ -13,14 +7,12 @@
   gap: 24px;
 }
 
-/* Contenido centrado (máximo 1400px) */
 .product-detail-page > section {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
 }
 
-/* Tarjetas blancas */
 .detail-gallery,
 .detail-info,
 .detail-section {
@@ -31,7 +23,6 @@
   padding: 24px;
 }
 
-/* --- FILA SUPERIOR: galería + info --- */
 .detail-top {
   display: grid;
   grid-template-columns: 1.7fr 0.8fr;
@@ -39,7 +30,6 @@
   align-items: start;
 }
 
-/* Columna izquierda: galería y secciones de contenido juntas */
 .detail-left {
   display: flex;
   flex-direction: column;
@@ -47,7 +37,6 @@
   min-width: 0;
 }
 
-/* --- MIGAJAS DE PAN (Inicio / Categoría / producto) --- */
 .detail-breadcrumb {
   width: 100%;
   max-width: 1400px;
@@ -75,7 +64,6 @@
   font-weight: 600;
 }
 
-/* Galería */
 .detail-gallery {
   display: flex;
   gap: 16px;
@@ -133,7 +121,6 @@
   color: #9ca3af;
 }
 
-/* Contador de imágenes (estilo "1/9" de la referencia) */
 .detail-counter {
   position: absolute;
   top: 12px;
@@ -147,7 +134,6 @@
   border-radius: 8px;
 }
 
-/* Flechas para moverse por la galería */
 .detail-arrow {
   position: absolute;
   top: 50%;
@@ -175,7 +161,6 @@
 .detail-arrow.left { left: 12px; }
 .detail-arrow.right { right: 12px; }
 
-/* Información esencial: panel derecho que se queda fijo al hacer scroll */
 .detail-info {
   display: flex;
   flex-direction: column;
@@ -205,7 +190,6 @@
   color: #6b7280;
 }
 
-/* Vista del vendedor (clic para abrir su perfil) */
 .detail-seller {
   display: flex;
   align-items: center;
@@ -287,7 +271,6 @@
   background: #f0f2f5;
 }
 
-/* Precio con badge de descuento y precio anterior tachado */
 .detail-price {
   display: flex;
   align-items: center;
@@ -325,7 +308,6 @@
   color: #9ca3af;
 }
 
-/* Especificaciones */
 .detail-specs {
   display: flex;
   flex-direction: column;
@@ -351,7 +333,6 @@
   margin-left: 4px;
 }
 
-/* Aviso de envío */
 .detail-shipping {
   display: flex;
   align-items: center;
@@ -365,7 +346,6 @@
   margin: 14px 0 0;
 }
 
-/* Botones de acción */
 .detail-actions {
   display: flex;
   gap: 12px;
@@ -405,8 +385,6 @@
   transform: translateY(-2px);
 }
 
-/* --- SECCIONES INFERIORES --- */
-/* Ahora viven dentro de la columna izquierda (ancho completo del grid) */
 .detail-features {
   list-style: disc;
   padding-left: 22px;
@@ -445,7 +423,6 @@
   color: #374151;
 }
 
-/* Más información del vendedor */
 .seller-info-grid {
   display: flex;
   align-items: center;
@@ -527,7 +504,6 @@
   letter-spacing: 2px;
 }
 
-/* Comentarios */
 .detail-comments-head {
   display: flex;
   justify-content: space-between;
@@ -611,13 +587,11 @@
   font-weight: 500;
 }
 
-/* --- RESPONSIVE --- */
 @media (max-width: 1200px) {
   .detail-top {
     grid-template-columns: 1fr;
   }
 
-  /* En una sola columna: galería, luego el panel, luego el resto */
   .detail-left {
     display: contents;
   }

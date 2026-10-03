@@ -1,4 +1,3 @@
-/* --- SUBNAV --- */
 .subnav {
   display: flex;
   justify-content: center;
@@ -56,7 +55,6 @@
   background-color: #f9fafb;
 }
 
-/* --- CONTENIDO PRINCIPAL --- */
 .home-container {
   max-width: 1280px;
   width: 100%;
@@ -73,7 +71,6 @@
   margin-bottom: 16px;
 }
 
-/* --- SECCIÓN HERO / BANNERS --- */
 .hero-section {
   display: grid;
   grid-template-columns: 1.6fr 1fr;
@@ -82,7 +79,6 @@
   align-items: stretch;
 }
 
-/* BANNER PRINCIPAL (CARRUSEL) */
 .hero-main {
   position: relative;
   width: 100%;
@@ -96,7 +92,6 @@
   cursor: pointer;
 }
 
-/* La imagen ocupa TODO el espacio de fondo */
 .hero-bg-img {
   position: absolute;
   top: 0;
@@ -108,7 +103,6 @@
   z-index: 1;
 }
 
-/* Capa oscura suave para mejorar legibilidad del texto sobre la imagen */
 .hero-overlay {
   position: absolute;
   top: 0;
@@ -119,7 +113,6 @@
   z-index: 2;
 }
 
-/* TEXTO SUPERPUESTO */
 .hero-content {
   position: relative;
   z-index: 3;
@@ -152,7 +145,6 @@
   line-height: 1.4;
 }
 
-/* PRECIO Y BOTÓN DE COMPRA */
 .hero-pricing {
   display: flex;
   align-items: center;
@@ -200,7 +192,6 @@
   transform: translateY(-2px);
 }
 
-/* CONTROLES DEL CARRUSEL */
 .carousel-arrow {
   position: absolute;
   top: 50%;
@@ -253,7 +244,6 @@
   border-radius: 4px;
 }
 
-/* --- TARJETAS LATERALES --- */
 .hero-side {
   display: flex;
   flex-direction: column;
@@ -292,7 +282,6 @@
   pointer-events: none;
 }
 
-/* --- SEPARADOR AZUL --- */
 .explore-banner {
   background-color: #1e3a8a;
   color: white;
@@ -307,7 +296,6 @@
   font-weight: 700;
 }
 
-/* --- GRID DE PRODUCTOS --- */
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -337,7 +325,6 @@
   pointer-events: none;
 }
 
-/* --- BANNER GRAN PROMOCIÓN DE TELEVISORES --- */
 .tv-banner {
   width: calc(100% + 40px);
   margin: 10px -20px 28px;
@@ -347,7 +334,6 @@
   box-shadow: 0 6px 20px rgba(109, 40, 217, 0.35);
 }
 
-/* Tiras de texto repetido arriba y abajo */
 .tv-banner-strip {
   display: flex;
   gap: 30px;
@@ -369,7 +355,6 @@
 .tv-banner-palabra.negro { color: #0a0f2d; }
 .tv-banner-palabra.blanco { color: #ffffff; }
 
-/* Cuerpo: imágenes a la izquierda, texto a la derecha */
 .tv-banner-body {
   display: flex;
   align-items: center;
@@ -470,6 +455,46 @@
   }
 
   .tv-banner-text { text-align: center; }
+}
+
+@media (max-width: 768px) {
+  .home-layout .header-container {
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+
+  .home-layout .header-logo { order: 1; }
+  .home-layout .header-user-actions { order: 2; }
+
+  .home-layout .header-nav {
+    order: 3;
+    flex: 1 1 100%;
+    margin-left: 0;
+    gap: 24px;
+  }
+
+  .home-layout .header-search {
+    order: 4;
+    flex: 1 1 100%;
+    margin: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-layout .footer-container {
+    grid-template-columns: 1fr;
+  }
+
+  .home-layout .footer-links-group {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .subnav {
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    padding: 8px 12px;
+  }
 }
 
 

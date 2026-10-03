@@ -5,7 +5,7 @@ import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
 import { buscarProducto } from '../productosDemo'
 import '../css/detalle.css'
 
-// Comentarios de ejemplo del vendedor.
+
 const COMENTARIOS = [
   {
     id: 1,
@@ -30,8 +30,7 @@ const COMENTARIOS = [
   },
 ]
 
-// Insignias del vendedor calculadas con su reputación
-// (mismas insignias de la página de Perfil).
+
 function insigniasVendedor(reputacion) {
   const rep = Number(reputacion || 0)
   let nivel = 'Nivel 1'
@@ -52,8 +51,6 @@ function etiquetaEstado(estado) {
   return 'Usado - En buen estado'
 }
 
-// Etiquetas de las fichas técnicas que se muestran
-// debajo de la galería (como "Características principales").
 const CAMPOS_FICHAS = {
   cpu: 'Procesador (CPU)',
   gpu: 'Tarjeta gráfica',
@@ -85,7 +82,6 @@ export default function Detalle({ id, auth, onNavigate }) {
 
   const insignia = insigniasVendedor(vendedor.reputacion)
 
-  // Galería con miniaturas (misma foto principal en la demo).
   const [imagenActiva, setImagenActiva] = useState(0)
   const miniaturas = [0, 1, 2, 3]
 
@@ -94,7 +90,6 @@ export default function Detalle({ id, auth, onNavigate }) {
   const imagenSiguiente = () =>
     setImagenActiva((i) => (i === miniaturas.length - 1 ? 0 : i + 1))
 
-  // Solo los campos con dato del producto aparecen en la lista.
   const caracteristicas = Object.keys(CAMPOS_FICHAS).filter((campo) => producto[campo])
 
   return (
@@ -102,7 +97,6 @@ export default function Detalle({ id, auth, onNavigate }) {
       <Header title={`AEGIS | ${titulo}`} auth={auth} onNavigate={onNavigate} />
 
       <main className="product-detail-page">
-        {/* Migajas de pan: Inicio / Categoría / producto */}
         <nav className="detail-breadcrumb" aria-label="Ruta de navegación">
           <a
             href={route('/')}
@@ -129,7 +123,6 @@ export default function Detalle({ id, auth, onNavigate }) {
         </nav>
 
         <section className="detail-top">
-          {/* ===== COLUMNA IZQUIERDA: galería + todo el contenido ===== */}
           <div className="detail-left">
             <article className="detail-gallery">
               <div className="detail-thumbs">
@@ -170,7 +163,6 @@ export default function Detalle({ id, auth, onNavigate }) {
               </div>
             </article>
 
-            {/* Características principales (idea de la referencia) */}
             {caracteristicas.length > 0 && (
               <section className="detail-section">
                 <h2>Características principales</h2>
@@ -244,7 +236,6 @@ export default function Detalle({ id, auth, onNavigate }) {
             </section>
           </div>
 
-          {/* ===== PANEL DERECHO: se queda fijo al hacer scroll ===== */}
           <aside className="detail-info">
             <p className="detail-code">Código de producto: {producto.id}</p>
 

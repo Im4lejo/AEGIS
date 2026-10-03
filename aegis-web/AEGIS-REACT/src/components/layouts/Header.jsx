@@ -3,13 +3,11 @@ import { avatarUrl, navigateTo, route } from '../shared/presentation'
 import Head from './Head'
 import Navbar from './Navbar'
 
-// Encabezado del sitio: título/meta (Head), logo, navegación, buscador y menú de usuario.
 export default function Header({ title, stylesheet, auth, onNavigate }) {
     const [profileOpen, setProfileOpen] = useState(false)
     const [busqueda, setBusqueda] = useState('')
     const profileRef = useRef(null)
 
-    // Cierra el menú desplegable al hacer clic fuera de él
     useEffect(() => {
         if (!profileOpen) return
         const handleClickOutside = (event) => {
@@ -45,7 +43,6 @@ export default function Header({ title, stylesheet, auth, onNavigate }) {
             <Head title={title} stylesheet={stylesheet} />
             <header className="main-header">
                 <div className="header-container">
-                    {/* Logo */}
                     <div className="header-logo" onClick={() => go(null, '/')}>
                         <img src="/favicon.svg" alt="AEGIS" className="logo-img" />
                         <span className="logo-text">AEGIS</span>
@@ -53,7 +50,6 @@ export default function Header({ title, stylesheet, auth, onNavigate }) {
 
                     <Navbar onNavigate={onNavigate} />
 
-                    {/* Buscador */}
                     <div className="header-search">
                         <input
                             type="text"
