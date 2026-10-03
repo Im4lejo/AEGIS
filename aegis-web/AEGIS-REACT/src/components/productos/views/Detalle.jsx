@@ -302,7 +302,13 @@ export default function Detalle({ id, auth, onNavigate }) {
             </p>
 
             <div className="detail-actions">
-              <button type="button" className="detail-btn primary">Contactar</button>
+              <button
+                type="button"
+                className="detail-btn primary"
+                onClick={() => onNavigate && onNavigate(`/mensajes?id=${producto.id}`)}
+              >
+                Contactar
+              </button>
               <button type="button" className="detail-btn outline">Agregar al Carrito</button>
             </div>
           </aside>
