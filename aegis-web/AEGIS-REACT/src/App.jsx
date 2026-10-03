@@ -13,6 +13,7 @@ import EditarPerfil from './components/perfil/views/Editar'
 import Login from './components/auth/views/Login'
 import Register from './components/auth/views/Register'
 import PuntosFisicos from './components/puntosFisicos/views/Index'
+import Mensajes from './components/mensajes/views/Mensajes'
 import Admin from './components/admin/views/Dashboard'
 import Plantilla from './components/shared/Plantilla'
 
@@ -39,6 +40,7 @@ const PAGES = {
   '/perfil/editar': EditarPerfil,
   '/vendedor': Vendedor,
   '/puntos-fisicos': PuntosFisicos,
+  '/mensajes': Mensajes,
   '/admin': Admin,
   '/login': Login,
   '/register': Register,
