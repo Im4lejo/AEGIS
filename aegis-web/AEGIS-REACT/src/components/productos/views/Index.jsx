@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { formatCurrency, imageUrl, route } from '../../shared/presentation'
-import { PRODUCTOS_DESTACADOS, PRODUCTOS_PERFIL, PRODUCTOS_PROMOCION } from '../productosDemo'
+import { PRODUCTOS_DESTACADOS, PRODUCTOS_PERFIL, PRODUCTOS_PROMOCION, PRODUCTOS_NOVEDADES } from '../productosDemo'
 import '../css/index.css'
 
-const CATEGORIAS = ['Televisores', 'Laptops', 'Celulares', 'Componentes PC']
+const CATEGORIAS = ['Televisores', 'Laptops', 'Celulares', 'Componentes PC', 'Consolas', 'Wearables', 'Smart Home', 'Audio', 'Oficina y Conectividad', 'Foto y Video']
 
 const CALIFICACIONES = [
   { valor: 4, label: '4★ o más' },
@@ -150,7 +150,7 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
     setPrecioMax(PRECIO_MAXIMO)
   }, [filtros])
 
-  const todos = [...PRODUCTOS_DESTACADOS, ...PRODUCTOS_PROMOCION, ...PRODUCTOS_PERFIL]
+  const todos = [...PRODUCTOS_DESTACADOS, ...PRODUCTOS_PROMOCION, ...PRODUCTOS_PERFIL, ...PRODUCTOS_NOVEDADES]
 
   let marcasDisponibles = []
   todos.forEach((prod) => {
