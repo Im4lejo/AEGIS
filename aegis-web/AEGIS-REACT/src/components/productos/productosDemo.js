@@ -396,6 +396,193 @@ export const PRODUCTOS_PROMOCION = [
 ]
 
 
+export const PRODUCTOS_NOVEDADES = [
+  {
+    id: 21,
+    nombre: 'Smartwatch Apple Watch SE 2ª Gen 40mm',
+    descripcion: 'Pantalla Retina Always-On - Resistencia al agua - Seguimiento deportivo',
+    estado: 'nuevo',
+    categoria: 'Wearables',
+    marca: 'Apple',
+    precio: 999990,
+    precioAnterior: 1199990,
+    descuento: 17,
+    calificacion: 4.7,
+    envioRapido: true,
+    vendedor: { id: 3, nombre: 'Charlie Kirk', reputacion: 4.3 },
+    imagen: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?q=80&w=800'
+  },
+  {
+    id: 22,
+    nombre: 'Pulsera de actividad Xiaomi Smart Band 9',
+    descripcion: 'Pantalla AMOLED 1.62" - Batería de 21 días - Más de 150 modos deportivos',
+    estado: 'nuevo',
+    categoria: 'Wearables',
+    marca: 'Xiaomi',
+    precio: 149990,
+    calificacion: 4.5,
+    envioRapido: true,
+    vendedor: { id: 4, nombre: 'Luis Alejandro Montenegro Ojeda', reputacion: 4.7 },
+    imagen: 'https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?q=80&w=800'
+  },
+  {
+    id: 23,
+    nombre: 'Altavoz inteligente Amazon Echo 4ª Gen',
+    descripcion: 'Audio de 360° - Alexa integrada - Control del hogar inteligente',
+    estado: 'nuevo',
+    categoria: 'Smart Home',
+    marca: 'Amazon',
+    precio: 289990,
+    precioAnterior: 349990,
+    descuento: 17,
+    calificacion: 4.7,
+    envioRapido: true,
+    vendedor: { id: 7, nombre: 'Samsung Store Oficial', reputacion: 4.7 },
+    imagen: 'https://images.unsplash.com/photo-1550985543-49bee3167284?q=80&w=800'
+  },
+  {
+    id: 24,
+    nombre: 'Cámara de vigilancia Wi-Fi TP-Link Tapo C200',
+    descripcion: 'Resolución 2K - Visión nocturna - Rotación 360° - Audio bidireccional',
+    estado: 'nuevo',
+    categoria: 'Smart Home',
+    marca: 'TP-Link',
+    precio: 179990,
+    calificacion: 4.4,
+    envioRapido: true,
+    vendedor: { id: 7, nombre: 'Samsung Store Oficial', reputacion: 4.7 },
+    imagen: 'https://images.unsplash.com/photo-1558002038-1055907df827?q=80&w=800'
+  },
+  {
+    id: 25,
+    nombre: 'Focos inteligentes LED RGB Tuya (Pack 4)',
+    descripcion: 'Millones de colores - Control por voz - Compatible con Alexa y Google Home',
+    estado: 'nuevo',
+    categoria: 'Smart Home',
+    marca: 'Tuya',
+    precio: 119990,
+    precioAnterior: 149990,
+    descuento: 20,
+    calificacion: 4.3,
+    envioRapido: true,
+    vendedor: { id: 6, nombre: 'HP Store Oficial', reputacion: 4.5 },
+    imagen: 'https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?q=80&w=800'
+  },
+  {
+    id: 26,
+    nombre: 'Audífonos inalámbricos Sony WH-1000XM5',
+    descripcion: 'Cancelación de ruido - 30 horas de batería - Audio Hi-Res',
+    estado: 'nuevo',
+    categoria: 'Audio',
+    marca: 'Sony',
+    precio: 1499990,
+    precioAnterior: 1799990,
+    descuento: 17,
+    calificacion: 4.9,
+    envioRapido: true,
+    vendedor: { id: 5, nombre: 'NVIDIA Store', reputacion: 4.9 },
+    imagen: 'https://images.unsplash.com/photo-1543512214-318c7553f230?q=80&w=800'
+  },
+  {
+    id: 27,
+    nombre: 'Bocina portátil JBL Flip 6 Bluetooth',
+    descripcion: 'Resistencia IP67 - 12 horas de reproducción - JBL PartyBoost',
+    estado: 'nuevo',
+    categoria: 'Audio',
+    marca: 'JBL',
+    precio: 549990,
+    calificacion: 4.7,
+    envioRapido: true,
+    vendedor: { id: 5, nombre: 'NVIDIA Store', reputacion: 4.9 },
+    imagen: 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?q=80&w=800'
+  },
+  {
+    id: 28,
+    nombre: 'Router Wi-Fi 6 TP-Link Archer AX23',
+    descripcion: 'Doble banda AX1800 - 4 antenas - Control desde la app Tether',
+    estado: 'nuevo',
+    categoria: 'Oficina y Conectividad',
+    marca: 'TP-Link',
+    precio: 349990,
+    calificacion: 4.5,
+    envioRapido: true,
+    vendedor: { id: 6, nombre: 'HP Store Oficial', reputacion: 4.5 },
+    imagen: 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?q=80&w=800'
+  },
+  {
+    id: 29,
+    nombre: 'Impresora multifuncional HP Smart Tank 580',
+    descripcion: 'Impresión a color - Tinta continua - Wi-Fi - Escáner incluido',
+    estado: 'nuevo',
+    categoria: 'Oficina y Conectividad',
+    marca: 'HP',
+    precio: 899990,
+    precioAnterior: 999990,
+    descuento: 10,
+    calificacion: 4.4,
+    envioRapido: true,
+    vendedor: { id: 6, nombre: 'HP Store Oficial', reputacion: 4.5 },
+    imagen: 'https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?q=80&w=800'
+  },
+  {
+    id: 30,
+    nombre: 'Drone DJI Mini 4K con cámara',
+    descripcion: 'Cámara 4K - 31 minutos de vuelo - 10 km de alcance - Peso 249g',
+    estado: 'nuevo',
+    categoria: 'Foto y Video',
+    marca: 'DJI',
+    precio: 1299999,
+    calificacion: 4.8,
+    envioRapido: true,
+    vendedor: { id: 5, nombre: 'NVIDIA Store', reputacion: 4.9 },
+    imagen: 'https://images.unsplash.com/photo-1473968512647-3e447244af8f?q=80&w=800'
+  },
+  {
+    id: 31,
+    nombre: 'Consola PlayStation 5 Slim Digital Edition',
+    descripcion: 'SSD de 1TB - 4K a 120fps - Ray tracing - Audio 3D Tempest',
+    estado: 'nuevo',
+    categoria: 'Consolas',
+    marca: 'Sony',
+    precio: 1899990,
+    precioAnterior: 2199990,
+    descuento: 14,
+    calificacion: 4.9,
+    envioRapido: true,
+    vendedor: { id: 5, nombre: 'NVIDIA Store', reputacion: 4.9 },
+    imagen: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?q=80&w=800'
+  },
+  {
+    id: 32,
+    nombre: 'Consola Xbox Series X 1TB',
+    descripcion: '4K a 120fps - SSD de 1TB - Compatible con miles de juegos',
+    estado: 'nuevo',
+    categoria: 'Consolas',
+    marca: 'Microsoft',
+    precio: 1699990,
+    calificacion: 4.8,
+    envioRapido: true,
+    vendedor: { id: 6, nombre: 'HP Store Oficial', reputacion: 4.5 },
+    imagen: 'https://images.unsplash.com/photo-1621259182978-fbf93132d53d?q=80&w=800'
+  },
+  {
+    id: 33,
+    nombre: 'Consola Nintendo Switch OLED',
+    descripcion: 'Pantalla OLED de 7" - Modo portátil y dock - Joy-Con incluidos',
+    estado: 'nuevo',
+    categoria: 'Consolas',
+    marca: 'Nintendo',
+    precio: 999990,
+    precioAnterior: 1099990,
+    descuento: 9,
+    calificacion: 4.8,
+    envioRapido: true,
+    vendedor: { id: 4, nombre: 'Luis Alejandro Montenegro Ojeda', reputacion: 4.7 },
+    imagen: 'https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?q=80&w=800'
+  }
+]
+
+
 export const VENDEDORES = [
   {
     id: 1,
@@ -471,14 +658,14 @@ export function buscarVendedor(id) {
 
 
 export function productosDelVendedor(vendedor) {
-  const todos = [...PRODUCTOS_DESTACADOS, ...PRODUCTOS_PROMOCION, ...PRODUCTOS_PERFIL]
+  const todos = [...PRODUCTOS_DESTACADOS, ...PRODUCTOS_PROMOCION, ...PRODUCTOS_PERFIL, ...PRODUCTOS_NOVEDADES]
   return todos.filter((item) => item.vendedor && vendedor && String(item.vendedor.id) === String(vendedor.id))
 }
 
 
 export function buscarProducto(id) {
   if (id === undefined || id === null || id === '') return PRODUCTOS_DESTACADOS[0]
-  const todos = [...PRODUCTOS_DESTACADOS, ...PRODUCTOS_PROMOCION, ...PRODUCTOS_PERFIL]
+  const todos = [...PRODUCTOS_DESTACADOS, ...PRODUCTOS_PROMOCION, ...PRODUCTOS_PERFIL, ...PRODUCTOS_NOVEDADES]
   const encontrado = todos.find((item) => String(item.id) === String(id))
   return encontrado || null
 }

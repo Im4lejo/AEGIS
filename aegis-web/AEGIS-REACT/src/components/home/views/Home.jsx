@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { formatCurrency, imageUrl, route } from '../../shared/presentation'
-import { PRODUCTOS_DESTACADOS, PRODUCTOS_PROMOCION } from '../../productos/productosDemo'
+import { PRODUCTOS_DESTACADOS, PRODUCTOS_PROMOCION, PRODUCTOS_NOVEDADES } from '../../productos/productosDemo'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import '../css/home.css'
@@ -169,8 +169,13 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
               <a href={route('/productos?categoria=Celulares')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Celulares') }}>Celulares</a>
               <a href={route('/productos?categoria=Componentes PC')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Componentes PC') }}>Componentes PC</a>
               <a href={route('/productos?categoria=Laptops')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Laptops') }}>Laptops</a>
-              <a href={route('/productos?categoria=Consolas & Juegos')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Consolas & Juegos') }}>Consolas & Juegos</a>
+              <a href={route('/productos?categoria=Consolas')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Consolas') }}>Consolas</a>
               <a href={route('/productos?categoria=Periféricos')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Periféricos') }}>Periféricos</a>
+              <a href={route('/productos?categoria=Wearables')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Wearables') }}>Wearables</a>
+              <a href={route('/productos?categoria=Smart Home')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Smart Home') }}>Smart Home</a>
+              <a href={route('/productos?categoria=Audio')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Audio') }}>Audio</a>
+              <a href={route('/productos?categoria=Oficina y Conectividad')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Oficina y Conectividad') }}>Oficina y Conectividad</a>
+              <a href={route('/productos?categoria=Foto y Video')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Foto y Video') }}>Foto y Video</a>
             </div>
           )}
         </div>
@@ -323,6 +328,80 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
             </div>
           </div>
           <TiraBanner />
+        </section>
+
+        <section className="novedades">
+          <div className="main-section-header">
+            <h2>Novedades en AEGIS</h2>
+          </div>
+
+          <div className="novedades-banners">
+            <div
+              className="novedad-banner novedad-casa"
+              role="button"
+              tabIndex={0}
+              onClick={() => abrirCatalogo('?categoria=Smart Home')}
+              onKeyDown={(e) => { if (e.key === 'Enter') abrirCatalogo('?categoria=Smart Home') }}
+            >
+              <div className="novedad-texto">
+                <span className="novedad-tag">NUEVO</span>
+                <h3>Tu hogar más inteligente</h3>
+                <p>Altavoces con Alexa, cámaras Wi-Fi y focos RGB.</p>
+                <span className="novedad-btn">Ver Smart Home</span>
+              </div>
+            </div>
+
+            <div
+              className="novedad-banner novedad-audio"
+              role="button"
+              tabIndex={0}
+              onClick={() => abrirCatalogo('?categoria=Audio')}
+              onKeyDown={(e) => { if (e.key === 'Enter') abrirCatalogo('?categoria=Audio') }}
+            >
+              <div className="novedad-texto">
+                <span className="novedad-tag">OFERTA</span>
+                <h3>Audio sin límites</h3>
+                <p>Audífonos con cancelación de ruido y bocinas resistentes al agua.</p>
+                <span className="novedad-btn">Ver Audio</span>
+              </div>
+            </div>
+
+            <div
+              className="novedad-banner novedad-video"
+              role="button"
+              tabIndex={0}
+              onClick={() => abrirCatalogo('?categoria=Foto y Video')}
+              onKeyDown={(e) => { if (e.key === 'Enter') abrirCatalogo('?categoria=Foto y Video') }}
+            >
+              <div className="novedad-texto">
+                <span className="novedad-tag">NUEVO</span>
+                <h3>Foto y video</h3>
+                <p>Drones con cámara 4K para tus mejores tomas aéreas.</p>
+                <span className="novedad-btn">Ver Foto y Video</span>
+              </div>
+            </div>
+
+            <div
+              className="novedad-banner novedad-wearables"
+              role="button"
+              tabIndex={0}
+              onClick={() => abrirCatalogo('?categoria=Wearables')}
+              onKeyDown={(e) => { if (e.key === 'Enter') abrirCatalogo('?categoria=Wearables') }}
+            >
+              <div className="novedad-texto">
+                <span className="novedad-tag">NUEVO</span>
+                <h3>Wearables</h3>
+                <p>Smartwatch y pulseras de actividad para cada día.</p>
+                <span className="novedad-btn">Ver Wearables</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="products-grid">
+            {PRODUCTOS_NOVEDADES.map((prod) => (
+              <TarjetaProducto key={prod.id} prod={prod} alAbrir={openProducto} />
+            ))}
+          </div>
         </section>
 
         <section className="products-section">
