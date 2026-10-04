@@ -514,3 +514,124 @@
   border-radius: 8px;
   margin-bottom: 4px;
 }
+
+@media (max-width: 900px) {
+  .msg-pagina {
+    height: auto;
+    min-height: 0;
+    flex: 1 0 auto;
+    flex-direction: column;
+    padding: 0 12px 16px;
+  }
+
+  .msg-separador {
+    display: none;
+  }
+
+  .msg-lista {
+    flex: 0 0 190px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .msg-conversaciones {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .msg-item {
+    flex: 0 0 min(270px, 80vw);
+  }
+
+  .msg-chat {
+    flex: 1 1 auto;
+    min-height: 420px;
+    margin-right: 0;
+  }
+
+  .msg-producto-acciones {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .msg-btn-ver,
+  .msg-btn-mas {
+    flex: 1;
+  }
+}
+
+@media (max-width: 520px) {
+  .msg-pagina {
+    padding: 0 8px 12px;
+  }
+
+  .msg-lista {
+    flex-basis: 170px;
+  }
+
+  .msg-lista-top {
+    padding: 14px 16px 12px;
+  }
+
+  .msg-buscar {
+    margin: 12px 12px 8px;
+  }
+
+  .msg-conversaciones {
+    padding: 6px;
+  }
+
+  .msg-item {
+    flex-basis: min(230px, 82vw);
+    padding: 9px;
+  }
+
+  .msg-chat {
+    min-height: 55vh;
+  }
+
+  .msg-producto {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .msg-producto-nombre {
+    font-size: 14px;
+  }
+
+  .msg-seguridad {
+    align-items: flex-start;
+    padding: 8px 10px;
+  }
+
+  .msg-zona {
+    padding: 10px 8px;
+  }
+
+  .msg-burbuja {
+    max-width: 82%;
+    padding: 9px 10px;
+  }
+
+  .msg-encuentro {
+    max-width: 100%;
+    padding: 12px;
+  }
+
+  .msg-input {
+    gap: 4px;
+    padding: 8px;
+  }
+
+  .msg-input input[type="text"] {
+    padding: 10px;
+  }
+
+  .msg-clip,
+  .msg-enviar {
+    width: 36px;
+    height: 36px;
+  }
+}

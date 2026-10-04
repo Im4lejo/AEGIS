@@ -387,3 +387,70 @@
   color: #6d28d9;
   line-height: 1.5;
 }
+
+@media (max-width: 900px) {
+  .enc-pagina {
+    padding: 20px 16px;
+  }
+
+  .enc-columnas {
+    flex-direction: column;
+  }
+
+  .enc-panel,
+  .enc-seguridad {
+    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .enc-pagina {
+    padding: 16px 10px;
+  }
+
+  .enc-cabecera {
+    gap: 10px;
+  }
+
+  .enc-cabecera-icono {
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
+  }
+
+  .enc-titulo {
+    font-size: 20px;
+  }
+
+  .enc-subtitulo {
+    font-size: 13px;
+  }
+
+  .enc-panel,
+  .enc-seguridad {
+    padding: 14px;
+  }
+
+  .enc-fila {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .enc-acciones {
+    flex-direction: column-reverse;
+  }
+
+  .enc-acciones button {
+    width: 100%;
+  }
+
+  .enc-producto {
+    align-items: flex-start;
+  }
+
+  .enc-producto-nombre {
+    overflow-wrap: anywhere;
+  }
+}
