@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
-import { buscarProducto } from '../productosDemo'
+import { buscarProducto, buscarVendedor } from '../productosDemo'
 import { agregarProducto } from '../../carrito/carritoDemo'
 import '../css/detalle.css'
 
@@ -77,9 +77,11 @@ export default function Detalle({ id, auth, onNavigate }) {
   const producto = buscarProducto(id) || {}
   const titulo = producto.nombre || producto.titulo || 'Producto'
   const imagen = producto.imagen || ''
-  const vendedor = producto.vendedor && producto.vendedor.nombre
+  const infoVendedor = producto.vendedor && producto.vendedor.nombre
     ? producto.vendedor
     : { nombre: 'Vendedor', reputacion: 0 }
+  const vendedorBuscado = infoVendedor.id ? buscarVendedor(infoVendedor.id) : null
+  const vendedor = vendedorBuscado || infoVendedor
 
   const insignia = insigniasVendedor(vendedor.reputacion)
 

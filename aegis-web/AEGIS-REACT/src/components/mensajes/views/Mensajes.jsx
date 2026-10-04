@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import Header from '../../layouts/Header'
-import Footer from '../../layouts/Footer'
 import { buscarProducto } from '../../productos/productosDemo'
 import { CHATS } from '../mensajesDemo'
 import '../css/mensajes.css'
@@ -261,8 +260,6 @@ export default function Mensajes({ id, auth, onNavigate }) {
           </form>
         </section>
       </div>
-
-      <Footer onNavigate={onNavigate} />
     </div>
   )
 }

@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { avatarUrl, navigateTo, route } from '../shared/presentation'
+import { USUARIOS_DEMO } from '../shared/usuariosDemo'
 import Head from './Head'
 import Navbar from './Navbar'
 import CarritoPanel from '../carrito/CarritoPanel'
 import { totalUnidades } from '../carrito/carritoDemo'
+import './css/layouts.css'
 
 export default function Header({ title, stylesheet, auth, onNavigate }) {
     const [profileOpen, setProfileOpen] = useState(false)
@@ -41,12 +43,11 @@ export default function Header({ title, stylesheet, auth, onNavigate }) {
     }
 
     const usuario = auth && auth.user ? auth.user : null
-    let avatar = ''
-    if (usuario && usuario.avatar) {
-        avatar = usuario.avatar
-    } else {
-        avatar = avatarUrl(usuario)
-    }
+    const guardado = JSON.parse(localStorage.getItem('perfilAegis') || '{}')
+    const demo = usuario && USUARIOS_DEMO[usuario.nombre] ? USUARIOS_DEMO[usuario.nombre] : null
+    const nombreMostrar = demo ? `${demo.nombre} ${demo.apellido}` : (usuario ? usuario.nombre : 'Invitado')
+    const apodoMostrar = demo && demo.apodo ? `@${demo.apodo}` : ''
+    let avatar = guardado.avatar || (usuario && usuario.avatar ? usuario.avatar : avatarUrl(usuario))
 
     return (
         <>
@@ -91,9 +92,16 @@ export default function Header({ title, stylesheet, auth, onNavigate }) {
 
                             {profileOpen && (
                                 <div className="profile-menu">
+                                    <div className="profile-menu-user">
+                                        <img src={avatar} alt="" className="profile-menu-avatar" />
+                                        <div className="profile-menu-datos">
+                                            <strong>{nombreMostrar}</strong>
+                                            {apodoMostrar && <span>{apodoMostrar}</span>}
+                                        </div>
+                                    </div>
                                     <a href={route('/perfil')} onClick={(e) => go(e, '/perfil')}>Mi Perfil</a>
                                     <a href={route('/plantilla?origen=mis-compras')} onClick={(e) => go(e, '/plantilla?origen=mis-compras')}>Mis Compras</a>
-                                    <a href={route('/plantilla?origen=configuracion')} onClick={(e) => go(e, '/plantilla?origen=configuracion')}>Configuración</a>
+                                    <a href={route('/perfil/editar')} onClick={(e) => go(e, '/perfil/editar')}>Configuración</a>
                                     <hr />
                                     <a href={route('/login')} onClick={(e) => go(e, '/login')} className="logout-link">Cerrar Sesión</a>
                                 </div>

@@ -1,4 +1,5 @@
 import { navigateTo, route } from '../shared/presentation'
+import './css/layouts.css'
 
 export default function Footer({ onNavigate }) {
     const go = (event, path) => {

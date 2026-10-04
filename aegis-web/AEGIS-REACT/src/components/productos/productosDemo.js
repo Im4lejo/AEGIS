@@ -610,7 +610,7 @@ export const VENDEDORES = [
     descripcion: 'Venta de celulares y equipos Apple reacondicionados, con pruebas de funcionamiento y garantía por 3 meses.',
     lugar: 'Cali, Valle del Cauca',
     fechaRegistro: '18/09/2024',
-    usuarioForo: 'NovaKatana'
+    usuarioForo: 'CharlieKirk'
   },
   {
     id: 4,
@@ -619,7 +619,7 @@ export const VENDEDORES = [
     descripcion: 'Vendedor particular de celulares Xiaomi. Respondo rápido por chat y hago entregas en Popayán y alrededores.',
     lugar: 'Popayán, Caucá',
     fechaRegistro: '30/04/2026',
-    usuarioForo: 'TheDarkMoon7456'
+    usuarioForo: 'Usuario AEGIS'
   },
   {
     id: 5,

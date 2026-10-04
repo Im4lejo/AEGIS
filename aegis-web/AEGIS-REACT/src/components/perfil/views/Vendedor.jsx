@@ -46,7 +46,7 @@ export default function Vendedor({ id, auth, onNavigate }) {
   const productos = productosDelVendedor(vendedor)
 
   return (
-    <div className="page-layout">
+    <div className="page-layout layout-perfil">
       <Header title={`AEGIS | ${vendedor.nombre || 'Vendedor'}`} auth={auth} onNavigate={onNavigate} />
 
       <main className="perfil-page">
