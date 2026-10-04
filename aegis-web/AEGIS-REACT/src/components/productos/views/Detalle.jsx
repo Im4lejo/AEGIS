@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
 import { buscarProducto } from '../productosDemo'
+import { agregarProducto } from '../../carrito/carritoDemo'
 import '../css/detalle.css'
 
 
@@ -83,7 +84,19 @@ export default function Detalle({ id, auth, onNavigate }) {
   const insignia = insigniasVendedor(vendedor.reputacion)
 
   const [imagenActiva, setImagenActiva] = useState(0)
+  const [agregado, setAgregado] = useState(false)
   const miniaturas = [0, 1, 2, 3]
+
+  const agregarAlCarrito = () => {
+    if (producto.id) {
+      agregarProducto(producto.id)
+      setAgregado(true)
+    }
+  }
+
+  useEffect(() => {
+    setAgregado(false)
+  }, [id])
 
   const imagenAnterior = () =>
     setImagenActiva((i) => (i === 0 ? miniaturas.length - 1 : i - 1))
@@ -309,7 +322,15 @@ export default function Detalle({ id, auth, onNavigate }) {
               >
                 Contactar
               </button>
-              <button type="button" className="detail-btn outline">Agregar al Carrito</button>
+              <button type="button" className="detail-btn outline" onClick={agregarAlCarrito}>
+                {agregado ? (
+                  <>
+                    <i className="fa-solid fa-check" /> Agregado al carrito
+                  </>
+                ) : (
+                  'Agregar al Carrito'
+                )}
+              </button>
             </div>
           </aside>
         </section>

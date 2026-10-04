@@ -14,6 +14,7 @@ import Login from './components/auth/views/Login'
 import Register from './components/auth/views/Register'
 import PuntosFisicos from './components/puntosFisicos/views/Index'
 import Mensajes from './components/mensajes/views/Mensajes'
+import Encuentros from './components/puntosFisicos/views/Encuentros'
 import Admin from './components/admin/views/Dashboard'
 import Plantilla from './components/shared/Plantilla'
 
@@ -40,6 +41,7 @@ const PAGES = {
   '/vendedor': Vendedor,
   '/puntos-fisicos': PuntosFisicos,
   '/mensajes': Mensajes,
+  '/configurar-encuentro': Encuentros,
   '/admin': Admin,
   '/login': Login,
   '/register': Register,

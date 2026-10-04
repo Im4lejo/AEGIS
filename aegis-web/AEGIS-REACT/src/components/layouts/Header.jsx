@@ -2,11 +2,21 @@ import { useEffect, useRef, useState } from 'react'
 import { avatarUrl, navigateTo, route } from '../shared/presentation'
 import Head from './Head'
 import Navbar from './Navbar'
+import CarritoPanel from '../carrito/CarritoPanel'
+import { totalUnidades } from '../carrito/carritoDemo'
 
 export default function Header({ title, stylesheet, auth, onNavigate }) {
     const [profileOpen, setProfileOpen] = useState(false)
     const [busqueda, setBusqueda] = useState('')
+    const [carritoAbierto, setCarritoAbierto] = useState(false)
+    const [unidades, setUnidades] = useState(totalUnidades())
     const profileRef = useRef(null)
+
+    useEffect(() => {
+        const actualizar = () => setUnidades(totalUnidades())
+        window.addEventListener('carrito-cambio', actualizar)
+        return () => window.removeEventListener('carrito-cambio', actualizar)
+    }, [])
 
     useEffect(() => {
         if (!profileOpen) return
@@ -90,13 +100,25 @@ export default function Header({ title, stylesheet, auth, onNavigate }) {
                             )}
                         </div>
 
-                        <button className="cart-btn" aria-label="Carrito de compras" type="button">
+                        <button
+                            className="cart-btn"
+                            aria-label="Carrito de compras"
+                            type="button"
+                            onClick={() => setCarritoAbierto(!carritoAbierto)}
+                        >
                             🛒
-                            <span className="cart-badge">0</span>
+                            <span className="cart-badge">{unidades}</span>
                         </button>
                     </div>
                 </div>
             </header>
+
+            {carritoAbierto && (
+                <CarritoPanel
+                    onCerrar={() => setCarritoAbierto(false)}
+                    onNavigate={onNavigate}
+                />
+            )}
         </>
     )
 }
