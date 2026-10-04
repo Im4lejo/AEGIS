@@ -15,7 +15,7 @@
 
 body {
   margin: 0;
-  min-width: 320px;
+  min-width: 0;
   font-family: 'Inter', sans-serif;
   background: #F4F6FB;
   color: #111827;

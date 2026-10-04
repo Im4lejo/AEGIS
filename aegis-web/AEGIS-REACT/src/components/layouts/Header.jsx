@@ -8,6 +8,7 @@ import './css/header.css'
 // Encabezado del sitio: título/meta (Head), logo, navegación, buscador y menú de usuario.
 export default function Header({ title, stylesheet, auth, onNavigate }) {
     const [profileOpen, setProfileOpen] = useState(false)
+    const [navigationOpen, setNavigationOpen] = useState(false)
     const [busqueda, setBusqueda] = useState('')
     const profileRef = useRef(null)
 
@@ -53,7 +54,11 @@ export default function Header({ title, stylesheet, auth, onNavigate }) {
                         <span className="logo-text">AEGIS</span>
                     </div>
 
-                    <Navbar onNavigate={onNavigate} />
+                    <Navbar
+                        onNavigate={onNavigate}
+                        isOpen={navigationOpen}
+                        onClose={() => setNavigationOpen(false)}
+                    />
 
                     {/* Buscador */}
                     <div className="header-search">
@@ -101,6 +106,19 @@ export default function Header({ title, stylesheet, auth, onNavigate }) {
                             <span className="cart-badge">0</span>
                         </button>
                     </div>
+
+                    <button
+                        className="menu-toggle"
+                        type="button"
+                        aria-label={navigationOpen ? 'Cerrar menú' : 'Abrir menú'}
+                        aria-expanded={navigationOpen}
+                        aria-controls="primary-navigation"
+                        onClick={() => setNavigationOpen((open) => !open)}
+                    >
+                        <span />
+                        <span />
+                        <span />
+                    </button>
                 </div>
             </header>
         </>

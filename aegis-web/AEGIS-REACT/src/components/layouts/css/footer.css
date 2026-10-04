@@ -1,15 +1,11 @@
-/* Mantiene el pie visible sin permitir que su contenido se desborde. */
 .main-footer {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 900;
+  position: static;
   width: 100%;
-  max-height: 45vh;
-  overflow-y: auto;
-  overflow-x: hidden;
+  max-height: none;
+  margin-top: auto;
+  overflow: visible;
 }
+
 .footer-container,
 .footer-links-group,
 .footer-column,
@@ -26,14 +22,9 @@
 }
 
 @media (max-width: 768px) {
-  body {
-    padding-bottom: 220px;
-  }
-
   .main-footer {
     text-align: center;
     padding: 12px 10px 8px;
-    max-height: 38vh;
   }
 
   .main-footer .footer-container {
@@ -79,5 +70,4 @@
     padding-top: 8px;
   }
 }
-
     

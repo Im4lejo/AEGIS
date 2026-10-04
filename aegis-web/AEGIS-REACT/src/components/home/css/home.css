@@ -464,6 +464,83 @@
 }
 
 @media (max-width: 768px) {
+  .home-container {
+    min-width: 0;
+    padding: 16px 12px;
+  }
+
+  .subnav {
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    padding: 8px 12px;
+  }
+
+  .hero-section {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero-main {
+    min-width: 0;
+    min-height: 340px;
+  }
+
+  .hero-content {
+    max-width: 100%;
+    padding: 24px 18px;
+  }
+
+  .hero-title {
+    font-size: 22px;
+    overflow-wrap: anywhere;
+  }
+
+  .hero-pricing {
+    flex-wrap: wrap;
+  }
+
+  .hero-side {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .side-banner-card {
+    min-width: 0;
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .tv-banner {
+    width: 100%;
+    margin: 10px 0 28px;
+  }
+
+  .tv-banner-body {
+    width: 100%;
+    padding: 20px 16px;
+  }
+
+  .tv-banner-imgs {
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .tv-banner-imgs img {
+    width: min(100%, 200px);
+    height: auto;
+    aspect-ratio: 250 / 175;
+  }
+
+  .tv-banner-text h2 {
+    font-size: 30px;
+    overflow-wrap: anywhere;
+  }
+
+  .promo-product-card {
+    grid-column: span 1;
+  }
+
   .tv-banner-body {
     flex-direction: column;
     text-align: center;
