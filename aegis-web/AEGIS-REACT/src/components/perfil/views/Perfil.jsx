@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
-import { PRODUCTOS_PERFIL } from '../../productos/productosDemo'
+import { USUARIOS_DEMO, usuarioGenerico, fotoUsuario } from '../../shared/usuariosDemo'
+import { VENDEDORES, productosDelVendedor } from '../../productos/productosDemo'
+import { POSTS_EJEMPLO } from '../../foro/views/Foro'
 import '../css/perfil.css'
 
 const IconPencil = ({ size = 15 }) => (
@@ -33,12 +35,6 @@ const IconStar = ({ size = 28 }) => (
 const IconChevron = ({ size = 14 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="6 9 12 15 18 9" />
-  </svg>
-)
-
-const IconFilter = ({ size = 16 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" />
   </svg>
 )
 
@@ -87,6 +83,7 @@ const IconClose = ({ size = 20 }) => (
 const USUARIO_EJEMPLO = {
   nombre: 'Luis Alejandro',
   apellido: 'Montenegro Ojeda',
+  apodo: 'Usuario AEGIS',
   descripcion: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus tempor elementum justo finibus tempus.',
   lugar: 'Popayán, Caucá',
   fechaNacimiento: '29 de marzo del 2008',
@@ -94,56 +91,10 @@ const USUARIO_EJEMPLO = {
   productosVendidos: 'Tarjetas Gráficas',
 }
 
-const PUBLICACIONES_EJEMPLO = [
-  {
-    id: 1,
-    autor: 'TheDarkMoon7456',
-    fecha: 'Hace 2 h',
-    titulo: '¿Alguien sabe si mi GTX 1050 puede correr Cyberpunk 2077 en ultra?',
-    cuerpo: 'He visto vídeos dispares y quiero asegurarme antes de comprarlo.\nTengo un i5 y 16GB de RAM.\n\n¿Alguna sugerencia sobre rendimiento?',
-    imagen: null,
-    likes: 892,
-    comentarios: 100,
-    lista: [
-      { autor: 'TechFan01', texto: 'En ultra te va a costar, mejor bajos-medios con DLSS.' },
-      { autor: 'GamerCol', texto: 'Con ese setup mejor medium, ¡pero va a ir fluido!' },
-    ],
-  },
-  {
-    id: 2,
-    autor: 'TheDarkMoon7456',
-    fecha: 'Hace 5 h',
-    titulo: '¿Alguien sabe cómo arreglar mi PC? Se queda en pantalla azul (BSOD) constantemente y no arranca.',
-    cuerpo: 'Pasa desde que actualicé los controladores. ¿Alguna idea de por dónde empezar?',
-    imagen: '/bsod-demo.svg',
-    likes: 341,
-    comentarios: 57,
-    lista: [
-      { autor: 'SoporteAegis', texto: 'Prueba entrando en modo seguro y desinstalando el último controlador.' },
-    ],
-  },
-  {
-    id: 3,
-    autor: 'NovaKatana',
-    fecha: 'Hace 1 d',
-    titulo: 'Recomendación de laptop para programar y estudiar',
-    cuerpo: 'Necesito una laptop con buen rendimiento para desarrollo (VS Code, Docker, React) y que la batería dure bastante.\n\n¿Alguna recomendación por menos de $3.000.000?',
-    imagen: null,
-    likes: 127,
-    comentarios: 24,
-    lista: [],
-  },
-]
-
 const ORDENES = [
   { id: 'recientes', label: 'Más recientes' },
   { id: 'populares', label: 'Más populares' },
   { id: 'comentados', label: 'Más comentados' },
-]
-
-const FILTROS = [
-  { id: 'todas', label: 'Todas las publicaciones' },
-  { id: 'con-imagen', label: 'Solo con imagen' },
 ]
 
 const contarComentarios = (publicacion) => {
@@ -199,14 +150,29 @@ function MenuOpciones({ trigger, triggerClass = 'perfil-menu-btn', valor, opcion
   )
 }
 
-export default function Perfil({ usuario = {}, publicaciones, productos, esPropio = true, auth, onNavigate }) {
-  const yo = { ...USUARIO_EJEMPLO, ...usuario }
-  const pubsDemo = publicaciones && publicaciones.length > 0 ? publicaciones : PUBLICACIONES_EJEMPLO
-  const prodsDemo = productos && productos.length > 0 ? productos : PRODUCTOS_PERFIL
+export default function Perfil({ id, usuario = {}, publicaciones, productos, esPropio = true, auth, onNavigate }) {
+  let datosUsuario = usuario
+  if (id) {
+    const demo = USUARIOS_DEMO[id]
+    datosUsuario = demo || usuarioGenerico(id)
+  }
+  const esMiPerfil = !id || id === 'Usuario AEGIS'
+  const guardado = esMiPerfil ? JSON.parse(localStorage.getItem('perfilAegis') || '{}') : {}
+  const yo = { ...USUARIO_EJEMPLO, ...datosUsuario, ...guardado }
+
+  const handle = id || (auth && auth.user && auth.user.nombre) || 'Usuario AEGIS'
+  const pubsDemo = publicaciones && publicaciones.length > 0
+    ? publicaciones
+    : POSTS_EJEMPLO.filter((item) => item.autor === handle)
+
+  const vendedor = VENDEDORES.find((item) => item.usuarioForo === handle) ||
+    VENDEDORES.find((item) => item.nombre === `${yo.nombre} ${yo.apellido}`.trim())
+  const prodsDemo = productos && productos.length > 0
+    ? productos
+    : (vendedor ? productosDelVendedor(vendedor) : [])
 
   const avatar = yo.avatar || avatarUrl(yo, 160)
   const [orden, setOrden] = useState('recientes')
-  const [filtro, setFiltro] = useState('todas')
   const [likesActivos, setLikesActivos] = useState({})
   const [reportadas, setReportadas] = useState({})
   const [comentariosAbiertos, setComentariosAbiertos] = useState({})
@@ -231,7 +197,6 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
   }, [lightbox])
 
   let publicacionesList = [...pubsDemo]
-  if (filtro === 'con-imagen') publicacionesList = publicacionesList.filter((item) => item.imagen)
   if (orden === 'populares') publicacionesList.sort((a, b) => Number(b.likes || 0) - Number(a.likes || 0))
   if (orden === 'comentados') publicacionesList.sort((a, b) => contarComentarios(b) - contarComentarios(a))
 
@@ -265,15 +230,20 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
   }
 
   return (
-    <div className="page-layout">
-      <Header title="AEGIS | Mi Perfil" auth={auth} onNavigate={onNavigate} />
+    <div className="page-layout layout-perfil">
+      <Header title={id ? 'AEGIS | Perfil' : 'AEGIS | Mi Perfil'} auth={auth} onNavigate={onNavigate} />
 
       <main className="perfil-page">
         <section className="perfil-card">
-          <div className="perfil-cover">
-            <button type="button" className="perfil-cover-btn" onClick={() => onNavigate && onNavigate('/perfil/editar')}>
-              <IconPencil /> Editar Perfil
-            </button>
+          <div
+            className="perfil-cover"
+            style={guardado.portada ? { backgroundImage: `url(${guardado.portada})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+          >
+            {esMiPerfil && (
+              <button type="button" className="perfil-cover-btn" onClick={() => onNavigate && onNavigate('/perfil/editar')}>
+                <IconPencil /> Editar Perfil
+              </button>
+            )}
           </div>
 
           <div className="perfil-identity">
@@ -282,6 +252,7 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
                 <img className="perfil-avatar" src={avatar} alt="Foto de perfil" />
               </div>
               <h1 className="perfil-name">{yo.nombre} {yo.apellido}</h1>
+              {yo.apodo && <span className="perfil-apodo">@{yo.apodo}</span>}
             </div>
 
             <div className="perfil-stats">
@@ -308,24 +279,6 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
             </div>
           </div>
         </section>
-
-        <div className="perfil-sortbar">
-          <MenuOpciones
-            triggerClass="perfil-menu-btn"
-            trigger={<>Ordenar por <IconChevron /></>}
-            valor={orden}
-            opciones={ORDENES}
-            onSelect={setOrden}
-          />
-          <span className="perfil-sortbar-sep" />
-          <MenuOpciones
-            triggerClass="perfil-menu-btn icon"
-            trigger={<IconFilter />}
-            valor={filtro}
-            opciones={FILTROS}
-            onSelect={setFiltro}
-          />
-        </div>
 
         <div className="perfil-grid">
           <div className="perfil-col">
@@ -379,10 +332,13 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
 
                 return (
                   <article className="perfil-post" key={id}>
-                    <div className="perfil-post-head">
+                    <div
+                      className="perfil-post-head"
+                      onClick={() => onNavigate && onNavigate('/perfil?id=' + encodeURIComponent(publicacion.autor))}
+                    >
                       <img
                         className="perfil-post-avatar"
-                        src={avatarUrl({ username: publicacion.autor }, 80)}
+                        src={fotoUsuario(publicacion.autor, 80)}
                         alt={publicacion.autor}
                       />
                       <div>
@@ -394,7 +350,7 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
                     <button
                       type="button"
                       className="perfil-post-title"
-                      onClick={() => onNavigate && onNavigate('/foro')}
+                      onClick={() => onNavigate && onNavigate(`/publicacion?id=${publicacion.id}`)}
                     >
                       {publicacion.titulo}
                     </button>
@@ -449,11 +405,13 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
                           <div className="perfil-comment" key={index}>
                             <img
                               className="perfil-comment-avatar"
-                              src={avatarUrl({ username: comentario.autor }, 60)}
+                              src={fotoUsuario(comentario.autor, 60)}
                               alt={comentario.autor}
                             />
                             <div>
-                              <strong>{comentario.autor}</strong>
+                              <strong onClick={() => onNavigate && onNavigate('/perfil?id=' + encodeURIComponent(comentario.autor))}>
+                                {comentario.autor}
+                              </strong>
                               <p>{comentario.texto}</p>
                             </div>
                           </div>
@@ -486,6 +444,12 @@ export default function Perfil({ usuario = {}, publicaciones, productos, esPropi
           <div className="perfil-col">
             <section className="perfil-panel">
               <h2 className="perfil-panel-title">Productos del Vendedor</h2>
+              {prodsDemo.length === 0 && (
+                <div className="perfil-empty-wrap">
+                  <img className="perfil-empty-icon" src="/sin-productos.png" alt="" />
+                  <p className="perfil-empty">Este usuario aún no ha publicado productos.</p>
+                </div>
+              )}
               <div className="perfil-products">
                 {prodsDemo.map((producto) => (
                   <a

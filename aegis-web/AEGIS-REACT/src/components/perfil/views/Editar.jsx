@@ -137,9 +137,10 @@ const ESTADISTICAS = [
 export default function Editar({ auth, onNavigate }) {
   const yo = USUARIO_EJEMPLO
 
-  const [avatar, setAvatar] = useState(yo.avatar || avatarUrl(yo, 160))
-  const [portada, setPortada] = useState(null)
-  const [descripcion, setDescripcion] = useState('')
+  const guardado = JSON.parse(localStorage.getItem('perfilAegis') || '{}')
+  const [avatar, setAvatar] = useState(guardado.avatar || avatarUrl(yo, 160))
+  const [portada, setPortada] = useState(guardado.portada || null)
+  const [descripcion, setDescripcion] = useState(guardado.descripcion || '')
 
   const [modalAbierto, setModalAbierto] = useState(false)
   const [borradorAvatar, setBorradorAvatar] = useState(avatar)
@@ -178,10 +179,39 @@ export default function Editar({ auth, onNavigate }) {
     setModalAbierto(true)
   }
 
-  const leerImagen = (file, setBorrador) => {
+  const aplicarFoto = (campo, datos) => {
+    if (campo === 'avatar') {
+      setBorradorAvatar(datos)
+      setAvatar(datos)
+    } else {
+      setBorradorPortada(datos)
+      setPortada(datos)
+    }
+    const previo = JSON.parse(localStorage.getItem('perfilAegis') || '{}')
+    const nuevos = { avatar: previo.avatar || '', portada: previo.portada || '', descripcion: previo.descripcion || '' }
+    if (campo === 'avatar') nuevos.avatar = datos
+    else nuevos.portada = datos
+    localStorage.setItem('perfilAegis', JSON.stringify(nuevos))
+    setToast('Foto guardada ✓')
+  }
+
+  const leerImagen = (file, campo) => {
     if (!file) return
     const reader = new FileReader()
-    reader.onload = (loadEvent) => setBorrador(loadEvent.target.result)
+    reader.onload = (loadEvent) => {
+      const imagen = new Image()
+      imagen.onload = () => {
+        const escala = Math.min(1, 900 / Math.max(imagen.width, imagen.height))
+        const ancho = Math.round(imagen.width * escala)
+        const alto = Math.round(imagen.height * escala)
+        const lienzo = document.createElement('canvas')
+        lienzo.width = ancho
+        lienzo.height = alto
+        lienzo.getContext('2d').drawImage(imagen, 0, 0, ancho, alto)
+        aplicarFoto(campo, lienzo.toDataURL('image/jpeg', 0.85))
+      }
+      imagen.src = loadEvent.target.result
+    }
     reader.readAsDataURL(file)
   }
 
@@ -189,6 +219,7 @@ export default function Editar({ auth, onNavigate }) {
     setAvatar(borradorAvatar)
     setPortada(borradorPortada)
     setDescripcion(borradorDesc.trim())
+    localStorage.setItem('perfilAegis', JSON.stringify({ avatar: borradorAvatar, portada: borradorPortada, descripcion: borradorDesc.trim() }))
     setModalAbierto(false)
     setToast('Cambios guardados')
   }
@@ -365,7 +396,7 @@ export default function Editar({ auth, onNavigate }) {
                   </span>
                 )}
                 <span className="editar-modal-cover-hint">{borradorPortada ? 'Cambiar foto' : 'Subir imagen'}</span>
-                <input type="file" accept="image/*" hidden onChange={(event) => leerImagen(event.target.files[0], setBorradorPortada)} />
+                <input type="file" accept="image/*" hidden onChange={(event) => leerImagen(event.target.files[0], 'portada')} />
               </label>
 
               <div className="editar-modal-avatar-wrap">
@@ -374,7 +405,7 @@ export default function Editar({ auth, onNavigate }) {
                   <span className="editar-modal-avatar-edit" title="Cambiar foto de perfil">
                     <IconPencil size={13} />
                   </span>
-                  <input type="file" accept="image/*" hidden onChange={(event) => leerImagen(event.target.files[0], setBorradorAvatar)} />
+                  <input type="file" accept="image/*" hidden onChange={(event) => leerImagen(event.target.files[0], 'avatar')} />
                 </label>
                 <span className="editar-modal-avatar-label">Foto Perfil</span>
               </div>

@@ -1,0 +1,102 @@
+import { avatarUrl } from './presentation'
+
+export const USUARIOS_DEMO = {
+  'TheDarkMoon7456': {
+    nombre: 'Andrés Felipe',
+    apellido: 'Torres Muñoz',
+    apodo: 'TheDarkMoon7456',
+    avatar: '',
+    portada: '',
+    seUnio: '14 de marzo de 2024',
+    fechaRegistro: '14/03/2024',
+    descripcion: 'Videojuegos, hardware y todo lo que tenga luces de colores.',
+    lugar: 'Bogotá, D.C.',
+    fechaNacimiento: 'No disponible',
+    productosVendidos: 'Sin productos',
+  },
+  'NovaKatana': {
+    nombre: 'Valentina',
+    apellido: 'Ríos Cardona',
+    apodo: 'NovaKatana',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=60',
+    portada: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=700&q=60',
+    seUnio: '2 de agosto de 2025',
+    fechaRegistro: '02/08/2025',
+    descripcion: 'Frontend developer. Me encantan los retos y los bugs fáciles de reproducir.',
+    lugar: 'Medellín, Antioquia',
+    fechaNacimiento: 'No disponible',
+    productosVendidos: 'Sin productos',
+  },
+  'Usuario AEGIS': {
+    nombre: 'Luis Alejandro',
+    apellido: 'Montenegro Ojeda',
+    apodo: 'Usuario AEGIS',
+    avatar: '',
+    portada: '',
+    seUnio: '30 de abril de 2026',
+    fechaRegistro: '30/04/2026',
+    descripcion: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus tempor elementum justo finibus tempus.',
+    lugar: 'Popayán, Caucá',
+    fechaNacimiento: '29 de marzo del 2008',
+    productosVendidos: 'Tarjetas Gráficas',
+  },
+  'TechFan01': {
+    nombre: 'Santiago',
+    apellido: 'Herrera Ruiz',
+    apodo: 'TechFan01',
+    avatar: '',
+    portada: '',
+    seUnio: '11 de enero de 2025',
+    fechaRegistro: '11/01/2025',
+    descripcion: 'Fanático del hardware, siempre probando algo nuevo.',
+    lugar: 'Cali, Valle del Cauca',
+    fechaNacimiento: 'No disponible',
+    productosVendidos: 'Sin productos',
+  },
+  'GamerCol': {
+    nombre: 'Daniela',
+    apellido: 'Castrillón',
+    apodo: 'GamerCol',
+    avatar: '',
+    portada: '',
+    seUnio: '5 de junio de 2025',
+    fechaRegistro: '05/06/2025',
+    descripcion: 'Gamer desde siempre. PC, consolas y todo lo que se mueva a 60 fps.',
+    lugar: 'Barranquilla, Atlántico',
+    fechaNacimiento: 'No disponible',
+    productosVendidos: 'Sin productos',
+  },
+  'SoporteAegis': {
+    nombre: 'Carlos Andrés',
+    apellido: 'Mendoza',
+    apodo: 'SoporteAegis',
+    avatar: '',
+    portada: '',
+    seUnio: '19 de febrero de 2024',
+    fechaRegistro: '19/02/2024',
+    descripcion: 'Soporte oficial de la comunidad AEGIS. Aquí para ayudarte con tu equipo.',
+    lugar: 'Bogotá, D.C.',
+    fechaNacimiento: 'No disponible',
+    productosVendidos: 'Sin productos',
+  },
+}
+
+export const usuarioGenerico = (nombre) => ({
+  nombre: nombre,
+  apellido: '',
+  apodo: '',
+  avatar: '',
+  portada: '',
+  seUnio: '',
+  fechaRegistro: '',
+  descripcion: 'Miembro de la comunidad AEGIS.',
+  lugar: 'No disponible',
+  fechaNacimiento: 'No disponible',
+  productosVendidos: 'Sin productos',
+})
+
+export const fotoUsuario = (nombre, size) => {
+  const usuario = USUARIOS_DEMO[nombre]
+  if (usuario && usuario.avatar) return usuario.avatar
+  return avatarUrl({ username: nombre }, size)
+}

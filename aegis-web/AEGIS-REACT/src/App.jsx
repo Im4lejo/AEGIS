@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { route } from './components/shared/presentation'
 import Home from './components/home/views/Home'
 import Foro from './components/foro/views/Foro'
+import Publicacion from './components/foro/views/Publicacion'
 import ProductosIndex from './components/productos/views/Index'
 import PublicarProducto from './components/productos/views/PublicarProducto'
 import DetalleProducto from './components/productos/views/Detalle'
@@ -32,6 +33,7 @@ const PAGES = {
   '/': Home,
   '/home': Home,
   '/foro': Foro,
+  '/publicacion': Publicacion,
   '/productos': ProductosIndex,
   '/productos/crear': PublicarProducto,
   '/productos/detalle': DetalleProducto,

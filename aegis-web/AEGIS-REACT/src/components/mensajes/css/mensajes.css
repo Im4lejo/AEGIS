@@ -1,13 +1,14 @@
-.msg-pagina {
-  width: 100%;
-  padding: 24px;
+.mensajes-layout {
+  height: 100vh;
+  overflow: hidden;
 }
 
 .msg-pagina {
+  width: 100%;
   display: flex;
   gap: 0;
-  height: calc(100vh - 62px);
-  min-height: 540px;
+  flex: 1;
+  min-height: 0;
   padding: 0;
   box-sizing: border-box;
 }

@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import Sidebar from '../../layouts/Sidebar'
-import { avatarUrl } from '../../shared/presentation'
+import { fotoUsuario } from '../../shared/usuariosDemo'
 import '../css/foro.css'
 
 const IconHeart = ({ filled }) => (
@@ -58,8 +58,8 @@ export const POSTS_EJEMPLO = [
     imagen: null,
     likes: 892,
     comentarios: [
-      { id: 1, autor: 'TechFan01', texto: 'En ultra te va a costar, mejor bajos-medios con DLSS.' },
-      { id: 2, autor: 'GamerCol', texto: 'Con ese setup mejor medium, ¡pero va a ir fluido!' },
+      { id: 1, autor: 'TechFan01', texto: 'En ultra te va a costar, mejor bajos-medios con DLSS.', likes: 96, fecha: 'hace 1 d' },
+      { id: 2, autor: 'GamerCol', texto: 'Con ese setup mejor medium, ¡pero va a ir fluido!', likes: 41, fecha: 'hace 22 h' },
     ],
   },
   {
@@ -71,7 +71,7 @@ export const POSTS_EJEMPLO = [
     imagen: '/bsod-demo.svg',
     likes: 341,
     comentarios: [
-      { id: 1, autor: 'SoporteAegis', texto: 'Prueba entrando en modo seguro y desinstalando el último controlador.' },
+      { id: 1, autor: 'SoporteAegis', texto: 'Prueba entrando en modo seguro y desinstalando el último controlador.', likes: 58, fecha: 'hace 4 h' },
     ],
   },
   {
@@ -84,6 +84,18 @@ export const POSTS_EJEMPLO = [
     likes: 127,
     comentarios: [],
   },
+  {
+    id: 4,
+    autor: 'Usuario AEGIS',
+    fecha: 'Hace 2 d',
+    titulo: 'Armé mi primer PC gamer, ¿qué les parece la configuración?',
+    cuerpo: 'Ryzen 5 5600, 16GB RAM, RTX 4060 y un SSD de 1TB.\n\nTodo lo compré por piezas y lo ensamblé yo mismo. ¡Cualquier consejo de mejora es bienvenido!',
+    imagen: null,
+    likes: 76,
+    comentarios: [
+      { id: 1, autor: 'TechFan01', texto: 'Muy buen armado, la 4060 corre todo en alto sin problema.', likes: 12, fecha: 'hace 1 d' },
+    ],
+  },
 ]
 
 const ORDENES = [
@@ -93,7 +105,7 @@ const ORDENES = [
 ]
 
 export default function Foro({ auth, onNavigate }) {
-  const [posts, setPosts] = useState(POSTS_EJEMPLO)
+  const [posts, setPosts] = useState(POSTS_EJEMPLO.map((post) => ({ ...post, comentarios: [...post.comentarios] })))
   const [busqueda, setBusqueda] = useState('')
   const [temaActivo, setTemaActivo] = useState(null)
   const [orden, setOrden] = useState('recientes')
@@ -167,22 +179,25 @@ export default function Foro({ auth, onNavigate }) {
   const agregarComentario = (id) => {
     const texto = nuevoComentario.trim()
     if (!texto) return
+    const nuevo = { id: Date.now(), autor: usuario, texto, likes: 0, fecha: 'Ahora mismo' }
     setPosts((prev) =>
       prev.map((post) =>
         post.id === id
           ? {
               ...post,
-              comentarios: [...post.comentarios, { id: Date.now(), autor: usuario, texto }],
+              comentarios: [...post.comentarios, nuevo],
             }
           : post
       )
     )
+    const guardado = POSTS_EJEMPLO.find((post) => post.id === id)
+    if (guardado) guardado.comentarios = [...guardado.comentarios, nuevo]
     setNuevoComentario('')
     setToast('Comentario publicado ✓')
   }
 
   const compartir = (post) => {
-    const enlace = `${window.location.origin}${window.location.pathname}#/plantilla?origen=post-${post.id}`
+    const enlace = `${window.location.origin}${window.location.pathname}#/publicacion?id=${post.id}`
     if (!navigator.clipboard) {
       setToast('No se pudo copiar el enlace')
       return
@@ -208,20 +223,19 @@ export default function Foro({ auth, onNavigate }) {
     const titulo = primerasLineas[0] || 'Nueva publicación'
     const cuerpo = primerasLineas.slice(1).join('\n')
 
-    setPosts((prev) => [
-      {
-        id: Date.now(),
-        autor: usuario,
-        fecha: 'Ahora mismo',
-        titulo,
-        cuerpo,
-        imagen: imagenNueva,
-        liked: false,
-        likes: 0,
-        comentarios: [],
-      },
-      ...prev,
-    ])
+    const nueva = {
+      id: Date.now(),
+      autor: usuario,
+      fecha: 'Ahora mismo',
+      titulo,
+      cuerpo,
+      imagen: imagenNueva,
+      liked: false,
+      likes: 0,
+      comentarios: [],
+    }
+    setPosts((prev) => [nueva, ...prev])
+    POSTS_EJEMPLO.unshift(nueva)
 
     setTextoPublicacion('')
     setImagenNueva(null)
@@ -346,9 +360,12 @@ export default function Foro({ auth, onNavigate }) {
           ) : (
             postsVisibles.map((post) => (
               <article className="foro-post" key={post.id}>
-                <div className="foro-post-header">
+                <div
+                  className="foro-post-header"
+                  onClick={() => onNavigate(`/perfil?id=${encodeURIComponent(post.autor)}`)}
+                >
                   <div className="foro-post-avatar">
-                    <img src={avatarUrl({ username: post.autor })} alt={post.autor} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                    <img src={fotoUsuario(post.autor, 80)} alt={post.autor} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
                   </div>
                   <div>
                     <div className="foro-post-author">{post.autor}</div>
@@ -359,7 +376,7 @@ export default function Foro({ auth, onNavigate }) {
                     type="button"
                     aria-label="Reportar publicación"
                     title="Reportar publicación"
-                    onClick={() => reportar(post)}
+                    onClick={(event) => { event.stopPropagation(); reportar(post) }}
                   >
                     <IconFlag />
                   </button>
@@ -368,12 +385,16 @@ export default function Foro({ auth, onNavigate }) {
                 <button
                   className="foro-post-title"
                   type="button"
-                  onClick={() => irPlantilla(`post-${post.id}`)}
+                  onClick={() => onNavigate(`/publicacion?id=${post.id}`)}
                 >
                   {post.titulo}
                 </button>
 
-                {post.cuerpo && <p className="foro-post-body">{post.cuerpo}</p>}
+                {post.cuerpo && (
+                  <p className="foro-post-body pub-abrir" onClick={() => onNavigate(`/publicacion?id=${post.id}`)}>
+                    {post.cuerpo}
+                  </p>
+                )}
 
                 {post.imagen && (
                   <img
@@ -420,10 +441,12 @@ export default function Foro({ auth, onNavigate }) {
                     {post.comentarios.map((comentario) => (
                       <div className="foro-comment" key={comentario.id}>
                         <div className="foro-comment-avatar">
-                          <img src={avatarUrl({ username: comentario.autor })} alt={comentario.autor} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                          <img src={fotoUsuario(comentario.autor, 64)} alt={comentario.autor} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
                         </div>
                         <div className="foro-comment-bubble">
-                          <strong>{comentario.autor}</strong>
+                          <strong onClick={() => onNavigate(`/perfil?id=${encodeURIComponent(comentario.autor)}`)}>
+                            {comentario.autor}
+                          </strong>
                           <p>{comentario.texto}</p>
                         </div>
                       </div>
