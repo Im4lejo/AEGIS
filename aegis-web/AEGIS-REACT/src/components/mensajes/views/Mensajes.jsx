@@ -225,7 +225,7 @@ export default function Mensajes({ id, auth, onNavigate }) {
                 <button
                   type="button"
                   className="msg-encuentro-btn"
-                  onClick={() => onNavigate && onNavigate('/puntos-fisicos')}
+                  onClick={() => onNavigate && onNavigate('/configurar-encuentro?id=' + activo)}
                 >
                   Configurar encuentro
                 </button>

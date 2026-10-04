@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { avatarUrl, navigateTo, route } from '../shared/presentation'
 import Head from './Head'
 import Navbar from './Navbar'
+import CarritoPanel from '../carrito/CarritoPanel'
+import { totalUnidades } from '../carrito/carritoDemo'
 import './css/header.css'
 
 
@@ -10,9 +12,17 @@ export default function Header({ title, stylesheet, auth, onNavigate }) {
     const [profileOpen, setProfileOpen] = useState(false)
     const [navigationOpen, setNavigationOpen] = useState(false)
     const [busqueda, setBusqueda] = useState('')
+    const [carritoAbierto, setCarritoAbierto] = useState(false)
+    const [unidades, setUnidades] = useState(totalUnidades())
     const profileRef = useRef(null)
 
     // Cierra el menú desplegable al hacer clic fuera de él
+    useEffect(() => {
+        const actualizar = () => setUnidades(totalUnidades())
+        window.addEventListener('carrito-cambio', actualizar)
+        return () => window.removeEventListener('carrito-cambio', actualizar)
+    }, [])
+
     useEffect(() => {
         if (!profileOpen) return
         const handleClickOutside = (event) => {
@@ -101,9 +111,14 @@ export default function Header({ title, stylesheet, auth, onNavigate }) {
                             )}
                         </div>
 
-                        <button className="cart-btn" aria-label="Carrito de compras" type="button">
+                        <button
+                            className="cart-btn"
+                            aria-label="Carrito de compras"
+                            type="button"
+                            onClick={() => setCarritoAbierto(!carritoAbierto)}
+                        >
                             🛒
-                            <span className="cart-badge">0</span>
+                            <span className="cart-badge">{unidades}</span>
                         </button>
                     </div>
 
@@ -121,6 +136,13 @@ export default function Header({ title, stylesheet, auth, onNavigate }) {
                     </button>
                 </div>
             </header>
+
+            {carritoAbierto && (
+                <CarritoPanel
+                    onCerrar={() => setCarritoAbierto(false)}
+                    onNavigate={onNavigate}
+                />
+            )}
         </>
     )
 }

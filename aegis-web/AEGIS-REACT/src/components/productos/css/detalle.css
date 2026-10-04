@@ -396,9 +396,15 @@
 }
 
 .detail-btn.outline {
-  background: #fff;
-  border: 2px solid #315bff;
-  color: #315bff;
+  background: linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(90deg, #a855f7 0%, #db2777 100%) border-box;
+  border: 2px solid transparent;
+  color: #7c3aed;
+}
+
+.detail-btn.outline:hover {
+  background: linear-gradient(#fdf2f8, #fdf2f8) padding-box,
+    linear-gradient(90deg, #a855f7 0%, #db2777 100%) border-box;
 }
 
 .detail-btn:hover {

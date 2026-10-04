@@ -1,0 +1,389 @@
+.enc-pagina {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.enc-volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: transparent;
+  color: #6d28d9;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0;
+  margin-bottom: 16px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.enc-volver:hover {
+  text-decoration: underline;
+}
+
+.enc-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+}
+
+.enc-cabecera::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #a855f7 0%, #db2777 100%);
+}
+
+.enc-cabecera-icono {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #a855f7 0%, #db2777 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.enc-titulo {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.enc-subtitulo {
+  margin: 2px 0 0;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.enc-columnas {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.enc-panel {
+  flex: 1;
+  min-width: 0;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+.enc-producto {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 18px;
+}
+
+.enc-producto-img {
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: #f1f5f9;
+  flex-shrink: 0;
+}
+
+.enc-producto-info {
+  min-width: 0;
+}
+
+.enc-producto-nombre {
+  margin: 0 0 4px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.enc-producto-precio {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.enc-producto-vendedor {
+  margin: 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.enc-producto-vendedor i {
+  color: #16a34a;
+}
+
+.enc-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.enc-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.enc-campo > span {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.enc-campo input[type="date"],
+.enc-campo textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border: 1.5px solid #cbd5e1;
+  background: #ffffff;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #1f2937;
+  outline: none;
+  font-family: inherit;
+}
+
+.enc-campo textarea {
+  resize: vertical;
+  min-height: 92px;
+  line-height: 1.5;
+}
+
+.enc-campo textarea::placeholder {
+  color: #9ca3af;
+}
+
+.enc-campo input:focus,
+.enc-campo select:focus,
+.enc-campo textarea:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.18);
+}
+
+.enc-select {
+  position: relative;
+  display: block;
+}
+
+.enc-select i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #7c3aed;
+  font-size: 13px;
+  pointer-events: none;
+}
+
+.enc-select select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px 10px 38px;
+  border: 1.5px solid #cbd5e1;
+  background: #ffffff;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #1f2937;
+  outline: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.enc-fila {
+  display: flex;
+  gap: 16px;
+}
+
+.enc-fila .enc-campo {
+  flex: 1;
+  min-width: 0;
+}
+
+.enc-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.enc-btn-cancelar {
+  padding: 11px 20px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.enc-btn-cancelar:hover {
+  background: #f8fafc;
+}
+
+.enc-btn-confirmar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border: none;
+  background: #3b82f6;
+  color: #ffffff;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.enc-btn-confirmar:hover {
+  background: #2563eb;
+}
+
+.enc-exito {
+  text-align: center;
+  padding: 32px 16px;
+}
+
+.enc-exito > i {
+  font-size: 46px;
+  color: #16a34a;
+}
+
+.enc-exito h2 {
+  margin: 14px 0 8px;
+  font-size: 20px;
+  color: #0f172a;
+}
+
+.enc-exito-datos {
+  margin: 2px 0;
+  font-size: 14px;
+  color: #334155;
+}
+
+.enc-exito-nota {
+  margin: 12px auto 20px;
+  max-width: 420px;
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.enc-seguridad {
+  flex: 0 0 320px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+.enc-seguridad-titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+}
+
+.enc-seguridad-titulo::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #a855f7 0%, #db2777 100%);
+}
+
+.enc-seguridad-titulo span {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f5f3ff;
+  color: #7c3aed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.enc-seguridad-titulo h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #0f172a;
+}
+
+.enc-seguridad-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.enc-seguridad-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.enc-seguridad-icono {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #eff6ff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.enc-seguridad-item h4 {
+  margin: 0 0 2px;
+  font-size: 14px;
+  color: #0f172a;
+}
+
+.enc-seguridad-item p {
+  margin: 0;
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.45;
+}
+
+.enc-seguridad-nota {
+  margin: 16px 0 0;
+  padding: 12px;
+  background: #f5f3ff;
+  border-left: 3px solid #a855f7;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #6d28d9;
+  line-height: 1.5;
+}
