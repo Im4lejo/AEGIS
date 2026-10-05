@@ -182,6 +182,7 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
         <a href={route('/productos?filtro=ofertas')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?filtro=ofertas') }}>Ofertas</a>
         <a href={route('/productos?filtro=gaming')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?filtro=gaming') }}>Gaming</a>
         <a href={route('/productos?filtro=reacondicionado')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?filtro=reacondicionado') }}>Reacondicionado</a>
+        <a href={route('/novedades')} onClick={(e) => { e.preventDefault(); setCategoryOpen(false); if (onNavigate) onNavigate('/novedades') }}>Novedades</a>
       </section>
 
       <main className="home-container">

@@ -492,7 +492,7 @@
   width: 42px;
   height: 42px;
   border: none;
-  background: #3b82f6;
+  background: linear-gradient(90deg, #a855f7 0%, #d946ef 45%, #ec4899 75%, #f43f5e 100%);
   color: #ffffff;
   border-radius: 50%;
   cursor: pointer;
@@ -501,7 +501,7 @@
 }
 
 .msg-enviar:hover {
-  background: #2563eb;
+  background: linear-gradient(90deg, #9333ea 0%, #c026d3 45%, #db2777 75%, #e11d48 100%);
 }
 
 .msg-archivo-oculto {

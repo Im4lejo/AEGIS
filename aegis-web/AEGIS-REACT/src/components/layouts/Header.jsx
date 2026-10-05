@@ -100,7 +100,7 @@ export default function Header({ title, stylesheet, auth, onNavigate }) {
                                         </div>
                                     </div>
                                     <a href={route('/perfil')} onClick={(e) => go(e, '/perfil')}>Mi Perfil</a>
-                                    <a href={route('/plantilla?origen=mis-compras')} onClick={(e) => go(e, '/plantilla?origen=mis-compras')}>Mis Compras</a>
+                                    <a href={route('/perfil/editar?id=compras')} onClick={(e) => go(e, '/perfil/editar?id=compras')}>Mis Compras</a>
                                     <a href={route('/perfil/editar')} onClick={(e) => go(e, '/perfil/editar')}>Configuración</a>
                                     <hr />
                                     <a href={route('/login')} onClick={(e) => go(e, '/login')} className="logout-link">Cerrar Sesión</a>

@@ -137,7 +137,7 @@ body{
 }
 
 .sidebar-menu a.active{
-    background:linear-gradient(90deg, #2563EB 0%, #3B82F6 100%);
+    background:linear-gradient(90deg, #a855f7 0%, #d946ef 45%, #ec4899 75%, #f43f5e 100%);
     color:white;
 }
 

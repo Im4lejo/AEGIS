@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
+import { guardarProductoPublicado } from '../productosDemo'
 import '../css/publicarProducto.css'
 
 
@@ -18,6 +19,7 @@ export default function PublicarProducto({ auth, onNavigate }) {
     const [fotoPrincipal, setFotoPrincipal] = useState('')
     const [fotos, setFotos] = useState(['', '', '', ''])
     const [mensaje, setMensaje] = useState(null)
+    const [publicado, setPublicado] = useState(false)
 
 
     const cambiarDato = (campo, valor) => {
@@ -27,25 +29,36 @@ export default function PublicarProducto({ auth, onNavigate }) {
     }
 
    
-    const elegirFotoPrincipal = (event) => {
-        const archivo = event.target.files[0]
+    const comprimir = (archivo, alListo) => {
         if (!archivo) return
         const lector = new FileReader()
-        lector.onload = () => setFotoPrincipal(lector.result)
+        lector.onload = (evento) => {
+            const imagen = new Image()
+            imagen.onload = () => {
+                const escala = Math.min(1, 1000 / Math.max(imagen.width, imagen.height))
+                const ancho = Math.round(imagen.width * escala)
+                const alto = Math.round(imagen.height * escala)
+                const lienzo = document.createElement('canvas')
+                lienzo.width = ancho
+                lienzo.height = alto
+                lienzo.getContext('2d').drawImage(imagen, 0, 0, ancho, alto)
+                alListo(lienzo.toDataURL('image/jpeg', 0.82))
+            }
+            imagen.src = evento.target.result
+        }
         lector.readAsDataURL(archivo)
     }
 
- 
+    const elegirFotoPrincipal = (event) => {
+        comprimir(event.target.files[0], setFotoPrincipal)
+    }
+
     const elegirFotoExtra = (event, indice) => {
-        const archivo = event.target.files[0]
-        if (!archivo) return
-        const lector = new FileReader()
-        lector.onload = () => {
+        comprimir(event.target.files[0], (datosFoto) => {
             const nuevas = [...fotos]
-            nuevas[indice] = lector.result
+            nuevas[indice] = datosFoto
             setFotos(nuevas)
-        }
-        lector.readAsDataURL(archivo)
+        })
     }
 
    
@@ -57,12 +70,31 @@ export default function PublicarProducto({ auth, onNavigate }) {
     const publicar = (event) => {
         event.preventDefault()
         const titulo = datos.titulo.trim()
-        const precio = datos.precio.trim()
-        if (!titulo || !precio) {
-            setMensaje({ tipo: 'error', texto: 'Completa el título del anuncio y el precio referencial.' })
+        const precio = Number(datos.precio.split('').filter((letra) => '0123456789'.indexOf(letra) !== -1).join(''))
+        if (!titulo || !precio || !fotoPrincipal) {
+            setMensaje({ tipo: 'error', texto: 'Completa el título, el precio y añade la foto principal del producto.' })
             return
         }
-        setMensaje({ tipo: 'success', texto: '¡Producto publicado con éxito!' })
+        const nuevo = {
+            id: 'mio-' + Date.now(),
+            nombre: titulo,
+            titulo: titulo,
+            descripcion: datos.descripcion.trim(),
+            categoria: datos.categoria.trim(),
+            marca: datos.marca.trim(),
+            modelo: datos.modelo.trim(),
+            estado: datos.estado.trim().toLowerCase() || 'usado',
+            precio: precio,
+            stock: datos.stock.trim() === '' ? 1 : Number(datos.stock),
+            imagen: fotoPrincipal,
+            fotos: fotos.filter((foto) => foto),
+            vendedor: { id: 4, nombre: 'Luis Alejandro Montenegro Ojeda', reputacion: 4.7 },
+            mio: true,
+            publicadoEn: Date.now(),
+        }
+        guardarProductoPublicado(nuevo)
+        setMensaje(null)
+        setPublicado(true)
     }
 
     return (
@@ -70,6 +102,14 @@ export default function PublicarProducto({ auth, onNavigate }) {
             <Header title="AEGIS | Publicar Producto" auth={auth} onNavigate={onNavigate} />
 
             <main className="main-content publish-page">
+                {publicado ? (
+                    <div className="publish-success">
+                        <i className="fa-solid fa-circle-check" />
+                        <h1>Producto publicado correctamente</h1>
+                        <p>Tu producto ya aparece en Novedades, en la lista de productos y en la sección "Productos del Vendedor" de tu perfil.</p>
+                        <button type="button" className="publish-btn" onClick={() => onNavigate && onNavigate('/')}>Ir al Home</button>
+                    </div>
+                ) : (
                 <form onSubmit={publicar}>
                    
                     <div className="publish-header">
@@ -166,6 +206,7 @@ export default function PublicarProducto({ auth, onNavigate }) {
                         </div>
                     </section>
                 </form>
+                )}
             </main>
 
             <Footer onNavigate={onNavigate} />

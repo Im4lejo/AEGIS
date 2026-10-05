@@ -4,6 +4,7 @@
   display: grid;
   grid-template-columns: 275px minmax(0, 1fr);
   gap: 26px;
+  width: 100%;
   max-width: 1240px;
   margin: 0 auto;
   padding: 24px 24px 48px;
@@ -50,13 +51,13 @@
 }
 
 .editar-nav-item.active {
-  background: linear-gradient(90deg, #4f7cf7, #7c3aed);
+  background: linear-gradient(90deg, #a855f7 0%, #d946ef 45%, #ec4899 75%, #f43f5e 100%);
   color: #fff;
-  box-shadow: 0 6px 16px rgba(79, 124, 247, 0.35);
+  box-shadow: 0 6px 16px rgba(168, 85, 247, 0.35);
 }
 
 .editar-nav-item.active:hover {
-  background: linear-gradient(90deg, #4f7cf7, #7c3aed);
+  background: linear-gradient(90deg, #a855f7 0%, #d946ef 45%, #ec4899 75%, #f43f5e 100%);
   color: #fff;
 }
 
@@ -70,6 +71,7 @@
   flex-direction: column;
   gap: 22px;
   min-width: 0;
+  min-height: 754px;
 }
 
 .editar-back {
@@ -162,13 +164,13 @@
   padding: 9px 20px;
   border: none;
   border-radius: 999px;
-  background: linear-gradient(90deg, #4f7cf7, #7c3aed);
+  background: linear-gradient(90deg, #a855f7 0%, #d946ef 45%, #ec4899 75%, #f43f5e 100%);
   color: #fff;
   font-family: inherit;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.32);
+  box-shadow: 0 6px 16px rgba(168, 85, 247, 0.35);
   transition: filter 0.15s ease;
 }
 
@@ -224,8 +226,11 @@
   gap: 2px;
   padding: 4px 0;
   border: none;
-  background: none;
-  color: #2563eb;
+  background: linear-gradient(90deg, #a855f7 0%, #d946ef 45%, #ec4899 75%, #f43f5e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: #d946ef;
+  -webkit-text-fill-color: transparent;
   font-family: inherit;
   font-size: 13.5px;
   font-weight: 600;
@@ -233,7 +238,6 @@
 }
 
 .editar-row-btn:hover {
-  color: #1d4ed8;
   text-decoration: underline;
 }
 
@@ -257,7 +261,7 @@
   padding: 9px 18px;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(90deg, #4f7cf7, #7c3aed);
+  background: linear-gradient(90deg, #a855f7 0%, #d946ef 45%, #ec4899 75%, #f43f5e 100%);
   color: #fff;
   font-family: inherit;
   font-size: 13.5px;
@@ -589,6 +593,30 @@
   gap: 10px;
   padding: 14px 20px;
   border-top: 1px solid #eef1f5;
+}
+
+.editar-compras-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 34px;
+  padding: 70px 20px;
+  text-align: center;
+}
+
+.editar-compras-vacio h2 {
+  margin: 0;
+  max-width: 440px;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #55596b;
+}
+
+.editar-compras-vacio img {
+  width: 320px;
+  max-width: 100%;
+  height: auto;
 }
 
 @media (max-width: 1000px) {
