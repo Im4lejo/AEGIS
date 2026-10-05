@@ -248,7 +248,7 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
           </div>
 
           <div className="hero-side">
-            <div className="side-banner-card">
+            <div className="side-banner-card side-banner-card--victus">
               <a
                 className="side-banner-link"
                 href="#/productos/detalle?id=10"
@@ -259,7 +259,7 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
               </a>
             </div>
 
-            <div className="side-banner-card">
+            <div className="side-banner-card side-banner-card--blackfriday">
               <a
                 className="side-banner-link"
                 href={route('/productos?filtro=blackfriday')}
@@ -280,7 +280,7 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
           <h2>Explora Más Productos</h2>
         </section>
 
-        <section className="products-section">
+        <section className="products-section products-section--featured">
           <div className="products-grid">
 
             <a
@@ -405,7 +405,7 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
           </div>
         </section>
 
-        <section className="products-section">
+        <section className="products-section products-section--ram">
           <div className="main-section-header">
             <h2>Teclados y Memorias RAM en Oferta</h2>
           </div>

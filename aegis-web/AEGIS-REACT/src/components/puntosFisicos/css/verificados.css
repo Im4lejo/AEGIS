@@ -198,3 +198,62 @@
 .pv-boton:hover {
     background: linear-gradient(90deg, #9333ea 0%, #c026d3 45%, #db2777 75%, #e11d48 100%);
 }
+
+@media (max-width: 900px) {
+    .pv-fila {
+        flex-direction: column;
+    }
+
+    .pv-panel {
+        width: 100%;
+        max-width: none;
+        flex: none;
+        order: 1;
+    }
+
+    .pv-zona-mapa {
+        width: 100%;
+        height: min(62vh, 620px);
+        min-height: 360px;
+        order: 0;
+    }
+}
+
+@media (max-width: 520px) {
+    .pv-contenido {
+        padding: 12px;
+    }
+
+    .pv-zona-mapa {
+        height: 58vh;
+        min-height: 320px;
+    }
+
+    .pv-ruta {
+        left: 10px;
+        bottom: 50px;
+        padding: 9px 12px;
+        font-size: 13px;
+    }
+
+    .pv-tiempo {
+        left: 10px;
+        bottom: 10px;
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .pv-panel {
+        padding: 20px 16px;
+    }
+
+    .pv-nombre {
+        font-size: 21px;
+        padding-right: 28px;
+    }
+
+    .pv-dato,
+    .pv-servicio {
+        font-size: 15px;
+    }
+}

@@ -9,7 +9,7 @@
             <div class="footer-logo">
 
                 <div class="footer-logo-icon">
-                    <i class="fa-solid fa-shield-halved"></i>
+                    <img src="<?= asset('Assets/global/aegis-logo.png') ?>" alt="">
                 </div>
 
                 <span>AEGIS</span>

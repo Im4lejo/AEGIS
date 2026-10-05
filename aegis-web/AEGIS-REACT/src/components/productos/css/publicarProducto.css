@@ -288,6 +288,17 @@
     color: #111827;
 }
 
+.main-image span.main-image-mas {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    background: rgba(17, 24, 39, 0.75);
+    color: #ffffff;
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 999px;
+}
+
 .main-image img {
     position: absolute;
     inset: 0;
@@ -301,6 +312,13 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
     align-content: center;
+}
+
+.miniaturas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: 10px;
+    margin-top: 14px;
 }
 
 .small-box {
@@ -429,4 +447,133 @@
 
 .publish-success .publish-btn {
     margin-top: 8px;
+}
+
+.images-movil {
+    display: none;
+}
+
+.num-movil {
+    display: none;
+}
+
+.publish-actions {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .publish-page {
+        width: 100%;
+    }
+
+    .publish-page form {
+        max-width: 780px;
+        margin: 0 auto;
+    }
+
+    .publish-actions {
+        display: flex;
+    }
+
+    .publish-btn-top {
+        display: none;
+    }
+
+    .images-escritorio {
+        display: none;
+    }
+
+    .images-movil {
+        display: block;
+    }
+
+    .num-escritorio {
+        display: none;
+    }
+
+    .num-movil {
+        display: inline;
+    }
+
+    .publish-card {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 28px;
+    }
+
+    .images-container {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 560px) {
+    .publish-page {
+        padding: 24px 14px;
+    }
+
+    .publish-header {
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .publish-title {
+        gap: 10px;
+        min-width: 0;
+    }
+
+    .publish-title h1 {
+        font-size: 23px;
+    }
+
+    .publish-btn {
+        padding: 11px 16px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .publish-actions .publish-btn {
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 15px;
+    }
+
+    .publish-card,
+    .details-card {
+        padding: 18px 14px;
+        border-radius: 12px;
+    }
+
+    .images-container {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 10px;
+    }
+
+    .main-image {
+        min-width: 0;
+    }
+
+    .main-image span {
+        font-size: 13px;
+    }
+
+    .miniaturas {
+        gap: 8px;
+    }
+
+    .small-box {
+        height: 40px;
+    }
+
+    .triple-grid,
+    .double-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+    }
+
+    .publish-success {
+        padding: 42px 18px;
+    }
+
+    .publish-success h1 {
+        font-size: 21px;
+    }
 }

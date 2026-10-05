@@ -41,7 +41,7 @@ export default function Register({ error, success, onNavigate }) {
         <main className="auth-page register-page">
             <section className="left-panel">
                 <div className="logo">
-                    <span className="logo-icon"><i className="fa-solid fa-shield-halved" /></span>
+                    <img src="/aegis-logo.png" alt="" className="auth-logo-panel" />
                     <span>AEGIS</span>
                 </div>
                 <div className="left-content">

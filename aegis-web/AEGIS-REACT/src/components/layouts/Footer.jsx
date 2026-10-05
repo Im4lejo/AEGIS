@@ -12,7 +12,7 @@ export default function Footer({ onNavigate }) {
             <div className="footer-container">
                 <div className="footer-brand">
                     <div className="footer-logo">
-                        <img src="/favicon.svg" alt="AEGIS" className="logo-img" />
+                        <img src="/aegis-logo.png" alt="AEGIS" className="logo-img" />
                         <span className="logo-text">AEGIS</span>
                     </div>
                     <p className="footer-description">

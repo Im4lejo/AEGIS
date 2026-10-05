@@ -108,6 +108,7 @@ export default function Foro({ auth, onNavigate }) {
   const [posts, setPosts] = useState(POSTS_EJEMPLO.map((post) => ({ ...post, comentarios: [...post.comentarios] })))
   const [busqueda, setBusqueda] = useState('')
   const [temaActivo, setTemaActivo] = useState(null)
+  const [foroMenuAbierto, setForoMenuAbierto] = useState(false)
   const [orden, setOrden] = useState('recientes')
   const [ordenOpen, setOrdenOpen] = useState(false)
   const [comentariosAbiertos, setComentariosAbiertos] = useState({})
@@ -120,6 +121,15 @@ export default function Foro({ auth, onNavigate }) {
 
   const ordenRef = useRef(null)
   const fileInputRef = useRef(null)
+
+  useEffect(() => {
+    if (!foroMenuAbierto) return
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') setForoMenuAbierto(false)
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [foroMenuAbierto])
 
   useEffect(() => {
     if (!ordenOpen) return
@@ -258,7 +268,34 @@ export default function Foro({ auth, onNavigate }) {
 
   return (
     <div className="page-layout foro-layout">
-      <Header title="AEGIS | Foro" auth={auth} onNavigate={onNavigate} />
+      <Header
+        title="AEGIS | Foro"
+        auth={auth}
+        onNavigate={onNavigate}
+        forumMode
+        forumMenuOpen={foroMenuAbierto}
+        onForumMenuToggle={() => setForoMenuAbierto((abierto) => !abierto)}
+      />
+
+      {foroMenuAbierto && (
+        <div className="foro-sidebar-overlay">
+          <button
+            className="foro-sidebar-backdrop"
+            type="button"
+            aria-label="Cerrar menú del foro"
+            onClick={() => setForoMenuAbierto(false)}
+          />
+          <Sidebar
+            busqueda={busqueda}
+            setBusqueda={setBusqueda}
+            orden={orden}
+            setOrden={setOrden}
+            temaActivo={temaActivo}
+            setTemaActivo={setTemaActivo}
+            onNavigate={onNavigate}
+          />
+        </div>
+      )}
 
       <div className="foro-container">
         <Sidebar busqueda={busqueda} setBusqueda={setBusqueda} orden={orden} setOrden={setOrden} temaActivo={temaActivo} setTemaActivo={setTemaActivo} onNavigate={onNavigate} />

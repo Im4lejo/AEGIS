@@ -19,6 +19,16 @@ const ESTADOS = [
   { id: 'usado', label: 'Usado' },
 ]
 
+const OPCIONES_ORDEN = [
+  { valor: 'recomendados', label: 'Recomendados' },
+  { valor: 'descuento', label: 'Mejor descuento' },
+  { valor: 'precio-desc', label: 'Precio mayor a menor' },
+  { valor: 'precio-asc', label: 'Precio menor a mayor' },
+  { valor: 'nombre-asc', label: 'A – Z' },
+  { valor: 'nombre-desc', label: 'Z – A' },
+  { valor: 'nuevos', label: 'Más Nuevos' },
+]
+
 const PRECIO_MAXIMO = 5000000
 
 const DIAS_NOVEDADES = 7
@@ -144,6 +154,8 @@ export default function Index({ filtros = {}, auth, onNavigate, vista }) {
   const [soloEnvio, setSoloEnvio] = useState(false)
   const [precioMax, setPrecioMax] = useState(PRECIO_MAXIMO)
   const [orden, setOrden] = useState('recomendados')
+  const [verFiltros, setVerFiltros] = useState(false)
+  const [verOrden, setVerOrden] = useState(false)
 
   useEffect(() => {
     setBusqueda(filtros.busqueda || '')
@@ -239,6 +251,10 @@ export default function Index({ filtros = {}, auth, onNavigate, vista }) {
 
   if (orden === 'precio-asc') lista = [...lista].sort((a, b) => a.precio - b.precio)
   if (orden === 'precio-desc') lista = [...lista].sort((a, b) => b.precio - a.precio)
+  if (orden === 'descuento') lista = [...lista].sort((a, b) => (b.descuento || 0) - (a.descuento || 0))
+  if (orden === 'nombre-asc') lista = [...lista].sort((a, b) => nombreDe(a).localeCompare(nombreDe(b)))
+  if (orden === 'nombre-desc') lista = [...lista].sort((a, b) => nombreDe(b).localeCompare(nombreDe(a)))
+  if (orden === 'nuevos') lista = [...lista].sort((a, b) => fechaPublicacion(b) - fechaPublicacion(a))
 
   let titulo = modoNovedades ? 'Novedades' : 'Productos'
   if (termino) titulo = `Resultados para "${busqueda.trim()}"`
@@ -324,18 +340,42 @@ export default function Index({ filtros = {}, auth, onNavigate, vista }) {
           <div className="products-sort">
             <span>Ordenar por</span>
             <select value={orden} onChange={(event) => setOrden(event.target.value)}>
-              <option value="recomendados">Recomendados</option>
-              <option value="precio-asc">Menor precio</option>
-              <option value="precio-desc">Mayor precio</option>
+              {OPCIONES_ORDEN.map((op) => (
+                <option key={op.valor} value={op.valor}>{op.label}</option>
+              ))}
             </select>
+          </div>
+
+          <div className="products-mobile-bar">
+            <button type="button" className="mobile-filter-btn" aria-label="Abrir filtros" onClick={() => { setVerFiltros(!verFiltros); setVerOrden(false) }}>
+              <i className="fa-solid fa-filter" />
+            </button>
+            <button type="button" className="mobile-sort-btn" aria-label="Abrir ordenamiento" onClick={() => { setVerOrden(!verOrden); setVerFiltros(false) }}>
+              <i className="fa-solid fa-sort" />
+            </button>
+            {verOrden && (
+              <div className="mobile-sort-menu">
+                {OPCIONES_ORDEN.map((op) => (
+                  <button
+                    type="button"
+                    key={op.valor}
+                    className={orden === op.valor ? 'orden-op active' : 'orden-op'}
+                    onClick={() => { setOrden(op.valor); setVerOrden(false) }}
+                  >
+                    {op.label}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
         <div className="products-body">
-          <aside className="products-filters">
+          <aside className={verFiltros ? 'products-filters filtros-movil-abierto' : 'products-filters'}>
             <div className="filters-head">
               <strong>Filtros seleccionados</strong>
               <button type="button" onClick={limpiarFiltros}>Limpiar filtros</button>
+              <button type="button" className="filters-close" onClick={() => setVerFiltros(false)} aria-label="Cerrar filtros">✕</button>
             </div>
 
             {chips.length === 0 ? (

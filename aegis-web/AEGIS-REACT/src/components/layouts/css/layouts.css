@@ -40,3 +40,19 @@ body .main-footer {
   font-size: 12px;
   color: #8a94a6;
 }
+
+.header-container .header-logo .logo-img,
+.main-footer .footer-logo .logo-img,
+.header-mobile-topbar .header-mobile-brand .logo-img {
+  width: auto;
+  height: 28px;
+}
+
+.header-container .header-logo .logo-text,
+.main-footer .footer-logo .logo-text,
+.header-mobile-topbar .header-mobile-brand span {
+  color: #ffffff;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 800;
+  letter-spacing: 2px;
+}

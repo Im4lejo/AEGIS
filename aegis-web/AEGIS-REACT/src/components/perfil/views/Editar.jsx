@@ -291,9 +291,10 @@ export default function Editar({ auth, onNavigate, id }) {
 
           {seccion !== 'compras' && (
             <section className="editar-hero">
-              {portada && (
-                <div className="editar-hero-portada" style={{ backgroundImage: `url(${portada})` }} />
-              )}
+              <div
+                className={portada ? 'editar-hero-portada con-foto' : 'editar-hero-portada'}
+                style={portada ? { backgroundImage: `url(${portada})` } : undefined}
+              />
               <div className="editar-hero-box">
                 <div className="editar-hero-avatar">
                   <img src={avatar} alt="Foto de perfil" />

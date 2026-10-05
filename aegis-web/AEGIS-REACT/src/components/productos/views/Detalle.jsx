@@ -202,7 +202,7 @@ export default function Detalle({ id, auth, onNavigate }) {
             </article>
 
             {caracteristicas.length > 0 && (
-              <section className="detail-section">
+              <section className="detail-section detail-features-section">
                 <h2>Características principales</h2>
                 <ul className="detail-features">
                   {caracteristicas.map((campo) => (
@@ -214,40 +214,12 @@ export default function Detalle({ id, auth, onNavigate }) {
               </section>
             )}
 
-            <section className="detail-section">
+            <section className="detail-section detail-description-section">
               <h2>Descripción</h2>
               <p className="detail-text">{producto.descripcion || 'Sin descripción disponible'}</p>
             </section>
 
-            <section className="detail-section">
-              <h2>Más información sobre este vendedor</h2>
-              <div className="seller-info-grid">
-                <img
-                  className="seller-info-avatar"
-                  src={vendedor.avatar || avatarUrl(vendedor, 160)}
-                  alt={vendedor.nombre}
-                  title="Ver perfil del vendedor"
-                  onClick={irVendedor}
-                />
-                <div className="seller-info-stat">
-                  <span className="seller-info-icon blue"><i className="fa-solid fa-crown" /></span>
-                  <h4>Nivel de Servicio</h4>
-                  <span className="seller-info-badge blue">{insignia.servicio}</span>
-                </div>
-                <div className="seller-info-stat">
-                  <span className="seller-info-icon purple"><i className="fa-solid fa-shield" /></span>
-                  <h4>Vendedor Estrella</h4>
-                  <span className="seller-info-badge purple">{insignia.estrella}</span>
-                </div>
-                <div className="seller-info-stat">
-                  <span className="seller-info-icon light"><i className="fa-regular fa-star" /> {insignia.rating}</span>
-                  <h4>Reseñas</h4>
-                  <span className="seller-info-stars">{insignia.estrellas}</span>
-                </div>
-              </div>
-            </section>
-
-            <section className="detail-section">
+            <section className="detail-section detail-comments-section">
               <div className="detail-comments-head">
                 <h2>Comentarios del Vendedor ({comentarios.length})</h2>
                 <select className="detail-comments-filter">
@@ -290,58 +262,44 @@ export default function Detalle({ id, auth, onNavigate }) {
           </div>
 
           <aside className="detail-info">
-            <p className="detail-code">Código de producto: {producto.id}</p>
+            <div className="detail-heading">
+              <p className="detail-code">Código de producto: {producto.id}</p>
+              <h1 className="detail-title">{titulo}</h1>
+              <p className="detail-brand">{producto.marca || 'Sin marca'}</p>
 
-            <h1 className="detail-title">{titulo}</h1>
-            <p className="detail-brand">{producto.marca || 'Sin marca'}</p>
-
-            <div className="detail-price">
-              {producto.descuento > 0 && (
-                <span className="detail-discount">-{producto.descuento}%</span>
-              )}
-              <strong className="detail-price-now">COP {formatCurrency(producto.precio)}</strong>
-              {producto.precioAnterior && (
-                <span className="detail-price-old">COP {formatCurrency(producto.precioAnterior)}</span>
-              )}
-            </div>
-            <p className="detail-stock">
-              {typeof producto.stock === 'number'
-                ? (producto.stock > 0 ? `(${producto.stock} disponibles)` : '(Agotado)')
-                : (producto.stock === false ? '(Agotado)' : '(Único Disponible)')}
-            </p>
-
-            <div
-              className="detail-seller"
-              role="button"
-              tabIndex={0}
-              onClick={irVendedor}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') irVendedor()
-              }}
-            >
-              <img className="detail-seller-avatar" src={vendedor.avatar || avatarUrl(vendedor, 100)} alt={vendedor.nombre} />
-              <div className="detail-seller-data">
-                <strong className="detail-seller-name">{vendedor.nombre}</strong>
-                <div className="detail-badges">
-                  <span className="detail-badge blue" title={`Nivel de Servicio: ${insignia.servicio}`}>
-                    <i className="fa-solid fa-crown" />
-                  </span>
-                  <span className="detail-badge purple" title={`Vendedor Estrella: ${insignia.estrella}`}>
-                    <i className="fa-solid fa-shield" />
-                  </span>
-                  <span className="detail-badge rating" title={`Reputación: ${insignia.rating}`}>
-                    <i className="fa-regular fa-star" /> {insignia.rating}
-                  </span>
-                </div>
-              </div>
-              <button
-                type="button"
-                className="detail-seller-arrow"
-                aria-label="Ver perfil del vendedor"
+              <div
+                className="detail-seller"
+                role="button"
+                tabIndex={0}
                 onClick={irVendedor}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') irVendedor()
+                }}
               >
-                <i className="fa-solid fa-arrow-right" />
-              </button>
+                <img className="detail-seller-avatar" src={vendedor.avatar || avatarUrl(vendedor, 100)} alt={vendedor.nombre} />
+                <div className="detail-seller-data">
+                  <strong className="detail-seller-name">{vendedor.nombre}</strong>
+                  <div className="detail-badges">
+                    <span className="detail-badge blue" title={`Nivel de Servicio: ${insignia.servicio}`}>
+                      <i className="fa-solid fa-crown" />
+                    </span>
+                    <span className="detail-badge purple" title={`Vendedor Estrella: ${insignia.estrella}`}>
+                      <i className="fa-solid fa-shield" />
+                    </span>
+                    <span className="detail-badge rating" title={`Reputación: ${insignia.rating}`}>
+                      <i className="fa-regular fa-star" /> {insignia.rating}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="detail-seller-arrow"
+                  aria-label="Ver perfil del vendedor"
+                  onClick={irVendedor}
+                >
+                  <i className="fa-solid fa-arrow-right" />
+                </button>
+              </div>
             </div>
 
             <div className="detail-specs">
@@ -356,23 +314,39 @@ export default function Detalle({ id, auth, onNavigate }) {
               <span>{producto.envioRapido ? 'Envío rápido disponible' : 'Envío estándar a domicilio'}</span>
             </p>
 
-            <div className="detail-actions">
-              <button
-                type="button"
-                className="detail-btn primary"
-                onClick={() => onNavigate && onNavigate(`/mensajes?id=${producto.id}`)}
-              >
-                Contactar
-              </button>
-              <button type="button" className="detail-btn outline" onClick={agregarAlCarrito}>
-                {agregado ? (
-                  <>
-                    <i className="fa-solid fa-check" /> Agregado al carrito
-                  </>
-                ) : (
-                  'Agregar al Carrito'
+            <div className="detail-purchase-bar">
+              <div className="detail-price">
+                {producto.descuento > 0 && (
+                  <span className="detail-discount">-{producto.descuento}%</span>
                 )}
-              </button>
+                <strong className="detail-price-now">COP {formatCurrency(producto.precio)}</strong>
+                {producto.precioAnterior && (
+                  <span className="detail-price-old">COP {formatCurrency(producto.precioAnterior)}</span>
+                )}
+              </div>
+              <p className="detail-stock">
+                {typeof producto.stock === 'number'
+                  ? (producto.stock > 0 ? `(${producto.stock} disponibles)` : '(Agotado)')
+                  : (producto.stock === false ? '(Agotado)' : '(Único Disponible)')}
+              </p>
+              <div className="detail-actions">
+                <button
+                  type="button"
+                  className="detail-btn primary"
+                  onClick={() => onNavigate && onNavigate(`/mensajes?id=${producto.id}`)}
+                >
+                  Comprar Ahora
+                </button>
+                <button type="button" className="detail-btn outline" onClick={agregarAlCarrito}>
+                  {agregado ? (
+                    <>
+                      <i className="fa-solid fa-check" /> Agregado al carrito
+                    </>
+                  ) : (
+                    'Agregar al Carrito'
+                  )}
+                </button>
+              </div>
             </div>
           </aside>
         </section>
