@@ -18,6 +18,7 @@ export default function PublicarProducto({ auth, onNavigate }) {
     })
     const [fotoPrincipal, setFotoPrincipal] = useState('')
     const [fotos, setFotos] = useState(['', '', '', ''])
+    const [fotosMoviles, setFotosMoviles] = useState([])
     const [mensaje, setMensaje] = useState(null)
     const [publicado, setPublicado] = useState(false)
 
@@ -28,7 +29,6 @@ export default function PublicarProducto({ auth, onNavigate }) {
         setDatos(nuevos)
     }
 
-   
     const comprimir = (archivo, alListo) => {
         if (!archivo) return
         const lector = new FileReader()
@@ -61,12 +61,27 @@ export default function PublicarProducto({ auth, onNavigate }) {
         })
     }
 
-   
+    const elegirFotos = (event) => {
+        const archivos = Array.from(event.target.files)
+        archivos.forEach((archivo, indice) => {
+            comprimir(archivo, (datosFoto) => {
+                if (indice === 0) {
+                    if (fotoPrincipal) {
+                        setFotosMoviles((previas) => [fotoPrincipal, ...previas])
+                    }
+                    setFotoPrincipal(datosFoto)
+                } else {
+                    setFotosMoviles((previas) => [...previas, datosFoto])
+                }
+            })
+        })
+        event.target.value = ''
+    }
+
     const volver = () => {
         if (onNavigate) onNavigate('/productos')
     }
 
-    
     const publicar = (event) => {
         event.preventDefault()
         const titulo = datos.titulo.trim()
@@ -87,7 +102,7 @@ export default function PublicarProducto({ auth, onNavigate }) {
             precio: precio,
             stock: datos.stock.trim() === '' ? 1 : Number(datos.stock),
             imagen: fotoPrincipal,
-            fotos: fotos.filter((foto) => foto),
+            fotos: [...fotos.filter((foto) => foto), ...fotosMoviles],
             vendedor: { id: 4, nombre: 'Luis Alejandro Montenegro Ojeda', reputacion: 4.7 },
             mio: true,
             publicadoEn: Date.now(),
@@ -111,7 +126,7 @@ export default function PublicarProducto({ auth, onNavigate }) {
                     </div>
                 ) : (
                 <form onSubmit={publicar}>
-                   
+
                     <div className="publish-header">
                         <div className="publish-title">
                             <button type="button" className="publish-back" onClick={volver} aria-label="Volver a productos">
@@ -119,7 +134,7 @@ export default function PublicarProducto({ auth, onNavigate }) {
                             </button>
                             <h1>Publicación..</h1>
                         </div>
-                        <button type="submit" className="publish-btn">Publicar</button>
+                        <button type="submit" className="publish-btn publish-btn-top">Publicar</button>
                     </div>
 
                     {mensaje && (
@@ -128,9 +143,8 @@ export default function PublicarProducto({ auth, onNavigate }) {
                         </div>
                     )}
 
-                   
                     <section className="publish-card">
-                        <div className="images-section">
+                        <div className="images-section images-escritorio">
                             <h2>1. Imágenes</h2>
                             <div className="images-container">
                                 <label className="main-image" htmlFor="foto-principal">
@@ -157,7 +171,7 @@ export default function PublicarProducto({ auth, onNavigate }) {
                         </div>
 
                         <div className="info-section">
-                            <h2>2. Información Básica</h2>
+                            <h2><span className="num-escritorio">2.</span><span className="num-movil">1.</span> Información Básica</h2>
 
                             <div className="input-group">
                                 <label htmlFor="titulo">Título del anuncio</label>
@@ -187,7 +201,7 @@ export default function PublicarProducto({ auth, onNavigate }) {
                     </section>
 
                     <section className="details-card">
-                        <h2>3. Detalles del Intercambio</h2>
+                        <h2><span className="num-escritorio">3.</span><span className="num-movil">2.</span> Detalles del Intercambio</h2>
 
                         <div className="double-grid">
                             <div className="input-group">
@@ -205,6 +219,42 @@ export default function PublicarProducto({ auth, onNavigate }) {
                             <textarea id="descripcion" placeholder="Especificaciones opcionales..." value={datos.descripcion} onChange={(event) => cambiarDato('descripcion', event.target.value)} />
                         </div>
                     </section>
+
+                    <section className="details-card images-movil">
+                        <div className="images-section">
+                            <h2>3. Imágenes</h2>
+                            <div className="images-container">
+                                <label className="main-image" htmlFor="foto-principal-movil">
+                                    {fotoPrincipal ? (
+                                        <>
+                                            <img src={fotoPrincipal} alt="Foto principal" />
+                                            <span className="main-image-mas">+ Agregar más</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <i className="fa-solid fa-camera" />
+                                            <span>Añadir Fotos</span>
+                                        </>
+                                    )}
+                                    <input className="foto-input" type="file" id="foto-principal-movil" accept="image/*" multiple onChange={elegirFotos} />
+                                </label>
+                            </div>
+
+                            {fotosMoviles.length > 0 && (
+                                <div className="miniaturas">
+                                    {fotosMoviles.map((foto, indice) => (
+                                        <div className="small-box" key={indice}>
+                                            <img src={foto} alt={`Foto ${indice + 1}`} />
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </section>
+
+                    <div className="publish-actions">
+                        <button type="submit" className="publish-btn">Publicar</button>
+                    </div>
                 </form>
                 )}
             </main>

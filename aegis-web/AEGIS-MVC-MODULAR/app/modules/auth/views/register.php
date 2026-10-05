@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AEGIS - Registro</title>
+    <link rel="icon" type="image/png" href="<?= asset('Assets/global/aegis-logo.png') ?>">
     <link rel="stylesheet" href="<?= asset('Assets/css/pages/register.css') ?>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -15,13 +16,7 @@
 
             <div class="logo">
                 <div class="logo-icon">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M12 3L19 6V11C19 16 15.5 20 12 21C8.5 20 5 16 5 11V6L12 3Z"
-                            stroke="white"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"/>
-                    </svg>
+                    <img src="<?= asset('Assets/global/aegis-logo.png') ?>" alt="">
                 </div>
 
                 <span>AEGIS</span>

@@ -24,6 +24,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin - AEGIS</title>
+    <link rel="icon" type="image/png" href="<?= asset('Assets/global/aegis-logo.png') ?>">
     <link rel="stylesheet" href="<?= asset('Assets/global/global.css') ?>">
     <link rel="stylesheet" href="<?= asset('Assets/css/pages/dashboard.css') ?>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -36,7 +37,7 @@
     <aside class="sidebar">
         <div class="logo">
             <div class="logo-icon">
-                <i class="fa-solid fa-shield-halved" style="color: #4F46E5;"></i>
+                <img src="<?= asset('Assets/global/aegis-logo.png') ?>" alt="">
             </div>
             <span>AEGIS</span>
         </div>

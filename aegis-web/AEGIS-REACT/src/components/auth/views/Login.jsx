@@ -30,7 +30,7 @@ export default function Login({ error, success, onNavigate }) {
         <main className="auth-page login-page">
             <section className="left-panel">
                 <div className="security-wrapper">
-                    <div className="security-icon"><i className="fa-solid fa-lock" /></div>
+                    <img src="/aegis-logo.png" alt="AEGIS" className="auth-logo-panel" />
                     <h1>Acceso Seguro</h1>
                     <p>Tu cuenta está protegida por encriptaciones y múltiples sistemas de seguridad y autenticación.</p>
                     <div className="security-card">

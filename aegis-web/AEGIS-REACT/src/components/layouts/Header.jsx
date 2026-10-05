@@ -7,10 +7,12 @@ import CarritoPanel from '../carrito/CarritoPanel'
 import { totalUnidades } from '../carrito/carritoDemo'
 import './css/layouts.css'
 
-export default function Header({ title, stylesheet, auth, onNavigate }) {
+export default function Header({ title, stylesheet, auth, onNavigate, forumMode = false, forumMenuOpen = false, onForumMenuToggle }) {
     const [profileOpen, setProfileOpen] = useState(false)
     const [busqueda, setBusqueda] = useState('')
     const [carritoAbierto, setCarritoAbierto] = useState(false)
+    const [menuAbierto, setMenuAbierto] = useState(false)
+    const [categoriasAbiertas, setCategoriasAbiertas] = useState(false)
     const [unidades, setUnidades] = useState(totalUnidades())
     const profileRef = useRef(null)
 
@@ -31,15 +33,38 @@ export default function Header({ title, stylesheet, auth, onNavigate }) {
         return () => document.removeEventListener('mousedown', handleClickOutside)
     }, [profileOpen])
 
+    useEffect(() => {
+        if (!menuAbierto) return
+        const overflowAnterior = document.body.style.overflow
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape') setMenuAbierto(false)
+        }
+        document.body.style.overflow = 'hidden'
+        document.addEventListener('keydown', handleKeyDown)
+        return () => {
+            document.body.style.overflow = overflowAnterior
+            document.removeEventListener('keydown', handleKeyDown)
+        }
+    }, [menuAbierto])
+
     const go = (event, path) => {
         if (event) event.preventDefault()
+        setMenuAbierto(false)
+        setCategoriasAbiertas(false)
         navigateTo(path, onNavigate)
     }
 
     const buscar = (event) => {
         if (event) event.preventDefault()
         const termino = busqueda.trim()
+        setMenuAbierto(false)
         navigateTo(termino ? `/productos?buscar=${encodeURIComponent(termino)}` : '/productos', onNavigate)
+    }
+
+    const navegarDesdeMenu = (path) => {
+        setMenuAbierto(false)
+        setCategoriasAbiertas(false)
+        navigateTo(path, onNavigate)
     }
 
     const usuario = auth && auth.user ? auth.user : null
@@ -52,14 +77,100 @@ export default function Header({ title, stylesheet, auth, onNavigate }) {
     return (
         <>
             <Head title={title} stylesheet={stylesheet} />
-            <header className="main-header">
+            <header className={`main-header${menuAbierto ? ' menu-open' : ''}${forumMode ? ' main-header--forum' : ''}`}>
                 <div className="header-container">
+                    {forumMode && (
+                        <button
+                            className="forum-menu-toggle"
+                            type="button"
+                            aria-label={forumMenuOpen ? 'Cerrar menú del foro' : 'Abrir menú del foro'}
+                            aria-expanded={forumMenuOpen}
+                            onClick={onForumMenuToggle}
+                        >
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <circle cx="5" cy="12" r="1.8" />
+                                <circle cx="12" cy="12" r="1.8" />
+                                <circle cx="19" cy="12" r="1.8" />
+                            </svg>
+                        </button>
+                    )}
+
                     <div className="header-logo" onClick={() => go(null, '/')}>
-                        <img src="/favicon.svg" alt="AEGIS" className="logo-img" />
+                        <img src="/aegis-logo.png" alt="AEGIS" className="logo-img" />
                         <span className="logo-text">AEGIS</span>
                     </div>
 
-                    <Navbar onNavigate={onNavigate} />
+                    <button
+                        className="menu-toggle"
+                        type="button"
+                        aria-label={menuAbierto ? 'Cerrar menú' : 'Abrir menú'}
+                        aria-expanded={menuAbierto}
+                        aria-controls="header-mobile-menu"
+                        onClick={() => setMenuAbierto(!menuAbierto)}
+                    >
+                        <span />
+                        <span />
+                        <span />
+                    </button>
+
+                    <div id="header-mobile-menu" className={`header-mobile-menu${menuAbierto ? ' is-open' : ''}`}>
+                        <div className="header-mobile-top">
+                            <div className="header-mobile-topbar">
+                                <div className="header-mobile-brand">
+                                    <img src="/aegis-logo.png" alt="" className="logo-img" />
+                                    <span>AEGIS</span>
+                                </div>
+                                <button className="header-mobile-close" type="button" onClick={() => setMenuAbierto(false)} aria-label="Cerrar menú">
+                                    <span />
+                                    <span />
+                                </button>
+                            </div>
+
+                            <a className="header-mobile-profile" href={route('/perfil/editar')} onClick={(event) => go(event, '/perfil/editar')}>
+                                <img src={avatar} alt="" className="profile-img" />
+                                <span className="header-mobile-profile-data">
+                                    <strong>{nombreMostrar}</strong>
+                                    <span>Ir a ajustes de cuenta</span>
+                                </span>
+                            </a>
+                        </div>
+
+                        <Navbar onNavigate={navegarDesdeMenu} />
+
+                        <nav className="header-mobile-links" aria-label="Navegación móvil">
+                            <div className="header-mobile-group">
+                                <span className="header-mobile-heading">Explorar</span>
+                                <button
+                                    className="header-mobile-link header-mobile-category-toggle"
+                                    type="button"
+                                    aria-expanded={categoriasAbiertas}
+                                    onClick={() => setCategoriasAbiertas(!categoriasAbiertas)}
+                                >
+                                    Categorías <span aria-hidden="true">{categoriasAbiertas ? '−' : '+'}</span>
+                                </button>
+                                {categoriasAbiertas && (
+                                    <div className="header-mobile-categories">
+                                        {['Celulares', 'Componentes PC', 'Laptops', 'Consolas', 'Periféricos', 'Wearables', 'Smart Home', 'Audio', 'Oficina y Conectividad', 'Foto y Video'].map((categoria) => (
+                                            <a
+                                                className="header-mobile-link"
+                                                href={route(`/productos?categoria=${encodeURIComponent(categoria)}`)}
+                                                key={categoria}
+                                                onClick={(event) => go(event, `/productos?categoria=${encodeURIComponent(categoria)}`)}
+                                            >
+                                                {categoria}
+                                            </a>
+                                        ))}
+                                    </div>
+                                )}
+                                <a className="header-mobile-link" href={route('/productos?filtro=ofertas')} onClick={(event) => go(event, '/productos?filtro=ofertas')}>Ofertas</a>
+                                <a className="header-mobile-link" href={route('/productos?filtro=gaming')} onClick={(event) => go(event, '/productos?filtro=gaming')}>Gaming</a>
+                                <a className="header-mobile-link" href={route('/productos?filtro=reacondicionado')} onClick={(event) => go(event, '/productos?filtro=reacondicionado')}>Reacondicionado</a>
+                                <a className="header-mobile-link" href={route('/novedades')} onClick={(event) => go(event, '/novedades')}>Novedades</a>
+                            </div>
+                        </nav>
+
+                        <a className="header-mobile-link header-mobile-logout" href={route('/login')} onClick={(event) => go(event, '/login')}>Cerrar sesión</a>
+                    </div>
 
                     <div className="header-search">
                         <input

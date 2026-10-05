@@ -672,15 +672,29 @@
 }
 
 @media (max-width: 780px) {
+  .perfil-page {
+    max-width: 100%;
+  }
+
   .perfil-identity {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 18px;
+    text-align: center;
+  }
+
+  .perfil-id-left {
+    align-items: center;
+    min-height: 0;
+  }
+
+  .perfil-name {
+    max-width: none;
   }
 
   .perfil-stats {
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: center;
   }
 
   .perfil-stat {
