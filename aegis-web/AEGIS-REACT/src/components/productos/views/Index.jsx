@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { formatCurrency, imageUrl, route } from '../../shared/presentation'
-import { PRODUCTOS_DESTACADOS, PRODUCTOS_PERFIL, PRODUCTOS_PROMOCION, PRODUCTOS_NOVEDADES } from '../productosDemo'
+import { PRODUCTOS_DESTACADOS, PRODUCTOS_PERFIL, PRODUCTOS_PROMOCION, PRODUCTOS_NOVEDADES, productosPublicados } from '../productosDemo'
 import '../css/index.css'
 
 const CATEGORIAS = ['Televisores', 'Laptops', 'Celulares', 'Componentes PC', 'Consolas', 'Wearables', 'Smart Home', 'Audio', 'Oficina y Conectividad', 'Foto y Video']
@@ -20,6 +20,15 @@ const ESTADOS = [
 ]
 
 const PRECIO_MAXIMO = 5000000
+
+const DIAS_NOVEDADES = 7
+
+function fechaPublicacion(prod) {
+  if (prod.publicadoEn) return prod.publicadoEn
+  const id = String(prod.id || '')
+  if (id.indexOf('mio-') === 0) return Number(id.substring(4))
+  return 0
+}
 
 const FILTROS_CATEGORIA = {
   Celulares: [
@@ -120,7 +129,8 @@ function badgeEstado(estado) {
   return 'badge-used'
 }
 
-export default function Index({ filtros = {}, auth, onNavigate }) {
+export default function Index({ filtros = {}, auth, onNavigate, vista }) {
+  const modoNovedades = vista === '/novedades'
   const [busqueda, setBusqueda] = useState(filtros.busqueda || '')
   const [categoria, setCategoria] = useState(filtros.categoria || '')
   const [estado, setEstado] = useState(filtros.filtro === 'reacondicionado' ? 'reacondicionado' : 'todo')
@@ -150,7 +160,19 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
     setPrecioMax(PRECIO_MAXIMO)
   }, [filtros])
 
-  const todos = [...PRODUCTOS_DESTACADOS, ...PRODUCTOS_PROMOCION, ...PRODUCTOS_PERFIL, ...PRODUCTOS_NOVEDADES]
+  const publicados = productosPublicados()
+  const limiteNovedades = Date.now() - DIAS_NOVEDADES * 24 * 60 * 60 * 1000
+  const recientes = publicados.filter((prod) => fechaPublicacion(prod) >= limiteNovedades)
+  const todos = modoNovedades
+    ? recientes
+    : [...publicados, ...PRODUCTOS_DESTACADOS, ...PRODUCTOS_PROMOCION, ...PRODUCTOS_PERFIL, ...PRODUCTOS_NOVEDADES]
+
+  const categorias = [...CATEGORIAS]
+  todos.forEach((prod) => {
+    if (prod.categoria && categorias.indexOf(prod.categoria) === -1) {
+      categorias.push(prod.categoria)
+    }
+  })
 
   let marcasDisponibles = []
   todos.forEach((prod) => {
@@ -218,7 +240,7 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
   if (orden === 'precio-asc') lista = [...lista].sort((a, b) => a.precio - b.precio)
   if (orden === 'precio-desc') lista = [...lista].sort((a, b) => b.precio - a.precio)
 
-  let titulo = 'Productos'
+  let titulo = modoNovedades ? 'Novedades' : 'Productos'
   if (termino) titulo = `Resultados para "${busqueda.trim()}"`
   else if (categoria) titulo = categoria
   else if (soloBlackFriday) titulo = 'Black Friday'
@@ -290,7 +312,7 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
 
   return (
     <div className="page-layout">
-      <Header title="AEGIS | Productos" auth={auth} onNavigate={onNavigate} />
+      <Header title={modoNovedades ? 'AEGIS | Novedades' : 'AEGIS | Productos'} auth={auth} onNavigate={onNavigate} />
 
       <main className="products-page">
         <div className="products-topbar">
@@ -379,7 +401,7 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
             <div className="filter-group">
               <span className="filter-group-title">Categoría</span>
               <div className="filter-tags">
-                {CATEGORIAS.map((cat) => (
+                {categorias.map((cat) => (
                   <button
                     type="button"
                     key={cat}
@@ -467,7 +489,9 @@ export default function Index({ filtros = {}, auth, onNavigate }) {
           <section className="products-results">
             {lista.length === 0 ? (
               <div className="no-products-message">
-                No se encontraron productos con los filtros seleccionados.
+                {modoNovedades && todos.length === 0
+                  ? 'Todavía no hay productos en Novedades. ¡Publica el primero!'
+                  : 'No se encontraron productos con los filtros seleccionados.'}
               </div>
             ) : (
               <div className="products-grid-container">

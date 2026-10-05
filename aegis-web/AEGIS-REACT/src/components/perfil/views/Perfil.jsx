@@ -7,6 +7,18 @@ import { VENDEDORES, productosDelVendedor } from '../../productos/productosDemo'
 import { POSTS_EJEMPLO } from '../../foro/views/Foro'
 import '../css/perfil.css'
 
+function etiquetaEstado(estado) {
+  if (estado === 'nuevo') return 'Nuevo'
+  if (estado === 'reacondicionado') return 'Reacondicionado'
+  return 'Usado'
+}
+
+function badgeEstado(estado) {
+  if (estado === 'nuevo') return 'badge-new'
+  if (estado === 'reacondicionado') return 'badge-refurbished'
+  return 'badge-used'
+}
+
 const IconPencil = ({ size = 15 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z" />
@@ -462,11 +474,16 @@ export default function Perfil({ id, usuario = {}, publicaciones, productos, esP
                     }}
                   >
                     <span className="perfil-product-img">
-                      <img src={producto.imagen} alt={producto.titulo} />
+                      <img src={producto.imagen} alt={producto.nombre || producto.titulo} />
+                      <span className={`product-state-tag ${badgeEstado(producto.estado)}`}>
+                        {etiquetaEstado(producto.estado)}
+                      </span>
                     </span>
                     <span className="perfil-product-body">
-                      <span className="perfil-product-name">{producto.titulo}</span>
-                      <span className="perfil-product-old">COP {formatCurrency(producto.precioAnterior || producto.precio)}</span>
+                      <span className="perfil-product-name">{producto.nombre || producto.titulo}</span>
+                      {producto.precioAnterior && (
+                        <span className="perfil-product-old">COP {formatCurrency(producto.precioAnterior)}</span>
+                      )}
                       <span className="perfil-product-price">COP {formatCurrency(producto.precio)}</span>
                     </span>
                   </a>

@@ -233,6 +233,35 @@
   text-decoration: line-through;
 }
 
+.products-page .product-card {
+  border-color: #e9d5ff;
+}
+
+.products-page .product-card:hover,
+.products-page .product-card:focus-visible {
+  border-color: #a855f7;
+  box-shadow: 0 10px 22px rgba(168, 85, 247, 0.2);
+}
+
+.products-page .product-image-container {
+  background: linear-gradient(180deg, #ffffff 0%, #f5f3ff 100%);
+}
+
+.products-page .product-price-row {
+  margin-top: 14px;
+}
+
+.products-page .product-current-price {
+  background: linear-gradient(90deg, #a855f7 0%, #d946ef 45%, #ec4899 75%, #f43f5e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  font-size: 13px;
+  padding: 0;
+  border-radius: 999px;
+}
+
 @media (max-width: 900px) {
   .products-body {
     flex-direction: column;

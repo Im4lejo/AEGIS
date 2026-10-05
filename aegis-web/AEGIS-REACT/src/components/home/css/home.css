@@ -27,6 +27,8 @@
 
 .dropdown-container {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .dropdown-btn {
@@ -604,10 +606,18 @@
   background: linear-gradient(180deg, #ffffff 0%, #f5f3ff 100%);
 }
 
+.home-layout .product-price-row {
+  margin-top: 16px;
+}
+
 .home-layout .product-price {
-  background: #eff6ff;
-  color: #2563eb;
-  padding: 5px 12px;
+  background: linear-gradient(90deg, #a855f7 0%, #d946ef 45%, #ec4899 75%, #f43f5e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  font-size: 12px;
+  padding: 0;
   border-radius: 999px;
   box-shadow: none;
 }

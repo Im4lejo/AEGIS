@@ -67,10 +67,14 @@ export default function Publicacion({ id, auth, onNavigate }) {
   let usuario = 'Usuario AEGIS'
   if (auth && auth.user && auth.user.nombre) usuario = auth.user.nombre
 
+  const perfilGuardado = JSON.parse(localStorage.getItem('perfilAegis') || '{}')
+  const miFoto = perfilGuardado.avatar || ''
+
   const autor = post ? post.autor : ''
   let datosAutor = USUARIOS_DEMO[autor]
   if (!datosAutor) datosAutor = usuarioGenerico(autor)
-  const fotoAutor = fotoUsuario(autor, 160)
+  let fotoAutor = fotoUsuario(autor, 160)
+  if (autor === usuario && miFoto) fotoAutor = miFoto
 
   let comentarios = []
   if (post) comentarios = [...post.comentarios, ...comentariosNuevos]
@@ -199,7 +203,7 @@ export default function Publicacion({ id, auth, onNavigate }) {
                 {comentarios.map((comentario) => (
                   <div className="foro-comment" key={comentario.id}>
                     <div className="foro-comment-avatar">
-                      <img src={fotoUsuario(comentario.autor, 64)} alt={comentario.autor} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                      <img src={comentario.autor === usuario && miFoto ? miFoto : fotoUsuario(comentario.autor, 64)} alt={comentario.autor} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
                     </div>
                     <div className="foro-comment-bubble">
                       <strong>
