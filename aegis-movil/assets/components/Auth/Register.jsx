@@ -1,9 +1,10 @@
 import { Image, Pressable, StyleSheet, Text, View, TextInput } from "react-native";
-import aegisLogo from "../icon.png";
+import aegisLogo from "../../../assets/icon.png";
 import { LinearGradient } from 'expo-linear-gradient';
-import Index from "../screens/Inicio";
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from "expo-router";
 export default function Authenticator() {
+    const router = useRouter();
     return (
         <View style={styles.container}>
 
@@ -15,7 +16,7 @@ export default function Authenticator() {
                 style={styles.background}
             >
                 <Pressable
-                    onPress={() => { }}
+                    onPress={() => { router.replace("/auth") }}
                     style={styles.indexButton}
                 >
 

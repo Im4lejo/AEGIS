@@ -1,11 +1,15 @@
 import { Image, Pressable, StyleSheet, Text, View, TextInput } from "react-native";
-import aegisLogo from "../icon.png";
+import aegisLogo from "../../../assets/icon.png";
 import { LinearGradient } from 'expo-linear-gradient';
-import Index from "../screens/Inicio";
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from "@react-navigation/native";
-export default function Authenticator({ isLogged, setLog }) {
-    const navigation = useNavigation();
+import { useRouter } from "expo-router";
+import { useAuth } from "../../context/AuthContext";
+import { useState } from "react";
+export default function Authenticator() {
+    const router = useRouter();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const { isLogged: loggedIn, setLog: updateLoginState } = useAuth();
     return (
         <View style={styles.container}>
 
@@ -17,7 +21,7 @@ export default function Authenticator({ isLogged, setLog }) {
                 style={styles.background}
             >
                 <Pressable
-                    onPress={() => { navigation.navigate("Authenticator") }}
+                    onPress={() => { router.replace("/auth") }}
                     style={styles.indexButton}
                 >
 
@@ -31,10 +35,12 @@ export default function Authenticator({ isLogged, setLog }) {
                     <Text style={styles.welcomeText}>Bienvenid@, ingresa tus datos en los campos</Text>
                     <View style={styles.subContent}>
                         <View style={styles.actions}>
-                            <Text style={styles.loginText}>Correo o teléfono</Text>
+                            <Text style={styles.loginText}>Correo</Text>
                             <TextInput
+                                value={email}
+                                onChangeText={(textValue) => setEmail(textValue)} 
                                 style={styles.input}
-                                placeholder="Correo o teléfono"
+                                placeholder="Correo"
                                 placeholderTextColor="#dfdfdf"
                             //value={ }
                             //onChangeText={(newValue) => setText(newValue)} // Actualiza el estado
@@ -43,6 +49,8 @@ export default function Authenticator({ isLogged, setLog }) {
                             />
                             <Text style={styles.loginText}>Contraseña</Text>
                             <TextInput
+                                value={password}
+                                onChangeText={(textValue) => setPassword(textValue)} 
                                 style={styles.input}
                                 placeholder="Contraseña"
                                 placeholderTextColor="#dfdfdf"
@@ -54,10 +62,17 @@ export default function Authenticator({ isLogged, setLog }) {
                             />
                             <Pressable
                                 onPress={() => {
-                                    navigation.navigate("Index", {
-                                        screen: "Inicio"
-                                    });
-                                    setLog(!isLogged)
+                                    const isValidCredentials =
+                                        email.trim().length > 0 &&
+                                        password.length >= 10 &&
+                                        password.length <= 19;
+
+                                    if (isValidCredentials) {
+                                        updateLoginState(true);
+                                        router.replace("/(tabs)");
+                                    } else {
+                                        updateLoginState(false);
+                                    }
                                 }}
                                 style={({ pressed }) => [styles.login, pressed && styles.pressed]}
                             >

@@ -3,6 +3,7 @@
     "name": "aegis-movil",
     "slug": "aegis-movil",
     "version": "1.0.0",
+    "scheme": "aegis-movil",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -19,6 +20,7 @@
       "package": "com.anonymous.aegismovil"
     },
     "web": {
+      "bundler": "metro",
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
@@ -32,7 +34,8 @@
           "darkBackground": "#000000",
           "darkLogo": "./assets/bootsplash/logo-dark.png"
         }
-      ]
+      ],
+      "expo-router"
     ]
   }
 }

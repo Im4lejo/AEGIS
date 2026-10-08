@@ -1,9 +1,11 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import aegisLogo from "../icon.png";
+import aegisLogo from "../../icon.png";
 import { LinearGradient } from 'expo-linear-gradient';
-import { useNavigation } from "@react-navigation/native";
-export default function Authenticator({ setLog }) {
-    const navigation = useNavigation();
+import { useRouter } from "expo-router";
+import { useAuth } from "../../context/AuthContext";
+export default function Authenticator() {
+    const router = useRouter();
+    const { setLog: updateLoginState } = useAuth();
     return (
         <View style={styles.container}>
             <LinearGradient
@@ -27,7 +29,7 @@ export default function Authenticator({ setLog }) {
                     <View style={styles.actions}>
                         <Pressable
                             onPress={() => {
-                                navigation.navigate("Login")
+                                router.push("/auth/login")
                             }}
                             style={({ pressed }) => [styles.login, pressed && styles.pressed]}
                         >
@@ -42,7 +44,7 @@ export default function Authenticator({ setLog }) {
 
                         <Pressable
                             onPress={() => {
-                                navigation.navigate("Register")
+                                router.push("/auth/register")
                             }}
                             style={({ pressed }) => [styles.register, pressed && styles.pressed]}
                         >
@@ -53,10 +55,8 @@ export default function Authenticator({ setLog }) {
                             <View style={styles.dividerLine} />
                             <Text style={styles.skipText}
                                 onPress={() => {
-                                    navigation.navigate("Index", {
-                                        screen: "Inicio"
-                                    });
-                                    setLog(false)
+                                    updateLoginState(false);
+                                    router.replace("/(tabs)")
                                 }}>
                                 Seguir navegando como invitado</Text>
                             <View style={styles.dividerLine} />
