@@ -39,5 +39,7 @@ export function avatarUrl(user, size = 100) {
 }
 
 export function imageUrl(filename, fallback = 'https://via.placeholder.com/300x230?text=Sin+Imagen') {
-    return filename ? asset(`Assets/uploads/products/${filename}`) : fallback
+    if (!filename) return fallback
+    if (filename.indexOf('data:') === 0 || filename.indexOf('http') === 0 || filename.indexOf('/') === 0) return filename
+    return asset(`Assets/uploads/products/${filename}`)
 }

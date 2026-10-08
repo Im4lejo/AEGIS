@@ -5,6 +5,18 @@ import { buscarVendedor, productosDelVendedor } from '../../productos/productosD
 import { POSTS_EJEMPLO } from '../../foro/views/Foro'
 import '../css/perfil.css'
 
+function etiquetaEstado(estado) {
+  if (estado === 'nuevo') return 'Nuevo'
+  if (estado === 'reacondicionado') return 'Reacondicionado'
+  return 'Usado'
+}
+
+function badgeEstado(estado) {
+  if (estado === 'nuevo') return 'badge-new'
+  if (estado === 'reacondicionado') return 'badge-refurbished'
+  return 'badge-used'
+}
+
 const IconCrown = () => (
   <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
     <path d="M3 8l4 4 5-7 5 7 4-4-1.6 9.5H4.6L3 8z" />
@@ -168,10 +180,15 @@ export default function Vendedor({ id, auth, onNavigate }) {
                   >
                     <span className="perfil-product-img">
                       <img src={producto.imagen} alt={producto.nombre || producto.titulo} />
+                      <span className={`product-state-tag ${badgeEstado(producto.estado)}`}>
+                        {etiquetaEstado(producto.estado)}
+                      </span>
                     </span>
                     <span className="perfil-product-body">
                       <span className="perfil-product-name">{producto.nombre || producto.titulo}</span>
-                      <span className="perfil-product-old">COP {formatCurrency(producto.precioAnterior || producto.precio)}</span>
+                      {producto.precioAnterior && (
+                        <span className="perfil-product-old">COP {formatCurrency(producto.precioAnterior)}</span>
+                      )}
                       <span className="perfil-product-price">COP {formatCurrency(producto.precio)}</span>
                     </span>
                   </a>

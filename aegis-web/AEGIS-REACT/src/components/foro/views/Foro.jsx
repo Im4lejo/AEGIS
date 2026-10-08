@@ -108,6 +108,7 @@ export default function Foro({ auth, onNavigate }) {
   const [posts, setPosts] = useState(POSTS_EJEMPLO.map((post) => ({ ...post, comentarios: [...post.comentarios] })))
   const [busqueda, setBusqueda] = useState('')
   const [temaActivo, setTemaActivo] = useState(null)
+  const [foroMenuAbierto, setForoMenuAbierto] = useState(false)
   const [orden, setOrden] = useState('recientes')
   const [ordenOpen, setOrdenOpen] = useState(false)
   const [comentariosAbiertos, setComentariosAbiertos] = useState({})
@@ -120,6 +121,15 @@ export default function Foro({ auth, onNavigate }) {
 
   const ordenRef = useRef(null)
   const fileInputRef = useRef(null)
+
+  useEffect(() => {
+    if (!foroMenuAbierto) return
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') setForoMenuAbierto(false)
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [foroMenuAbierto])
 
   useEffect(() => {
     if (!ordenOpen) return
@@ -160,6 +170,9 @@ export default function Foro({ auth, onNavigate }) {
 
   let usuario = 'Usuario AEGIS'
   if (auth && auth.user && auth.user.nombre) usuario = auth.user.nombre
+
+  const perfilGuardado = JSON.parse(localStorage.getItem('perfilAegis') || '{}')
+  const miFoto = perfilGuardado.avatar || ''
 
   const toggleLike = (id) => {
     setPosts((prev) =>
@@ -255,7 +268,34 @@ export default function Foro({ auth, onNavigate }) {
 
   return (
     <div className="page-layout foro-layout">
-      <Header title="AEGIS | Foro" auth={auth} onNavigate={onNavigate} />
+      <Header
+        title="AEGIS | Foro"
+        auth={auth}
+        onNavigate={onNavigate}
+        forumMode
+        forumMenuOpen={foroMenuAbierto}
+        onForumMenuToggle={() => setForoMenuAbierto((abierto) => !abierto)}
+      />
+
+      {foroMenuAbierto && (
+        <div className="foro-sidebar-overlay">
+          <button
+            className="foro-sidebar-backdrop"
+            type="button"
+            aria-label="Cerrar menú del foro"
+            onClick={() => setForoMenuAbierto(false)}
+          />
+          <Sidebar
+            busqueda={busqueda}
+            setBusqueda={setBusqueda}
+            orden={orden}
+            setOrden={setOrden}
+            temaActivo={temaActivo}
+            setTemaActivo={setTemaActivo}
+            onNavigate={onNavigate}
+          />
+        </div>
+      )}
 
       <div className="foro-container">
         <Sidebar busqueda={busqueda} setBusqueda={setBusqueda} orden={orden} setOrden={setOrden} temaActivo={temaActivo} setTemaActivo={setTemaActivo} onNavigate={onNavigate} />
@@ -263,7 +303,7 @@ export default function Foro({ auth, onNavigate }) {
         <main className="foro-feed">
           {!panelAbierto ? (
             <div className="foro-composer">
-              <div className="foro-composer-avatar">?</div>
+              <div className="foro-composer-avatar">{miFoto ? <img src={miFoto} alt="Mi foto" /> : '?'}</div>
               <div className="foro-composer-field">
                 <input
                   className="foro-composer-input"
@@ -287,7 +327,7 @@ export default function Foro({ auth, onNavigate }) {
           ) : (
             <div className="foro-composer-panel">
               <div className="foro-composer" style={{ border: 'none', boxShadow: 'none', padding: 0 }}>
-                <div className="foro-composer-avatar">?</div>
+                <div className="foro-composer-avatar">{miFoto ? <img src={miFoto} alt="Mi foto" /> : '?'}</div>
                 <div className="foro-composer-field">
                   <input
                     className="foro-composer-input"
@@ -365,7 +405,7 @@ export default function Foro({ auth, onNavigate }) {
                   onClick={() => onNavigate(`/perfil?id=${encodeURIComponent(post.autor)}`)}
                 >
                   <div className="foro-post-avatar">
-                    <img src={fotoUsuario(post.autor, 80)} alt={post.autor} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                    <img src={post.autor === usuario && miFoto ? miFoto : fotoUsuario(post.autor, 80)} alt={post.autor} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
                   </div>
                   <div>
                     <div className="foro-post-author">{post.autor}</div>
@@ -441,7 +481,7 @@ export default function Foro({ auth, onNavigate }) {
                     {post.comentarios.map((comentario) => (
                       <div className="foro-comment" key={comentario.id}>
                         <div className="foro-comment-avatar">
-                          <img src={fotoUsuario(comentario.autor, 64)} alt={comentario.autor} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                          <img src={comentario.autor === usuario && miFoto ? miFoto : fotoUsuario(comentario.autor, 64)} alt={comentario.autor} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
                         </div>
                         <div className="foro-comment-bubble">
                           <strong onClick={() => onNavigate(`/perfil?id=${encodeURIComponent(comentario.autor)}`)}>

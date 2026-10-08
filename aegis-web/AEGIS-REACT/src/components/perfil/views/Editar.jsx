@@ -81,6 +81,13 @@ const USUARIO_EJEMPLO = {
   apellido: 'Montenegro Ojeda',
 }
 
+const IconDolar = () => (
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="12" y1="2" x2="12" y2="22" />
+    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+  </svg>
+)
+
 const CAMPOS_INICIALES = [
   { id: 'nombre', label: 'Nombre Completo', valor: 'Luis Alejandro Montenegro Ojeda', ayuda: 'los usuarios verán tu nombre en AEGIS de esta forma' },
   { id: 'contacto', label: 'Número de contacto', valor: '+57 322022020', ayuda: 'los usuarios te contactarán por este contacto' },
@@ -95,6 +102,7 @@ const SECCIONES = [
   { id: 'privacidad', label: 'Privacidad', icono: <IconShield /> },
   { id: 'negocio', label: 'Ajustes del negocio', icono: <IconChart /> },
   { id: 'estadisticas', label: 'Estadísticas', icono: <IconBars /> },
+  { id: 'compras', label: 'Mis compras', icono: <IconDolar /> },
 ]
 
 const AJUSTES = {
@@ -134,10 +142,12 @@ const ESTADISTICAS = [
   { label: 'Valoración', valor: '4.7', tono: 'purple', icono: <IconStar /> },
 ]
 
-export default function Editar({ auth, onNavigate }) {
+export default function Editar({ auth, onNavigate, id }) {
   const yo = USUARIO_EJEMPLO
 
   const guardado = JSON.parse(localStorage.getItem('perfilAegis') || '{}')
+  const camposGuardados = JSON.parse(localStorage.getItem('camposPerfilAegis') || '[]')
+  const ajustesGuardados = JSON.parse(localStorage.getItem('ajustesPerfilAegis') || '{}')
   const [avatar, setAvatar] = useState(guardado.avatar || avatarUrl(yo, 160))
   const [portada, setPortada] = useState(guardado.portada || null)
   const [descripcion, setDescripcion] = useState(guardado.descripcion || '')
@@ -147,13 +157,18 @@ export default function Editar({ auth, onNavigate }) {
   const [borradorPortada, setBorradorPortada] = useState(null)
   const [borradorDesc, setBorradorDesc] = useState('')
 
-  const [seccion, setSeccion] = useState('info')
+  const [seccion, setSeccion] = useState(id || 'info')
 
-  const [campos, setCampos] = useState(CAMPOS_INICIALES)
+  const [campos, setCampos] = useState(
+    CAMPOS_INICIALES.map((campo) => {
+      const previo = camposGuardados.find((item) => item.id === campo.id)
+      return previo ? { ...campo, valor: previo.valor } : campo
+    })
+  )
   const [editando, setEditando] = useState(null)
   const [valorEdit, setValorEdit] = useState('')
 
-  const [ajustes, setAjustes] = useState(AJUSTES_INICIALES)
+  const [ajustes, setAjustes] = useState({ ...AJUSTES_INICIALES, ...ajustesGuardados })
 
   const [toast, setToast] = useState(null)
 
@@ -171,6 +186,10 @@ export default function Editar({ auth, onNavigate }) {
     document.addEventListener('keydown', onKeyDown)
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [modalAbierto])
+
+  useEffect(() => {
+    setSeccion(id || 'info')
+  }, [id])
 
   const abrirModal = () => {
     setBorradorAvatar(avatar)
@@ -225,12 +244,19 @@ export default function Editar({ auth, onNavigate }) {
   }
 
   const guardarCampo = (id) => {
-    setCampos((prev) => prev.map((campo) => (campo.id === id ? { ...campo, valor: valorEdit.trim() || campo.valor } : campo)))
+    const nuevos = campos.map((campo) => (campo.id === id ? { ...campo, valor: valorEdit.trim() || campo.valor } : campo))
+    setCampos(nuevos)
+    const paraGuardar = nuevos.map((campo) => ({ id: campo.id, valor: campo.valor }))
+    localStorage.setItem('camposPerfilAegis', JSON.stringify(paraGuardar))
     setEditando(null)
     setToast('Cambios guardados')
   }
 
-  const alternarAjuste = (id) => setAjustes((prev) => ({ ...prev, [id]: !prev[id] }))
+  const alternarAjuste = (id) => {
+    const nuevos = { ...ajustes, [id]: !ajustes[id] }
+    setAjustes(nuevos)
+    localStorage.setItem('ajustesPerfilAegis', JSON.stringify(nuevos))
+  }
 
   const seccionActual = SECCIONES.find((item) => item.id === seccion)
 
@@ -263,25 +289,28 @@ export default function Editar({ auth, onNavigate }) {
             ← Volver a mi perfil
           </button>
 
-          <section className="editar-hero">
-            {portada && (
-              <div className="editar-hero-portada" style={{ backgroundImage: `url(${portada})` }} />
-            )}
-            <div className="editar-hero-box">
-              <div className="editar-hero-avatar">
-                <img src={avatar} alt="Foto de perfil" />
+          {seccion !== 'compras' && (
+            <section className="editar-hero">
+              <div
+                className={portada ? 'editar-hero-portada con-foto' : 'editar-hero-portada'}
+                style={portada ? { backgroundImage: `url(${portada})` } : undefined}
+              />
+              <div className="editar-hero-box">
+                <div className="editar-hero-avatar">
+                  <img src={avatar} alt="Foto de perfil" />
+                </div>
+                <div className="editar-hero-info">
+                  <p className="editar-hero-hint" onClick={abrirModal}>
+                    Personaliza tu foto de perfil, así es como las personas te verán en la plataforma.
+                  </p>
+                  {descripcion && <p className="editar-hero-desc">{descripcion}</p>}
+                  <button type="button" className="editar-hero-btn" onClick={abrirModal}>
+                    Editar <IconPencil size={15} />
+                  </button>
+                </div>
               </div>
-              <div className="editar-hero-info">
-                <p className="editar-hero-hint" onClick={abrirModal}>
-                  Personaliza tu foto de perfil, así es como las personas te verán en la plataforma.
-                </p>
-                {descripcion && <p className="editar-hero-desc">{descripcion}</p>}
-                <button type="button" className="editar-hero-btn" onClick={abrirModal}>
-                  Editar <IconPencil size={15} />
-                </button>
-              </div>
-            </div>
-          </section>
+            </section>
+          )}
 
           {seccion === 'info' && (
             <section className="editar-section">
@@ -364,6 +393,15 @@ export default function Editar({ auth, onNavigate }) {
                     <span className="editar-stat-label">{stat.label}</span>
                   </div>
                 ))}
+              </div>
+            </section>
+          )}
+
+          {seccion === 'compras' && (
+            <section className="editar-section">
+              <div className="editar-compras-vacio">
+                <h2>Ups, Todavía no has realizado ninguna compra aun.</h2>
+                <img src="/carrito-vacio.png" alt="Carrito vacío" />
               </div>
             </section>
           )}

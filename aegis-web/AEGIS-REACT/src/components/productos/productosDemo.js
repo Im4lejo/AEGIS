@@ -659,13 +659,29 @@ export function buscarVendedor(id) {
 
 export function productosDelVendedor(vendedor) {
   const todos = [...PRODUCTOS_DESTACADOS, ...PRODUCTOS_PROMOCION, ...PRODUCTOS_PERFIL, ...PRODUCTOS_NOVEDADES]
-  return todos.filter((item) => item.vendedor && vendedor && String(item.vendedor.id) === String(vendedor.id))
+  const demo = todos.filter((item) => item.vendedor && vendedor && String(item.vendedor.id) === String(vendedor.id))
+  const mios = productosPublicados().filter((item) => item.vendedor && vendedor && String(item.vendedor.id) === String(vendedor.id))
+  return mios.concat(demo)
 }
 
 
 export function buscarProducto(id) {
   if (id === undefined || id === null || id === '') return PRODUCTOS_DESTACADOS[0]
+  const mio = productosPublicados().find((item) => String(item.id) === String(id))
+  if (mio) return mio
   const todos = [...PRODUCTOS_DESTACADOS, ...PRODUCTOS_PROMOCION, ...PRODUCTOS_PERFIL, ...PRODUCTOS_NOVEDADES]
   const encontrado = todos.find((item) => String(item.id) === String(id))
   return encontrado || null
+}
+
+const CLAVE_PRODUCTOS = 'productosAegis'
+
+export function productosPublicados() {
+  return JSON.parse(localStorage.getItem(CLAVE_PRODUCTOS) || '[]')
+}
+
+export function guardarProductoPublicado(producto) {
+  const lista = productosPublicados()
+  lista.unshift(producto)
+  localStorage.setItem(CLAVE_PRODUCTOS, JSON.stringify(lista))
 }

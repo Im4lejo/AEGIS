@@ -170,6 +170,17 @@
   align-self: start;
 }
 
+.detail-purchase-bar {
+  display: contents;
+}
+
+.detail-heading { order: 1; }
+.detail-price { order: 2; }
+.detail-stock { order: 3; }
+.detail-specs { order: 4; }
+.detail-shipping { order: 5; }
+.detail-actions { order: 6; }
+
 .detail-code {
   margin: 0 0 8px;
   font-size: 13px;
@@ -367,12 +378,12 @@
 }
 
 .detail-btn.primary {
-  background: #315bff;
+  background: linear-gradient(90deg, #a855f7 0%, #d946ef 45%, #ec4899 75%, #f43f5e 100%);
   color: #fff;
 }
 
 .detail-btn.primary:hover {
-  background: #2546cc;
+  background: linear-gradient(90deg, #9333ea 0%, #c026d3 45%, #db2777 75%, #e11d48 100%);
 }
 
 .detail-btn.outline {
@@ -593,9 +604,52 @@
   font-weight: 500;
 }
 
+.detail-comment-form {
+  display: flex;
+  gap: 10px;
+  padding: 16px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.detail-comment-input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+}
+
+.detail-comment-input:focus {
+  border-color: #7c3aed;
+}
+
+.detail-comment-btn {
+  border: none;
+  background: #7c3aed;
+  color: #fff;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.detail-comment-btn:hover {
+  background: #6d28d9;
+}
+
+.detail-comments-empty {
+  font-size: 14px;
+  color: #6b7280;
+  padding: 8px 0;
+}
+
 @media (max-width: 1200px) {
   .detail-top {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .detail-left {
@@ -613,13 +667,140 @@
 }
 
 @media (max-width: 768px) {
+  .product-detail-page {
+    padding: 16px 12px calc(170px + env(safe-area-inset-bottom));
+  }
+
+  .detail-top {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .detail-left,
+  .detail-info {
+    display: contents;
+  }
+
+  .detail-heading {
+    order: 1;
+    padding: 18px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  }
+
+  .detail-title {
+    font-size: 24px;
+    line-height: 1.2;
+  }
+
+  .detail-seller {
+    padding: 12px 0 0;
+    margin-top: 8px;
+  }
+
+  .detail-seller-avatar {
+    width: 40px;
+    height: 40px;
+    border-width: 2px;
+  }
+
+  .detail-seller-name {
+    font-size: 13px;
+  }
+
+  .detail-badge {
+    min-width: 20px;
+    height: 20px;
+    font-size: 10px;
+  }
+
+  .detail-gallery {
+    order: 2;
+  }
+
+  .detail-specs {
+    order: 5;
+  }
+
+  .detail-shipping {
+    order: 6;
+  }
+
+  .detail-purchase-bar {
+    position: fixed;
+    z-index: 900;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    order: 7;
+    padding: 8px 16px calc(12px + env(safe-area-inset-bottom));
+    border-top: 1px solid #e5e7eb;
+    background: #fff;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .detail-purchase-bar .detail-price {
+    order: 0;
+    padding: 2px 0;
+  }
+
+  .detail-purchase-bar .detail-price-now {
+    font-size: 22px;
+  }
+
+  .detail-purchase-bar .detail-stock {
+    order: 1;
+    margin: 0;
+  }
+
+  .detail-purchase-bar .detail-actions {
+    position: static;
+    order: 2;
+    flex-direction: row;
+    gap: 12px;
+    margin: 0;
+    padding: 6px 0 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .detail-left > .detail-section.detail-features-section {
+    order: 8;
+  }
+
+  .detail-left > .detail-section.detail-description-section {
+    order: 9;
+  }
+
+  .detail-left > .detail-section.detail-seller-section {
+    order: 10;
+  }
+
+  .detail-left > .detail-section.detail-comments-section {
+    order: 11;
+  }
+
   .detail-gallery {
     flex-direction: column-reverse;
+    min-width: 0;
   }
 
   .detail-thumbs {
     flex-direction: row;
     justify-content: center;
+  }
+
+  .detail-thumb {
+    width: min(80px, calc((100% - 36px) / 4));
+    height: auto;
+    aspect-ratio: 1;
   }
 
   .detail-main-image {
@@ -631,8 +812,10 @@
     gap: 4px;
   }
 
-  .detail-actions {
-    flex-direction: column;
+  .detail-btn {
+    min-height: 52px;
+    height: auto;
+    font-size: 16px;
   }
 
   .detail-comments-head {

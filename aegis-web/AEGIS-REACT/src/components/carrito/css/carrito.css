@@ -201,7 +201,7 @@
   width: 34px;
   height: 34px;
   border: none;
-  background: #3b82f6;
+  background: linear-gradient(90deg, #a855f7 0%, #d946ef 45%, #ec4899 75%, #f43f5e 100%);
   color: #ffffff;
   border-radius: 8px;
   cursor: pointer;
@@ -209,7 +209,7 @@
 }
 
 .car-item-mas:hover {
-  background: #2563eb;
+  background: linear-gradient(90deg, #9333ea 0%, #c026d3 45%, #db2777 75%, #e11d48 100%);
 }
 
 .car-item-eliminar {
@@ -336,12 +336,12 @@
 
 .car-btn-finalizar {
   border: none;
-  background: #3b82f6;
+  background: linear-gradient(90deg, #a855f7 0%, #d946ef 45%, #ec4899 75%, #f43f5e 100%);
   color: #ffffff;
 }
 
 .car-btn-finalizar:hover {
-  background: #2563eb;
+  background: linear-gradient(90deg, #9333ea 0%, #c026d3 45%, #db2777 75%, #e11d48 100%);
 }
 
 .car-btn-finalizar:disabled {

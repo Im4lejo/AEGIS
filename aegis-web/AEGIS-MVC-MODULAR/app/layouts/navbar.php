@@ -2,7 +2,7 @@
     <div class="nav-left">
         <div class="logo">
             <div class="logo-icon">
-                <i class="fa-solid fa-shield-halved"></i>
+                <img src="<?= asset('Assets/global/aegis-logo.png') ?>" alt="">
             </div>
             <span>AEGIS</span>
         </div>

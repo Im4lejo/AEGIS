@@ -25,7 +25,10 @@
 
 .left-panel{
     width:50%;
-    background:linear-gradient(180deg,#15285F 0%, #172E72 100%);
+    background:
+        linear-gradient(rgba(0,0,0,0.62), rgba(0,0,0,0.62)),
+        url('/auth-mujer.jpg') center/cover no-repeat,
+        #0b2050;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -39,21 +42,25 @@
     text-align:center;
 }
 
-.security-icon{
-    width:50px;
-    height:50px;
-    border-radius:14px;
-    border:1px solid rgba(29,209,161,0.35);
-    background:rgba(29,209,161,0.08);
-    display:flex;
-    align-items:center;
-    justify-content:center;
+.auth-logo-panel{
+    display:block;
+    width:104px;
+    height:auto;
     margin-bottom:26px;
 }
 
-.security-icon i{
-    font-size:22px;
-    color:#1dd1a1;
+.register-page .logo .auth-logo-panel{
+    width:60px;
+    height:auto;
+    margin-bottom:0;
+}
+
+.register-page .logo span{
+    color:#ffffff;
+    font-family:'Orbitron', sans-serif;
+    font-size:20px;
+    font-weight:800;
+    letter-spacing:2px;
 }
 
 .security-wrapper h1{
@@ -145,23 +152,23 @@
     font-size:28px;
     font-weight:800;
     color:#111111;
-    margin-bottom:44px;
+    margin-bottom:24px;
 }
 
 .auth-page .input-group{
-    margin-bottom:28px;
+    margin-bottom:8px;
 }
 
 .auth-page .input-group label{
     display:block;
     font-size:14px;
     color:#555555;
-    margin-bottom:12px;
+    margin-bottom:6px;
 }
 
 .auth-page .input-group input{
     width:100%;
-    height:52px;
+    height:44px;
     border:none;
     outline:none;
     border-radius:15px;
@@ -212,10 +219,10 @@
 
 .login-btn{
     width:100%;
-    height:58px;
+    height:46px;
     border:none;
     border-radius:16px;
-    background:#294292;
+    background:linear-gradient(90deg, #060f1c 0%, #0a1e36 35%, #0d3a66 68%, #1467ad 100%);
     color:white;
     font-size:14px;
     font-weight:700;
@@ -225,13 +232,13 @@
     gap:10px;
     cursor:pointer;
     transition:0.2s;
-    margin-top:36px;
-    box-shadow:0 3px 0 #16255A;
+    margin-top:18px;
+    box-shadow:none;
     text-decoration:none;
 }
 
 .login-btn:hover{
-    background:#22397F;
+    background:linear-gradient(90deg, #040a14 0%, #08182b 35%, #0b2f54 68%, #10558c 100%);
 }
 
 .login-btn svg{
@@ -278,10 +285,10 @@
     margin:0 8px;
 }
 
-.subtitle{
+.auth-page .subtitle{
     color:#A2A2A2;
     font-size:14px;
-    margin-bottom:28px;
+    margin-bottom:10px;
 }
 
 .form-container textarea{
@@ -308,16 +315,16 @@
 .login-page .back-home{
     font-size:13px;
     color:#6b7280;
-    margin-bottom:36px;
+    margin-bottom:24px;
 }
 
 .login-page .form-container h2{
     color:#111827;
-    margin-bottom:36px;
+    margin-bottom:20px;
 }
 
 .login-page .input-group input{
-    height:46px;
+    height:44px;
     border-radius:10px;
     border:1.5px solid #e5e7eb;
     background:#ffffff;
@@ -328,11 +335,11 @@
 }
 
 .login-page .login-btn{
-    height:50px;
+    height:46px;
     border-radius:10px;
     font-size:15px;
     box-shadow:none;
-    margin-top:30px;
+    margin-top:18px;
 }
 
 .login-page .register-hint{
@@ -343,7 +350,11 @@
 }
 
 .login-page .register-hint a{
-    color:#294292;
+    background:linear-gradient(90deg, #060f1c 0%, #0a1e36 35%, #0d3a66 68%, #1467ad 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:#0d3a66;
+    -webkit-text-fill-color:transparent;
     font-weight:600;
     text-decoration:none;
 }
@@ -357,7 +368,7 @@
     font-weight:500;
     border-radius:10px;
     padding:11px 14px;
-    margin-bottom:18px;
+    margin-bottom:12px;
 }
 
 .auth-page .auth-alert--error{
@@ -437,4 +448,81 @@
 .register-page .feature-item span:last-child{
     color:rgba(255,255,255,0.85);
     font-size:13px;
+}
+
+.register-page .steps{
+    margin-bottom:10px;
+}
+
+@media (max-width: 900px){
+    .left-panel{
+        padding:36px 24px;
+    }
+
+    .right-panel{
+        padding:32px 24px;
+    }
+
+    .form-container{
+        width:100%;
+        max-width:420px;
+    }
+}
+
+@media (max-width: 680px){
+    .auth-page{
+        min-height:100vh;
+    }
+
+    .auth-page .left-panel{
+        display:none;
+    }
+
+    .auth-page .right-panel{
+        width:100%;
+        min-height:100vh;
+        padding:28px 20px;
+    }
+
+    .auth-page .form-container{
+        width:100%;
+        max-width:420px;
+    }
+
+    .back-home{
+        margin-bottom:32px;
+    }
+
+    .form-container h2{
+        font-size:25px;
+    }
+
+    .line{
+        width:min(95px, 20vw);
+    }
+}
+
+.register-page .form-container h2{
+    font-size:24px;
+    margin-bottom:10px;
+}
+
+.register-page .input-group{
+    margin-bottom:8px;
+}
+
+.register-page .input-group label{
+    margin-bottom:6px;
+}
+
+.register-page .input-group input{
+    height:44px;
+    border-radius:10px;
+}
+
+.register-page .login-btn{
+    height:46px;
+    border-radius:10px;
+    font-size:15px;
+    margin-top:16px;
 }

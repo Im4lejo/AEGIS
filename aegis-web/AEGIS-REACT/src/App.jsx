@@ -35,6 +35,7 @@ const PAGES = {
   '/foro': Foro,
   '/publicacion': Publicacion,
   '/productos': ProductosIndex,
+  '/novedades': ProductosIndex,
   '/productos/crear': PublicarProducto,
   '/productos/detalle': DetalleProducto,
   '/productos/mis-productos': MisProductos,
@@ -113,6 +114,7 @@ function App() {
         navegacion: navegacion,
       }}
       id={params.id}
+      vista={path}
     />
   )
 }
