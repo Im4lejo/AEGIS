@@ -1,7 +1,7 @@
 const users =
 {
     id: 1,
-    name: "Luis Alejandro",
+    name: "Luis Alejandro Montenegro Ojeda",
     price: 5000000,
     profile_img: require("../user2.png"),
     profile_background: require("../background.png"),
