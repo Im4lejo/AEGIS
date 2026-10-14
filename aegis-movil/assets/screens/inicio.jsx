@@ -3,14 +3,20 @@ import { ScrollView } from "react-native-web";
 import { View, Text, StyleSheet, Image } from "react-native";
 import ProductosHor from "../components/Start/ProductList";
 import ProductosVer from "../components/Start/ProductList2";
+import Categorias from "../components/Start/categories";
+
 const styles = StyleSheet.create({
     primaryText: {
-        margin:15,
+        margin: 15,
         fontSize: 32,
-        borderStyle:"solid",
+        borderStyle: "solid",
         borderBottomColor: "#b119cf",
         borderBottomWidth: 4,
-        width:"70%"
+        width: "70%"
+    },
+    categoryContainer: {
+        display: "flex",
+        flexDirection:"row"
     }
 })
 export default function index() {
@@ -19,17 +25,19 @@ export default function index() {
         <SafeAreaView style={{ flex: 1 }}>
 
             <ScrollView>
+                <Categorias/>
                 <Text style={styles.primaryText}>Página de productos</Text>
                 <Image
                     source={require("../images/blackfriday.jpg")}
-                    style={{ width: "100%", height: 180, resizeMode: "cover", marginVertical:15 }}
+                    style={{ width: "100%", height: 180, resizeMode: "cover", marginVertical: 15 }}
                 />
                 {/*npm ci*/}
                 <ProductosHor />
+
                 <Image
                     source={require("../images/celulares-banner.png")}
-                    
-                    style={{ width: "100%", height: 260, resizeMode: "cover"}}
+
+                    style={{ width: "100%", height: 260, resizeMode: "cover" }}
                 />
                 <ProductosVer />
 
