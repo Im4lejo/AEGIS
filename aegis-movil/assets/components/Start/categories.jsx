@@ -9,7 +9,7 @@ export default function Categorias() {
     }, []);
     const uploadCategories = async () => {
         const res = await getCategories();
-        setCategories(res.data.data);
+        setCategories(res.data.data) || [];
     };
     const renderCard = ({ item }) => (
         

@@ -31,9 +31,12 @@ export default function Productos() {
             padding: 5
         },
         titleText: {
-            margin: 10,
-            fontSize: 24,
-            fontWeight: "semibold"
+            margin: 15,
+            fontSize: 28,
+            borderStyle: "solid",
+            borderBottomColor: "#1986cf",
+            borderBottomWidth: 4,
+            width: "70%"
         },
     });
     return (
