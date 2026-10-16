@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image, FlatList } from "react-native";
+import { View, Text, StyleSheet, Image, FlatList, Pressable } from "react-native";
+import { useRouter } from "expo-router";
 import { getProducts } from "../../../services/api";
-import img from "../../producto1.png"
+import { resolveProductImageUri } from "./productImage";
+import img from "../../producto1.png";
+
 export default function Productos() {
+    const router = useRouter();
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -14,17 +18,27 @@ export default function Productos() {
             setProducts(res.data.data) || [];
         };
 
-    const renderCard = ({ item }) => (
-        <View style={styles.productCard}>
-            <Image
-                source={img}
-                style={{ width: 100, height: 100, alignSelf: "center", marginBottom: 15 }}
-            />
-            <Text style={styles.descripctionText}>{item.descripcion}</Text>
-            <Text style={styles.priceText}>$ {item.precio}</Text>
-            <Text style={styles.usageText}>{item.estado_producto}</Text>
-        </View>
-    );
+    const renderCard = ({ item }) => {
+        const imageUri = resolveProductImageUri(item.imagen_principal);
+
+        return (
+            <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`Ver producto ${item.titulo || item.descripcion}`}
+                onPress={() => router.push(`/(tabs)/product/${item.id}`)}
+                style={styles.productCard}
+            >
+                <Image
+                    source={imageUri ? { uri: imageUri } : img}
+                    style={{ width: 100, height: 100, alignSelf: "center", marginBottom: 15 }}
+                    resizeMode="contain"
+                />
+                <Text style={styles.descripctionText}>{item.titulo || item.descripcion}</Text>
+                <Text style={styles.priceText}>$ {item.precio}</Text>
+                <Text style={styles.usageText}>{item.estado_producto}</Text>
+            </Pressable>
+        );
+    };
 
     const styles = StyleSheet.create({
         container: {
@@ -70,7 +84,7 @@ export default function Productos() {
             <FlatList
                 data={products.slice(0, 10)}
                 renderItem={renderCard}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => String(item.id)}
                 horizontal
             />
         </View>

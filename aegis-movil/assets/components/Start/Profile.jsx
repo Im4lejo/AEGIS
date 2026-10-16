@@ -1,8 +1,11 @@
-import { Image, StyleSheet, View, ImageBackground, ScrollView, Text } from "react-native";
+import { Image, StyleSheet, View, ImageBackground, ScrollView, Text, Pressable } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import user from "../../DATA/users"
-
+import { useState } from "react";
+import ProfileProducts from "./ProfileProducts";
 export default function Profile() {
+    const [selectedSection, setSelectedSection] = useState("publicaciones");
+
     return (
         <ScrollView style={styles.scrollView}>
             <View style={styles.container}>
@@ -58,11 +61,58 @@ export default function Profile() {
                     <Text>30/04/2026</Text>
 
                 </View>
+                <View style={styles.sectionTabs}>
+                    <Pressable
+                        accessibilityRole="tab"
+                        accessibilityState={{ selected: selectedSection === "publicaciones" }}
+                        onPress={() => setSelectedSection("publicaciones")}
+                        style={[
+                            styles.sectionTab,
+                            selectedSection === "publicaciones" && styles.selectedSectionTab,
+                        ]}
+                    >
+                        <Text
+                            style={[
+                                styles.sectionTabText,
+                                selectedSection === "publicaciones" && styles.selectedSectionTabText,
+                            ]}
+                        >
+                            Publicaciones
+                        </Text>
+                    </Pressable>
+                    <Pressable
+                        accessibilityRole="tab"
+                        accessibilityState={{ selected: selectedSection === "productos" }}
+                        onPress={() => setSelectedSection("productos")}
+                        style={[
+                            styles.sectionTab,
+                            selectedSection === "productos" && styles.selectedSectionTab,
+                        ]}
+                    >
+                        <Text
+                            style={[
+                                styles.sectionTabText,
+                                selectedSection === "productos" && styles.selectedSectionTabText,
+                            ]}
+                        >
+                            Productos
+                        </Text>
+                    </Pressable>
+                </View>
+                {selectedSection === "publicaciones" ? (
+                    <Publicaciones />
+                ) : (
+                    <ProfileProducts />
+                )}
 
 
             </View>
         </ScrollView>
     )
+}
+
+function Publicaciones() {
+    return <Text style={styles.sectionPlaceholder}>Sin publicaciones aún</Text>;
 }
 
 const styles = StyleSheet.create({
@@ -203,5 +253,33 @@ const styles = StyleSheet.create({
         color: "#c4c4c4",
         fontSize: 10,
         
+    },
+    sectionTabs: {
+        flexDirection: "row",
+        marginTop: 18,
+        borderBottomWidth: 1,
+        borderBottomColor: "#c9c9c9",
+        backgroundColor: "#f3f3f3",
+    },
+    sectionTab: {
+        flex: 1,
+        alignItems: "center",
+        paddingVertical: 14,
+        borderBottomWidth: 3,
+        borderBottomColor: "transparent",
+    },
+    selectedSectionTab: {
+        borderBottomColor: "#317df8",
+    },
+    sectionTabText: {
+        color: "#666666",
+        fontWeight: "600",
+    },
+    selectedSectionTabText: {
+        color: "#317df8",
+    },
+    sectionPlaceholder: {
+        padding: 16,
+        color: "#666666",
     },
 })

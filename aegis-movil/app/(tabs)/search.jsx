@@ -1,5 +1,5 @@
-import { View } from "react-native";
+import SearchCatalog from "../../assets/components/Start/SearchCatalog";
 
 export default function SearchTab() {
-    return <View style={{ flex: 1, backgroundColor: "#f5f7fb" }} />;
+    return <SearchCatalog />;
 }

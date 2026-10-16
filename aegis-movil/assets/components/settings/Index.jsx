@@ -1,4 +1,6 @@
+import { Alert } from "react-native";
 import { useRouter } from "expo-router";
+import { useAuth } from "../../context/AuthContext";
 import {
     SettingCard,
     SettingLinkRow,
@@ -7,7 +9,21 @@ import {
 
 export default function Index() {
     const router = useRouter();
+    const { logout } = useAuth();
     const openSettings = (path) => router.push(path);
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+            router.replace("/auth");
+        } catch (error) {
+            console.error("Error cerrando la sesión:", error);
+            Alert.alert(
+                "No se pudo cerrar la sesión",
+                "Inténtalo de nuevo."
+            );
+        }
+    };
 
     return (
         <SettingsScreen title="Ajustes">
@@ -41,6 +57,11 @@ export default function Index() {
                     label="Mis compras"
                     description="Revisa tu historial de compras"
                     onPress={() => openSettings("/(tabs)/settings/my-purchases")}
+                />
+                <SettingLinkRow
+                    label="Cerrar sesión"
+                    description="Salir de tu cuenta"
+                    onPress={handleLogout}
                 />
             </SettingCard>
         </SettingsScreen>

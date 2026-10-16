@@ -1,15 +1,79 @@
-import { Image, Pressable, StyleSheet, Text, View, TextInput } from "react-native";
+import { Alert, Image, Pressable, StyleSheet, Text, View, TextInput } from "react-native";
 import aegisLogo from "../../../assets/icon.png";
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { loginUser } from "../../../services/api";
 import { useRouter } from "expo-router";
 import { useAuth } from "../../context/AuthContext";
+import { setAuthToken } from "../../context/authTokenStorage";
 import { useState } from "react";
 export default function Authenticator() {
     const router = useRouter();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const { isLogged: loggedIn, setLog: updateLoginState } = useAuth();
+   
+    const { setLog } = useAuth();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [invalidCredentials, setInvalidCredentials] = useState(false);
+
+    const handleLogin = async () => {
+        setInvalidCredentials(false);
+
+        if (!email.trim() || !password) {
+            Alert.alert(
+                "Campos incompletos",
+                "Ingresa tu correo y contraseña."
+            );
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const response = await loginUser({
+                email: email.trim(),
+                password: password,
+            });
+
+            const { token, usuario } = response.data;
+
+            await setAuthToken(token);
+
+            setLog(true);
+            router.replace("/(tabs)");
+
+            setLog(true);
+
+            Alert.alert(
+                "¡Bienvenido a AEGIS!",
+                `Hola, ${usuario.nombre}.`,
+                [
+                    {
+                        text: "Continuar",
+                        onPress: () => router.replace("/(tabs)"),
+                    },
+                ]
+            );
+        } catch (error) {
+            if (error.response?.status === 422) {
+                setInvalidCredentials(true);
+            } else if (error.response?.status === 403) {
+                Alert.alert(
+                    "Cuenta no disponible",
+                    error.response.data.message
+                );
+            } else {
+                Alert.alert(
+                    "Error",
+                    error.response?.data?.message ||
+                    "No se pudo conectar con el servidor."
+                );
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <View style={styles.container}>
 
@@ -38,7 +102,10 @@ export default function Authenticator() {
                             <Text style={styles.loginText}>Correo</Text>
                             <TextInput
                                 value={email}
-                                onChangeText={(textValue) => setEmail(textValue)} 
+                                onChangeText={(value) => {
+                                    setEmail(value);
+                                    setInvalidCredentials(false);
+                                }}
                                 style={styles.input}
                                 placeholder="Correo"
                                 placeholderTextColor="#dfdfdf"
@@ -50,7 +117,10 @@ export default function Authenticator() {
                             <Text style={styles.loginText}>Contraseña</Text>
                             <TextInput
                                 value={password}
-                                onChangeText={(textValue) => setPassword(textValue)} 
+                                onChangeText={(value) => {
+                                    setPassword(value);
+                                    setInvalidCredentials(false);
+                                }}
                                 style={styles.input}
                                 placeholder="Contraseña"
                                 placeholderTextColor="#dfdfdf"
@@ -60,23 +130,25 @@ export default function Authenticator() {
                             //autoCapitalize="none"  // Evita mayúsculas automáticas si no se desean
                             //autoCorrect={false} 
                             />
+                            {invalidCredentials ? (
+                                <Text
+                                    accessibilityRole="alert"
+                                    style={styles.invalidCredentialsText}
+                                >
+                                    Correo o contraseña inválidos o incorrectos
+                                </Text>
+                            ) : null}
                             <Pressable
-                                onPress={() => {
-                                    const isValidCredentials =
-                                        email.trim().length > 0 &&
-                                        password.length >= 10 &&
-                                        password.length <= 19;
-
-                                    if (isValidCredentials) {
-                                        updateLoginState(true);
-                                        router.replace("/(tabs)");
-                                    } else {
-                                        updateLoginState(false);
-                                    }
-                                }}
-                                style={({ pressed }) => [styles.login, pressed && styles.pressed]}
+                                onPress={handleLogin}
+                                disabled={loading}
+                                style={({ pressed }) => [
+                                    styles.login,
+                                    pressed && styles.pressed,
+                                ]}
                             >
-                                <Text style={styles.loginButtonText}>Iniciar sesión</Text>
+                                <Text style={styles.loginButtonText}>
+                                    {loading ? "Iniciando sesión..." : "Iniciar sesión"}
+                                </Text>
                             </Pressable>
 
                             <View style={styles.divider}>
@@ -209,6 +281,13 @@ const styles = StyleSheet.create({
         color: '#e2e2e2',
         fontSize: 16,
         fontWeight: '800',
+    },
+    invalidCredentialsText: {
+        marginTop: 4,
+        color: "#ffb4b4",
+        fontSize: 12,
+        fontWeight: "600",
+        textAlign: "center",
     },
     loginButtonText: {
         color: '#2e22ce',

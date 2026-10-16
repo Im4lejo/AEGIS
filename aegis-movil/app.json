@@ -35,7 +35,8 @@
           "darkLogo": "./assets/bootsplash/logo-dark.png"
         }
       ],
-      "expo-router"
+      "expo-router",
+      "expo-secure-store"
     ]
   }
 }

@@ -1,19 +1,27 @@
-import { View, Text, StyleSheet, Image, FlatList } from "react-native";
-import products from "../../DATA/products"
+import { View, Text, StyleSheet, Image, FlatList, Pressable } from "react-native";
+import { useRouter } from "expo-router";
+import products from "../../DATA/products";
+
 export default function Productos() {
+    const router = useRouter();
+
     const renderCard = ({ item }) => (
-        <View style={styles.productCard}>
+        <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`Ver producto ${item.name}`}
+            onPress={() => router.push(`/(tabs)/product/${item.id}`)}
+            style={styles.productCard}
+        >
             <Image
                 source={item.img}
                 style={{ width: 150, height: 150, alignSelf: "center", marginBottom: 15 }}
+                resizeMode="contain"
             />
-            <Text >{item.description}</Text>
-            <br />
-            <Text >$ {item.price}</Text>
-           
-            <Text >{item.usageTime}</Text>
-        </View>
-    )
+            <Text>{item.name}</Text>
+            <Text>$ {item.price}</Text>
+            <Text>{item.usageTime}</Text>
+        </Pressable>
+    );
     const styles = StyleSheet.create({
         container: {
             display: "flex",
@@ -45,7 +53,7 @@ export default function Productos() {
             <FlatList
                 data={products}
                 renderItem={renderCard}
-                keyExtractor={item => item.id}
+                keyExtractor={item => String(item.id)}
                 numColumns={2}
             />
 

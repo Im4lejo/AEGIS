@@ -1,22 +1,48 @@
+
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: "http://aegis/api"
+    baseURL: "http://aegis/api",
+    headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+    },
 });
-export const getCategories = () => {
-    return API.get("/categorias");
+
+// Consultas existentes
+export const getCategories = () => API.get("/categorias");
+
+export const getProducts = (params) => API.get("/productos", { params });
+
+export const getUniqueProduct = (id) => {
+    return API.get(`/productos/${id}`);
 };
-export const getProducts = () => {
-    return API.get("/productos");
+
+export const getForum = () => API.get("/foro");
+
+export const getUserProfile = (usuario) => {
+    return API.get(`/perfil/${usuario}`);
 };
-export const getUniqueProduct = (params) => {
-    return API.get(`/productos/${ params }`, {
-        params: params
-    });
+
+// Autenticación
+export const registerUser = (userData) => {
+    return API.post("/register", userData);
 };
-export const getForum = () => {
-    return API.get("/categorias");
+
+export const loginUser = (credentials) => {
+    return API.post("/login", credentials);
 };
-export const getUserProfile = () => {
-    return API.get("/categorias");
+
+export const logoutUser = (token) => {
+    return API.post(
+        "/logout",
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
 };
+
+export default API;

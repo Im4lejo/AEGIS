@@ -1,3 +1,4 @@
+
 import { Tabs, useRouter } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -6,7 +7,7 @@ import { useAuth } from "../../assets/context/AuthContext";
 
 export default function TabLayout() {
     const router = useRouter();
-    const { isLogged } = useAuth();
+    const { isLogged, isLoading } = useAuth();
     const tabLabels = {
         index: "Inicio",
         settings: "Ajustes",
@@ -16,6 +17,11 @@ export default function TabLayout() {
     };
 
     const redirectUnauthenticated = (event) => {
+        if (isLoading) {
+            event.preventDefault();
+            return;
+        }
+
         if (!isLogged) {
             event.preventDefault();
             router.replace("/auth");
@@ -75,6 +81,14 @@ export default function TabLayout() {
                 name="forum"
                 options={{ title: "Foro" }}
                 listeners={{ tabPress: redirectUnauthenticated }}
+            />
+            <Tabs.Screen
+                name="product"
+                options={{ href: null }}
+            />
+            <Tabs.Screen
+                name="search-results"
+                options={{ href: null }}
             />
         </Tabs>
     );
