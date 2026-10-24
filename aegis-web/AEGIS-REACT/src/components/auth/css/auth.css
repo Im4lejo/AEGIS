@@ -131,6 +131,10 @@
     align-items:center;
 }
 
+.auth-mobile-brand{
+    display:none;
+}
+
 .form-container{
     width:420px;
 }
@@ -481,7 +485,31 @@
     .auth-page .right-panel{
         width:100%;
         min-height:100vh;
-        padding:28px 20px;
+        min-height:100dvh;
+        flex-direction:column;
+        justify-content:flex-start;
+        align-items:center;
+        padding:0 20px 28px;
+    }
+
+    .auth-page .auth-mobile-brand{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        flex:0 0 auto;
+        align-self:center;
+        width:calc(100% + 40px);
+        height:266px;
+        margin:0 -20px 48px;
+        border-radius:0;
+        background:linear-gradient(90deg, #060f1c 0%, #0a1e36 35%, #0d3a66 68%, #1467ad 100%);
+    }
+
+    .auth-page .auth-mobile-brand .auth-logo-panel{
+        width:156px;
+        height:156px;
+        margin:0;
+        object-fit:contain;
     }
 
     .auth-page .form-container{

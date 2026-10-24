@@ -46,6 +46,9 @@ export default function Login({ error, success, onNavigate }) {
             </section>
 
             <section className="right-panel">
+                <div className="auth-mobile-brand" aria-label="AEGIS">
+                    <img src="/aegis-logo.png" alt="" className="auth-logo-panel" />
+                </div>
                 <div className="form-container">
                     <a href={route('/home')} className="back-home">Back to Home</a>
                     <h2>Bienvenido de nuevo</h2>

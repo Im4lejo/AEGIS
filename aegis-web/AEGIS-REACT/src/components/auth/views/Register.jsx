@@ -59,6 +59,9 @@ export default function Register({ error, success, onNavigate }) {
             </section>
 
             <section className="right-panel">
+                <div className="auth-mobile-brand" aria-label="AEGIS">
+                    <img src="/aegis-logo.png" alt="" className="auth-logo-panel" />
+                </div>
                 <div className="form-container">
                     <div className="steps">
                         <a href={route('/login')} className="back-arrow" aria-label="Volver al inicio de sesión">←</a>
