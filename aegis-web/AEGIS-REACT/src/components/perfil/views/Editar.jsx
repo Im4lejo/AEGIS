@@ -284,7 +284,7 @@ export default function Editar({ auth, onNavigate, id }) {
           </nav>
         </aside>
 
-        <section className="editar-main">
+        <section className={seccion === 'compras' ? 'editar-main editar-main-corto' : 'editar-main'}>
           <button type="button" className="editar-back" onClick={() => onNavigate && onNavigate('/perfil')}>
             ← Volver a mi perfil
           </button>

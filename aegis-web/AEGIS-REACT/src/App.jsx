@@ -1,6 +1,6 @@
 import './App.css'
-import { useEffect, useState } from 'react'
-import { route } from './components/shared/presentation'
+import { useState } from 'react'
+import { HashRouter, Routes, Route, useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import Home from './components/home/views/Home'
 import Foro from './components/foro/views/Foro'
 import Publicacion from './components/foro/views/Publicacion'
@@ -29,93 +29,71 @@ const DEFAULT_AUTH = {
   },
 }
 
-const PAGES = {
-  '/': Home,
-  '/home': Home,
-  '/foro': Foro,
-  '/publicacion': Publicacion,
-  '/productos': ProductosIndex,
-  '/novedades': ProductosIndex,
-  '/productos/crear': PublicarProducto,
-  '/productos/detalle': DetalleProducto,
-  '/productos/mis-productos': MisProductos,
-  '/perfil': Perfil,
-  '/perfil/editar': EditarPerfil,
-  '/vendedor': Vendedor,
-  '/puntos-fisicos': PuntosFisicos,
-  '/mensajes': Mensajes,
-  '/configurar-encuentro': Encuentros,
-  '/admin': Admin,
-  '/login': Login,
-  '/register': Register,
-}
-
-const getHashPath = () => {
-  const hash = window.location.hash.substring(1)
-  return hash.split('?')[0] || '/'
-}
-
-const getHashParams = () => {
-  const hash = window.location.hash.substring(1)
-  const queryIndex = hash.indexOf('?')
-  const params = {}
-  if (queryIndex === -1) return params
-
-  const consulta = hash.substring(queryIndex + 1)
-  const partes = consulta.split('&')
-  for (let i = 0; i < partes.length; i++) {
-    const separador = partes[i].indexOf('=')
-    if (separador !== -1) {
-      const clave = decodeURIComponent(partes[i].substring(0, separador))
-      const valor = decodeURIComponent(partes[i].substring(separador + 1))
-      params[clave] = valor
-    }
-  }
-  return params
-}
-
-function App() {
-  const [path, setPath] = useState(getHashPath())
-  const [params, setParams] = useState(getHashParams())
+function Vista({ Componente }) {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const [searchParams] = useSearchParams()
   const [navegacion, setNavegacion] = useState(0)
 
-  useEffect(() => {
-    const onHashChange = () => {
-      setPath(getHashPath())
-      setParams(getHashParams())
-    }
-    window.addEventListener('hashchange', onHashChange)
-    return () => window.removeEventListener('hashchange', onHashChange)
-  }, [])
-
-  const navigate = (to) => {
-    const target = route(to)
-    if (window.location.hash === target) {
-      setPath(getHashPath())
-      setParams(getHashParams())
+  const onNavigate = (to, state) => {
+    const actual = location.pathname + location.search
+    if (to === actual) {
       setNavegacion((n) => n + 1)
     } else {
-      window.location.hash = target
+      navigate(to, state ? { state } : undefined)
     }
     window.scrollTo(0, 0)
   }
 
-  const Page = PAGES[path] || Plantilla
+  const id = searchParams.get('id') || undefined
+
+  const filtros = {
+    busqueda: searchParams.get('buscar') || '',
+    categoria: searchParams.get('categoria') || '',
+    filtro: searchParams.get('filtro') || '',
+    navegacion: navegacion,
+  }
+
+  const origen = searchParams.get('origen') || location.pathname || '/'
 
   return (
-    <Page
+    <Componente
       auth={DEFAULT_AUTH}
-      onNavigate={navigate}
-      origen={params.origen || path || '/'}
-      filtros={{
-        busqueda: params.buscar || '',
-        categoria: params.categoria || '',
-        filtro: params.filtro || '',
-        navegacion: navegacion,
-      }}
-      id={params.id}
-      vista={path}
+      onNavigate={onNavigate}
+      origen={origen}
+      filtros={filtros}
+      id={id}
+      vista={location.pathname}
+      message={location.state && location.state.message}
     />
+  )
+}
+
+function App() {
+  return (
+    <HashRouter>
+      <Routes>
+        <Route path="/" element={<Vista Componente={Home} />} />
+        <Route path="/home" element={<Vista Componente={Home} />} />
+        <Route path="/foro" element={<Vista Componente={Foro} />} />
+        <Route path="/publicacion" element={<Vista Componente={Publicacion} />} />
+        <Route path="/productos" element={<Vista Componente={ProductosIndex} />} />
+        <Route path="/novedades" element={<Vista Componente={ProductosIndex} />} />
+        <Route path="/productos/crear" element={<Vista Componente={PublicarProducto} />} />
+        <Route path="/productos/detalle" element={<Vista Componente={DetalleProducto} />} />
+        <Route path="/productos/mis-productos" element={<Vista Componente={MisProductos} />} />
+        <Route path="/perfil" element={<Vista Componente={Perfil} />} />
+        <Route path="/perfil/editar" element={<Vista Componente={EditarPerfil} />} />
+        <Route path="/vendedor" element={<Vista Componente={Vendedor} />} />
+        <Route path="/puntos-fisicos" element={<Vista Componente={PuntosFisicos} />} />
+        <Route path="/mensajes" element={<Vista Componente={Mensajes} />} />
+        <Route path="/configurar-encuentro" element={<Vista Componente={Encuentros} />} />
+        <Route path="/admin" element={<Vista Componente={Admin} />} />
+        <Route path="/login" element={<Vista Componente={Login} />} />
+        <Route path="/register" element={<Vista Componente={Register} />} />
+        <Route path="*" element={<Vista Componente={Plantilla} />} />
+      </Routes>
+    </HashRouter>
   )
 }
 

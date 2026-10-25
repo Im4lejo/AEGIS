@@ -1,9 +1,9 @@
 body .main-header {
-  background: linear-gradient(90deg, #060f1c 0%, #0a1e36 35%, #0d3a66 68%, #1467ad 100%);
+  background: #0b2c4e;
 }
 
 body .main-footer {
-  background: linear-gradient(90deg, #060f1c 0%, #0a1e36 35%, #0d3a66 68%, #1467ad 100%);
+  background: #0b2c4e;
 }
 
 .profile-menu-user {

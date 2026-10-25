@@ -74,6 +74,10 @@
   min-height: 754px;
 }
 
+.editar-main-corto {
+  min-height: 0;
+}
+
 .editar-back {
   align-self: flex-start;
   padding: 7px 14px;
@@ -605,22 +609,24 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 34px;
-  padding: 70px 20px;
+  gap: 16px;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 30px 20px;
   text-align: center;
 }
 
 .editar-compras-vacio h2 {
   margin: 0;
-  max-width: 440px;
-  font-size: 24px;
+  max-width: 340px;
+  font-size: 17px;
   font-weight: 600;
   line-height: 1.5;
   color: #55596b;
 }
 
 .editar-compras-vacio img {
-  width: 320px;
+  width: 170px;
   max-width: 100%;
   height: auto;
 }
