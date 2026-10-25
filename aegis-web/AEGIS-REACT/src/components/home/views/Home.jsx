@@ -107,7 +107,15 @@ const MAS_PRODUCTOS = IDS_MAS_PRODUCTOS.map((id) => PRODUCTOS_PROMOCION.find((pr
 export default function Home({ productos = [], auth, message, onNavigate }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [categoryOpen, setCategoryOpen] = useState(false)
+  const [mensajeEmergente, setMensajeEmergente] = useState('')
   const categoryRef = useRef(null)
+
+  useEffect(() => {
+    if (!message) return
+    setMensajeEmergente(message)
+    const timeout = setTimeout(() => setMensajeEmergente(''), 5000)
+    return () => clearTimeout(timeout)
+  }, [message])
 
   useEffect(() => {
     if (!categoryOpen) return
@@ -186,7 +194,12 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
       </section>
 
       <main className="home-container">
-        {message && <div className="auth-alert auth-alert--success">{message}</div>}
+        {mensajeEmergente && (
+          <div className="home-toast" role="alert">
+            <i className="fa-solid fa-circle-check" aria-hidden="true" />
+            <span>{mensajeEmergente}</span>
+          </div>
+        )}
 
         <div className="main-section-header">
           <h2>Productos Destacados</h2>

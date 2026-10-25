@@ -23,7 +23,7 @@ textarea {
 }
 
 .main-header {
-  background-color: #0b2050;
+  background-color: #0b2c4e;
   color: white;
   padding: 12px 24px;
 }
@@ -219,7 +219,7 @@ textarea {
 }
 
 .main-footer {
-  background-color: #0b2050;
+  background-color: #0b2c4e;
   color: #d1d5db;
   padding: 36px 24px 16px;
   margin-top: 40px;
@@ -687,7 +687,7 @@ textarea {
         margin: calc(-1 * (env(safe-area-inset-top) + 12px)) -20px 0;
         padding: calc(env(safe-area-inset-top) + 12px) 24px 14px;
         border-radius: 0;
-        background: linear-gradient(90deg, #060f1c 0%, #0a1e36 35%, #0d3a66 68%, #1467ad 100%);
+        background: #0b2c4e;
     }
 
     .header-mobile-topbar {
@@ -800,7 +800,7 @@ textarea {
         margin: 0 -20px 12px;
         padding: 4px 32px;
         border-radius: 0 0 16px 16px;
-        background: linear-gradient(90deg, #060f1c 0%, #0a1e36 35%, #0d3a66 68%, #1467ad 100%);
+        background: #0b2c4e;
         box-sizing: border-box;
     }
 
@@ -894,12 +894,10 @@ textarea {
     .header-mobile-menu .header-mobile-links a,
     .header-mobile-menu .header-mobile-links button,
     .header-mobile-menu > .header-mobile-logout {
-        font-family: 'Orbitron', sans-serif;
-        background-image: linear-gradient(90deg, #060f1c 0%, #0a1e36 35%, #0d3a66 68%, #1467ad 100%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        color: #0d3a66;
-        -webkit-text-fill-color: transparent;
+        font-family: inherit;
+        background-image: none;
+        color: #0b2c4e;
+        -webkit-text-fill-color: #0b2c4e;
     }
 
     .header-mobile-menu .header-nav a,
@@ -960,8 +958,10 @@ textarea {
         grid-column: 1 / -1;
         grid-row: 2;
         order: 1;
-        width: 100%;
+        width: calc(100% - 24px);
+        max-width: 560px;
         margin: 0;
+        justify-self: center;
     }
 
     .header-user-actions {

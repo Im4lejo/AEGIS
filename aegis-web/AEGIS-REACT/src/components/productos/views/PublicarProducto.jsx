@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { guardarProductoPublicado } from '../productosDemo'
+import { formatCurrency } from '../../shared/presentation'
 import '../css/publicarProducto.css'
 
 
@@ -20,7 +21,6 @@ export default function PublicarProducto({ auth, onNavigate }) {
     const [fotos, setFotos] = useState(['', '', '', ''])
     const [fotosMoviles, setFotosMoviles] = useState([])
     const [mensaje, setMensaje] = useState(null)
-    const [publicado, setPublicado] = useState(false)
 
 
     const cambiarDato = (campo, valor) => {
@@ -82,10 +82,12 @@ export default function PublicarProducto({ auth, onNavigate }) {
         if (onNavigate) onNavigate('/productos')
     }
 
+    const soloNumeros = (texto) => Number(texto.split('').filter((letra) => '0123456789'.indexOf(letra) !== -1).join(''))
+
     const publicar = (event) => {
         event.preventDefault()
         const titulo = datos.titulo.trim()
-        const precio = Number(datos.precio.split('').filter((letra) => '0123456789'.indexOf(letra) !== -1).join(''))
+        const precio = soloNumeros(datos.precio)
         if (!titulo || !precio || !fotoPrincipal) {
             setMensaje({ tipo: 'error', texto: 'Completa el título, el precio y añade la foto principal del producto.' })
             return
@@ -109,22 +111,20 @@ export default function PublicarProducto({ auth, onNavigate }) {
         }
         guardarProductoPublicado(nuevo)
         setMensaje(null)
-        setPublicado(true)
+        if (onNavigate) {
+            onNavigate('/', { message: '¡El producto se ha publicado satisfactoriamente!' })
+        }
     }
 
+    const precioVista = soloNumeros(datos.precio)
+    const stockVista = datos.stock === '' ? 1 : Number(datos.stock)
+    const fotosVista = fotos.filter((foto) => foto).concat(fotosMoviles)
+
     return (
-        <div className="page-layout">
+        <div className="page-layout publish-layout">
             <Header title="AEGIS | Publicar Producto" auth={auth} onNavigate={onNavigate} />
 
             <main className="main-content publish-page">
-                {publicado ? (
-                    <div className="publish-success">
-                        <i className="fa-solid fa-circle-check" />
-                        <h1>Producto publicado correctamente</h1>
-                        <p>Tu producto ya aparece en Novedades, en la lista de productos y en la sección "Productos del Vendedor" de tu perfil.</p>
-                        <button type="button" className="publish-btn" onClick={() => onNavigate && onNavigate('/')}>Ir al Home</button>
-                    </div>
-                ) : (
                 <form onSubmit={publicar}>
 
                     <div className="publish-header">
@@ -143,120 +143,175 @@ export default function PublicarProducto({ auth, onNavigate }) {
                         </div>
                     )}
 
-                    <section className="publish-card">
-                        <div className="images-section images-escritorio">
-                            <h2>1. Imágenes</h2>
-                            <div className="images-container">
-                                <label className="main-image" htmlFor="foto-principal">
+                    <div className="publish-columns">
+                        <div className="publish-form-col">
+                            <section className="publish-card">
+                                <div className="images-section images-escritorio">
+                                    <h2>1. Imágenes</h2>
+                                    <div className="images-container">
+                                        <label className="main-image" htmlFor="foto-principal">
+                                            {fotoPrincipal ? (
+                                                <img src={fotoPrincipal} alt="Foto principal" />
+                                            ) : (
+                                                <>
+                                                    <i className="fa-solid fa-camera" />
+                                                    <span>Añadir Foto Principal</span>
+                                                </>
+                                            )}
+                                            <input className="foto-input" type="file" id="foto-principal" accept="image/*" onChange={elegirFotoPrincipal} />
+                                        </label>
+
+                                        <div className="small-images">
+                                            {fotos.map((foto, indice) => (
+                                                <label className="small-box" htmlFor={`foto-${indice}`} key={indice}>
+                                                    {foto ? <img src={foto} alt={`Foto ${indice + 1}`} /> : <i className="fa-solid fa-plus" />}
+                                                    <input className="foto-input" type="file" id={`foto-${indice}`} accept="image/*" onChange={(event) => elegirFotoExtra(event, indice)} />
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="info-section">
+                                    <h2><span className="num-escritorio">2.</span><span className="num-movil">1.</span> Información Básica</h2>
+
+                                    <div className="input-group">
+                                        <label htmlFor="titulo">Título del anuncio</label>
+                                        <input id="titulo" type="text" value={datos.titulo} onChange={(event) => cambiarDato('titulo', event.target.value)} />
+                                    </div>
+
+                                    <div className="input-group">
+                                        <label htmlFor="categoria">Categoría</label>
+                                        <input id="categoria" type="text" value={datos.categoria} onChange={(event) => cambiarDato('categoria', event.target.value)} />
+                                    </div>
+
+                                    <div className="triple-grid">
+                                        <div className="input-group">
+                                            <label htmlFor="marca">Marca</label>
+                                            <input id="marca" type="text" value={datos.marca} onChange={(event) => cambiarDato('marca', event.target.value)} />
+                                        </div>
+                                        <div className="input-group">
+                                            <label htmlFor="modelo">Modelo</label>
+                                            <input id="modelo" type="text" value={datos.modelo} onChange={(event) => cambiarDato('modelo', event.target.value)} />
+                                        </div>
+                                        <div className="input-group">
+                                            <label htmlFor="estado">Estado</label>
+                                            <input id="estado" type="text" value={datos.estado} onChange={(event) => cambiarDato('estado', event.target.value)} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section className="details-card">
+                                <h2><span className="num-escritorio">3.</span><span className="num-movil">2.</span> Detalles del Intercambio</h2>
+
+                                <div className="double-grid">
+                                    <div className="input-group">
+                                        <label htmlFor="precio">Precio Referencial</label>
+                                        <input id="precio" type="text" placeholder="COP 0.00" value={datos.precio} onChange={(event) => cambiarDato('precio', event.target.value)} />
+                                    </div>
+                                    <div className="input-group">
+                                        <label htmlFor="stock">Stock Disponibles</label>
+                                        <input id="stock" type="number" placeholder="0" value={datos.stock} onChange={(event) => cambiarDato('stock', event.target.value)} />
+                                    </div>
+                                </div>
+
+                                <div className="input-group">
+                                    <label htmlFor="descripcion">Descripción (Opcional)</label>
+                                    <textarea id="descripcion" placeholder="Especificaciones opcionales..." value={datos.descripcion} onChange={(event) => cambiarDato('descripcion', event.target.value)} />
+                                </div>
+                            </section>
+
+                            <section className="details-card images-movil">
+                                <div className="images-section">
+                                    <h2>3. Imágenes</h2>
+                                    <div className="images-container">
+                                        <label className="main-image" htmlFor="foto-principal-movil">
+                                            {fotoPrincipal ? (
+                                                <>
+                                                    <img src={fotoPrincipal} alt="Foto principal" />
+                                                    <span className="main-image-mas">+ Agregar más</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <i className="fa-solid fa-camera" />
+                                                    <span>Añadir Fotos</span>
+                                                </>
+                                            )}
+                                            <input className="foto-input" type="file" id="foto-principal-movil" accept="image/*" multiple onChange={elegirFotos} />
+                                        </label>
+                                    </div>
+
+                                    {fotosMoviles.length > 0 && (
+                                        <div className="miniaturas">
+                                            {fotosMoviles.map((foto, indice) => (
+                                                <div className="small-box" key={indice}>
+                                                    <img src={foto} alt={`Foto ${indice + 1}`} />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </section>
+
+                            <div className="publish-actions">
+                                <button type="submit" className="publish-btn">Publicar</button>
+                            </div>
+                        </div>
+
+                        <aside className="publish-preview">
+                            <div className="preview-head">
+                                <h2>Vista previa</h2>
+                                <p>Así se verá tu publicación</p>
+                            </div>
+
+                            <article className="preview-card">
+                                <div className="preview-image">
                                     {fotoPrincipal ? (
                                         <img src={fotoPrincipal} alt="Foto principal" />
                                     ) : (
-                                        <>
-                                            <i className="fa-solid fa-camera" />
-                                            <span>Añadir Foto Principal</span>
-                                        </>
+                                        <i className="fa-regular fa-image" />
                                     )}
-                                    <input className="foto-input" type="file" id="foto-principal" accept="image/*" onChange={elegirFotoPrincipal} />
-                                </label>
-
-                                <div className="small-images">
-                                    {fotos.map((foto, indice) => (
-                                        <label className="small-box" htmlFor={`foto-${indice}`} key={indice}>
-                                            {foto ? <img src={foto} alt={`Foto ${indice + 1}`} /> : <i className="fa-solid fa-plus" />}
-                                            <input className="foto-input" type="file" id={`foto-${indice}`} accept="image/*" onChange={(event) => elegirFotoExtra(event, indice)} />
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="info-section">
-                            <h2><span className="num-escritorio">2.</span><span className="num-movil">1.</span> Información Básica</h2>
-
-                            <div className="input-group">
-                                <label htmlFor="titulo">Título del anuncio</label>
-                                <input id="titulo" type="text" value={datos.titulo} onChange={(event) => cambiarDato('titulo', event.target.value)} />
-                            </div>
-
-                            <div className="input-group">
-                                <label htmlFor="categoria">Categoría</label>
-                                <input id="categoria" type="text" value={datos.categoria} onChange={(event) => cambiarDato('categoria', event.target.value)} />
-                            </div>
-
-                            <div className="triple-grid">
-                                <div className="input-group">
-                                    <label htmlFor="marca">Marca</label>
-                                    <input id="marca" type="text" value={datos.marca} onChange={(event) => cambiarDato('marca', event.target.value)} />
-                                </div>
-                                <div className="input-group">
-                                    <label htmlFor="modelo">Modelo</label>
-                                    <input id="modelo" type="text" value={datos.modelo} onChange={(event) => cambiarDato('modelo', event.target.value)} />
-                                </div>
-                                <div className="input-group">
-                                    <label htmlFor="estado">Estado</label>
-                                    <input id="estado" type="text" value={datos.estado} onChange={(event) => cambiarDato('estado', event.target.value)} />
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section className="details-card">
-                        <h2><span className="num-escritorio">3.</span><span className="num-movil">2.</span> Detalles del Intercambio</h2>
-
-                        <div className="double-grid">
-                            <div className="input-group">
-                                <label htmlFor="precio">Precio Referencial</label>
-                                <input id="precio" type="text" placeholder="COP 0.00" value={datos.precio} onChange={(event) => cambiarDato('precio', event.target.value)} />
-                            </div>
-                            <div className="input-group">
-                                <label htmlFor="stock">Stock Disponibles</label>
-                                <input id="stock" type="number" placeholder="0" value={datos.stock} onChange={(event) => cambiarDato('stock', event.target.value)} />
-                            </div>
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="descripcion">Descripción (Opcional)</label>
-                            <textarea id="descripcion" placeholder="Especificaciones opcionales..." value={datos.descripcion} onChange={(event) => cambiarDato('descripcion', event.target.value)} />
-                        </div>
-                    </section>
-
-                    <section className="details-card images-movil">
-                        <div className="images-section">
-                            <h2>3. Imágenes</h2>
-                            <div className="images-container">
-                                <label className="main-image" htmlFor="foto-principal-movil">
-                                    {fotoPrincipal ? (
-                                        <>
-                                            <img src={fotoPrincipal} alt="Foto principal" />
-                                            <span className="main-image-mas">+ Agregar más</span>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <i className="fa-solid fa-camera" />
-                                            <span>Añadir Fotos</span>
-                                        </>
-                                    )}
-                                    <input className="foto-input" type="file" id="foto-principal-movil" accept="image/*" multiple onChange={elegirFotos} />
-                                </label>
-                            </div>
-
-                            {fotosMoviles.length > 0 && (
-                                <div className="miniaturas">
-                                    {fotosMoviles.map((foto, indice) => (
-                                        <div className="small-box" key={indice}>
-                                            <img src={foto} alt={`Foto ${indice + 1}`} />
+                                    {datos.estado && <span className="preview-tag">{datos.estado}</span>}
+                                    {fotosVista.length > 0 && (
+                                        <div className="preview-thumbs">
+                                            {fotosVista.map((foto, indice) => (
+                                                <img src={foto} alt={`Foto ${indice + 1}`} key={indice} />
+                                            ))}
                                         </div>
-                                    ))}
+                                    )}
                                 </div>
-                            )}
-                        </div>
-                    </section>
 
-                    <div className="publish-actions">
-                        <button type="submit" className="publish-btn">Publicar</button>
+                                <div className="preview-body">
+                                    <p className="preview-price">{precioVista > 0 ? 'COP ' + formatCurrency(precioVista) : 'COP 0'}</p>
+                                    <h3 className="preview-title">{datos.titulo ? datos.titulo : 'Título del anuncio'}</h3>
+                                    <p className="preview-brand">
+                                        {datos.marca ? datos.marca : 'Sin marca'}
+                                        {datos.modelo ? ' · ' + datos.modelo : ''}
+                                    </p>
+
+                                    <ul className="preview-specs">
+                                        <li><span>Categoría</span><strong>{datos.categoria ? datos.categoria : 'Sin categoría'}</strong></li>
+                                        <li><span>Estado</span><strong>{datos.estado ? datos.estado : 'Usado'}</strong></li>
+                                        <li><span>Stock</span><strong>{stockVista + ' disponibles'}</strong></li>
+                                    </ul>
+
+                                    <p className="preview-desc">{datos.descripcion ? datos.descripcion : 'Sin descripción del producto.'}</p>
+
+                                    <div className="preview-seller">
+                                        <i className="fa-solid fa-circle-user" />
+                                        <div>
+                                            <strong>Luis Alejandro Montenegro Ojeda</strong>
+                                            <span><i className="fa-regular fa-star" /> 4.7 · Vendedor estrella</span>
+                                        </div>
+                                    </div>
+
+                                    <button type="button" className="preview-btn">Comprar ahora</button>
+                                </div>
+                            </article>
+                        </aside>
                     </div>
                 </form>
-                )}
             </main>
 
             <Footer onNavigate={onNavigate} />

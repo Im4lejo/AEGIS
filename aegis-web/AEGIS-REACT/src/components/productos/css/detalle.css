@@ -202,6 +202,7 @@
 }
 
 .detail-seller {
+  order: 2;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -694,6 +695,10 @@
   .detail-title {
     font-size: 24px;
     line-height: 1.2;
+  }
+
+  .detail-seller {
+    order: 3;
   }
 
   .detail-seller {

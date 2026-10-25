@@ -1,5 +1,32 @@
 .home-layout {
   background-image: linear-gradient(180deg, #ffffff 0%, #f7f5ff 45%, #eff6ff 100%);
+  overflow-x: clip;
+}
+
+.home-toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  padding: 14px 18px;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  background: #f0fdf4;
+  color: #166534;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
+  font-size: 14px;
+  font-weight: 600;
+  transform: translateX(-50%);
+}
+
+.home-toast i {
+  flex-shrink: 0;
+  font-size: 18px;
 }
 
 .subnav {
@@ -482,6 +509,10 @@
   }
 
   .tv-banner-text h2 { font-size: 36px; }
+
+  .products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 768px) {
@@ -794,12 +825,11 @@
   }
 
   .products-grid {
-    grid-template-columns: 1fr;
     gap: 16px;
   }
 
   .promo-product-card {
-    grid-column: span 1;
+    grid-column: span 2;
     width: calc(100% + 40px);
     margin: 0 -20px;
     border-radius: 12px;
@@ -864,5 +894,30 @@
 
   .home-container > .products-section--ram {
     order: 8;
+  }
+}
+
+.tv-banner,
+.novedades-banners {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
+@media (max-width: 480px) {
+  .products-grid {
+    gap: 10px;
+  }
+
+  .products-grid .product-image-container {
+    height: 120px;
+  }
+
+  .products-grid .product-info {
+    padding: 9px;
+  }
+
+  .products-grid .product-name {
+    font-size: 11px;
   }
 }

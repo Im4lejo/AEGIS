@@ -188,17 +188,17 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 14px;
 }
 
 .publish-title {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
 }
 
 .publish-title h1 {
-    font-size: 28px;
+    font-size: 20px;
     font-weight: 800;
 }
 
@@ -206,27 +206,243 @@
     background: linear-gradient(90deg, #a855f7 0%, #d946ef 45%, #ec4899 75%, #f43f5e 100%);
     color: white;
     border: none;
-    padding: 14px 32px;
-    border-radius: 16px;
+    padding: 10px 20px;
+    border-radius: 12px;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 13px;
     cursor: pointer;
 }
 
 .publish-card,
 .details-card {
     background: white;
-    border-radius: 16px;
-    padding: 30px;
+    border-radius: 12px;
+    padding: 16px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    margin-bottom: 24px;
+    margin-bottom: 14px;
 }
 
 .publish-card {
     border: 2px solid #3B82F6;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 44px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+}
+
+.publish-layout {
+    background-color: #e3e8f0;
+}
+
+.publish-page {
+    max-width: 1120px;
+    padding: 26px 20px;
+}
+
+.publish-page form {
+    max-width: 840px;
+    margin: 0 auto;
+}
+
+.publish-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 340px);
+    gap: 20px;
+    align-items: start;
+}
+
+.publish-form-col {
+    min-width: 0;
+}
+
+.publish-preview {
+    position: sticky;
+    top: 24px;
+    min-width: 0;
+}
+
+.preview-head {
+    margin-bottom: 10px;
+}
+
+.preview-head h2 {
+    font-size: 15px;
+    font-weight: 800;
+    margin-bottom: 3px;
+}
+
+.preview-head p {
+    font-size: 12px;
+    color: #475569;
+}
+
+.preview-card {
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.preview-image {
+    position: relative;
+    height: 185px;
+    background: #F1F5F9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.preview-image > i {
+    font-size: 36px;
+    color: #94A3B8;
+}
+
+.preview-image > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.preview-tag {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(17, 24, 39, 0.75);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 9px;
+    border-radius: 999px;
+    text-transform: capitalize;
+}
+
+.preview-thumbs {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    display: flex;
+    gap: 5px;
+}
+
+.preview-thumbs img {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 2px solid #ffffff;
+}
+
+.preview-body {
+    padding: 14px;
+}
+
+.preview-price {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0F172A;
+    margin-bottom: 4px;
+}
+
+.preview-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 4px;
+    overflow-wrap: anywhere;
+}
+
+.preview-brand {
+    font-size: 12px;
+    color: #64748B;
+    margin-bottom: 12px;
+}
+
+.preview-specs {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.preview-specs li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.preview-specs span {
+    color: #64748B;
+}
+
+.preview-specs strong {
+    color: #0F172A;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.preview-desc {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #475569;
+    background: #F8FAFC;
+    border: 1px solid #EEF2F7;
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-bottom: 12px;
+    max-height: 90px;
+    overflow: auto;
+    overflow-wrap: anywhere;
+}
+
+.preview-seller {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid #E5E7EB;
+    margin-bottom: 12px;
+}
+
+.preview-seller > i {
+    font-size: 24px;
+    color: #1D4ED8;
+}
+
+.preview-seller div {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.preview-seller strong {
+    font-size: 12px;
+    color: #111827;
+    overflow-wrap: anywhere;
+}
+
+.preview-seller span {
+    font-size: 11px;
+    color: #16A34A;
+}
+
+.preview-btn {
+    width: 100%;
+    padding: 9px 14px;
+    border-radius: 10px;
+    border: 1px solid #1D4ED8;
+    background: white;
+    color: #1D4ED8;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.preview-btn:hover {
+    background: #EFF6FF;
 }
 
 .publish-back {
@@ -235,7 +451,7 @@
     padding: 0;
     display: flex;
     align-items: center;
-    font-size: 20px;
+    font-size: 17px;
     color: #111827;
     cursor: pointer;
 }
@@ -246,9 +462,9 @@
 
 .publish-card h2,
 .details-card h2 {
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 .images-section {
@@ -257,33 +473,33 @@
 
 .images-container {
     display: grid;
-    grid-template-columns: 1fr 110px;
-    gap: 20px;
+    grid-template-columns: 220px 88px;
+    gap: 12px;
 }
 
 .main-image {
     position: relative;
     overflow: hidden;
-    height: 190px;
+    height: 140px;
     background: #EAFBF7;
     border: 2px solid #55D6C8;
-    border-radius: 16px;
+    border-radius: 12px;
     text-align: center;
     cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 6px;
 }
 
 .main-image i {
-    font-size: 44px;
+    font-size: 28px;
     color: #111827;
 }
 
 .main-image span {
-    font-size: 15px;
+    font-size: 12px;
     font-weight: 700;
     color: #111827;
 }
@@ -310,7 +526,7 @@
 .small-images {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: 8px;
     align-content: center;
 }
 
@@ -325,8 +541,8 @@
     position: relative;
     overflow: hidden;
     background: #D8DBE1;
-    border-radius: 10px;
-    height: 46px;
+    border-radius: 7px;
+    height: 34px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -334,7 +550,7 @@
 }
 
 .small-box i {
-    font-size: 20px;
+    font-size: 15px;
     color: #111827;
 }
 
@@ -376,31 +592,42 @@
 .triple-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    gap: 10px;
 }
 
 .double-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    gap: 10px;
 }
 
 .input-group textarea {
     resize: vertical;
-    min-height: 64px;
+    min-height: 48px;
+}
+
+.publish-page .input-group {
+    margin-bottom: 12px;
+}
+
+.publish-page .input-group label {
+    font-size: 12px;
+    margin-bottom: 5px;
 }
 
 .publish-page .input-group input,
 .publish-page .input-group textarea {
-    border-radius: 12px;
+    border-radius: 9px;
+    padding: 8px 10px;
+    font-size: 13px;
 }
 
 .publish-alert {
-    padding: 12px 16px;
+    padding: 10px 14px;
     border-radius: 10px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
 }
 
 .publish-alert--error {
@@ -471,6 +698,14 @@
         margin: 0 auto;
     }
 
+    .publish-columns {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .publish-preview {
+        position: static;
+    }
+
     .publish-actions {
         display: flex;
     }
@@ -521,7 +756,7 @@
     }
 
     .publish-title h1 {
-        font-size: 23px;
+        font-size: 18px;
     }
 
     .publish-btn {
@@ -532,8 +767,8 @@
 
     .publish-actions .publish-btn {
         width: 100%;
-        padding: 14px 16px;
-        font-size: 15px;
+        padding: 12px 16px;
+        font-size: 14px;
     }
 
     .publish-card,
@@ -571,6 +806,18 @@
 
     .publish-success {
         padding: 42px 18px;
+    }
+
+    .preview-image {
+        height: 160px;
+    }
+
+    .preview-body {
+        padding: 14px;
+    }
+
+    .preview-price {
+        font-size: 20px;
     }
 
     .publish-success h1 {

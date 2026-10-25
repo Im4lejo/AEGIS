@@ -266,40 +266,40 @@ export default function Detalle({ id, auth, onNavigate }) {
               <p className="detail-code">Código de producto: {producto.id}</p>
               <h1 className="detail-title">{titulo}</h1>
               <p className="detail-brand">{producto.marca || 'Sin marca'}</p>
+            </div>
 
-              <div
-                className="detail-seller"
-                role="button"
-                tabIndex={0}
-                onClick={irVendedor}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') irVendedor()
-                }}
-              >
-                <img className="detail-seller-avatar" src={vendedor.avatar || avatarUrl(vendedor, 100)} alt={vendedor.nombre} />
-                <div className="detail-seller-data">
-                  <strong className="detail-seller-name">{vendedor.nombre}</strong>
-                  <div className="detail-badges">
-                    <span className="detail-badge blue" title={`Nivel de Servicio: ${insignia.servicio}`}>
-                      <i className="fa-solid fa-crown" />
-                    </span>
-                    <span className="detail-badge purple" title={`Vendedor Estrella: ${insignia.estrella}`}>
-                      <i className="fa-solid fa-shield" />
-                    </span>
-                    <span className="detail-badge rating" title={`Reputación: ${insignia.rating}`}>
-                      <i className="fa-regular fa-star" /> {insignia.rating}
-                    </span>
-                  </div>
+            <div
+              className="detail-seller"
+              role="button"
+              tabIndex={0}
+              onClick={irVendedor}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') irVendedor()
+              }}
+            >
+              <img className="detail-seller-avatar" src={vendedor.avatar || avatarUrl(vendedor, 100)} alt={vendedor.nombre} />
+              <div className="detail-seller-data">
+                <strong className="detail-seller-name">{vendedor.nombre}</strong>
+                <div className="detail-badges">
+                  <span className="detail-badge blue" title={`Nivel de Servicio: ${insignia.servicio}`}>
+                    <i className="fa-solid fa-crown" />
+                  </span>
+                  <span className="detail-badge purple" title={`Vendedor Estrella: ${insignia.estrella}`}>
+                    <i className="fa-solid fa-shield" />
+                  </span>
+                  <span className="detail-badge rating" title={`Reputación: ${insignia.rating}`}>
+                    <i className="fa-regular fa-star" /> {insignia.rating}
+                  </span>
                 </div>
-                <button
-                  type="button"
-                  className="detail-seller-arrow"
-                  aria-label="Ver perfil del vendedor"
-                  onClick={irVendedor}
-                >
-                  <i className="fa-solid fa-arrow-right" />
-                </button>
               </div>
+              <button
+                type="button"
+                className="detail-seller-arrow"
+                aria-label="Ver perfil del vendedor"
+                onClick={irVendedor}
+              >
+                <i className="fa-solid fa-arrow-right" />
+              </button>
             </div>
 
             <div className="detail-specs">
