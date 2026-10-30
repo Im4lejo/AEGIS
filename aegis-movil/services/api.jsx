@@ -1,13 +1,23 @@
 
 import axios from "axios";
 
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || "http://aegis/api";
+
 const API = axios.create({
-    baseURL: "http://aegis/api",
+    baseURL: API_BASE_URL,
     headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
     },
 });
+
+export function getApiErrorMessage(error) {
+    if (!error?.response) {
+        return "No se pudo conectar con la API. Verifica que el servidor esté iniciado y que la URL configurada sea accesible desde el teléfono.";
+    }
+
+    return `La API respondió con el error HTTP ${error.response.status}.`;
+}
 
 // Consultas existentes
 export const getCategories = () => API.get("/categorias");

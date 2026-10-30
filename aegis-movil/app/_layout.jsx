@@ -1,14 +1,16 @@
 import { useEffect } from "react";
 import { Stack } from "expo-router";
-import BootSplash from "react-native-bootsplash";
+import * as SplashScreen from "expo-splash-screen";
 import App from "../App";
 import { AuthProvider } from "../assets/context/AuthContext";
+
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
     useEffect(() => {
         const hideSplash = async () => {
             await new Promise((resolve) => setTimeout(resolve, 2000));
-            await BootSplash.hide({ fade: true });
+            await SplashScreen.hideAsync();
         };
 
         hideSplash();

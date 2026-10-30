@@ -1,12 +1,13 @@
-import { View, Text, StyleSheet, Image, FlatList, Pressable } from "react-native";
+import { View, Text, StyleSheet, Image, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 import products from "../../DATA/products";
 
 export default function Productos() {
     const router = useRouter();
 
-    const renderCard = ({ item }) => (
+    const renderCard = (item) => (
         <Pressable
+            key={item.id}
             accessibilityRole="button"
             accessibilityLabel={`Ver producto ${item.name}`}
             onPress={() => router.push(`/(tabs)/product/${item.id}`)}
@@ -24,8 +25,12 @@ export default function Productos() {
     );
     const styles = StyleSheet.create({
         container: {
-            display: "flex",
+            flex: 1,
             backgroundColor: "#f0f0f0"
+        },
+        productsGrid: {
+            flexDirection: "row",
+            flexWrap: "wrap",
         },
         productCard: {
             flexDirection: "column",
@@ -50,13 +55,9 @@ export default function Productos() {
     return (
         <View style={styles.container}>
             <Text style={styles.titleText}>Productos En descuento</Text>
-            <FlatList
-                data={products}
-                renderItem={renderCard}
-                keyExtractor={item => String(item.id)}
-                numColumns={2}
-            />
-
+            <View style={styles.productsGrid}>
+                {products.map(renderCard)}
+            </View>
         </View>
     )
 }

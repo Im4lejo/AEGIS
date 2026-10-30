@@ -14,6 +14,7 @@ export default function TabLayout() {
         profile: "Perfil",
         search: "Buscar",
         forum: "Foro",
+        publish: "Publicar",
     };
 
     const redirectUnauthenticated = (event) => {
@@ -53,6 +54,7 @@ export default function TabLayout() {
                     else if (route.name === "settings") iconName = focused ? "settings" : "settings-outline";
                     else if (route.name === "profile") iconName = focused ? "person" : "person-outline";
                     else if (route.name === "search") iconName = focused ? "search" : "search-outline";
+                    else if (route.name === "publish") iconName = "add";
                     return <Ionicons name={iconName} size={size} color={color} />;
                 },
                 tabBarActiveTintColor: "#317df8",
@@ -61,15 +63,16 @@ export default function TabLayout() {
             })}
         >
             <Tabs.Screen name="index" options={{ title: "Inicio" }} />
-            <Tabs.Screen
-                name="settings"
-                options={{ title: "Ajustes" }}
-                listeners={{ tabPress: redirectUnauthenticated }}
-                
-            />
+            
             <Tabs.Screen
                 name="profile"
                 options={{ title: "Perfil" }}
+                listeners={{ tabPress: redirectUnauthenticated }}
+            />
+            <Tabs.Screen name="publish" options={{ title: "Publicar" }} />
+            <Tabs.Screen
+                name="forum"
+                options={{ title: "Foro" }}
                 listeners={{ tabPress: redirectUnauthenticated }}
             />
             <Tabs.Screen
@@ -77,11 +80,14 @@ export default function TabLayout() {
                 options={{ title: "Buscar" }}
                 listeners={{ tabPress: redirectUnauthenticated }}
             />
+
             <Tabs.Screen
-                name="forum"
-                options={{ title: "Foro" }}
+                name="settings"
+                options={{ title: "Ajustes" }}
                 listeners={{ tabPress: redirectUnauthenticated }}
+
             />
+            
             <Tabs.Screen
                 name="product"
                 options={{ href: null }}

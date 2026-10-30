@@ -1,21 +1,27 @@
 import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, FlatList, Pressable } from "react-native";
 import { useRouter } from "expo-router";
-import { getProducts } from "../../../services/api";
+import { getApiErrorMessage, getProducts } from "../../../services/api";
 import { resolveProductImageUri } from "./productImage";
 import img from "../../producto1.png";
 
 export default function Productos() {
     const router = useRouter();
     const [products, setProducts] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
         uploadProducts();
     }, []);
 
         const uploadProducts = async () => {
-            const res = await getProducts();
-            setProducts(res.data.data) || [];
+            try {
+                const res = await getProducts();
+                setProducts(res.data.data);
+                setErrorMessage("");
+            } catch (error) {
+                setErrorMessage(getApiErrorMessage(error));
+            }
         };
 
     const renderCard = ({ item }) => {
@@ -64,6 +70,11 @@ export default function Productos() {
             borderBottomWidth: 4,
             width: "65%"
         },
+        error: {
+            color: "#b00020",
+            marginHorizontal: 15,
+            marginBottom: 10,
+        },
         descripctionText: {
        
             fontWeight: "600",
@@ -80,7 +91,7 @@ export default function Productos() {
     return (
         <View style={styles.container}>
             <Text style={styles.titleText}>Productos Destacados</Text>
-       
+            {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
             <FlatList
                 data={products.slice(0, 10)}
                 renderItem={renderCard}

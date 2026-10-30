@@ -25,18 +25,20 @@
     },
     "plugins": [
       [
-        "react-native-bootsplash",
+        "expo-splash-screen",
         {
-          "assetsOutput": "assets/bootsplash",
-          "logo": "./assets/bootsplash/logoAegis.png",
-          "logoWidth": 100,
-          "background": "#232323",
-          "darkBackground": "#000000",
-          "darkLogo": "./assets/bootsplash/logo-dark.png"
+          "image": "./assets/bootsplash/logoAegis.png",
+          "imageWidth": 100,
+          "backgroundColor": "#232323",
+          "dark": {
+            "image": "./assets/bootsplash/logo-dark.png",
+            "backgroundColor": "#000000"
+          }
         }
       ],
       "expo-router",
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-font"
     ]
   }
 }

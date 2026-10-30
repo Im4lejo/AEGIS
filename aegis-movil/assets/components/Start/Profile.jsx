@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View, ImageBackground, ScrollView, Text, Pressable } from "react-native";
+import { Image, StyleSheet, View, ScrollView, Text, Pressable } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import user from "../../DATA/users"
 import { useState } from "react";
@@ -10,17 +10,17 @@ export default function Profile() {
         <ScrollView style={styles.scrollView}>
             <View style={styles.container}>
                 <View style={styles.primaryBackground}>
-                    <ImageBackground
-                        source={require('../../../assets/background.png')}
-                        style={styles.profileImgContainer}
-                        imageStyle={styles.backgroundImage}
-                        resizeMode="cover"
-                    >
+                    <View style={styles.profileImgContainer}>
+                        <Image
+                            source={require('../../../assets/background.png')}
+                            style={styles.backgroundImage}
+                            resizeMode="cover"
+                        />
                         <View style={styles.coverEditButton}>
                             <Ionicons name="pencil" size={20} color="#ffffff" />
                             <Text style={styles.cardTitle}>Editar Fondo</Text>
                         </View>
-                    </ImageBackground>
+                    </View>
                     <View style={styles.avatarContainer}>
                         <Image
                             source={user.profile_img}
@@ -51,13 +51,13 @@ export default function Profile() {
                     </View>
                 </View>
                 <View style={styles.personalData}>
-                    <Text style={styles.description}><strong>Descripción</strong></Text>
+                    <Text style={styles.description}>Descripción</Text>
                     <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas eligendi hic facilis, voluptatem eos velit nobis nesciunt perferendis accusamus consequuntur recusandae dolores quaerat, corporis illo temporibus sapiente reprehenderit rem aut.</Text>
-                    <Text><strong>Lugar de residencia</strong></Text>
+                    <Text>Lugar de residencia</Text>
                     <Text>Popayán, Cauca</Text>
-                    <Text><strong>Fecha de Nacimiento</strong></Text>
+                    <Text>Fecha de Nacimiento</Text>
                     <Text>29 de marzo del 2006</Text>
-                    <Text><strong>Fecha de registro de cuenta</strong></Text>
+                    <Text>Fecha de registro de cuenta</Text>
                     <Text>30/04/2026</Text>
 
                 </View>
@@ -126,9 +126,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     backgroundImage: {
-        width: "100%",
-        height: 225,
-        borderRadius: 15,
+        ...StyleSheet.absoluteFillObject,
     },
     logo: {
         width: 130,
