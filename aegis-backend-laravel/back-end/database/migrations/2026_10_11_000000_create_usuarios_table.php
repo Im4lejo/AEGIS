@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('password');
             $table->string('telefono', 20)->nullable();
             $table->string('ciudad', 100)->nullable();
-            $table->string('img_background_url');
-            $table->string('img_background_id');
-            $table->string('foto_perfil_url')->default('default.png');
-            $table->string('foto_perfil_id');
+            $table->string('img_background_url')->nullable();
+            $table->string('img_background_id')->nullable();
+            $table->string('foto_perfil_url')->nullable();
+            $table->string('foto_perfil_id')->nullable();
             $table->text('descripcion')->nullable();
             $table->decimal('reputacion', 3, 2)->default(5);
             $table->enum('rol', ['usuario', 'owner', 'admin'])->default('usuario');
