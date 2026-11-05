@@ -6,73 +6,71 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert } from "react-native";
 import { registerUser } from "../../../services/api";
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 export default function Authenticator() {
-    const [nombre, setNombre] = useState("");
-    const [apellido, setApellido] = useState("");
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [passwordConfirmation, setPasswordConfirmation] = useState("");
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const validationSchema =
+    Yup.object().shape({
+        nombre: Yup.string()
+            .required('El nombre es obligatorio'),
+        apellido: Yup.string()
+            .required('El apellido es obligatorio'),
+        username: Yup.string()
+            .required('El nombre de usuario es obligatorio')
+            .matches(
+                /^[a-zA-Z0-9_]+$/,
+                "Solo se permiten letras, números y guion bajo"
+        ),
+        email: Yup.string()
+            .email('Email inválido')
+            .required('El correo es obligatorio'),
+        password: Yup.string()
+            .min(8, 'La contraseña debe tener al menos 8 caracteres')
+            .max(20, 'la contraseña no puede ser mayor a 20 caracteres'),
+        passwordConfirmation: Yup.string()
+            .oneOf(
+                [Yup.ref("password")],
+                "Las contraseñas no coinciden"
+            )
+            .required("Confirma tu contraseña")
+    })
+    const formik = useFormik({
+        initialValues: {
+            nombre: '',
+            apellido: '',
+            username: '',
+            email: '',
+            password: '',
+            passwordConfirmation: '',
+        },
+        validationSchema,
+        onSubmit: async (values) => {
+            const { passwordConfirmation, ...userData } = values;
+            setLoading(true);
 
-    const handleRegister = async () => {
-        if (
-            !nombre.trim() ||
-            !apellido.trim() ||
-            !email.trim() ||
-            !password ||
-            !passwordConfirmation
-        ) {
-            Alert.alert("Campos incompletos", "Completa los campos obligatorios.");
-            return;
-        }
+            try {
+                const response = await registerUser({
+                    ...userData,
+                    password_confirmation: passwordConfirmation,
+                });
+                Alert.alert('Registro exitoso', response.data.message);
+            } catch (error) {
+                const validationErrors = error.response?.data?.errors;
+                const firstError = validationErrors
+                    ? Object.values(validationErrors)[0]?.[0]
+                    : error.response?.data?.message;
 
-        if (password !== passwordConfirmation) {
-            Alert.alert("Error", "Las contraseñas no coinciden.");
-            return;
-        }
-
-        setLoading(true);
-
-        try {
-            const response = await registerUser({
-                nombre: nombre.trim(),
-                apellido: apellido.trim(),
-                username: username.trim() || null,
-                email: email.trim(),
-                password: password,
-                password_confirmation: passwordConfirmation,
-            });
-
-            Alert.alert(
-                "¡Bienvenido a AEGIS!",
-                response.data.message
-            );
-
-            console.log("Usuario creado:", response.data.usuario);
-
-        } catch (error) {
-            if (error.response?.status === 422) {
-                const errors = error.response.data.errors;
-
-                const firstError = errors
-                    ? Object.values(errors)[0]?.[0]
-                    : error.response.data.message;
-
-                Alert.alert("Revisa tus datos", firstError || "Datos inválidos.");
-            } else {
                 Alert.alert(
-                    "Error de conexión",
-                    error.response?.data?.message ||
-                    error.message ||
-                    "No fue posible conectar con el servidor."
+                    error.response?.status === 422 ? 'Revisa tus datos' : 'Error de conexión',
+                    firstError || error.message || 'No fue posible conectar con el servidor.'
                 );
+            } finally {
+                setLoading(false);
             }
-        } finally {
-            setLoading(false);
-        }
-    };
+        },
+    });
 
     return (
         <View style={styles.container}>
@@ -110,8 +108,9 @@ export default function Authenticator() {
                                     placeholder="Tu nombre"
                                     placeholderTextColor="#dfdfdf"
                                     autoCapitalize="words"
-                                    value={nombre}
-                                    onChangeText={setNombre}
+                                    onBlur={formik.handleBlur('nombre')}
+                                    value={formik.values.nombre}
+                                    onChangeText={formik.handleChange('nombre')}
                                 />
                                 <Text style={styles.loginText}>Apellido</Text>
                                 <TextInput
@@ -119,8 +118,9 @@ export default function Authenticator() {
                                     placeholder="Tu apellido"
                                     placeholderTextColor="#dfdfdf"
                                     autoCapitalize="words"
-                                    value={apellido}
-                                    onChangeText={setApellido}
+                                    onBlur={formik.handleBlur('apellido')}
+                                    value={formik.values.apellido}
+                                    onChangeText={formik.handleChange('apellido')}
                                 />
                                 <Text style={styles.loginText}>Nombre de usuario</Text>
                                 <TextInput
@@ -129,8 +129,9 @@ export default function Authenticator() {
                                     placeholderTextColor="#dfdfdf"
                                     autoCapitalize="none"
                                     autoCorrect={false}
-                                    value={username}
-                                    onChangeText={setUsername}
+                                    onBlur={formik.handleBlur('username')}
+                                    value={formik.values.username}
+                                    onChangeText={formik.handleChange('username')}
                                 />
                                 <Text style={styles.loginText}>Correo</Text>
                                 <TextInput
@@ -140,8 +141,9 @@ export default function Authenticator() {
                                     keyboardType="email-address"
                                     autoCapitalize="none"
                                     autoCorrect={false}
-                                    value={email}
-                                    onChangeText={setEmail}
+                                    onBlur={formik.handleBlur('email')}
+                                    value={formik.values.email}
+                                    onChangeText={formik.handleChange('email')}
                                 />
                                 <Text style={styles.loginText}>Contraseña</Text>
                                 <TextInput
@@ -149,8 +151,9 @@ export default function Authenticator() {
                                     placeholder="Crea una contraseña"
                                     placeholderTextColor="#dfdfdf"
                                     secureTextEntry
-                                    value={password}
-                                    onChangeText={setPassword}
+                                    onBlur={formik.handleBlur('password')}
+                                    value={formik.values.password}
+                                    onChangeText={formik.handleChange('password')}
                                 />
                                 <Text style={styles.loginText}>Confirmar contraseña</Text>
                                 <TextInput
@@ -158,12 +161,14 @@ export default function Authenticator() {
                                     placeholder="Vuelve a escribir tu contraseña"
                                     placeholderTextColor="#dfdfdf"
                                     secureTextEntry
-                                    value={passwordConfirmation}
-                                    onChangeText={setPasswordConfirmation}
+                                    onBlur={formik.handleBlur('passwordConfirmation')}
+                                    value={formik.values.passwordConfirmation}
+                                    onChangeText={formik.handleChange('passwordConfirmation')}
                                 />
                                 <Pressable
-                                    onPress={handleRegister}
-                                    disabled={loading}
+                                    title="Registrarse"
+                                    onPress={formik.handleSubmit}
+                                    disabled={formik.isSubmitting}
                                     style={({ pressed }) => [
                                         styles.register,
                                         pressed && styles.pressed,
