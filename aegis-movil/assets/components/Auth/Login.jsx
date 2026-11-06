@@ -7,72 +7,70 @@ import { useRouter } from "expo-router";
 import { useAuth } from "../../context/AuthContext";
 import { setAuthToken } from "../../context/authTokenStorage";
 import { useState } from "react";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+
+
 export default function Authenticator() {
     const router = useRouter();
    
     const { setLog } = useAuth();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [invalidCredentials, setInvalidCredentials] = useState(false);
 
-    const handleLogin = async () => {
-        setInvalidCredentials(false);
+    const loginSchema = Yup.object({
+        email: Yup.string()
+            .email("Correo no válido")
+            .required("El correo es obligatorio"),
 
-        if (!email.trim() || !password) {
-            Alert.alert(
-                "Campos incompletos",
-                "Ingresa tu correo y contraseña."
-            );
-            return;
-        }
+        password: Yup.string()
+            .required("La contraseña es obligatoria")
+    });
+    const formik = useFormik({
+        initialValues: {
+            email: "",
+            password: "",
+        },
+        validationSchema: loginSchema,
+        onSubmit: async (values) => {
+            setInvalidCredentials(false);
+            setLoading(true);
 
-        setLoading(true);
+            try {
+                const response = await loginUser({
+                    email: values.email.trim(),
+                    password: values.password,
+                });
+                const { token } = response.data;
 
-        try {
-            const response = await loginUser({
-                email: email.trim(),
-                password: password,
-            });
+                if (!token) {
+                    throw new Error("La respuesta del servidor no contiene un token de sesión.");
+                }
 
-            const { token, usuario } = response.data;
-
-            await setAuthToken(token);
-
-            setLog(true);
-            router.replace("/(tabs)");
-
-            setLog(true);
-
-            Alert.alert(
-                "¡Bienvenido a AEGIS!",
-                `Hola, ${usuario.nombre}.`,
-                [
-                    {
-                        text: "Continuar",
-                        onPress: () => router.replace("/(tabs)"),
-                    },
-                ]
-            );
-        } catch (error) {
-            if (error.response?.status === 422) {
-                setInvalidCredentials(true);
-            } else if (error.response?.status === 403) {
-                Alert.alert(
-                    "Cuenta no disponible",
-                    error.response.data.message
-                );
-            } else {
-                Alert.alert(
-                    "Error",
-                    error.response?.data?.message ||
-                    "No se pudo conectar con el servidor."
-                );
+                await setAuthToken(token);
+                setLog(true);
+                router.replace("/(tabs)");
+            } catch (error) {
+                if (error.response?.status === 422) {
+                    setInvalidCredentials(true);
+                } else if (error.response?.status === 403) {
+                    Alert.alert(
+                        "Cuenta no disponible",
+                        error.response.data.message
+                    );
+                } else {
+                    Alert.alert(
+                        "Error",
+                        error.response?.data?.message ||
+                        error.message ||
+                        "No se pudo conectar con el servidor."
+                    );
+                }
+            } finally {
+                setLoading(false);
             }
-        } finally {
-            setLoading(false);
-        }
-    };
+        },
+    });
 
     return (
         <View style={styles.container}>
@@ -101,35 +99,34 @@ export default function Authenticator() {
                         <View style={styles.actions}>
                             <Text style={styles.loginText}>Correo</Text>
                             <TextInput
-                                value={email}
-                                onChangeText={(value) => {
-                                    setEmail(value);
-                                    setInvalidCredentials(false);
-                                }}
+                                value={formik.values.email}
+                                onChangeText={formik.handleChange("email")}
+                                onBlur={formik.handleBlur("email")}
                                 style={styles.input}
-                                placeholder="Correo"
+                                placeholder="Correo electrónico"
                                 placeholderTextColor="#dfdfdf"
-                            //value={ }
-                            //onChangeText={(newValue) => setText(newValue)} // Actualiza el estado
-                            //autoCapitalize="none"  // Evita mayúsculas automáticas si no se desean
-                            //autoCorrect={false} 
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="email-address"
                             />
+                            {formik.touched.email && formik.errors.email ? (
+                                <Text style={styles.invalidCredentialsText}>{formik.errors.email}</Text>
+                            ) : null}
+
                             <Text style={styles.loginText}>Contraseña</Text>
                             <TextInput
-                                value={password}
-                                onChangeText={(value) => {
-                                    setPassword(value);
-                                    setInvalidCredentials(false);
-                                }}
+                                value={formik.values.password}
+                                onChangeText={formik.handleChange("password")}
+                                onBlur={formik.handleBlur("password")}
                                 style={styles.input}
                                 placeholder="Contraseña"
                                 placeholderTextColor="#dfdfdf"
-                            //onPress={}
-                            //value={ }
-                            //onChangeText={(newValue) => setText(newValue)} // Actualiza el estado
-                            //autoCapitalize="none"  // Evita mayúsculas automáticas si no se desean
-                            //autoCorrect={false} 
+                                secureTextEntry
                             />
+                            {formik.touched.password && formik.errors.password ? (
+                                <Text style={styles.invalidCredentialsText}>{formik.errors.password}</Text>
+                            ) : null}
+
                             {invalidCredentials ? (
                                 <Text
                                     accessibilityRole="alert"
@@ -138,8 +135,9 @@ export default function Authenticator() {
                                     Correo o contraseña inválidos o incorrectos
                                 </Text>
                             ) : null}
+
                             <Pressable
-                                onPress={handleLogin}
+                                onPress={formik.handleSubmit}
                                 disabled={loading}
                                 style={({ pressed }) => [
                                     styles.login,

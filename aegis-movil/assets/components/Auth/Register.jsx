@@ -55,7 +55,7 @@ export default function Authenticator() {
                     ...userData,
                     password_confirmation: passwordConfirmation,
                 });
-                Alert.alert('Registro exitoso', response.data.message);
+                Alert.alert('¡Registro exitoso!, Vuelve al inicio para iniciar sesión', response.data.message);
             } catch (error) {
                 const validationErrors = error.response?.data?.errors;
                 const firstError = validationErrors

@@ -2,7 +2,7 @@ import { ScrollView, Text, StyleSheet, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ProductosHor from "../components/Start/ProductList";
 import ProductosVer from "../components/Start/DiscountProducts";
-import Categorias from "../components/Start/categories";
+import Categorias from "../components/Start/Categories";
 
 const styles = StyleSheet.create({
     primaryText: {
