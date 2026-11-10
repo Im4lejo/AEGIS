@@ -1,14 +1,18 @@
 import { useEffect } from "react";
 import { Stack } from "expo-router";
+import Constants from "expo-constants";
 import * as SplashScreen from "expo-splash-screen";
 import App from "../App";
 import { AuthProvider } from "../assets/context/AuthContext";
 
 SplashScreen.preventAutoHideAsync();
-SplashScreen.setOptions({
-    duration: 1000,
-    fade: true,
-});
+
+if (Constants.appOwnership !== "expo") {
+    SplashScreen.setOptions({
+        duration: 1000,
+        fade: true,
+    });
+}
 
 export default function RootLayout() {
     useEffect(() => {

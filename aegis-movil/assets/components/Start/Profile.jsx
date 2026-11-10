@@ -1,9 +1,11 @@
 import { Image, StyleSheet, View, ScrollView, Text, Pressable } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import user from "../../DATA/users"
+import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import ProfileProducts from "./ProfileProducts";
+import {useAuth} from "../../context/AuthContext"
 export default function Profile() {
+    const {user} = useAuth();
     const [selectedSection, setSelectedSection] = useState("publicaciones");
 
     return (
@@ -11,11 +13,20 @@ export default function Profile() {
             <View style={styles.container}>
                 <View style={styles.primaryBackground}>
                     <View style={styles.profileImgContainer}>
-                        <Image
-                            source={require('../../../assets/background.png')}
-                            style={styles.backgroundImage}
-                            resizeMode="cover"
-                        />
+                        {user?.img_background_url ? (
+                            <Image
+                                source={{ uri: user.img_background_url }}
+                                style={styles.backgroundImage}
+                                resizeMode="cover"
+                            />
+                        ) : (
+                            <LinearGradient
+                                colors={["#101edb", "#5925d3", "#9325d3"]}
+                                start={{ x: 0, y: 0 }}
+                                end={{ x: 1, y: 1 }}
+                                style={styles.backgroundImage}
+                            />
+                        )}
                         <View style={styles.coverEditButton}>
                             <Ionicons name="pencil" size={20} color="#ffffff" />
                             <Text style={styles.cardTitle}>Editar Fondo</Text>
@@ -23,14 +34,19 @@ export default function Profile() {
                     </View>
                     <View style={styles.avatarContainer}>
                         <Image
-                            source={user.profile_img}
+                            source={
+                                user?.foto_perfil_url
+                                    ? { uri: user.foto_perfil_url }
+                                    : require("../../default-profile.png")
+                            }
                             style={styles.logo}
                         />
                         <View style={styles.avatarEditButton}>
                             <Ionicons name="pencil" size={18} color="#ffffff" />
                         </View>
                     </View>
-                    <Text style={styles.primaryName}>{user.name}</Text>
+                    <Text style={styles.primaryName}>{user.nombre} {user.apellido}  </Text>
+                    <Text style={styles.username}>@{user.username}</Text>
                     <View style={styles.cardContainer}>
                    
                         <View style={styles.card_1}>
@@ -40,7 +56,7 @@ export default function Profile() {
                         </View>
                         <View style={styles.card_2}>
                             <Ionicons name="star" size={24} color="#ffffff" />
-                            <Text style={styles.cardTitle}>4.7</Text>
+                            <Text style={styles.cardTitle}>{user.reputacion}</Text>
                             <Text style={styles.cardDescription}>Reseñas</Text>
                         </View>
                         <View style={styles.card_3}>
@@ -52,14 +68,13 @@ export default function Profile() {
                 </View>
                 <View style={styles.personalData}>
                     <Text style={styles.description}>Descripción</Text>
-                    <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas eligendi hic facilis, voluptatem eos velit nobis nesciunt perferendis accusamus consequuntur recusandae dolores quaerat, corporis illo temporibus sapiente reprehenderit rem aut.</Text>
+                    <Text style={styles.usernameDATA}>{user.descripcion}</Text>
                     <Text>Lugar de residencia</Text>
-                    <Text>Popayán, Cauca</Text>
+                    <Text style={styles.usernameDATA}>{user.ciudad}</Text>
                     <Text>Fecha de Nacimiento</Text>
-                    <Text>29 de marzo del 2006</Text>
+                    <Text style={styles.usernameDATA}>29 de marzo del 2006</Text>
                     <Text>Fecha de registro de cuenta</Text>
-                    <Text>30/04/2026</Text>
-
+                    <Text style={styles.usernameDATA}>{user.fecha_registro}</Text>
                 </View>
                 <View style={styles.sectionTabs}>
                     <Pressable
@@ -204,6 +219,19 @@ const styles = StyleSheet.create({
         fontWeight: "semibold",
         marginBottom: 15,
         
+    },
+    username: {
+        marginLeft: "40%",
+        fontSize: 16,
+        fontWeight: "semibold",
+        marginBottom: 15,
+        color:"#595959"
+    },
+    usernameDATA: {
+        fontSize: 16,
+        fontWeight: "semibold",
+        marginBottom: 15,
+        color:"#595959"
     },
     primaryBackground: {
        backgroundColor:"#f5f5f5"

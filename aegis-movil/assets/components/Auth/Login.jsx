@@ -5,7 +5,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { loginUser } from "../../../services/api";
 import { useRouter } from "expo-router";
 import { useAuth } from "../../context/AuthContext";
-import { setAuthToken } from "../../context/authTokenStorage";
 import { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -14,7 +13,7 @@ import { useFormik } from "formik";
 export default function Authenticator() {
     const router = useRouter();
    
-    const { setLog } = useAuth();
+    const { login } = useAuth();
     const [loading, setLoading] = useState(false);
     const [invalidCredentials, setInvalidCredentials] = useState(false);
 
@@ -41,14 +40,13 @@ export default function Authenticator() {
                     email: values.email.trim(),
                     password: values.password,
                 });
-                const { token } = response.data;
+                const { token, usuario } = response.data;
 
-                if (!token) {
-                    throw new Error("La respuesta del servidor no contiene un token de sesión.");
+                if (!token || !usuario) {
+                    throw new Error("La respuesta del servidor no contiene el token y los datos del usuario.");
                 }
 
-                await setAuthToken(token);
-                setLog(true);
+                await login(token, usuario);
                 router.replace("/(tabs)");
             } catch (error) {
                 if (error.response?.status === 422) {

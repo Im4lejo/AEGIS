@@ -8,7 +8,11 @@ import {
 
 import {
     deleteAuthToken,
+    deleteAuthUser,
+    getAuthUser,
     getAuthToken,
+    setAuthUser,
+    setAuthToken,
 } from "./authTokenStorage";
 
 const AuthContext = createContext(null);
@@ -16,15 +20,24 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
     const [isLogged, setLog] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [token, setToken] = useState(null);
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
         const restoreSession = async () => {
             try {
-                const token = await getAuthToken();
+                const [storedToken, storedUser] = await Promise.all([
+                    getAuthToken(),
+                    getAuthUser(),
+                ]);
 
-                setLog(!!token);
+                setToken(storedToken);
+                setUser(storedToken ? storedUser : null);
+                setLog(!!storedToken);
             } catch (error) {
                 console.error("Error recuperando la sesión:", error);
+                setToken(null);
+                setUser(null);
                 setLog(false);
             } finally {
                 setIsLoading(false);
@@ -34,10 +47,20 @@ export function AuthProvider({ children }) {
         restoreSession();
     }, []);
 
+    const login = async (authToken, authenticatedUser) => {
+        await setAuthUser(authenticatedUser);
+        await setAuthToken(authToken);
+        setToken(authToken);
+        setUser(authenticatedUser);
+        setLog(true);
+    };
+
     const logout = async () => {
         try {
-            await deleteAuthToken();
+            await Promise.all([deleteAuthToken(), deleteAuthUser()]);
         } finally {
+            setToken(null);
+            setUser(null);
             setLog(false);
         }
     };
@@ -48,6 +71,9 @@ export function AuthProvider({ children }) {
                 isLogged,
                 setLog,
                 isLoading,
+                token,
+                user,
+                login,
                 logout,
             }}
         >
