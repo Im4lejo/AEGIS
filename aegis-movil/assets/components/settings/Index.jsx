@@ -15,13 +15,14 @@ export default function Index() {
     const handleLogout = async () => {
         try {
             await logout();
-            router.replace("/auth");
         } catch (error) {
             console.error("Error cerrando la sesión:", error);
             Alert.alert(
                 "No se pudo cerrar la sesión",
                 "Inténtalo de nuevo."
             );
+        } finally {
+            router.replace("/auth");
         }
     };
 

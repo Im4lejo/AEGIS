@@ -2,11 +2,16 @@ import { Image, StyleSheet, View, ScrollView, Text, Pressable } from "react-nati
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
+import { Redirect } from "expo-router";
 import ProfileProducts from "./ProfileProducts";
-import {useAuth} from "../../context/AuthContext"
+import { useAuth } from "../../context/AuthContext";
 export default function Profile() {
-    const {user} = useAuth();
+    const { user } = useAuth();
     const [selectedSection, setSelectedSection] = useState("publicaciones");
+
+    if (!user) {
+        return <Redirect href="/auth" />;
+    }
 
     return (
         <ScrollView style={styles.scrollView}>
