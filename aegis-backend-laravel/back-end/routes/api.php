@@ -21,5 +21,9 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/productos', [ProductoController::class, 'store']);
+    Route::post('/foro', [ForoController::class, 'store']);
+    Route::post('/foro/{publicacion}/comentarios', [ForoController::class, 'storeComment'])
+        ->whereNumber('publicacion');
     Route::post('/logout', [AuthController::class, 'logout']);
 });

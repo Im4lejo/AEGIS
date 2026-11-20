@@ -1,4 +1,4 @@
-import UserOptions from "../../assets/components/settings/UserOptions";
+import UserOptions from "../../src/views/settings/UserOptions";
 
 export default function SettingsIndex() {
     return <UserOptions />;

@@ -14,7 +14,7 @@ class InicioController extends Controller
             ->activo()
             ->with([
                 'categoria:id,nombre,descripcion',
-                'vendedor:id,nombre,apellido,username,foto_perfil,reputacion',
+                'vendedor:id,nombre,apellido,username,foto_perfil_url as foto_perfil,reputacion',
                 'imagenes:id,producto_id,imagen,principal',
             ])
             ->latest('fecha_publicacion')

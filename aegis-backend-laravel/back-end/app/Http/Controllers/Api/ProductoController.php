@@ -7,7 +7,8 @@ use App\Http\Resources\ProductoResource;
 use App\Models\Categoria;
 use App\Models\Producto;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
+use Cloudinary\Cloudinary;
 class ProductoController extends Controller
 {
     public function categorias()
@@ -32,7 +33,7 @@ class ProductoController extends Controller
             ->activo()
             ->with([
                 'categoria:id,nombre,descripcion',
-                'vendedor:id,nombre,apellido,username,foto_perfil,reputacion',
+                'vendedor:id,nombre,apellido,username,foto_perfil_url as foto_perfil,reputacion',
                 'imagenes:id,producto_id,imagen,principal',
             ]);
 
@@ -73,11 +74,86 @@ class ProductoController extends Controller
             ->activo()
             ->with([
                 'categoria:id,nombre,descripcion',
-                'vendedor:id,nombre,apellido,username,foto_perfil,reputacion',
+                'vendedor:id,nombre,apellido,username,foto_perfil_url as foto_perfil,reputacion',
                 'imagenes:id,producto_id,imagen,principal',
             ])
             ->findOrFail($producto);
 
         return new ProductoResource($product);
+    }
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'categoria_id' => 'required|exists:categorias,id',
+            'titulo' => 'required|string|max:150',
+            'descripcion' => 'required|string',
+            'precio' => 'required|numeric|min:0|max:9999999999.99',
+            'estado_producto' => 'required|in:nuevo,usado,reacondicionado',
+            'ciudad' => 'nullable|string|max:100',
+            'imagenes' => 'required|array|min:1|max:5',
+            'imagenes.*' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
+        ]);
+
+        $usuarioId = $request->user()->getKey();
+        $cloudinary = new Cloudinary(config('cloudinary.cloud_url'));
+
+        $imagenesSubidas = [];
+
+        try {
+            $producto = DB::transaction(function () use (
+                $validated,
+                $cloudinary,
+                $usuarioId,
+                &$imagenesSubidas
+            ) {
+                $producto = Producto::create([
+                    'usuario_id' => $usuarioId,
+                    'categoria_id' => $validated['categoria_id'],
+                    'titulo' => $validated['titulo'],
+                    'descripcion' => $validated['descripcion'],
+                    'precio' => $validated['precio'],
+                    'estado_producto' => $validated['estado_producto'],
+                    'ciudad' => $validated['ciudad'] ?? null,
+                ]);
+
+                foreach ($validated['imagenes'] as $index => $file) {
+                    $resultado = $cloudinary->uploadApi()->upload(
+                        $file->getRealPath(),
+                        [
+                            'folder' => 'productos',
+                            'resource_type' => 'image',
+                        ]
+                    );
+
+                    $imagenesSubidas[] = $resultado['public_id'];
+
+                    $producto->imagenes()->create([
+                        'imagen' => $resultado['secure_url'],
+                        'principal' => $index === 0,
+                    ]);
+                }
+
+                return $producto;
+            });
+
+            return response()->json([
+                'message' => 'Producto creado correctamente',
+                'data' => $producto->load('imagenes'),
+            ], 201);
+        } catch (\Throwable $e) {
+            foreach ($imagenesSubidas as $publicId) {
+                try {
+                    $cloudinary->uploadApi()->destroy($publicId);
+                } catch (\Throwable $error) {
+                    report($error);
+                }
+            }
+
+            report($e);
+
+            return response()->json([
+                'message' => 'Error al crear el producto.',
+            ], 500);
+        }
     }
 }

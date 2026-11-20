@@ -19,7 +19,7 @@ class PerfilController extends Controller
                 'apellido',
                 'username',
                 'ciudad',
-                'foto_perfil',
+                'foto_perfil_url',
                 'descripcion',
                 'reputacion',
                 'fecha_registro',
@@ -31,7 +31,7 @@ class PerfilController extends Controller
             ->where('usuario_id', $profile->id)
             ->with([
                 'categoria:id,nombre,descripcion',
-                'vendedor:id,nombre,apellido,username,foto_perfil,reputacion',
+                'vendedor:id,nombre,apellido,username,foto_perfil_url as foto_perfil,reputacion',
                 'imagenes:id,producto_id,imagen,principal',
             ])
             ->latest('fecha_publicacion')
@@ -40,6 +40,13 @@ class PerfilController extends Controller
 
         $posts = Publicacion::query()
             ->where('usuario_id', $profile->id)
+            ->with([
+                'imagenes:id,publicacion_id,imagen,orden',
+                'comentarios' => fn ($query) => $query
+                    ->with('usuario:id,nombre,username,foto_perfil_url as foto_perfil')
+                    ->orderBy('fecha_comentario'),
+            ])
+            ->withCount('comentarios')
             ->latest('fecha_publicacion')
             ->limit(10)
             ->get(['id', 'usuario_id', 'titulo', 'contenido', 'fecha_publicacion']);

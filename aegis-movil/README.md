@@ -1,5 +1,21 @@
 # AEGIS Móvil
 
+## Estructura MVVM
+
+El código de la aplicación está organizado por responsabilidad dentro de `src/`:
+
+```text
+src/
+  models/       Acceso a API, almacenamiento y datos de dominio
+  viewmodels/   Estado y lógica de presentación de cada feature
+  views/        Pantallas y componentes visuales
+```
+
+Las rutas de Expo Router permanecen en `app/` y actúan como adaptadores que
+renderizan las vistas correspondientes. Así se conservan las URLs y la
+navegación existentes, mientras las vistas delegan la carga y transformación
+del estado a sus ViewModels.
+
 ## Conectar Expo Go con la API local
 
 La IPv4 Wi-Fi actual del PC es `10.10.34.167`. El teléfono debe usar esta dirección en lugar del nombre local `aegis`.

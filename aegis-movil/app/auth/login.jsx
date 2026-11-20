@@ -1,4 +1,4 @@
-import Login from "../../assets/components/Auth/Login";
+import Login from "../../src/views/auth/Login";
 
 export default function LoginRoute() {
     return <Login />;

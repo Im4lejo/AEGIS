@@ -1,4 +1,4 @@
-import BasicInfo from "../../../assets/components/settings/BasicInfo";
+import BasicInfo from "../../../src/views/settings/BasicInfo";
 
 export default function BasicInfoRoute() {
     return <BasicInfo />;

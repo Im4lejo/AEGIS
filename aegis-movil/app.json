@@ -38,7 +38,16 @@
       ],
       "expo-router",
       "expo-secure-store",
-      "expo-font"
+      "expo-font",
+      "expo-status-bar",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "AEGIS necesita acceso a tus fotos para adjuntar imágenes a tus productos.",
+          "cameraPermission": false,
+          "microphonePermission": false
+        }
+      ]
     ]
   }
 }

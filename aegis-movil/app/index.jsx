@@ -1,5 +1,5 @@
 import { Redirect } from "expo-router";
-import { useAuth } from "../assets/context/AuthContext";
+import { useAuth } from "../src/viewmodels/auth/AuthContext";
 
 export default function IndexRoute() {
     const { isLogged, isLoading } = useAuth();

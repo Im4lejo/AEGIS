@@ -28,4 +28,10 @@ class Publicacion extends Model
     {
         return $this->hasMany(Comentario::class, 'publicacion_id');
     }
+
+    public function imagenes(): HasMany
+    {
+        return $this->hasMany(ImagenPublicacionForo::class, 'publicacion_id')
+            ->orderBy('orden');
+    }
 }

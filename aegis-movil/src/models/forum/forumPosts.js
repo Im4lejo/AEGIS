@@ -1,0 +1,31 @@
+export const initialForumPosts = [
+    {
+        id: "post-1",
+        author: "TheDarkMoon7456",
+        age: "Hace 2 h",
+        title: "¿Alguien sabe si mi GTX 1050 puede correr Cyberpunk 2077 al ultra?",
+        body: "He visto varios videos y quiero asegurarme antes de comprarlo. Tengo un i5 y 16GB de RAM.",
+        question: "¿Alguna sugerencia sobre rendimiento?",
+        likes: 892,
+        comments: 2,
+    },
+    {
+        id: "post-2",
+        author: "TheDarkMoon7456",
+        age: "Hace 5 h",
+        title: "¿Alguien sabe cómo arreglar mi PC? Se queda en pantalla azul (BSOD) constantemente y no arranca.",
+        body: "Your PC ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart for you.",
+        likes: 341,
+        comments: 1,
+        hasImage: true,
+    },
+    {
+        id: "post-3",
+        author: "NovaKatana",
+        age: "Hace 1 d",
+        title: "¿Qué periféricos recomiendan para empezar a hacer streaming?",
+        body: "Busco opciones buenas y económicas para mejorar mi setup.",
+        likes: 126,
+        comments: 8,
+    },
+];

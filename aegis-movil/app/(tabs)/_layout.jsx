@@ -3,13 +3,14 @@ import { Tabs, useRouter } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Text } from "react-native";
-import { useAuth } from "../../assets/context/AuthContext";
+import { useAuth } from "../../src/viewmodels/auth/AuthContext";
 
 export default function TabLayout() {
     const router = useRouter();
     const { isLogged, isLoading } = useAuth();
     const tabLabels = {
         index: "Inicio",
+        points: "Puntos",
         settings: "Ajustes",
         profile: "Perfil",
         search: "Buscar",
@@ -54,6 +55,7 @@ export default function TabLayout() {
                     else if (route.name === "settings") iconName = focused ? "settings" : "settings-outline";
                     else if (route.name === "profile") iconName = focused ? "person" : "person-outline";
                     else if (route.name === "search") iconName = focused ? "search" : "search-outline";
+                    else if (route.name === "points") iconName = focused ? "location" : "location-outline";
                     else if (route.name === "publish") iconName = "add";
                     return <Ionicons name={iconName} size={size} color={color} />;
                 },
@@ -63,6 +65,7 @@ export default function TabLayout() {
             })}
         >
             <Tabs.Screen name="index" options={{ title: "Inicio" }} />
+            <Tabs.Screen name="points" options={{ title: "Puntos" }} />
             
             <Tabs.Screen
                 name="profile"
@@ -88,10 +91,6 @@ export default function TabLayout() {
 
             />
             
-            <Tabs.Screen
-                name="product"
-                options={{ href: null }}
-            />
             <Tabs.Screen
                 name="search-results"
                 options={{ href: null }}

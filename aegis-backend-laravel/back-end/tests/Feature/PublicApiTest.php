@@ -11,7 +11,9 @@ use App\Models\PuntoFisico;
 use App\Models\Usuario;
 use Database\Seeders\CategoriaSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class PublicApiTest extends TestCase
@@ -62,6 +64,29 @@ class PublicApiTest extends TestCase
         $this->getJson('/api/productos/'.$hidden->id)->assertNotFound();
     }
 
+    public function test_product_creation_requires_at_least_one_image(): void
+    {
+        $seller = $this->createUser();
+        $category = Categoria::query()->create(['nombre' => 'Accesorios']);
+        Sanctum::actingAs($seller);
+
+        $this->postJson('/api/productos', [
+            'categoria_id' => $category->id,
+            'titulo' => 'Teclado mecánico',
+            'descripcion' => 'Teclado usado en buen estado.',
+            'precio' => 150000,
+            'estado_producto' => 'usado',
+        ])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['imagenes']);
+    }
+
+    public function test_product_creation_requires_authentication(): void
+    {
+        $this->postJson('/api/productos')
+            ->assertUnauthorized();
+    }
+
     public function test_forum_feed_contains_authors_and_comments_without_private_fields(): void
     {
         $author = $this->createUser(['username' => 'autor']);
@@ -85,6 +110,69 @@ class PublicApiTest extends TestCase
             ->assertJsonMissingPath('data.0.comentarios.0.usuario.password');
     }
 
+    public function test_authenticated_users_can_publish_forum_posts(): void
+    {
+        $author = $this->createUser(['username' => 'publicador']);
+        Sanctum::actingAs($author);
+        $content = '¿Qué tarjeta gráfica recomiendan para jugar?';
+
+        $this->postJson('/api/foro', ['contenido' => $content])
+            ->assertCreated()
+            ->assertJsonPath('data.titulo', $content)
+            ->assertJsonPath('data.contenido', $content)
+            ->assertJsonPath('data.usuario.username', 'publicador');
+
+        $this->assertDatabaseHas('publicaciones_foro', [
+            'usuario_id' => $author->id,
+            'titulo' => $content,
+            'contenido' => $content,
+        ]);
+    }
+
+    public function test_authenticated_users_can_comment_on_forum_posts(): void
+    {
+        $author = $this->createUser(['username' => 'autor']);
+        $commenter = $this->createUser(['username' => 'comentarista']);
+        $post = Publicacion::query()->create([
+            'usuario_id' => $author->id,
+            'titulo' => 'Consulta de hardware',
+            'contenido' => '¿Qué tarjeta gráfica recomiendan?',
+        ]);
+        Sanctum::actingAs($commenter);
+
+        $this->postJson('/api/foro/'.$post->id.'/comentarios', [
+            'comentario' => 'Una GPU de gama media.',
+        ])
+            ->assertCreated()
+            ->assertJsonPath('data.comentario', 'Una GPU de gama media.')
+            ->assertJsonPath('data.usuario.username', 'comentarista');
+
+        $this->assertDatabaseHas('comentarios_foro', [
+            'publicacion_id' => $post->id,
+            'usuario_id' => $commenter->id,
+            'comentario' => 'Una GPU de gama media.',
+        ]);
+    }
+
+    public function test_forum_posts_reject_non_image_attachments(): void
+    {
+        Sanctum::actingAs($this->createUser());
+
+        $this->withHeader('Accept', 'application/json')
+            ->post('/api/foro', [
+                'contenido' => 'Publicación de prueba',
+                'imagenes' => [
+                    UploadedFile::fake()->create(
+                        'manual.pdf',
+                        20,
+                        'application/pdf'
+                    ),
+                ],
+            ])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['imagenes.0']);
+    }
+
     public function test_profile_and_physical_point_endpoints_only_expose_public_records(): void
     {
         $owner = $this->createUser(['username' => 'owner']);
@@ -104,13 +192,33 @@ class PublicApiTest extends TestCase
             'estado' => 'pendiente',
         ]);
         $this->createProduct($owner, $category);
+        $post = Publicacion::query()->create([
+            'usuario_id' => $owner->id,
+            'titulo' => 'Mi publicación del foro',
+            'contenido' => 'Consulta desde mi perfil.',
+        ]);
+        $post->comentarios()->create([
+            'usuario_id' => $owner->id,
+            'comentario' => 'Comentario visible desde el perfil.',
+        ]);
 
-        $this->getJson('/api/perfiles/'.$owner->id)
+        $this->getJson('/api/perfil/'.$owner->id)
             ->assertOk()
             ->assertJsonPath('data.perfil.username', 'owner')
             ->assertJsonMissingPath('data.perfil.email')
             ->assertJsonMissingPath('data.perfil.password')
-            ->assertJsonCount(1, 'data.productos');
+            ->assertJsonCount(1, 'data.productos')
+            ->assertJsonCount(1, 'data.publicaciones')
+            ->assertJsonPath('data.publicaciones.0.id', $post->id)
+            ->assertJsonPath('data.publicaciones.0.comentarios_count', 1)
+            ->assertJsonPath(
+                'data.publicaciones.0.comentarios.0.comentario',
+                'Comentario visible desde el perfil.'
+            )
+            ->assertJsonPath(
+                'data.publicaciones.0.comentarios.0.usuario.username',
+                'owner'
+            );
 
         $this->getJson('/api/puntos-fisicos')
             ->assertOk()
