@@ -1,262 +1,200 @@
 import { useEffect, useRef, useState } from 'react'
 import Header from '../../layouts/Header'
-import { buscarProducto } from '../../productos/productosDemo'
-import { CHATS } from '../mensajesDemo'
+import { useAuth } from '../../../auth/useAuth'
+import { messageApi, productApi } from '../../../services/api'
 import '../css/mensajes.css'
 
-const moverArriba = (chat) => {
-  const posicion = CHATS.indexOf(chat)
-  if (posicion > 0) {
-    CHATS.splice(posicion, 1)
-    CHATS.unshift(chat)
-  }
-}
-
 export default function Mensajes({ id, auth, onNavigate }) {
-  const chatExistente = CHATS.find((c) => String(c.productoId) === String(id))
-  const productoNuevo = id && !chatExistente ? buscarProducto(id) : null
-
-  let activoInicial = CHATS[0].productoId
-  if (chatExistente) {
-    activoInicial = chatExistente.productoId
-  } else if (productoNuevo) {
-    CHATS.unshift({
-      productoId: productoNuevo.id,
-      hora: 'Ahora',
-      noLeidos: 0,
-      mensajes: [],
-    })
-    activoInicial = productoNuevo.id
-  }
-
-  const [listaChats, setListaChats] = useState(CHATS.slice())
-  const [activo, setActivo] = useState(activoInicial)
+  const { token } = useAuth()
+  const [conversations, setConversations] = useState([])
+  const [activeId, setActiveId] = useState(null)
+  const [messages, setMessages] = useState([])
   const [texto, setTexto] = useState('')
   const [busqueda, setBusqueda] = useState('')
+  const [adjuntos, setAdjuntos] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [beforeId, setBeforeId] = useState(null)
+  const [hasMore, setHasMore] = useState(false)
+  const zoneRef = useRef(null)
+  const fileRef = useRef(null)
 
-  const zonaMensajes = useRef(null)
-  const archivoRef = useRef(null)
-
-  const chat = listaChats.find((c) => c.productoId === activo) || listaChats[0]
-  const producto = buscarProducto(chat.productoId) || {}
-  const titulo = producto.nombre || producto.titulo || 'Producto'
-  const vendedor = producto.vendedor ? producto.vendedor : { nombre: 'Vendedor' }
-
-  const bajar = () => {
-    if (zonaMensajes.current) {
-      zonaMensajes.current.scrollTop = zonaMensajes.current.scrollHeight
+  const loadInbox = async (silent = false) => {
+    if (!token) return
+    try {
+      const { data } = await messageApi.inbox(token)
+      setConversations(data)
+      setError('')
+      if (!silent && !activeId && data.length) setActiveId(data[0].id)
+    } catch (requestError) {
+      setError(requestError.message)
+    } finally {
+      setLoading(false)
     }
   }
 
   useEffect(() => {
-    bajar()
-  }, [listaChats, activo])
+    if (!token) return undefined
+    loadInbox()
+    const interval = window.setInterval(() => loadInbox(true), 5000)
+    return () => window.clearInterval(interval)
+  }, [token])
 
-  const abrirChat = (productoId) => {
-    setActivo(productoId)
-    const chat = listaChats.find((c) => c.productoId === productoId)
-    if (chat) {
-      chat.noLeidos = 0
+  useEffect(() => {
+    if (!id || !token) return
+    let active = true
+    productApi.show(id)
+      .then(({ data }) => {
+        if (!active || !data.usuario_id || data.usuario_id === auth?.user?.id) return
+        return messageApi.openDirect(data.usuario_id, id, token)
+      })
+      .then((result) => {
+        if (result?.data) {
+          setActiveId(result.data.id)
+          loadInbox(true)
+        }
+      })
+      .catch((requestError) => setError(requestError.message))
+    return () => { active = false }
+  }, [id, token])
+
+  const loadMessages = async (conversationId, before = null) => {
+    if (!conversationId || !token) return
+    try {
+      const { data, meta } = await messageApi.messages(conversationId, token, before)
+      setBeforeId(meta.next_before_id)
+      setHasMore(meta.has_more)
+      setMessages((actual) => before ? [...data, ...actual] : data)
+      await messageApi.markRead(conversationId, token)
+    } catch (requestError) {
+      setError(requestError.message)
     }
-    setListaChats(CHATS.slice())
   }
 
-  const enviar = (event) => {
+  useEffect(() => {
+    if (!activeId) return
+    loadMessages(activeId)
+    const interval = window.setInterval(() => loadMessages(activeId), 5000)
+    return () => window.clearInterval(interval)
+  }, [activeId])
+
+  const active = conversations.find((item) => item.id === activeId)
+
+  const submit = async (event) => {
     event.preventDefault()
-    const mensaje = texto.trim()
-    if (!mensaje) return
-
-    const hora = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })
-
-    const chat = listaChats.find((c) => c.productoId === activo)
-    if (chat) {
-      chat.mensajes = chat.mensajes.concat({ id: chat.mensajes.length + 1, mio: true, texto: mensaje, hora })
-      chat.hora = hora
-      chat.noLeidos = 0
-      moverArriba(chat)
-      setListaChats(CHATS.slice())
+    if (!activeId || (!texto.trim() && adjuntos.length === 0)) return
+    try {
+      const { data } = await messageApi.send(activeId, {
+        contenido: texto.trim(),
+        adjuntos,
+      }, token)
+      setMessages((actual) => [...actual, data])
+      setTexto('')
+      setAdjuntos([])
+      await loadInbox(true)
+    } catch (requestError) {
+      setError(requestError.message)
     }
-    setTexto('')
   }
 
-  const adjuntar = (event) => {
-    const archivo = event.target.files && event.target.files[0]
-    if (!archivo) return
-
-    const url = URL.createObjectURL(archivo)
-    const hora = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })
-
-    const chat = listaChats.find((c) => c.productoId === activo)
-    if (chat) {
-      chat.mensajes = chat.mensajes.concat({ id: chat.mensajes.length + 1, mio: true, texto: '', imagen: url, hora })
-      chat.hora = hora
-      chat.noLeidos = 0
-      moverArriba(chat)
-      setListaChats(CHATS.slice())
+  const search = async (event) => {
+    const value = event.target.value
+    setBusqueda(value)
+    if (!value.trim()) return
+    try {
+      await messageApi.search(value.trim(), token, activeId)
+    } catch (requestError) {
+      setError(requestError.message)
     }
-    event.target.value = ''
   }
 
-  const chatsVisibles = listaChats.filter((c) => {
-    const p = buscarProducto(c.productoId) || {}
-    const nombre = (p.nombre || p.titulo || '') + ' ' + (p.vendedor ? p.vendedor.nombre : '')
-    return nombre.toLowerCase().indexOf(busqueda.toLowerCase()) !== -1
-  })
+  const loadPrevious = () => {
+    if (beforeId) loadMessages(activeId, beforeId)
+  }
 
   return (
     <div className="page-layout mensajes-layout">
       <Header title="AEGIS | Mensajes" auth={auth} onNavigate={onNavigate} />
-
       <div className="msg-pagina">
         <aside className="msg-lista">
           <div className="msg-lista-top">
             <h1 className="msg-titulo">Mensajes</h1>
           </div>
-
           <div className="msg-buscar">
-            <i className="fa-solid fa-magnifying-glass" />
             <input
-              type="text"
+              type="search"
               placeholder="Buscar conversaciones..."
               value={busqueda}
-              onChange={(e) => setBusqueda(e.target.value)}
+              onChange={search}
             />
           </div>
-
-          <div className="msg-conversaciones">
-            {chatsVisibles.map((c) => {
-              const p = buscarProducto(c.productoId) || {}
-              const nombreProducto = p.nombre || p.titulo || 'Producto'
-              const nombreVendedor = p.vendedor ? p.vendedor.nombre : 'Vendedor'
-              const ultimo = c.mensajes.length > 0 ? c.mensajes[c.mensajes.length - 1].texto : ''
-              return (
+          {loading ? (
+            <p className="msg-vacio">Cargando conversaciones...</p>
+          ) : conversations.length === 0 ? (
+            <p className="msg-vacio">No tienes conversaciones.</p>
+          ) : (
+            <div className="msg-conversaciones">
+              {conversations.map((conversation) => (
                 <button
-                  key={c.productoId}
                   type="button"
-                  className={c.productoId === activo ? 'msg-item msg-item-activo' : 'msg-item'}
-                  onClick={() => abrirChat(c.productoId)}
+                  key={conversation.id}
+                  className={conversation.id === activeId ? 'msg-item msg-item-activo' : 'msg-item'}
+                  onClick={() => setActiveId(conversation.id)}
                 >
-                  <img className="msg-item-img" src={p.imagen} alt="" />
                   <span className="msg-item-info">
-                    <span className="msg-item-fila">
-                      <strong className="msg-item-nombre">{nombreProducto}</strong>
-                      <span className="msg-item-hora">{c.hora}</span>
-                    </span>
-                    <span className="msg-item-vendedor">{nombreVendedor}</span>
-                    <span className="msg-item-fila">
-                      <span className="msg-item-preview">{ultimo}</span>
-                      {c.noLeidos > 0 && <span className="msg-item-badge">{c.noLeidos}</span>}
-                    </span>
+                    <strong>{conversation.tipo === 'directa'
+                      ? (conversation.usuarios?.find((user) => user.id !== auth?.user?.id)?.nombre || 'Conversación')
+                      : conversation.titulo}</strong>
+                    {conversation.producto && (
+                      <span>{conversation.producto.titulo} · COP {Number(conversation.producto.precio || 0).toLocaleString('es-CO')}</span>
+                    )}
                   </span>
                 </button>
-              )
-            })}
-            {chatsVisibles.length === 0 && (
-              <p className="msg-vacio">No se encontraron conversaciones.</p>
-            )}
-          </div>
+              ))}
+            </div>
+          )}
         </aside>
 
-        <span className="msg-separador" />
-
         <section className="msg-chat">
-          <div className="msg-producto">
-            <img className="msg-producto-img" src={producto.imagen} alt={titulo} />
-            <div className="msg-producto-info">
-              <h2 className="msg-producto-nombre">{titulo}</h2>
-              <p className="msg-producto-precio">
-                {producto.precio ? '$' + producto.precio.toLocaleString('es-CO') : ''}
-              </p>
-              <p className="msg-producto-vendedor">
-                Publicado por <strong>{vendedor.nombre}</strong>{' '}
-                <i className="fa-solid fa-circle-check" />
-              </p>
-            </div>
-            <div className="msg-producto-acciones">
-              <button
-                type="button"
-                className="msg-btn-ver"
-                onClick={() => onNavigate && onNavigate('/productos/detalle?id=' + activo)}
-              >
+          {active?.producto && (
+            <div className="msg-producto">
+              <div className="msg-producto-info">
+                <h2>{active.producto.titulo}</h2>
+                <p>COP {Number(active.producto.precio || 0).toLocaleString('es-CO')}</p>
+                <p>Estado: {active.producto.estado_publicacion}</p>
+              </div>
+              <button type="button" onClick={() => onNavigate?.(`/productos/detalle?id=${active.producto.id}`)}>
                 Ver producto
               </button>
-              <button type="button" className="msg-btn-mas">Más opciones</button>
             </div>
-          </div>
-
+          )}
           <div className="msg-seguridad">
-            <i className="fa-solid fa-shield-halved" />
-            <span>Por tu seguridad, mantén todas las conversaciones y pagos dentro de AEGIS.</span>
+            Mantén conversaciones y pagos dentro de AEGIS.
           </div>
-
-          <div className="msg-zona" ref={zonaMensajes}>
-            {chat.mensajes.length > 0 && <span className="msg-hoy">Hoy</span>}
-
-            {chat.mensajes.map((m) => (
-              <div
-                key={m.id}
-                className={m.mio ? 'msg-fila msg-fila-mio' : 'msg-fila msg-fila-vendedor'}
-              >
-                {!m.mio && (
-                  <span className="msg-avatar msg-avatar-vendedor">
-                    <i className="fa-solid fa-shield-halved" />
-                  </span>
-                )}
-                <div className={m.mio ? 'msg-burbuja msg-burbuja-mio' : 'msg-burbuja msg-burbuja-vendedor'}>
-                  {m.imagen && <img className="msg-imagen" src={m.imagen} alt="Imagen enviada" onLoad={bajar} />}
-                  {m.texto && <p className="msg-texto">{m.texto}</p>}
-                  <span className="msg-hora-burbuja">
-                    {m.hora}
-                    {m.mio && <i className="fa-solid fa-check-double" />}
-                  </span>
+          {error && <p className="msg-vacio" role="alert">{error}</p>}
+          {hasMore && (
+            <button type="button" onClick={loadPrevious}>Cargar mensajes anteriores</button>
+          )}
+          <div className="msg-zona" ref={zoneRef}>
+            {messages.map((message) => (
+              <div key={message.id} className={message.autor_id === auth?.user?.id ? 'msg-fila msg-fila-mio' : 'msg-fila'}>
+                <div className="msg-burbuja">
+                  {message.contenido && <p>{message.estado === 'eliminado' ? 'Mensaje eliminado' : message.contenido}</p>}
+                  {(message.adjuntos || []).map((adjunto) => (
+                    <a key={adjunto.id} href={adjunto.url} target="_blank" rel="noreferrer">
+                      {adjunto.nombre_original || 'Adjunto'}
+                    </a>
+                  ))}
                 </div>
-                {m.mio && <span className="msg-avatar msg-avatar-mio">US</span>}
               </div>
             ))}
-
-            <div className="msg-encuentro">
-              <span className="msg-encuentro-icono">
-                <i className="fa-solid fa-calendar-days" />
-              </span>
-              <div className="msg-encuentro-info">
-                <h4>Configurar encuentro</h4>
-                <p>Coordina fecha, hora y lugar para revisar el producto en persona.</p>
-                <button
-                  type="button"
-                  className="msg-encuentro-btn"
-                  onClick={() => onNavigate && onNavigate('/configurar-encuentro?id=' + activo)}
-                >
-                  Configurar encuentro
-                </button>
-              </div>
-            </div>
           </div>
-
-          <form className="msg-input" onSubmit={enviar}>
-            <input
-              ref={archivoRef}
-              type="file"
-              accept="image/*"
-              className="msg-archivo-oculto"
-              onChange={adjuntar}
-            />
-            <button
-              type="button"
-              className="msg-clip"
-              aria-label="Adjuntar"
-              onClick={() => archivoRef.current && archivoRef.current.click()}
-            >
-              <i className="fa-solid fa-paperclip" />
-            </button>
-            <input
-              type="text"
-              placeholder="Escribe tu mensaje..."
-              value={texto}
-              onChange={(e) => setTexto(e.target.value)}
-            />
-            <button type="submit" className="msg-enviar" aria-label="Enviar">
-              <i className="fa-solid fa-arrow-up" />
-            </button>
+          <form className="msg-composer" onSubmit={submit}>
+            <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" multiple hidden
+              onChange={(event) => setAdjuntos(Array.from(event.target.files || []))} />
+            <button type="button" onClick={() => fileRef.current?.click()} disabled={!activeId}>Adjuntar</button>
+            <input type="text" value={texto} onChange={(event) => setTexto(event.target.value)} placeholder="Escribe un mensaje..." />
+            <button type="submit" disabled={!activeId}>Enviar</button>
           </form>
         </section>
       </div>

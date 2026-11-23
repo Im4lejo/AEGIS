@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ForoController;
 use App\Http\Controllers\Api\GuardadosController;
 use App\Http\Controllers\Api\InicioController;
 use App\Http\Controllers\Api\MediaController;
+use App\Http\Controllers\Api\MensajeController;
 use App\Http\Controllers\Api\PerfilController;
 use App\Http\Controllers\Api\ProductoController;
 use App\Http\Controllers\Api\PuntoFisicoController;
@@ -72,6 +73,20 @@ Route::prefix('auth/web')->name('auth.web.')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
+    Route::get('/mensajes', [MensajeController::class, 'inbox']);
+    Route::get('/mensajes/buscar', [MensajeController::class, 'search']);
+    Route::post('/mensajes/directo', [MensajeController::class, 'openDirect']);
+    Route::post('/mensajes/grupo', [MensajeController::class, 'createGroup']);
+    Route::get('/mensajes/{conversacion}', [MensajeController::class, 'show'])->whereNumber('conversacion');
+    Route::get('/mensajes/{conversacion}/mensajes', [MensajeController::class, 'messages'])->whereNumber('conversacion');
+    Route::post('/mensajes/{conversacion}/mensajes', [MensajeController::class, 'send'])->whereNumber('conversacion');
+    Route::delete('/mensajes/{conversacion}/mensajes/{mensaje}', [MensajeController::class, 'deleteMessage'])
+        ->whereNumber('conversacion')
+        ->whereNumber('mensaje');
+    Route::patch('/mensajes/{conversacion}/lectura', [MensajeController::class, 'markRead'])->whereNumber('conversacion');
+    Route::patch('/mensajes/{conversacion}/preferencias', [MensajeController::class, 'preferences'])->whereNumber('conversacion');
+    Route::delete('/mensajes/{conversacion}/participacion', [MensajeController::class, 'leave'])->whereNumber('conversacion');
+    Route::post('/mensajes/{conversacion}/reportar', [MensajeController::class, 'report'])->whereNumber('conversacion');
     Route::post('/tiendas', [TiendaController::class, 'store']);
     Route::patch('/tiendas/{tienda}', [TiendaController::class, 'update'])->whereNumber('tienda');
     Route::post('/tiendas/{tienda}/verificacion', [TiendaController::class, 'requestVerification'])->whereNumber('tienda');

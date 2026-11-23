@@ -198,6 +198,15 @@ El foro usa `publicaciones_foro` como entidad canónica y conserva `/api/foro`.
 - Inventario por producto incluye stock disponible y reservado.
 - Ajustes usan transacciones y movimientos auditados.
 
+## Mensajería
+
+- Conversaciones directas/grupales persistidas.
+- Conversaciones comerciales vinculadas al anuncio.
+- Adjuntos mediante el servicio de media.
+- Lecturas opt-in, bloqueo, archivo, silencio y reportes.
+- Paginación hacia atrás por ID.
+- React usa polling de 5 segundos; no hay WebSocket real configurado.
+
 ## Verificación
 
 ```bash

@@ -454,6 +454,67 @@ export const savedApi = {
     request('/reportes/contextual', { method: 'POST', body: details, token }),
 }
 
+export const messageApi = {
+  inbox: (token, perPage = 30) =>
+    request(`/mensajes${queryString({ per_page: perPage })}`, { token }),
+  search: (busqueda, token, conversacionId = null) =>
+    request(`/mensajes/buscar${queryString({ busqueda, conversacion_id: conversacionId })}`, { token }),
+  openDirect: (usuarioId, productoId, token) =>
+    request('/mensajes/directo', {
+      method: 'POST',
+      body: { usuario_id: usuarioId, producto_id: productoId || undefined },
+      token,
+    }),
+  createGroup: (titulo, usuarioIds, token) =>
+    request('/mensajes/grupo', {
+      method: 'POST',
+      body: { titulo, usuario_ids: usuarioIds },
+      token,
+    }),
+  show: (conversationId, token) =>
+    request(`/mensajes/${encodeURIComponent(conversationId)}`, { token }),
+  messages: (conversationId, token, beforeId = null, perPage = 30) =>
+    request(`/mensajes/${encodeURIComponent(conversationId)}/mensajes${queryString({ before_id: beforeId, per_page: perPage })}`, { token }),
+  send: (conversationId, details, token) => {
+    const body = new FormData()
+    if (details.contenido) body.append('contenido', details.contenido)
+    if (details.respondido_a_id) body.append('respondido_a_id', details.respondido_a_id)
+    ;(details.adjuntos || []).forEach((file) => body.append('adjuntos[]', file))
+    return request(`/mensajes/${encodeURIComponent(conversationId)}/mensajes`, {
+      method: 'POST',
+      body,
+      token,
+    })
+  },
+  deleteMessage: (conversationId, messageId, token) =>
+    request(`/mensajes/${encodeURIComponent(conversationId)}/mensajes/${encodeURIComponent(messageId)}`, {
+      method: 'DELETE',
+      token,
+    }),
+  markRead: (conversationId, token) =>
+    request(`/mensajes/${encodeURIComponent(conversationId)}/lectura`, {
+      method: 'PATCH',
+      token,
+    }),
+  preferences: (conversationId, details, token) =>
+    request(`/mensajes/${encodeURIComponent(conversationId)}/preferencias`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  leave: (conversationId, token) =>
+    request(`/mensajes/${encodeURIComponent(conversationId)}/participacion`, {
+      method: 'DELETE',
+      token,
+    }),
+  report: (conversationId, details, token) =>
+    request(`/mensajes/${encodeURIComponent(conversationId)}/reportar`, {
+      method: 'POST',
+      body: details,
+      token,
+    }),
+}
+
 export const profileApi = {
   show: (userId) => request(`/perfil/${encodeURIComponent(userId)}`),
   own: (token) => request('/perfil/me', { token }),

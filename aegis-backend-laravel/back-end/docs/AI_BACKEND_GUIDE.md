@@ -295,6 +295,14 @@ Las preguntas viven en `preguntas_producto`. Públicamente solo aparecen las `re
 
 `inventario_producto` controla stock y reservas por producto. `movimientos_inventario` registra entradas, salidas, reservas, liberaciones y ajustes. Las operaciones usan bloqueo transaccional y rechazan stock negativo.
 
+### Mensajería
+
+`conversaciones` contiene DMs/contextos y grupos. `participantes_conversacion` controla acceso, rol, lectura opt-in, archivo y silencio. `mensajes` conserva contenido y cita; `adjuntos_mensaje` referencia el proveedor remoto. `lecturas_mensaje` almacena recibos solo opt-in.
+
+Las DMs usan `contexto_clave` ordenado por participante y producto para evitar duplicados. Los bloqueos impiden abrir o enviar. El backend limita envíos a 30 por minuto por cuenta.
+
+No existe proveedor WebSocket/Reverb/Pusher configurado. React usa polling cada cinco segundos contra `/api/mensajes`; no muestra presencia ni conexión falsamente.
+
 ## 6. Modelos Eloquent y relaciones
 
 | Modelo | Tabla | Relaciones definidas / comportamiento |
