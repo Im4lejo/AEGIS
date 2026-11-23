@@ -726,3 +726,58 @@
 .perfil-page .perfil-post-head {
   cursor: pointer;
 }
+
+.perfil-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 12px 18px 0;
+  border-top: 1px solid #edf0f5;
+}
+
+.perfil-tabs button {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: #667085;
+  padding: 10px 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.perfil-tabs button.active {
+  color: #0b2050;
+  border-bottom-color: #0b2050;
+  font-weight: 700;
+}
+
+.perfil-tab-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 10px 18px 14px;
+  font-size: 13px;
+}
+
+.perfil-tab-pagination button {
+  border: 1px solid #dfe3e9;
+  border-radius: 8px;
+  background: #fff;
+  padding: 7px 10px;
+}
+
+.perfil-tab-pagination button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (max-width: 520px) {
+  .perfil-identity {
+    grid-template-columns: 1fr;
+  }
+
+  .perfil-tab-pagination {
+    justify-content: space-between;
+  }
+}

@@ -123,6 +123,16 @@ Los productos y publicaciones usan Cloudinary mediante `MediaManager` y conserva
 - Fallos remotos crean operaciones pendientes para reintento; los registros históricos sin `public_id` no se borran remotamente.
 - Avatar y portada se reemplazan mediante endpoints propios del usuario autenticado.
 
+## Perfiles sociales
+
+- `GET/PATCH /api/perfil/me` administra el perfil propio y su actividad.
+- `GET /api/perfil/{id}` conserva el contrato público anterior.
+- `GET /api/perfil/{id}/tabs/{tab}` pagina Publicaciones, Productos, Comunidades, Reseñas e Información.
+- `perfil_privado`, seguidores, presencia y publicación fijada tienen reglas persistidas.
+- Seguir, bloquear y silenciar tienen endpoints propios.
+- Los recursos públicos excluyen email, teléfono, dirección exacta y otros campos privados.
+- La desactivación inicia 30 días de retención y revoca tokens.
+
 ## Verificación
 
 ```bash

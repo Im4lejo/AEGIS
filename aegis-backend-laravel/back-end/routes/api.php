@@ -18,6 +18,8 @@ Route::get('/productos/{producto}', [ProductoController::class, 'show'])->whereN
 Route::get('/foro', [ForoController::class, 'index']);
 Route::get('/foro/{publicacion}', [ForoController::class, 'show'])->whereNumber('publicacion');
 Route::get('/perfil/{usuario}', [PerfilController::class, 'show'])->whereNumber('usuario');
+Route::get('/perfil/{usuario}/tabs/{tab}', [PerfilController::class, 'tab'])
+    ->whereNumber('usuario');
 Route::get('/puntos-fisicos', [PuntoFisicoController::class, 'index']);
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -63,6 +65,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/productos/{producto}/imagenes/orden', [MediaController::class, 'reorderProducto'])->whereNumber('producto');
         Route::post('/perfil/media/avatar', [MediaController::class, 'replaceAvatar']);
         Route::post('/perfil/media/portada', [MediaController::class, 'replaceCover']);
+        Route::get('/perfil/me', [PerfilController::class, 'own']);
+        Route::patch('/perfil/me', [PerfilController::class, 'updateOwn']);
+        Route::post('/perfil/{usuario}/seguir', [PerfilController::class, 'follow'])->whereNumber('usuario');
+        Route::delete('/perfil/{usuario}/seguir', [PerfilController::class, 'unfollow'])->whereNumber('usuario');
+        Route::post('/perfil/{usuario}/restriccion', [PerfilController::class, 'restrict'])->whereNumber('usuario');
+        Route::delete('/perfil/{usuario}/restriccion', [PerfilController::class, 'unrestrict'])->whereNumber('usuario');
+        Route::post('/perfil/me/desactivar', [PerfilController::class, 'deactivate']);
         Route::post('/foro', [ForoController::class, 'store']);
         Route::patch('/foro/{publicacion}', [ForoController::class, 'update'])->whereNumber('publicacion');
         Route::delete('/foro/{publicacion}', [ForoController::class, 'destroy'])->whereNumber('publicacion');

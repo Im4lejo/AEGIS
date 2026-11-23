@@ -235,6 +235,28 @@ export const forumApi = {
 
 export const profileApi = {
   show: (userId) => request(`/perfil/${encodeURIComponent(userId)}`),
+  own: (token) => request('/perfil/me', { token }),
+  updateOwn: (details, token) =>
+    request('/perfil/me', { method: 'PATCH', body: details, token }),
+  tab: (userId, tab, page = 1, perPage = 12) =>
+    request(`/perfil/${encodeURIComponent(userId)}/tabs/${encodeURIComponent(tab)}${queryString({ page, per_page: perPage })}`),
+  follow: (userId, token) =>
+    request(`/perfil/${encodeURIComponent(userId)}/seguir`, { method: 'POST', token }),
+  unfollow: (userId, token) =>
+    request(`/perfil/${encodeURIComponent(userId)}/seguir`, { method: 'DELETE', token }),
+  restrict: (userId, tipo, token) =>
+    request(`/perfil/${encodeURIComponent(userId)}/restriccion`, {
+      method: 'POST',
+      body: { tipo },
+      token,
+    }),
+  unrestrict: (userId, token) =>
+    request(`/perfil/${encodeURIComponent(userId)}/restriccion`, {
+      method: 'DELETE',
+      token,
+    }),
+  deactivate: (token) =>
+    request('/perfil/me/desactivar', { method: 'POST', token }),
   replaceAvatar: (file, token, altText = 'Foto de perfil') => {
     const body = new FormData()
     body.append('imagen', file)

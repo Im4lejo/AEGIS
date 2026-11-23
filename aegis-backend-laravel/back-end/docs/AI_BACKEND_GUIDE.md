@@ -225,6 +225,14 @@ Las rutas de adjuntos son operaciones protegidas y revalidan el Gate del recurso
 
 `operaciones_media` contiene eliminaciones remotas pendientes con clave idempotente, estado, intentos y próximo intento. Los registros históricos sin `public_id` se mantienen y no generan borrado remoto.
 
+### Perfiles sociales
+
+El perfil propio se obtiene y modifica con `/api/perfil/me`. El contrato público `/api/perfil/{usuario}` permanece compatible y limita campos a información autorizada. Las pestañas públicas usan `/api/perfil/{usuario}/tabs/{tab}` y paginan por `per_page` con máximo 50.
+
+`usuarios.url_publica`, `ciudad_aprox`, `perfil_privado`, `mostrar_seguidores`, `mostrar_presencia`, `ultima_actividad` y `publicacion_fijada_id` modelan identidad visible y privacidad. `enlaces_perfil` limita enlaces a tipos conocidos y URLs HTTP/HTTPS. `seguimientos` distingue pendiente/aceptado. `bloqueos_usuario` diferencia bloqueo y silencio. `desactivaciones_usuario` conserva una ventana de retención antes de procesar la desactivación.
+
+Los recursos públicos nunca seleccionan email, teléfono ni ciudad exacta. Un perfil privado devuelve `PROFILE_PRIVATE` salvo propietario o seguimiento aceptado. Los bloqueos mutuos devuelven `PROFILE_RESTRICTED`.
+
 ## 6. Modelos Eloquent y relaciones
 
 | Modelo | Tabla | Relaciones definidas / comportamiento |
