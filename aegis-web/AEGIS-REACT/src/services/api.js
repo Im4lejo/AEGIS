@@ -454,6 +454,31 @@ export const savedApi = {
     request('/reportes/contextual', { method: 'POST', body: details, token }),
 }
 
+export const meetingApi = {
+  points: (filters = {}) => request(`/puntos-fisicos/directorio${queryString(filters)}`),
+  meetings: (estado = null, token) =>
+    request(`/encuentros${queryString({ estado })}`, { token }),
+  create: (details, token) =>
+    request('/encuentros', { method: 'POST', body: details, token }),
+  update: (meetingId, details, token) =>
+    request(`/encuentros/${encodeURIComponent(meetingId)}`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  generateQr: (meetingId, token) =>
+    request(`/encuentros/${encodeURIComponent(meetingId)}/qr`, {
+      method: 'POST',
+      token,
+    }),
+  validateQr: (tokenValue, evidencia, token) =>
+    request('/encuentros/qr/validar', {
+      method: 'POST',
+      body: { token: tokenValue, evidencia },
+      token,
+    }),
+}
+
 export const negotiationApi = {
   mine: (token) => request('/negociacion', { token }),
   create: (details, token) =>

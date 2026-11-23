@@ -21,6 +21,12 @@ class Encuentro extends Model
         'fecha_encuentro',
         'hora_encuentro',
         'estado',
+        'operacion_id',
+        'expira_en',
+        'notas',
+        'confirmado_en',
+        'cancelado_en',
+        'finalizado_en',
     ];
 
     protected function casts(): array
@@ -28,6 +34,10 @@ class Encuentro extends Model
         return [
             'fecha_encuentro' => 'date',
             'fecha_creacion' => 'datetime',
+            'expira_en' => 'datetime',
+            'confirmado_en' => 'datetime',
+            'cancelado_en' => 'datetime',
+            'finalizado_en' => 'datetime',
         ];
     }
 

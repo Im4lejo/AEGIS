@@ -214,6 +214,13 @@ El foro usa `publicaciones_foro` como entidad canónica y conserva `/api/foro`.
 - Completar la operación es una acción del vendedor y marca vendido.
 - No existe checkout ni pasarela de pagos.
 
+## Puntos físicos y encuentros
+
+- Puntos aprobados se listan por directorio y ciudad.
+- Encuentros tienen propuesta, confirmación, reprogramación, cancelación y finalización.
+- QR usa token opaco solo una vez y expira.
+- Solo owner del punto o administración valida presencialmente.
+
 ## Verificación
 
 ```bash

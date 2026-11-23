@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { buscarProducto } from '../../productos/productosDemo'
+import { meetingApi } from '../../../services/api'
 import '../css/encuentros.css'
 
 const PUNTOS = [
@@ -29,6 +30,20 @@ export default function Encuentros({ id, auth, onNavigate }) {
   const [hora, setHora] = useState('04:00 PM')
   const [notas, setNotas] = useState('')
   const [confirmado, setConfirmado] = useState(false)
+  const [puntosReales, setPuntosReales] = useState([])
+  const [errorEncuentro, setErrorEncuentro] = useState('')
+
+  useEffect(() => {
+    let active = true
+    meetingApi.points({ per_page: 50 })
+      .then(({ data }) => {
+        if (active) setPuntosReales(data)
+      })
+      .catch((error) => {
+        if (active) setErrorEncuentro(error.message)
+      })
+    return () => { active = false }
+  }, [])
 
   const partes = fecha.split('-')
   const fechaTexto = partes.length === 3 ? partes[2] + '/' + partes[1] + '/' + partes[0] : fecha
@@ -37,9 +52,27 @@ export default function Encuentros({ id, auth, onNavigate }) {
     if (onNavigate) onNavigate('/mensajes?id=' + producto.id)
   }
 
-  const confirmar = (event) => {
+  const confirmar = async (event) => {
     event.preventDefault()
-    setConfirmado(true)
+    if (!auth?.token) return
+    const selected = puntosReales.find((item) => item.nombre === punto)
+      || puntosReales[0]
+    if (!selected) {
+      setErrorEncuentro('No hay puntos aprobados disponibles.')
+      return
+    }
+    try {
+      await meetingApi.create({
+        producto_id: producto.id,
+        punto_fisico_id: selected.id,
+        fecha_encuentro: fecha,
+        hora_encuentro: hora.replace(/ (AM|PM)/, '').replace(/：/g, ':'),
+        notas,
+      }, auth.token)
+      setConfirmado(true)
+    } catch (error) {
+      setErrorEncuentro(error.message)
+    }
   }
 
   return (
@@ -92,12 +125,13 @@ export default function Encuentros({ id, auth, onNavigate }) {
               </div>
             ) : (
               <form className="enc-formulario" onSubmit={confirmar}>
+                {errorEncuentro && <p role="alert">{errorEncuentro}</p>}
                 <label className="enc-campo">
                   <span>Selecciona Punto Verificado</span>
                   <span className="enc-select">
                     <i className="fa-solid fa-location-dot" />
                     <select value={punto} onChange={(e) => setPunto(e.target.value)}>
-                      {PUNTOS.map((nombre) => (
+                      {(puntosReales.length ? puntosReales.map((item) => item.nombre) : PUNTOS).map((nombre) => (
                         <option key={nombre} value={nombre}>{nombre}</option>
                       ))}
                     </select>

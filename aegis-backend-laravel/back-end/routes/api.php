@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AdminAuthorizationController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ComunidadController;
+use App\Http\Controllers\Api\EncuentroController;
 use App\Http\Controllers\Api\ForoController;
 use App\Http\Controllers\Api\GuardadosController;
 use App\Http\Controllers\Api\InicioController;
@@ -32,6 +33,7 @@ Route::get('/perfil/{usuario}/tabs/{tab}', [PerfilController::class, 'tab'])
 Route::get('/perfil/{usuario}/seguidores', [PerfilController::class, 'followers'])->whereNumber('usuario');
 Route::get('/perfil/{usuario}/siguiendo', [PerfilController::class, 'following'])->whereNumber('usuario');
 Route::get('/puntos-fisicos', [PuntoFisicoController::class, 'index']);
+Route::get('/puntos-fisicos/directorio', [EncuentroController::class, 'pointDirectory']);
 Route::get('/tiendas', [TiendaController::class, 'index']);
 Route::get('/tiendas/{tienda}', [TiendaController::class, 'show'])->whereNumber('tienda');
 Route::get('/comunidades', [ComunidadController::class, 'index']);
@@ -74,6 +76,13 @@ Route::prefix('auth/web')->name('auth.web.')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/puntos-fisicos', [PuntoFisicoController::class, 'store']);
+    Route::patch('/puntos-fisicos/{punto}/revision', [PuntoFisicoController::class, 'review'])->whereNumber('punto');
+    Route::get('/encuentros', [EncuentroController::class, 'index']);
+    Route::post('/encuentros', [EncuentroController::class, 'store']);
+    Route::patch('/encuentros/{encuentro}', [EncuentroController::class, 'update'])->whereNumber('encuentro');
+    Route::post('/encuentros/{encuentro}/qr', [EncuentroController::class, 'generateQr'])->whereNumber('encuentro');
+    Route::post('/encuentros/qr/validar', [EncuentroController::class, 'validateQr']);
     Route::get('/negociacion', [NegociacionController::class, 'mine']);
     Route::post('/ofertas', [NegociacionController::class, 'store']);
     Route::patch('/ofertas/{oferta}/contraoferta', [NegociacionController::class, 'counter'])->whereNumber('oferta');

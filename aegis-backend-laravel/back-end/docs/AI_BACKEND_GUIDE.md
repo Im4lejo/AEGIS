@@ -309,6 +309,14 @@ No existe proveedor WebSocket/Reverb/Pusher configurado. React usa polling cada 
 
 Aceptar una oferta crea reserva y operación pendiente. Completar solo puede hacerlo el vendedor o admin y cambia el anuncio a vendido. Cancelar/disputar conserva el estado de acuerdo y libera la reserva cuando corresponde.
 
+### Puntos físicos y encuentros
+
+Los puntos tienen owner, estado público y estado de revisión. Solo puntos activos/aprobados aparecen en el directorio.
+
+Los encuentros pueden ser propuestos por comprador y confirmados/reprogramados por vendedor. Cancelación y finalización quedan auditadas.
+
+Los QR no contienen datos personales: se genera un token opaco que el servidor no devuelve como texto persistido, salvo hash SHA-256 en `token_hash`. Expiran, se usan una vez y solo owner del punto/admin pueden validar.
+
 ## 6. Modelos Eloquent y relaciones
 
 | Modelo | Tabla | Relaciones definidas / comportamiento |
