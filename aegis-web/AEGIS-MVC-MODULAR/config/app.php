@@ -1,6 +1,8 @@
 <?php
 
-define('BASE_URL', '/AEGIS-MVC-MODULAR/public');
+$scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '/index.php');
+$baseUrl = rtrim(str_replace('/index.php', '', $scriptName), '/');
+define('BASE_URL', $baseUrl === '' ? '' : $baseUrl);
 define('ROOT_PATH', dirname(__DIR__));
 
 function url(string $path = ''): string

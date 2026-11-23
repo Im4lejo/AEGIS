@@ -4,6 +4,8 @@ import { useAuth } from '../../auth/useAuth'
 import { productApi } from '../../services/api'
 import Head from './Head'
 import Navbar from './Navbar'
+import WorkspaceChrome from './WorkspaceChrome'
+import { ThemeSelector } from '../../theme/ThemeProvider'
 import CarritoPanel from '../carrito/CarritoPanel'
 import { totalUnidades } from '../carrito/carritoDemo'
 import './css/layouts.css'
@@ -125,10 +127,10 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
                         </button>
                     )}
 
-                    <div className="header-logo" onClick={() => go(null, '/')}>
+                    <button className="header-logo" type="button" aria-label="AEGIS, ir al inicio" onClick={() => go(null, '/')}>
                         <img src="/aegis-logo.png" alt="AEGIS" className="logo-img" />
                         <span className="logo-text">AEGIS</span>
-                    </div>
+                    </button>
 
                     <button
                         className="menu-toggle"
@@ -199,14 +201,21 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
                                 <a className="header-mobile-link" href={route('/novedades')} onClick={(event) => go(event, '/novedades')}>Novedades</a>
                             </div>
                         </nav>
+                        <ThemeSelector className="theme-select--mobile" />
 
                         {usuario
                             ? <a className="header-mobile-link header-mobile-logout" href={route('/login')} onClick={cerrarSesion}>Cerrar sesión</a>
                             : <a className="header-mobile-link header-mobile-logout" href={route('/login')} onClick={(event) => go(event, '/login')}>Iniciar sesión</a>}
+                        {usuario && (
+                            <a className="header-mobile-link" href={route('/seguridad')} onClick={(event) => go(event, '/seguridad')}>
+                                Seguridad de cuenta
+                            </a>
+                        )}
                     </div>
 
                     <div className="header-search">
                         <input
+                        aria-label="Buscar productos"
                             type="text"
                             placeholder="Busca tu producto aquí..."
                             value={busqueda}
@@ -222,6 +231,13 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
                     </div>
 
                     <div className="header-user-actions">
+                        <a className="header-message-link" href={route('/mensajes')} onClick={(event) => go(event, '/mensajes')}>
+                            Mensajes
+                        </a>
+                        <span className="header-notification-status" role="status" title="La bandeja de notificaciones aún no está disponible">
+                            Notificaciones · próximamente
+                        </span>
+                        <ThemeSelector className="theme-select--desktop" />
                         <div className="profile-dropdown-container" ref={profileRef}>
                             <button
                                 className="profile-btn"
@@ -246,6 +262,7 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
                                     {usuario ? (
                                         <>
                                             <a href={route('/perfil')} onClick={(e) => go(e, '/perfil')}>Mi Perfil</a>
+                                            <a href={route('/seguridad')} onClick={(e) => go(e, '/seguridad')}>Seguridad de cuenta</a>
                                             <hr />
                                             <a href={route('/login')} onClick={cerrarSesion} className="logout-link">Cerrar Sesión</a>
                                         </>
@@ -271,6 +288,8 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
                     </div>
                 </div>
             </header>
+
+            <WorkspaceChrome auth={auth} onNavigate={onNavigate} />
 
             {carritoAbierto && (
                 <CarritoPanel

@@ -5,7 +5,7 @@ class Publicacion extends Model
     public function findById(int $id): ?array
     {
         return $this->fetch(
-            'SELECT p.*, u.nombre, u.foto_perfil, u.username
+            'SELECT p.*, u.nombre, u.foto_perfil_url AS foto_perfil, u.username
              FROM publicaciones_foro p
              JOIN usuarios u ON p.usuario_id = u.id
              WHERE p.id = ?',
@@ -30,7 +30,7 @@ class Publicacion extends Model
     public function getAllWithAuthor(): array
     {
         return $this->fetchAll(
-            'SELECT p.*, u.nombre, u.username, u.foto_perfil
+            'SELECT p.*, u.nombre, u.username, u.foto_perfil_url AS foto_perfil
              FROM publicaciones_foro p
              JOIN usuarios u ON p.usuario_id = u.id
              ORDER BY p.fecha_publicacion DESC'

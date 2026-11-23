@@ -188,6 +188,8 @@ export default function Editar({ auth, onNavigate, id }) {
   }, [modalAbierto])
 
   useEffect(() => {
+    // Keep the selected profile section synchronized with the URL query.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSeccion(id || 'info')
   }, [id])
 

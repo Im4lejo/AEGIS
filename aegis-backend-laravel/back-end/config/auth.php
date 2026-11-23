@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\Usuario;
 
 return [
 
@@ -67,6 +68,11 @@ return [
             'model' => env('AUTH_MODEL', User::class),
         ],
 
+        'usuarios' => [
+            'driver' => 'eloquent',
+            'model' => Usuario::class,
+        ],
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -96,6 +102,13 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'usuarios' => [
+            'provider' => 'usuarios',
+            'table' => env('AUTH_USUARIO_PASSWORD_RESET_TOKEN_TABLE', 'usuario_password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,
         ],

@@ -5,22 +5,25 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-class Usuario extends Authenticatable
-
+class Usuario extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens;
+    use HasApiTokens, Notifiable;
+
     protected $table = 'usuarios';
 
     public $timestamps = false;
 
-    protected $hidden = ['password'];
+    protected $hidden = ['password', 'remember_token'];
 
     protected $fillable = [
         'nombre',
         'apellido',
         'username',
         'email',
+        'email_verified_at',
         'password',
         'telefono',
         'ciudad',
@@ -39,6 +42,7 @@ class Usuario extends Authenticatable
         return [
             'reputacion' => 'decimal:2',
             'fecha_registro' => 'datetime',
+            'email_verified_at' => 'datetime',
         ];
     }
 

@@ -1,5 +1,4 @@
 RewriteEngine On
-RewriteBase /AEGIS-MVC-MODULAR/public/
 
 # Si el archivo o carpeta no existe
 RewriteCond %{REQUEST_FILENAME} !-f

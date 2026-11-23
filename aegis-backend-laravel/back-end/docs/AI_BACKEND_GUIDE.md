@@ -42,7 +42,7 @@ En orden de autoridad para el comportamiento real:
 - Único endpoint web definido por la aplicación: `GET /`, que devuelve la vista Laravel `welcome`.
 - La ruta de salud configurada por Laravel es `/up`.
 
-No existe actualmente una capa de servicios de dominio, repositorios, DTOs, Form Requests, middleware propio, policies ni gates de autorización. Los controladores validan y orquestan directamente Eloquent, transacciones y Cloudinary. `AppServiceProvider` no registra lógica de aplicación.
+No se han añadido capas generales de servicios de dominio, repositorios o DTOs. Las rutas web de autenticación usan un controlador, un recurso de usuario y middleware propio solo para responsabilidades concretas. Los controladores existentes validan y orquestan directamente Eloquent, transacciones y Cloudinary.
 
 ## 2. Inicio y ciclo de una petición
 
@@ -64,7 +64,7 @@ Cliente
   -> cliente
 ```
 
-`bootstrap/app.php` registra `routes/web.php`, `routes/api.php`, `routes/console.php` y el health check `/up`. No añade callbacks propios de middleware ni de excepciones. El prefijo `/api` lo aporta el enrutamiento API de Laravel; no se repite en los paths dentro de `routes/api.php`.
+`bootstrap/app.php` registra `routes/web.php`, `routes/api.php`, `routes/console.php`, el health check `/up` y el alias `verified.web`. El prefijo `/api` lo aporta el enrutamiento API de Laravel; no se repite en los paths dentro de `routes/api.php`.
 
 ### CLI
 
@@ -88,10 +88,11 @@ Las tareas habituales usan Composer/Artisan. `routes/console.php` solo registra 
 | `routes/api.php` | Fuente de verdad de endpoints API y agrupación `auth:sanctum`. |
 | `routes/web.php` | Ruta `GET /` a la vista `welcome`. No contiene vistas del marketplace. |
 | `routes/console.php` | Comando scaffold `inspire`. |
-| `app/Http/Controllers/Api` | Autenticación, foro, inicio, perfiles públicos, productos y puntos físicos. |
-| `app/Http/Resources/ProductoResource.php` | Serialización pública de productos. Es el único recurso API propio identificado. |
+| `app/Http/Controllers/Api` | Autenticación legacy y web, foro, inicio, perfiles públicos, productos y puntos físicos. |
+| `app/Http/Resources` | Serialización de productos públicos y de datos de autenticación AEGIS. |
+| `app/Http/Middleware/EnsureWebEmailIsVerified.php` | Exige verificación para escrituras con tokens `aegis-web`, sin cambiar el flujo móvil. |
 | `app/Models` | Modelos Eloquent del dominio y modelo scaffold `User`. |
-| `app/Providers/AppServiceProvider.php` | Sin registros o inicialización de aplicación propios. |
+| `app/Providers/AppServiceProvider.php` | Configura URLs firmadas de correo y destino frontend de restablecimiento. |
 | `database/migrations` | Esquema de dominio y tablas scaffold de Laravel/Sanctum. |
 | `database/seeders` | Categorías y datos de demostración idempotentes. |
 | `database/factories/UserFactory.php` | Factory scaffold para `App\Models\User` y la tabla `users`; no para `usuarios`. |
@@ -113,12 +114,13 @@ Las tareas habituales usan Composer/Artisan. `routes/console.php` solo registra 
 | `ForoController` | Feed, crear publicaciones y crear comentarios. |
 | `PerfilController` | Perfil público, productos activos y publicaciones del usuario. |
 | `PuntoFisicoController` | Listado paginado de puntos físicos activos. |
+| `WebAuthController` | Registro, verificación, login, recuperación, cambio de contraseña, sesiones y avisos para React. |
 
 El controlador base `App\Http\Controllers\Controller` está vacío.
 
 ## 4. Contrato HTTP existente
 
-Todas las rutas de la tabla son `/api/...`. Para recibir errores de validación JSON, los clientes deben enviar `Accept: application/json`. Los endpoints protegidos usan `Authorization: Bearer <token>`. Peticiones con archivos deben usar `multipart/form-data`; los payloads sin archivo normalmente usan JSON.
+Todas las rutas de la tabla son `/api/...`. Laravel serializa excepciones de rutas API como JSON incluso si el cliente omite `Accept`; los clientes deben enviar `Accept: application/json` para declarar explícitamente el formato esperado. Los endpoints protegidos usan `Authorization: Bearer <token>`. Peticiones con archivos deben usar `multipart/form-data`; los payloads sin archivo normalmente usan JSON.
 
 ### Rutas públicas
 
@@ -134,6 +136,29 @@ Todas las rutas de la tabla son `/api/...`. Para recibir errores de validación 
 | `POST /api/register` | `AuthController::register` | `nombre` requerido string máx. 100; `apellido` requerido string máx. 100; `username` opcional string máx. 50 y único en `usuarios`; `email` requerido email máx. 150 y único; `password` requerido string mín. 8 y confirmado mediante `password_confirmation`. | 201. Crea `Usuario` con `rol=usuario`, `estado=activo`, hash de contraseña y token Sanctum. Devuelve `message`, `usuario` y `token`. |
 | `POST /api/login` | `AuthController::login` | `email` requerido con formato email; `password` requerido string. | Credenciales no válidas: ValidationException (422). Cuenta distinta de activa: 403. Éxito: `message`, `usuario` y token Sanctum. |
 
+### Identidad y recuperación web
+
+Las rutas web viven bajo `/api/auth/web`; no sustituyen los endpoints Bearer legacy anteriores:
+
+| Método y ruta | Acceso | Comportamiento |
+|---|---|---|
+| `POST /api/auth/web/register` | Público, 5/min | Valida y crea `Usuario`; respuesta genérica 202 y notificación de verificación, sin token |
+| `POST /api/auth/web/login` | Público, 5/min | Devuelve un token `aegis-web` con expiración a 8 h; cuentas inexistentes, inactivas, no verificadas y credenciales incorrectas reciben el mismo 401 |
+| `POST /api/auth/web/email/resend` | Público, 3/min | Reenvía verificación con respuesta genérica 202 |
+| `GET /api/auth/web/email/verify/{id}/{hash}` | Firma temporal, 10/min | Marca el correo verificado y redirige a `FRONTEND_URL` |
+| `POST /api/auth/web/password/forgot` | Público, 3/min | Usa `Password::broker('usuarios')`; siempre devuelve respuesta genérica 202 |
+| `POST /api/auth/web/password/reset` | Público, 5/min | Restablece contraseña validada y revoca todos los tokens de la cuenta |
+| `GET /api/auth/web/me` | `auth:sanctum` | Devuelve `UsuarioAuthResource` limitado |
+| `POST /api/auth/web/logout` | `auth:sanctum` | Revoca el token Bearer actual |
+| `GET /api/auth/web/sessions` | `auth:sanctum` | Lista hasta 50 tokens propios, sin su secreto |
+| `DELETE /api/auth/web/sessions/{token}` | `auth:sanctum` | Revoca solo un token perteneciente al usuario actual; otro usuario obtiene 404 |
+| `DELETE /api/auth/web/sessions` | `auth:sanctum` | Revoca todos los tokens de la cuenta |
+| `GET /api/auth/web/security-notices` | `auth:sanctum` | Lista avisos web recientes, limitados al usuario |
+| `PATCH /api/auth/web/password` | `auth:sanctum`, 5/min | Verifica contraseña actual, cambia contraseña y revoca todos los tokens |
+| `POST /api/auth/web/email/verification-notification` | `auth:sanctum`, 3/min | Reenvía verificación de la cuenta autenticada |
+
+Los endpoints legacy `/api/register`, `/api/login`, `/api/me` y `/api/logout` conservan la emisión y revocación `aegis-movil` para consumidores existentes. Las operaciones de escritura con token `aegis-web` requieren email verificado; el middleware no bloquea tokens `aegis-movil`.
+
 ### Rutas protegidas con `auth:sanctum`
 
 | Método y ruta | Controlador | Entrada y validaciones | Resultado actual |
@@ -148,6 +173,7 @@ Todas las rutas de la tabla son `/api/...`. Para recibir errores de validación 
 
 - Los códigos exactos de validación se generan con `$request->validate`; para peticiones JSON, Laravel responde 422 con `message` y `errors`.
 - Autenticación ausente en rutas protegidas: 401.
+- Las excepciones en `/api/*` se renderizan como JSON sin redirigir a una ruta web de login.
 - Modelos consultados con `findOrFail`: 404.
 - Cuenta inactiva al iniciar sesión: 403.
 - Creaciones exitosas: 201.
@@ -163,20 +189,23 @@ Este detalle es obligatorio para cualquier cambio de autenticación o persistenc
 - `App\Models\User` corresponde a la tabla scaffold `users`. `config/auth.php` lo establece como modelo del proveedor Eloquent del guard web predeterminado (`AUTH_MODEL`, por defecto `User`). `UserFactory` también genera registros para esta tabla.
 - `App\Models\Usuario` corresponde a la tabla AEGIS `usuarios`. Extiende `Authenticatable`, usa `HasApiTokens`, oculta `password`, define `$fillable`, casts y relaciones del dominio.
 - Los controladores API de registro/login consultan `Usuario`; no crean cuentas AEGIS en `users`.
-- `config/auth.php` mantiene el broker scaffold `passwords.users` ligado al provider `users` y a `App\Models\User`. No hay rutas de recuperación de contraseña. Si se agrega recuperación AEGIS, debe seleccionarse explícitamente el modelo/tabla AEGIS; no asumir que el broker scaffold servirá `usuarios`.
+- `config/auth.php` mantiene el broker scaffold `passwords.users` ligado al provider `users` y a `App\Models\User`; `passwords.usuarios` usa explícitamente el provider `usuarios` y la tabla independiente `usuario_password_reset_tokens`.
 - Los tokens API se crean desde `Usuario` y `auth:sanctum` autentica esas peticiones Bearer.
+- `AUTH_USUARIO_PASSWORD_RESET_TOKEN_TABLE` puede cambiar el nombre de la tabla del broker AEGIS; su valor predeterminado es `usuario_password_reset_tokens`. No reutilizar la tabla scaffold.
 - No sustituyas uno por otro ni crees una migración de usuario nueva sin identificar primero qué guard, token y contrato consumirán el cambio.
 
 ### Flujo del token
 
 1. Registro/login valida la entrada.
 2. Contraseña se crea/verifica con `Hash::make` / `Hash::check`.
-3. El usuario AEGIS emite un token llamado `aegis-movil`.
-4. El cliente conserva el token en su capa de autenticación y envía `Authorization: Bearer <token>`.
-5. `auth:sanctum` protege `GET /me`, logout, creación de productos y escrituras del foro.
-6. Logout elimina `currentAccessToken()`.
+3. Las rutas legacy emiten tokens `aegis-movil` sin caducidad global configurada; no se cambia su comportamiento para Expo.
+4. El login web requiere una cuenta activa y verificada y emite `aegis-web` con expiración individual a ocho horas.
+5. React mantiene solo el token web en `sessionStorage` por pestaña, vuelve a validar el usuario con `/api/auth/web/me` y envía `Authorization: Bearer <token>`.
+6. El logout web elimina el token actual; cambio/restablecimiento de contraseña revocan todos los tokens. La pantalla de seguridad permite listar y revocar sesiones propias.
 
-`config/sanctum.php` deja `expiration=null` (sin caducidad global configurada), usa `guard=['web']` para autenticación stateful compatible, y permite configurar dominios stateful y prefijo del token por entorno. No hay endpoint de refresh token en `routes/api.php`.
+El uso de Bearer web evita migrar parcialmente a cookies stateful sin conocer los dominios reales de despliegue. `sessionStorage` reduce persistencia respecto del `localStorage` previo, pero el token sigue expuesto a JavaScript y a XSS. No se implementan refresh tokens, MFA ni passkeys; los dos últimos se muestran como no disponibles.
+
+`config/sanctum.php` deja `expiration=null` (sin caducidad global configurada), usa `guard=['web']` para autenticación stateful compatible, y permite configurar dominios stateful y prefijo del token por entorno. Los tokens `aegis-web` tienen expiración individual; no hay endpoint de refresh token en `routes/api.php`.
 
 ### Roles y estados
 

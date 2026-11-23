@@ -8,8 +8,10 @@ export default function Navbar({ onNavigate }) {
 
     return (
         <nav className="header-nav">
+            <a href={route('/productos')} onClick={(event) => go(event, '/productos')}>Marketplace</a>
             <a href={route('/productos/crear')} onClick={(event) => go(event, '/productos/crear')}>Publicar Producto</a>
             <a href={route('/foro')} onClick={(event) => go(event, '/foro')}>Foro</a>
+            <a href={route('/mensajes')} onClick={(event) => go(event, '/mensajes')}>Mensajes</a>
             <a href={route('/puntos-fisicos')} onClick={(event) => go(event, '/puntos-fisicos')}>Puntos Físicos</a>
         </nav>
     )

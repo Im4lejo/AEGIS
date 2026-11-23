@@ -149,3 +149,60 @@ Los archivos de MVC PHP marcados como modificados ya estaban en el worktree ante
 
 1. Repetir comprobación visual sobre Perfil con sesión autenticada y revisar Comunidad/Mensajes/Ajustes con teclado, contraste y tema oscuro.
 2. Levantar API con el origen Vite permitido para revisar datos reales integrados y estados de autorización.
+
+## Incremento 03 — identidad web y seguridad de acceso
+
+### Git y alcance histórico
+
+- Rama activa: `PersonalizacionPerfil`.
+- `HEAD`: `04c492920bef07269dc01dc5438722bce4487e40` al inicio del incremento; no se cambió de rama ni se creó commit.
+- `git rev-parse '6.0.0^{commit}'` falla porque el tag `6.0.0` no existe en este clon. No se puede afirmar ni reconstruir la relación histórica tag–HEAD.
+- Se conservaron los cambios preexistentes del worktree, incluidos cambios previos de React y MVC. No se usaron `checkout`, reset ni limpieza.
+
+### Cambios implementados
+
+- Se conservan las rutas Bearer existentes `/api/register`, `/api/login`, `/api/me` y `/api/logout` para clientes legacy/Expo. React usa `/api/auth/web/*` con `Usuario`/`usuarios`, token `aegis-web` de ocho horas y `sessionStorage` por pestaña.
+- El ciclo web incluye registro con mensaje genérico y verificación firmada, login, reenvío de verificación, recovery/reset, sesión actual, logout, gestión/revocación de tokens, avisos de inicio y cambio de contraseña. Password reset y cambio revocan tokens.
+- Login responde igual para cuenta desconocida, inactiva, sin verificar o credenciales inválidas. Registro/recovery no enumeran cuentas. Los endpoints sensibles usan throttling.
+- Una solicitud privada API sin `Accept` reveló un redirect a la ruta web `login` inexistente. Se configuró serialización JSON para `/api/*` y redirect nulo para visitantes API; ahora devuelve 401 y tiene prueba de regresión.
+- Dos migraciones incrementales: `2026_11_23_000001_add_email_verified_at_to_usuarios_table` y `2026_11_23_000002_create_usuario_password_reset_tokens_table`. El broker `usuarios` usa una tabla propia para evitar colisión con el broker scaffold `users`.
+- React incluye rutas/pantallas de registro, login, recuperación, restablecimiento, verificación y seguridad; feedback de validación, mostrar/ocultar contraseña y limpieza del token de reset de la URL tras cargarlo. MFA/passkeys se informan como no disponibles.
+- Se actualizaron ADR-0004, README y guía backend. No se modificaron endpoints legacy, el guard scaffold `web` ni los envelopes exitosos existentes.
+
+### Persistencia y seguridad operacional
+
+- No se ejecutó ni se leyó `.env`; no se expusieron credenciales.
+- No se aplicaron migraciones al MySQL de desarrollo compartido, no se ejecutó seeder, no se alteraron datos ni se creó backup porque no hubo escrituras en esa base.
+- `php artisan test` ejecuta las migraciones/features en SQLite en memoria según `phpunit.xml`. Las migraciones nuevas y la separación de brokers se probaron en ese entorno.
+- El correo real depende de `FRONTEND_URL`, origen permitido por CORS y un mailer operativo. Las pruebas interceptan las notificaciones; no se envió correo externo ni se realizó flujo manual de email.
+- Bearer web en `sessionStorage` sigue expuesto ante XSS; MFA/passkeys y refresh token no están habilitados. Requiere hardening CSP/sanitización antes de despliegue sensible.
+
+### Verificación del incremento
+
+| Comando / comprobación | Resultado |
+|---|---|
+| `php artisan test` | **27 tests, 147 assertions, éxito**; incluye aislamiento del broker `usuarios`, no enumeración en login y 401 JSON sin `Accept` |
+| `npm test` | **17 pruebas Vitest y 8 pruebas Node, éxito** |
+| `npm run lint` | **Éxito** |
+| `npm run format:check` | **Éxito** |
+| `npm run build` | **Éxito**, Vite 8.3.0 |
+| `php artisan route:list --path=api --except-vendor` | **Éxito: 28 rutas**, incluidas 14 nuevas rutas web; endpoints legacy siguen listados |
+| `git diff --check` | **Éxito**; Git advirtió conversión LF→CRLF esperada por la configuración local de Windows |
+| Navegador React ↔ Laravel | **Smoke integrado exitoso** con registro, verificación manual en la DB desechable, login, página de seguridad/sesión, recovery con mensajes iguales y logout con token revocado |
+| Navegador responsive y privacidad URL | A 360 px no hubo overflow en login/seguridad; revelar contraseña funcionó; la ruta reset eliminó token y email de la URL. Capturas desktop login y mobile registro adjuntas a la sesión |
+| Migraciones de prueba | **19/19 aplicadas** a un SQLite nuevo y aislado dentro del espacio temporal de sesión; el archivo se retiró al finalizar |
+| Migración contra base MySQL compartida | No ejecutada intencionalmente |
+
+El smoke registró la cuenta mediante React. Como el mailer de prueba local fue `array` y no se envió correo externo, se marcó verificada manualmente solo en el SQLite efímero para completar login y seguridad; el enlace firmado está cubierto por `WebAuthTest`. Recovery se verificó en navegador por su respuesta genérica para correo existente e inexistente; el restablecimiento real con email se valida en tests backend/UI, no con proveedor SMTP.
+
+### Archivos propios de Incremento 03
+
+Backend: `app/Models/Usuario.php`, `app/Providers/AppServiceProvider.php`, `bootstrap/app.php`, `config/app.php`, `config/auth.php`, `routes/api.php`, `app/Http/Controllers/Api/WebAuthController.php`, `app/Http/Middleware/EnsureWebEmailIsVerified.php`, `app/Http/Resources/UsuarioAuthResource.php`, las migraciones `email_verified_at` y `usuario_password_reset_tokens`, `tests/Feature/WebAuthTest.php`.
+
+React: `src/services/api.js` y `api.test.js`, `src/auth/AuthProvider.jsx`, `src/App.jsx`, `src/components/layouts/Header.jsx`, `src/components/auth/views/Login.jsx` y `Register.jsx`, además de pantallas, componentes, estilos y pruebas bajo `src/components/auth/`.
+
+Los cambios MVC marcados en el worktree se respetaron; no son parte del incremento web.
+
+### Estado y pendientes
+
+**Parcial — código y tests completos; integración de correo real pendiente.** Suites backend/frontend, lint, formato, build y smoke web local pasaron. Falta configurar un mailer operativo y verificar recepción de correo/enlaces de verificación y reset en entorno aprobado. No se aplicaron migraciones a MySQL compartido; antes de hacerlo, revisar y respaldar esa instancia local compartida.

@@ -1,0 +1,79 @@
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+  --color-canvas: #f3f5f8;
+  --color-surface: #ffffff;
+  --color-surface-muted: #e9edf3;
+  --color-text: #142338;
+  --color-text-muted: #4b5c72;
+  --color-border: #d3dbe5;
+  --color-border-strong: #9aa9bb;
+  --color-action: #173a60;
+  --color-action-hover: #102d4b;
+  --color-action-text: #ffffff;
+  --color-focus: #7a3fe0;
+  --color-danger: #a3211a;
+  --color-danger-hover: #811a15;
+  --color-danger-soft: #ffebe9;
+  --color-success: #176b3a;
+  --color-success-text: #14532d;
+  --color-success-soft: #e7f6ec;
+  --color-warning-soft: #fff3d6;
+  --color-warning-text: #6f4a00;
+  --color-info-soft: #e8f1ff;
+  --color-info-text: #1d477f;
+  --color-overlay: rgb(12 23 38 / 58%);
+  --font-family-sans:
+    Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --radius-control: 0.625rem;
+  --radius-card: 1rem;
+  --radius-pill: 999px;
+  --shadow-card: 0 1px 3px rgb(16 24 40 / 8%);
+  --shadow-raised: 0 12px 30px rgb(16 24 40 / 12%);
+  --shadow-overlay: 0 24px 70px rgb(0 0 0 / 24%);
+  --z-menu: 100;
+  --z-overlay: 1200;
+  --z-toast: 1400;
+  --breakpoint-mobile: 700px;
+  --breakpoint-tablet: 900px;
+  --breakpoint-wide: 1200px;
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --color-canvas: #101927;
+  --color-surface: #1a2738;
+  --color-surface-muted: #26364a;
+  --color-text: #f0f4f8;
+  --color-text-muted: #c1ccda;
+  --color-border: #394b60;
+  --color-border-strong: #64788f;
+  --color-action: #b7d5ff;
+  --color-action-hover: #d0e3ff;
+  --color-action-text: #10243b;
+  --color-focus: #d2afff;
+  --color-danger: #ff9a91;
+  --color-danger-hover: #ffc0ba;
+  --color-danger-soft: #4a2529;
+  --color-success: #9be0ad;
+  --color-success-text: #c5f2d0;
+  --color-success-soft: #1d3b2b;
+  --color-warning-soft: #4a3b1e;
+  --color-warning-text: #ffe0a0;
+  --color-info-soft: #203851;
+  --color-info-text: #c7e0ff;
+  --color-overlay: rgb(0 0 0 / 72%);
+  --shadow-card: 0 1px 3px rgb(0 0 0 / 30%);
+  --shadow-raised: 0 12px 30px rgb(0 0 0 / 38%);
+  --shadow-overlay: 0 24px 70px rgb(0 0 0 / 56%);
+}

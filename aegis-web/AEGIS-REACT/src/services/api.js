@@ -1,29 +1,116 @@
-const API_URL = (import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api').replace(/\/$/, '')
+const API_URL = (
+  import.meta.env?.VITE_API_URL || 'http://127.0.0.1:8000/api'
+).replace(/\/$/, '')
+
+const ERROR_MESSAGES = {
+  0: 'No se pudo conectar con AEGIS. Comprueba tu conexión e inténtalo de nuevo.',
+  400: 'No se pudo procesar la solicitud. Revisa los datos e inténtalo de nuevo.',
+  401: 'Tu sesión no es válida. Inicia sesión de nuevo para continuar.',
+  403: 'No tienes permiso para realizar esta acción.',
+  404: 'No encontramos lo que buscas.',
+  409: 'La información cambió o entra en conflicto. Actualiza e inténtalo de nuevo.',
+  422: 'Revisa los datos ingresados.',
+  429: 'Se alcanzó el límite temporal de solicitudes. Inténtalo de nuevo más tarde.',
+  500: 'El servicio tuvo un problema. Inténtalo de nuevo más tarde.',
+}
 
 export class ApiError extends Error {
-  constructor(message, status, errors = {}) {
+  constructor(
+    message,
+    status,
+    errors = {},
+    retryAfter = null,
+    cause,
+    code = null,
+  ) {
     super(message)
     this.name = 'ApiError'
     this.status = status
     this.errors = errors
+    this.retryAfter = retryAfter
+    this.code = code
+    if (cause) this.cause = cause
   }
 }
 
-async function request(path, { method = 'GET', body, token } = {}) {
+function errorMessage(status, data) {
+  const serverMessage = typeof data?.message === 'string' ? data.message : ''
+  const errors =
+    data?.errors && typeof data.errors === 'object' ? data.errors : {}
+  const validationMessage = Object.values(errors)
+    .flat()
+    .find((message) => typeof message === 'string')
+
+  if (status === 422) {
+    return validationMessage || serverMessage || ERROR_MESSAGES[422]
+  }
+
+  if (status === 400 || status === 403 || status === 409) {
+    return serverMessage || ERROR_MESSAGES[status]
+  }
+
+  if (status === 401) return serverMessage || ERROR_MESSAGES[401]
+
+  return ERROR_MESSAGES[status] || 'No se pudo completar la solicitud.'
+}
+
+export async function request(
+  path,
+  { method = 'GET', body, token, fetchImpl = globalThis.fetch } = {},
+) {
   const headers = { Accept: 'application/json' }
   if (token) headers.Authorization = `Bearer ${token}`
-  if (body && !(body instanceof FormData)) headers['Content-Type'] = 'application/json'
+  const isFormData = typeof FormData !== 'undefined' && body instanceof FormData
+  if (body !== undefined && body !== null && !isFormData)
+    headers['Content-Type'] = 'application/json'
 
-  const response = await fetch(`${API_URL}${path}`, {
-    method,
-    headers,
-    body: body instanceof FormData ? body : body ? JSON.stringify(body) : undefined,
-  })
-  const data = await response.json().catch(() => ({}))
+  let response
+  try {
+    response = await fetchImpl(`${API_URL}${path}`, {
+      method,
+      headers,
+      body: isFormData
+        ? body
+        : body === undefined || body === null
+          ? undefined
+          : JSON.stringify(body),
+    })
+  } catch (error) {
+    if (error?.name === 'AbortError') throw error
+    throw new ApiError(ERROR_MESSAGES[0], 0, {}, null, error)
+  }
+
+  const responseBody = await response.text()
+  let data
+  let isJson = false
+  if (responseBody) {
+    try {
+      data = JSON.parse(responseBody)
+      isJson = true
+    } catch {
+      data = null
+    }
+  }
 
   if (!response.ok) {
-    const validationMessage = data.errors && Object.values(data.errors).flat()[0]
-    throw new ApiError(validationMessage || data.message || 'No se pudo completar la solicitud.', response.status, data.errors)
+    const errors =
+      data?.errors && typeof data.errors === 'object' ? data.errors : {}
+    throw new ApiError(
+      errorMessage(response.status, data),
+      response.status,
+      errors,
+      response.headers.get('Retry-After'),
+      undefined,
+      data?.code || null,
+    )
+  }
+
+  if (response.status === 204) return null
+  if (!isJson) {
+    throw new ApiError(
+      'El servidor devolvió una respuesta no válida.',
+      response.status,
+    )
   }
 
   return data
@@ -32,17 +119,42 @@ async function request(path, { method = 'GET', body, token } = {}) {
 function queryString(params) {
   const query = new URLSearchParams()
   Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== '') query.set(key, value)
+    if (value !== undefined && value !== null && value !== '')
+      query.set(key, value)
   })
   const serialized = query.toString()
   return serialized ? `?${serialized}` : ''
 }
 
 export const authApi = {
-  login: (credentials) => request('/login', { method: 'POST', body: credentials }),
-  register: (details) => request('/register', { method: 'POST', body: details }),
-  me: (token) => request('/me', { token }),
-  logout: (token) => request('/logout', { method: 'POST', token }),
+  login: (credentials) =>
+    request('/auth/web/login', { method: 'POST', body: credentials }),
+  register: (details) =>
+    request('/auth/web/register', { method: 'POST', body: details }),
+  me: (token) => request('/auth/web/me', { token }),
+  logout: (token) => request('/auth/web/logout', { method: 'POST', token }),
+  resendVerification: (email) =>
+    request('/auth/web/email/resend', { method: 'POST', body: { email } }),
+  resendAuthenticatedVerification: (token) =>
+    request('/auth/web/email/verification-notification', {
+      method: 'POST',
+      token,
+    }),
+  forgotPassword: (email) =>
+    request('/auth/web/password/forgot', { method: 'POST', body: { email } }),
+  resetPassword: (details) =>
+    request('/auth/web/password/reset', { method: 'POST', body: details }),
+  changePassword: (details, token) =>
+    request('/auth/web/password', { method: 'PATCH', body: details, token }),
+  sessions: (token) => request('/auth/web/sessions', { token }),
+  revokeSession: (id, token) =>
+    request(`/auth/web/sessions/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      token,
+    }),
+  revokeAllSessions: (token) =>
+    request('/auth/web/sessions', { method: 'DELETE', token }),
+  securityNotices: (token) => request('/auth/web/security-notices', { token }),
 }
 
 export const productApi = {
@@ -53,7 +165,8 @@ export const productApi = {
   create: (product, token) => {
     const body = new FormData()
     Object.entries(product).forEach(([key, value]) => {
-      if (key === 'imagenes') value.forEach((image) => body.append('imagenes[]', image))
+      if (key === 'imagenes')
+        value.forEach((image) => body.append('imagenes[]', image))
       else if (value !== undefined && value !== null) body.append(key, value)
     })
     return request('/productos', { method: 'POST', body, token })
@@ -69,11 +182,12 @@ export const forumApi = {
     if (post.imagen) body.append('imagenes[]', post.imagen)
     return request('/foro', { method: 'POST', body, token })
   },
-  comment: (postId, comentario, token) => request(`/foro/${postId}/comentarios`, {
-    method: 'POST',
-    body: { comentario },
-    token,
-  }),
+  comment: (postId, comentario, token) =>
+    request(`/foro/${postId}/comentarios`, {
+      method: 'POST',
+      body: { comentario },
+      token,
+    }),
 }
 
 export const profileApi = {
