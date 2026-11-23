@@ -281,6 +281,12 @@ Los filtros públicos conservan `GET /api/productos`; `precio_min` y `precio_max
 
 Las búsquedas se registran en `busquedas_productos`; las comparaciones opcionales en `comparaciones_producto`. React persiste preferencias locales y sincroniza filtros activos en el hash URL.
 
+### Detalle comercial
+
+`GET /api/productos/{id}` devuelve galería, atributos, políticas, entrega, disponibilidad, preguntas respondidas, reseñas elegibles y metadatos SEO. No expone teléfono, email ni dirección exacta.
+
+Las preguntas viven en `preguntas_producto`. Públicamente solo aparecen las `respondida`. El vendedor propietario y administradores pueden responder/moderar. Visitantes pueden preguntar solo en anuncios activos o reservados públicos.
+
 ## 6. Modelos Eloquent y relaciones
 
 | Modelo | Tabla | Relaciones definidas / comportamiento |

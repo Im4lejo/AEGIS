@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductoResource;
+use App\Models\Calificacion;
 use App\Models\Categoria;
 use App\Models\Producto;
 use App\Services\MediaManager;
@@ -261,7 +262,64 @@ class ProductoController extends Controller
             abort(404);
         }
 
-        return new ProductoResource($product);
+        $questions = $product->preguntas()
+            ->where('estado', 'respondida')
+            ->with([
+                'usuario:id,nombre,username',
+                'respondidoPor:id,nombre,username',
+            ])
+            ->latest('fecha_pregunta')
+            ->limit(20)
+            ->get([
+                'id',
+                'pregunta',
+                'respuesta',
+                'usuario_id',
+                'respondido_por',
+                'estado',
+                'fecha_pregunta',
+                'fecha_respuesta',
+            ]);
+
+        $reviews = Calificacion::query()
+            ->where('receptor_id', $product->usuario_id)
+            ->whereNotNull('encuentro_id')
+            ->with('autor:id,nombre,apellido,username')
+            ->latest('fecha_calificacion')
+            ->limit(10)
+            ->get([
+                'id',
+                'autor_id',
+                'puntuacion',
+                'comentario',
+                'fecha_calificacion',
+            ]);
+
+        $resource = (new ProductoResource($product))->resolve($request);
+        $resource['preguntas'] = $questions;
+        $resource['resenas'] = $reviews;
+        $resource['confianza'] = [
+            'reputacion_comercial' => $product->vendedor?->reputacion,
+            'resenas_verificadas' => $reviews->count(),
+            'vendedor_verificado' => false,
+            'nota' => 'Solo se muestran comprobaciones reales; ninguna insignia se infiere de likes o seguidores.',
+        ];
+        $resource['seguridad'] = [
+            'ciudad_aprox' => $product->ciudad_aprox,
+            'permite_encuentro' => (bool) $product->permite_encuentro,
+            'no_compartir_datos_personales' => true,
+            'recomendacion' => 'Conversa y acuerda encuentros en espacios públicos.',
+        ];
+        $resource['seo'] = [
+            'title' => $product->titulo.' | AEGIS',
+            'description' => Str::limit(strip_tags((string) $product->descripcion), 160),
+            'canonical' => rtrim(config('app.frontend_url'), '/').'#/productos/detalle?id='.$product->id,
+            'robots' => $product->estado_publicacion === 'activo' && $product->visibilidad === 'publica'
+                ? 'index,follow'
+                : 'noindex,nofollow',
+        ];
+
+        return response()->json(['data' => $resource]);
     }
 
     public function store(Request $request)
@@ -537,6 +595,108 @@ class ProductoController extends Controller
                 'archivados' => (clone $base)->where('estado_publicacion', 'archivado')->count(),
             ],
             'nota' => 'Solo incluye registros almacenados; no representa métricas externas.',
+        ]);
+    }
+
+    public function questions(Request $request, int $producto)
+    {
+        $product = Producto::query()->findOrFail($producto);
+        $questions = $product->preguntas()
+            ->where('estado', 'respondida')
+            ->with([
+                'usuario:id,nombre,username',
+                'respondidoPor:id,nombre,username',
+            ])
+            ->latest('fecha_pregunta')
+            ->paginate((int) $request->integer('per_page', 20));
+
+        return response()->json([
+            'data' => $questions->items(),
+            'meta' => [
+                'current_page' => $questions->currentPage(),
+                'per_page' => $questions->perPage(),
+                'total' => $questions->total(),
+                'last_page' => $questions->lastPage(),
+            ],
+        ]);
+    }
+
+    public function ask(Request $request, int $producto)
+    {
+        $product = Producto::query()->findOrFail($producto);
+        if (! in_array($product->estado_publicacion, ['activo', 'reservado'], true)
+            || $product->visibilidad !== 'publica'
+        ) {
+            return response()->json([
+                'message' => 'Este anuncio no acepta preguntas públicas.',
+                'code' => 'PRODUCT_NOT_ACCEPTING_QUESTIONS',
+            ], 403);
+        }
+
+        $validated = $request->validate([
+            'pregunta' => ['required', 'string', 'max:2000'],
+        ]);
+        $question = $product->preguntas()->create([
+            'usuario_id' => $request->user()->id,
+            'pregunta' => trim($validated['pregunta']),
+            'estado' => 'pendiente',
+            'fecha_pregunta' => now(),
+        ]);
+
+        return response()->json([
+            'message' => 'Pregunta publicada para moderación del vendedor.',
+            'data' => $question->load('usuario:id,nombre,username'),
+        ], 201);
+    }
+
+    public function answerQuestion(Request $request, int $producto, int $pregunta)
+    {
+        $product = Producto::query()->findOrFail($producto);
+        if (! Gate::forUser($request->user())->allows('update.product', $product)
+            && $request->user()->rol !== 'admin'
+        ) {
+            return response()->json([
+                'message' => 'Solo el vendedor o un administrador puede responder.',
+                'code' => 'FORBIDDEN_RESOURCE',
+            ], 403);
+        }
+
+        $question = $product->preguntas()->whereKey($pregunta)->firstOrFail();
+        $validated = $request->validate([
+            'respuesta' => ['required', 'string', 'max:5000'],
+        ]);
+        $question->update([
+            'respuesta' => trim($validated['respuesta']),
+            'respondido_por' => $request->user()->id,
+            'estado' => 'respondida',
+            'fecha_respuesta' => now(),
+        ]);
+
+        return response()->json([
+            'data' => $question->fresh(['usuario:id,nombre,username', 'respondidoPor:id,nombre,username']),
+        ]);
+    }
+
+    public function moderateQuestion(Request $request, int $producto, int $pregunta)
+    {
+        $product = Producto::query()->findOrFail($producto);
+        if (! Gate::forUser($request->user())->allows('update.product', $product)
+            && $request->user()->rol !== 'admin'
+        ) {
+            return response()->json(['message' => 'Sin permiso.', 'code' => 'FORBIDDEN_RESOURCE'], 403);
+        }
+
+        $validated = $request->validate([
+            'estado' => ['required', 'in:pendiente,oculta,eliminada'],
+        ]);
+        $question = $product->preguntas()->whereKey($pregunta)->firstOrFail();
+        $question->update([
+            'estado' => $validated['estado'],
+            'editada_en' => now(),
+        ]);
+
+        return response()->json([
+            'data' => $question->fresh(),
         ]);
     }
 

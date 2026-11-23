@@ -210,6 +210,14 @@ export const productApi = {
     request(`/productos/comparar${queryString({ ids: ids.join(',') })}`),
   similar: (productId) =>
     request(`/productos/${encodeURIComponent(productId)}/similares`),
+  questions: (productId, page = 1, perPage = 20) =>
+    request(`/productos/${encodeURIComponent(productId)}/preguntas${queryString({ page, per_page: perPage })}`),
+  ask: (productId, pregunta, token) =>
+    request(`/productos/${encodeURIComponent(productId)}/preguntas`, {
+      method: 'POST',
+      body: { pregunta },
+      token,
+    }),
 }
 
 export const forumApi = {

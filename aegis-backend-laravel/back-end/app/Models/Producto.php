@@ -35,6 +35,11 @@ class Producto extends Model
         'editado_en',
         'motivo_archivo',
         'vistas',
+        'politicas',
+        'entrega_aprox',
+        'metodo_entrega',
+        'permite_encuentro',
+        'fecha_disponibilidad',
     ];
 
     protected function casts(): array
@@ -46,6 +51,8 @@ class Producto extends Model
             'fecha_renovacion' => 'datetime',
             'editado_en' => 'datetime',
             'atributos' => 'array',
+            'permite_encuentro' => 'boolean',
+            'fecha_disponibilidad' => 'datetime',
         ];
     }
 
@@ -74,5 +81,10 @@ class Producto extends Model
     public function encuentros(): HasMany
     {
         return $this->hasMany(Encuentro::class, 'producto_id');
+    }
+
+    public function preguntas(): HasMany
+    {
+        return $this->hasMany(PreguntaProducto::class, 'producto_id');
     }
 }

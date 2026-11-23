@@ -182,6 +182,14 @@ El foro usa `publicaciones_foro` como entidad canónica y conserva `/api/foro`.
 - Comparar acepta 2–4 productos públicos.
 - Similares usa misma categoría y ±20% de precio.
 
+## Detalle comercial
+
+- Ficha pública incluye política, entrega, punto de encuentro, disponibilidad y atributos.
+- Preguntas públicas requieren moderación del vendedor.
+- Solo reseñas ligadas a encuentros se consideran elegibles.
+- Los badges no se inventan a partir de likes o seguidores.
+- Productos privados y borradores usan `noindex,nofollow`.
+
 ## Verificación
 
 ```bash

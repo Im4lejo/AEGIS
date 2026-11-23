@@ -19,6 +19,7 @@ Route::get('/productos', [ProductoController::class, 'index']);
 Route::get('/productos/comparar', [ProductoController::class, 'compare']);
 Route::get('/productos/{producto}/similares', [ProductoController::class, 'similar'])->whereNumber('producto');
 Route::get('/productos/{producto}', [ProductoController::class, 'show'])->whereNumber('producto');
+Route::get('/productos/{producto}/preguntas', [ProductoController::class, 'questions'])->whereNumber('producto');
 Route::get('/foro', [ForoController::class, 'index']);
 Route::get('/foro/{publicacion}', [ForoController::class, 'show'])->whereNumber('publicacion');
 Route::get('/foro/{publicacion}/comentarios', [ForoController::class, 'comments'])->whereNumber('publicacion');
@@ -76,6 +77,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/productos/{producto}', [ProductoController::class, 'destroy'])->whereNumber('producto');
         Route::patch('/productos/{producto}/estado', [ProductoController::class, 'transition'])->whereNumber('producto');
         Route::post('/productos/{producto}/renovar', [ProductoController::class, 'renew'])->whereNumber('producto');
+        Route::post('/productos/{producto}/preguntas', [ProductoController::class, 'ask'])->whereNumber('producto');
+        Route::patch('/productos/{producto}/preguntas/{pregunta}/respuesta', [ProductoController::class, 'answerQuestion'])
+            ->whereNumber('producto')
+            ->whereNumber('pregunta');
+        Route::patch('/productos/{producto}/preguntas/{pregunta}/moderacion', [ProductoController::class, 'moderateQuestion'])
+            ->whereNumber('producto')
+            ->whereNumber('pregunta');
         Route::post('/productos/{producto}/imagenes', [MediaController::class, 'storeProducto'])->whereNumber('producto');
         Route::delete('/productos/{producto}/imagenes/{imagen}', [MediaController::class, 'destroyProducto'])->whereNumber('producto')->whereNumber('imagen');
         Route::patch('/productos/{producto}/imagenes/orden', [MediaController::class, 'reorderProducto'])->whereNumber('producto');
