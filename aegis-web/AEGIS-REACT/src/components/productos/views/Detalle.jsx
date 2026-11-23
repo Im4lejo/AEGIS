@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
-import { productApi } from '../../../services/api'
+import { productApi, savedApi } from '../../../services/api'
 import { agregarProducto } from '../../carrito/carritoDemo'
 import '../css/detalle.css'
 
@@ -52,6 +52,9 @@ const CAMPOS_FICHAS = {
 
 export default function Detalle({ id, auth, onNavigate }) {
   const [respuesta, setRespuesta] = useState({ id: null, producto: {}, error: '' })
+  const [preguntas, setPreguntas] = useState([])
+  const [nuevaPregunta, setNuevaPregunta] = useState('')
+  const [mensajeAccion, setMensajeAccion] = useState('')
   useEffect(() => {
     let active = true
     productApi.show(id)
@@ -70,6 +73,7 @@ export default function Detalle({ id, auth, onNavigate }) {
             avatar: data.vendedor.foto_perfil,
           } : null,
         } })
+        setPreguntas(data.preguntas || [])
       })
       .catch((error) => {
         if (active) setRespuesta({ id, producto: {}, error: error.message })
@@ -110,12 +114,64 @@ export default function Detalle({ id, auth, onNavigate }) {
     }
   }
 
+  const guardarProducto = async () => {
+    if (!auth?.isAuthenticated) {
+      onNavigate?.('/login')
+      return
+    }
+    try {
+      await savedApi.save({
+        recurso_tipo: 'producto',
+        recurso_id: producto.id,
+      }, auth.token)
+      setMensajeAccion('Producto guardado')
+    } catch (requestError) {
+      setMensajeAccion(requestError.message)
+    }
+  }
+
+  const enviarPregunta = async (event) => {
+    event.preventDefault()
+    if (!auth?.isAuthenticated) {
+      onNavigate?.('/login')
+      return
+    }
+    const texto = nuevaPregunta.trim()
+    if (!texto) return
+    try {
+      await productApi.ask(producto.id, texto, auth.token)
+      setNuevaPregunta('')
+      setMensajeAccion('Pregunta enviada al vendedor')
+    } catch (requestError) {
+      setMensajeAccion(requestError.message)
+    }
+  }
+
   const imagenAnterior = () =>
     setIndiceImagen((i) => (i === 0 ? imagenes.length - 1 : i - 1))
   const imagenSiguiente = () =>
     setIndiceImagen((i) => (i === imagenes.length - 1 ? 0 : i + 1))
 
   const caracteristicas = Object.keys(CAMPOS_FICHAS).filter((campo) => producto[campo])
+
+  useEffect(() => {
+    if (!producto?.seo) return
+    document.title = producto.seo.title
+    let description = document.querySelector('meta[name="description"]')
+    if (!description) {
+      description = document.createElement('meta')
+      description.name = 'description'
+      document.head.appendChild(description)
+    }
+    description.content = producto.seo.description
+    let robots = document.querySelector('meta[name="robots"]')
+    if (!robots) {
+      robots = document.createElement('meta')
+      robots.name = 'robots'
+      document.head.appendChild(robots)
+    }
+    robots.content = producto.seo.robots
+  }, [producto?.seo?.title, producto?.seo?.description, producto?.seo?.robots])
 
   if (cargando) {
     return <main className="no-products-message">Cargando producto...</main>
@@ -219,6 +275,47 @@ export default function Detalle({ id, auth, onNavigate }) {
               <p className="detail-text">{producto.descripcion || 'Sin descripción disponible'}</p>
             </section>
 
+            <section className="detail-section" aria-labelledby="preguntas-titulo">
+              <h2 id="preguntas-titulo">Preguntas públicas</h2>
+              {preguntas.length === 0 && (
+                <p className="detail-text">Aún no hay preguntas respondidas.</p>
+              )}
+              {preguntas.map((pregunta) => (
+                <article className="detail-question" key={pregunta.id}>
+                  <strong>{pregunta.pregunta}</strong>
+                  {pregunta.respuesta && <p>{pregunta.respuesta}</p>}
+                </article>
+              ))}
+              {auth?.isAuthenticated ? (
+                <form onSubmit={enviarPregunta}>
+                  <label htmlFor="pregunta-producto">Pregunta al vendedor</label>
+                  <textarea
+                    id="pregunta-producto"
+                    value={nuevaPregunta}
+                    maxLength={2000}
+                    onChange={(event) => setNuevaPregunta(event.target.value)}
+                  />
+                  <button type="submit" className="detail-btn outline">Enviar pregunta</button>
+                </form>
+              ) : (
+                <button type="button" className="detail-btn outline" onClick={() => onNavigate?.('/login')}>
+                  Inicia sesión para preguntar
+                </button>
+              )}
+              {mensajeAccion && <p role="status">{mensajeAccion}</p>}
+            </section>
+
+            <section className="detail-section" aria-labelledby="seguridad-titulo">
+              <h2 id="seguridad-titulo">Políticas y seguridad</h2>
+              <p className="detail-text">{producto.politicas || 'El vendedor no ha publicado políticas adicionales.'}</p>
+              <p className="detail-text">
+                {producto.permite_encuentro
+                  ? 'Se permite acordar punto de encuentro.'
+                  : 'No se ofrece punto de encuentro para este anuncio.'}
+              </p>
+              <p className="detail-text">No compartas datos personales ni pagos fuera de canales seguros.</p>
+            </section>
+
           </div>
 
           <aside className="detail-info">
@@ -305,6 +402,9 @@ export default function Detalle({ id, auth, onNavigate }) {
                   ) : (
                     'Agregar al Carrito'
                   )}
+                </button>
+                <button type="button" className="detail-btn outline" onClick={guardarProducto}>
+                  Guardar
                 </button>
               </div>
             </div>

@@ -101,6 +101,7 @@ export default function Foro({ auth, onNavigate }) {
   const [feedTab, setFeedTab] = useState('recientes')
   const [nextCursor, setNextCursor] = useState(null)
   const [loadingMore, setLoadingMore] = useState(false)
+  const [tipoPost, setTipoPost] = useState('discusion')
 
   const ordenRef = useRef(null)
   const fileInputRef = useRef(null)
@@ -297,6 +298,7 @@ export default function Foro({ auth, onNavigate }) {
           titulo,
           contenido: texto,
           imagen: archivoNuevo,
+          tipo: tipoPost,
         },
         token,
       )
@@ -346,6 +348,16 @@ export default function Foro({ auth, onNavigate }) {
         forumMenuOpen={foroMenuAbierto}
         onForumMenuToggle={() => setForoMenuAbierto((abierto) => !abierto)}
       />
+      <label className="foro-composer-type">
+        Tipo de publicación
+        <select value={tipoPost} onChange={(event) => setTipoPost(event.target.value)}>
+          <option value="discusion">Discusión</option>
+          <option value="pregunta">Pregunta</option>
+          <option value="tutorial">Tutorial</option>
+          <option value="encuesta">Encuesta</option>
+          <option value="anuncio">Anuncio de grupo</option>
+        </select>
+      </label>
 
       {foroMenuAbierto && (
         <div className="foro-sidebar-overlay">

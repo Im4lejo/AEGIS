@@ -26,6 +26,7 @@ export default function PublicarProducto({ auth, onNavigate }) {
     const [mensaje, setMensaje] = useState(null)
     const [mediaFiles, setMediaFiles] = useState([])
     const [mediaAltText, setMediaAltText] = useState('')
+    const [publicando, setPublicando] = useState(false)
 
     useEffect(() => {
         let active = true
@@ -115,14 +116,16 @@ export default function PublicarProducto({ auth, onNavigate }) {
 
     const publicar = async (event) => {
         event.preventDefault()
+        if (publicando) return
         const titulo = datos.titulo.trim()
         const precio = soloNumeros(datos.precio)
         const imagenes = mediaFiles.length ? mediaFiles : archivos.filter(Boolean)
-        if (!titulo || !precio || !datos.categoria_id || !datos.estado || !imagenes.length) {
+        if (!titulo || !datos.categoria_id || !datos.estado || !imagenes.length || !Number.isFinite(precio) || precio < 0) {
             setMensaje({ tipo: 'error', texto: 'Completa título, categoría, estado, precio y añade al menos una imagen.' })
             return
         }
         try {
+            setPublicando(true)
             await productApi.create({
                 categoria_id: datos.categoria_id,
                 titulo,
@@ -137,6 +140,8 @@ export default function PublicarProducto({ auth, onNavigate }) {
             if (onNavigate) onNavigate('/productos', { message: '¡El producto se ha publicado satisfactoriamente!' })
         } catch (error) {
             setMensaje({ tipo: 'error', texto: error.message })
+        } finally {
+            setPublicando(false)
         }
     }
 
@@ -165,7 +170,7 @@ export default function PublicarProducto({ auth, onNavigate }) {
                             </button>
                             <h1>Publicación..</h1>
                         </div>
-                        <button type="submit" className="publish-btn publish-btn-top">Publicar</button>
+                        <button type="submit" className="publish-btn publish-btn-top" disabled={publicando}>{publicando ? 'Publicando...' : 'Publicar'}</button>
                     </div>
 
                     {mensaje && (
@@ -287,7 +292,7 @@ export default function PublicarProducto({ auth, onNavigate }) {
                             </section>
 
                             <div className="publish-actions">
-                                <button type="submit" className="publish-btn">Publicar</button>
+                                <button type="submit" className="publish-btn" disabled={publicando}>{publicando ? 'Publicando...' : 'Publicar'}</button>
                             </div>
                         </div>
 

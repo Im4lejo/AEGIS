@@ -19,6 +19,8 @@ class Comentario extends Model
         'comentario',
         'estado',
         'editado_en',
+        'votos_utiles',
+        'es_solucion',
     ];
 
     protected function casts(): array
@@ -26,6 +28,7 @@ class Comentario extends Model
         return [
             'fecha_comentario' => 'datetime',
             'editado_en' => 'datetime',
+            'es_solucion' => 'boolean',
         ];
     }
 

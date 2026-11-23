@@ -1076,3 +1076,33 @@
     font-size: 21px;
   }
 }
+
+.foro-thread-type,
+.foro-composer-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 9px;
+  text-transform: capitalize;
+}
+
+.foro-composer-type {
+  width: auto;
+  border-radius: 8px;
+  background: transparent;
+  color: #344054;
+  text-transform: none;
+}
+
+.foro-composer-type select {
+  margin-left: 8px;
+  border: 1px solid #dfe3e9;
+  border-radius: 8px;
+  padding: 7px 9px;
+}

@@ -257,6 +257,36 @@ Las comunidades usan `comunidades`, `membresias_comunidad` y `acciones_comunidad
 
 Las comunidades privadas no aparecen en el directorio público ni en feeds/enlaces directos sin membresía activa. Las solicitudes usan estado `solicitado`; las invitaciones usan `invitado`.
 
+### Foro avanzado
+
+`publicaciones_foro.tipo` distingue discusión, pregunta, tutorial, encuesta y anuncio. `interaccion_estado` bloquea comentarios al cerrar un hilo.
+
+Las soluciones usan `respuesta_aceptada_id` y el índice `es_solucion`. Solo autor de la pregunta, moderador owner/moderador de comunidad o admin pueden marcar una solución.
+
+Las encuestas usan `encuestas`, `opciones_encuesta` y `votos_encuesta`. Una encuesta simple elimina votos previos del usuario antes de insertar una opción nueva. Las múltiples permiten opciones únicas.
+
+### Marketplace
+
+`productos.estado_publicacion` evoluciona entre borrador, activo, pausado, reservado, vendido, archivado y oculto. Los campos pueden quedar parciales solo para borradores.
+
+`PATCH /api/productos/{id}/estado` aplica transiciones permitidas y registra `historial_producto`. `POST /api/productos/{id}/renovar` activa/renueva un anuncio validable.
+
+Los filtros públicos conservan `GET /api/productos`; `precio_min` y `precio_max` usan comparación numérica, incluyendo precio cero. Las rutas `/api/productos/mis*` son propias del usuario autenticado.
+
+### Descubrimiento de marketplace
+
+`GET /api/productos` combina búsqueda, categoría, estado, precio mínimo/máximo, ubicación, marca, atributos, recencia y orden. Los filtros SQL usan índices por precio/categoría/estado/ubicación.
+
+`GET /api/productos/comparar?ids=1,2` muestra hasta cuatro productos activos públicos y una matriz de atributos JSON. `GET /api/productos/{id}/similares` usa categoría y ±20% de precio sin afirmar ranking de IA.
+
+Las búsquedas se registran en `busquedas_productos`; las comparaciones opcionales en `comparaciones_producto`. React persiste preferencias locales y sincroniza filtros activos en el hash URL.
+
+### Detalle comercial
+
+`GET /api/productos/{id}` devuelve galería, atributos, políticas, entrega, disponibilidad, preguntas respondidas, reseñas elegibles y metadatos SEO. No expone teléfono, email ni dirección exacta.
+
+Las preguntas viven en `preguntas_producto`. Públicamente solo aparecen las `respondida`. El vendedor propietario y administradores pueden responder/moderar. Visitantes pueden preguntar solo en anuncios activos o reservados públicos.
+
 ## 6. Modelos Eloquent y relaciones
 
 | Modelo | Tabla | Relaciones definidas / comportamiento |
