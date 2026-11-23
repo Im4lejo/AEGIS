@@ -1,6 +1,14 @@
 import './App.css'
 import { useState } from 'react'
-import { HashRouter, Routes, Route, useNavigate, useLocation, useSearchParams, Navigate } from 'react-router-dom'
+import {
+  HashRouter,
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+  useSearchParams,
+  Navigate,
+} from 'react-router-dom'
 import { AuthProvider } from './auth/AuthProvider'
 import { useAuth } from './auth/useAuth'
 import Home from './components/home/views/Home'
@@ -15,11 +23,20 @@ import Vendedor from './components/perfil/views/Vendedor'
 import EditarPerfil from './components/perfil/views/Editar'
 import Login from './components/auth/views/Login'
 import Register from './components/auth/views/Register'
+import ForgotPassword from './components/auth/views/ForgotPassword'
+import ResetPassword from './components/auth/views/ResetPassword'
+import VerifyEmail from './components/auth/views/VerifyEmail'
+import EmailVerified from './components/auth/views/EmailVerified'
+import AccountSecurity from './components/auth/views/AccountSecurity'
 import PuntosFisicos from './components/puntosFisicos/views/Index'
 import Mensajes from './components/mensajes/views/Mensajes'
 import Encuentros from './components/puntosFisicos/views/Encuentros'
 import Admin from './components/admin/views/Dashboard'
 import Plantilla from './components/shared/Plantilla'
+import { NotFoundPage } from './components/shared/ApiState'
+import { ErrorBoundary } from './components/shared/ui'
+import { ThemeProvider } from './theme/ThemeProvider'
+import './design-system/design-system.css'
 
 function Vista({ Componente }) {
   const navigate = useNavigate()
@@ -54,10 +71,26 @@ function Vista({ Componente }) {
     user: session.user,
     token: session.token,
   }
-  const requiereSesion = ['/productos/crear', '/perfil'].includes(location.pathname)
+  const requiereSesion = ['/productos/crear', '/perfil', '/seguridad'].includes(
+    location.pathname,
+  )
 
   if (requiereSesion && session.loading) {
-    return <main className="auth-loading" aria-live="polite">Verificando sesión...</main>
+    return (
+      <main className="auth-loading" aria-live="polite">
+        Verificando sesión...
+      </main>
+    )
+  }
+  if (requiereSesion && session.token && session.error) {
+    return (
+      <main className="auth-loading" role="alert">
+        <p>No se pudo verificar tu sesión: {session.error}</p>
+        <button type="button" onClick={session.retrySession}>
+          Reintentar
+        </button>
+      </main>
+    )
   }
   if (requiereSesion && !session.isAuthenticated) {
     return <Navigate to="/login" replace state={{ from: location.pathname }} />
@@ -73,37 +106,102 @@ function Vista({ Componente }) {
       vista={location.pathname}
       message={location.state && location.state.message}
       success={location.state && location.state.message}
+      returnTo={location.state && location.state.from}
     />
   )
 }
 
 function App() {
   return (
-    <AuthProvider>
-      <HashRouter>
-        <Routes>
-          <Route path="/" element={<Vista Componente={Home} />} />
-          <Route path="/home" element={<Vista Componente={Home} />} />
-          <Route path="/foro" element={<Vista Componente={Foro} />} />
-          <Route path="/publicacion" element={<Vista Componente={Publicacion} />} />
-          <Route path="/productos" element={<Vista Componente={ProductosIndex} />} />
-          <Route path="/novedades" element={<Vista Componente={ProductosIndex} />} />
-          <Route path="/productos/crear" element={<Vista Componente={PublicarProducto} />} />
-          <Route path="/productos/detalle" element={<Vista Componente={DetalleProducto} />} />
-          <Route path="/productos/mis-productos" element={<Vista Componente={MisProductos} />} />
-          <Route path="/perfil" element={<Vista Componente={Perfil} />} />
-          <Route path="/perfil/editar" element={<Vista Componente={EditarPerfil} />} />
-          <Route path="/vendedor" element={<Vista Componente={Vendedor} />} />
-          <Route path="/puntos-fisicos" element={<Vista Componente={PuntosFisicos} />} />
-          <Route path="/mensajes" element={<Vista Componente={Mensajes} />} />
-          <Route path="/configurar-encuentro" element={<Vista Componente={Encuentros} />} />
-          <Route path="/admin" element={<Vista Componente={Admin} />} />
-          <Route path="/login" element={<Vista Componente={Login} />} />
-          <Route path="/register" element={<Vista Componente={Register} />} />
-          <Route path="*" element={<Vista Componente={Plantilla} />} />
-        </Routes>
-      </HashRouter>
-    </AuthProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <AuthProvider>
+          <HashRouter>
+            <Routes>
+              <Route path="/" element={<Vista Componente={Home} />} />
+              <Route path="/home" element={<Vista Componente={Home} />} />
+              <Route path="/foro" element={<Vista Componente={Foro} />} />
+              <Route
+                path="/publicacion"
+                element={<Vista Componente={Publicacion} />}
+              />
+              <Route
+                path="/productos"
+                element={<Vista Componente={ProductosIndex} />}
+              />
+              <Route
+                path="/novedades"
+                element={<Vista Componente={ProductosIndex} />}
+              />
+              <Route
+                path="/productos/crear"
+                element={<Vista Componente={PublicarProducto} />}
+              />
+              <Route
+                path="/productos/detalle"
+                element={<Vista Componente={DetalleProducto} />}
+              />
+              <Route
+                path="/productos/mis-productos"
+                element={<Vista Componente={MisProductos} />}
+              />
+              <Route path="/perfil" element={<Vista Componente={Perfil} />} />
+              <Route
+                path="/perfil/editar"
+                element={<Vista Componente={EditarPerfil} />}
+              />
+              <Route
+                path="/vendedor"
+                element={<Vista Componente={Vendedor} />}
+              />
+              <Route
+                path="/puntos-fisicos"
+                element={<Vista Componente={PuntosFisicos} />}
+              />
+              <Route
+                path="/mensajes"
+                element={<Vista Componente={Mensajes} />}
+              />
+              <Route
+                path="/configurar-encuentro"
+                element={<Vista Componente={Encuentros} />}
+              />
+              <Route path="/admin" element={<Vista Componente={Admin} />} />
+              <Route path="/login" element={<Vista Componente={Login} />} />
+              <Route
+                path="/forgot-password"
+                element={<Vista Componente={ForgotPassword} />}
+              />
+              <Route
+                path="/reset-password"
+                element={<Vista Componente={ResetPassword} />}
+              />
+              <Route
+                path="/verify-email"
+                element={<Vista Componente={VerifyEmail} />}
+              />
+              <Route
+                path="/email-verified"
+                element={<Vista Componente={EmailVerified} />}
+              />
+              <Route
+                path="/seguridad"
+                element={<Vista Componente={AccountSecurity} />}
+              />
+              <Route
+                path="/register"
+                element={<Vista Componente={Register} />}
+              />
+              <Route
+                path="/plantilla"
+                element={<Vista Componente={Plantilla} />}
+              />
+              <Route path="*" element={<Vista Componente={NotFoundPage} />} />
+            </Routes>
+          </HashRouter>
+        </AuthProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   )
 }
 

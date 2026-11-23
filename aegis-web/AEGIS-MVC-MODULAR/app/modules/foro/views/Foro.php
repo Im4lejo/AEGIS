@@ -3,6 +3,24 @@ $pageTitle = 'AEGIS | Foro';
 $pageStylesheet = asset('Assets/css/pages/forum.css');
 require_once ROOT_PATH . '/app/layouts/head.php';
 require_once ROOT_PATH . '/app/layouts/navbar.php';
+
+$foroAvatarUrl = static function (?string $photo, string $seed, int $size): string {
+    $photo = trim((string) $photo);
+    $scheme = parse_url($photo, PHP_URL_SCHEME);
+
+    if ($photo !== '' && in_array($scheme, ['http', 'https'], true)) {
+        return $photo;
+    }
+
+    $filename = basename($photo);
+    $photoPath = ROOT_PATH . '/public/Assets/uploads/users/' . $filename;
+
+    if ($filename !== '' && is_file($photoPath)) {
+        return url('/Assets/uploads/users/' . $filename);
+    }
+
+    return avatar_url($seed, $size);
+};
 ?>
 
 <main class="forum-page">
@@ -60,11 +78,11 @@ require_once ROOT_PATH . '/app/layouts/navbar.php';
             <div class="create-post" id="createPostTrigger">
                 <?php
                     $me = Auth::user();
-                    $fotoPerfilMe = trim((string) ($me['foto_perfil'] ?? ''));
-                    $fotoPathMe = ROOT_PATH . '/public/Assets/uploads/users/' . basename($fotoPerfilMe);
-                    $avatarSrcMe = (is_file($fotoPathMe) && $fotoPerfilMe !== '')
-                        ? url('/Assets/uploads/users/' . $fotoPerfilMe)
-                        : avatar_url($me['username'] ?? $me['email'] ?? 'yo', 100);
+                    $avatarSrcMe = $foroAvatarUrl(
+                        $me['foto_perfil_url'] ?? $me['foto_perfil'] ?? null,
+                        $me['username'] ?? $me['email'] ?? 'yo',
+                        100
+                    );
                 ?>
                 <img src="<?= htmlspecialchars($avatarSrcMe) ?>" alt="Tu perfil">
                 <input type="text" readonly placeholder="Publica aquí tu pregunta o experiencia..." id="createPostInput">
@@ -105,11 +123,7 @@ require_once ROOT_PATH . '/app/layouts/navbar.php';
             $totalComentarios = count($postComentarios);
             $autorMostrar = !empty($post['username']) ? $post['username'] : $post['nombre'];
             $avatarSeed = $post['username'] ?? $post['email'] ?? $post['nombre'];
-            $fotoPerfilAutor = trim((string) ($post['foto_perfil'] ?? ''));
-            $fotoPathAutor = ROOT_PATH . '/public/Assets/uploads/users/' . basename($fotoPerfilAutor);
-            $autorAvatarSrc = (is_file($fotoPathAutor) && $fotoPerfilAutor !== '')
-                ? url('/Assets/uploads/users/' . $fotoPerfilAutor)
-                : avatar_url($avatarSeed, 100);
+            $autorAvatarSrc = $foroAvatarUrl($post['foto_perfil'] ?? null, $avatarSeed, 100);
             $reacciones = reacciones_simuladas((int) $post['id']);
             ?>
 
@@ -154,11 +168,11 @@ require_once ROOT_PATH . '/app/layouts/navbar.php';
                             <?php
                             $nombreComentario = !empty($comentario['username']) ? $comentario['username'] : $comentario['nombre'];
                             $seedComentario = $comentario['username'] ?? $comentario['nombre'];
-                            $fotoPerfilComentario = trim((string) ($comentario['foto_perfil'] ?? ''));
-                            $fotoPathComentario = ROOT_PATH . '/public/Assets/uploads/users/' . basename($fotoPerfilComentario);
-                            $comentarioAvatarSrc = (is_file($fotoPathComentario) && $fotoPerfilComentario !== '')
-                                ? url('/Assets/uploads/users/' . $fotoPerfilComentario)
-                                : avatar_url($seedComentario, 50);
+                            $comentarioAvatarSrc = $foroAvatarUrl(
+                                $comentario['foto_perfil'] ?? null,
+                                $seedComentario,
+                                50
+                            );
                             ?>
                             <div class="comment">
                                 <img src="<?= htmlspecialchars($comentarioAvatarSrc) ?>" alt="<?= htmlspecialchars($nombreComentario) ?>">
@@ -176,11 +190,11 @@ require_once ROOT_PATH . '/app/layouts/navbar.php';
                         <input type="hidden" name="publicacion_id" value="<?= (int) $post['id'] ?>">
                         <?php
                             $me = Auth::user();
-                            $fotoPerfilMe2 = trim((string) ($me['foto_perfil'] ?? ''));
-                            $fotoPathMe2 = ROOT_PATH . '/public/Assets/uploads/users/' . basename($fotoPerfilMe2);
-                            $avatarSrcMe2 = (is_file($fotoPathMe2) && $fotoPerfilMe2 !== '')
-                                ? url('/Assets/uploads/users/' . $fotoPerfilMe2)
-                                : avatar_url($me['username'] ?? $me['email'] ?? 'yo', 50);
+                            $avatarSrcMe2 = $foroAvatarUrl(
+                                $me['foto_perfil_url'] ?? $me['foto_perfil'] ?? null,
+                                $me['username'] ?? $me['email'] ?? 'yo',
+                                50
+                            );
                         ?>
                         <img src="<?= htmlspecialchars($avatarSrcMe2) ?>" alt="Tu perfil">
                         <input type="text" name="comentario" required placeholder="Escribe un comentario..." maxlength="500">
@@ -211,11 +225,11 @@ require_once ROOT_PATH . '/app/layouts/navbar.php';
                 <?php foreach ($miembrosDestacados as $miembro): ?>
                     <?php $nombreMiembro = !empty($miembro['username']) ? $miembro['username'] : $miembro['nombre']; ?>
                     <?php
-                        $fotoPerfilMiembro = trim((string) ($miembro['foto_perfil'] ?? ''));
-                        $fotoPathMiembro = ROOT_PATH . '/public/Assets/uploads/users/' . basename($fotoPerfilMiembro);
-                        $miembroAvatarSrc = (is_file($fotoPathMiembro) && $fotoPerfilMiembro !== '')
-                            ? url('/Assets/uploads/users/' . $fotoPerfilMiembro)
-                            : avatar_url($miembro['username'] ?? $miembro['nombre'], 60);
+                        $miembroAvatarSrc = $foroAvatarUrl(
+                            $miembro['foto_perfil'] ?? null,
+                            $miembro['username'] ?? $miembro['nombre'],
+                            60
+                        );
                     ?>
                     <div class="member">
                         <img src="<?= htmlspecialchars($miembroAvatarSrc) ?>" alt="<?= htmlspecialchars($nombreMiembro) ?>">

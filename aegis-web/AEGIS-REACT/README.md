@@ -1,19 +1,30 @@
-# React + Vite
+# AEGIS Web (React)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend web de AEGIS basado en React y Vite. La aplicación usa las rutas existentes y consume la API Laravel mediante el cliente centralizado en `src/services/api.js`.
 
-Currently, two official plugins are available:
+## Requisitos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Node.js compatible con la versión de Vite declarada en `package.json`.
+- Una instancia local o remota de la API. Configura `VITE_API_URL` en el entorno local sin guardar credenciales en el repositorio.
 
-## React Compiler
+## Desarrollo y verificación
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+```powershell
+npm ci
+npm run dev
+npm test
+npm run lint
+npm run format:check
+npm run build
+```
 
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
+`npm test` ejecuta las pruebas de componentes con Vitest y las pruebas del cliente API con Node. `npm run format` aplica Prettier a los archivos frontend incluidos en la configuración del proyecto.
 
-## Expanding the ESLint configuration
+## Interfaz compartida
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Los tokens semánticos y reglas globales están en `src/design-system/`.
+- Los componentes reutilizables accesibles están en `src/components/shared/ui/`.
+- El tema admite preferencias `system`, `light` y `dark`; por ahora se guarda localmente en el navegador y no se sincroniza con la cuenta.
+- El armazón responsive se integra alrededor de las rutas existentes desde `src/components/layouts/WorkspaceChrome.jsx`.
+
+La adopción visual de tokens en pantallas heredadas es progresiva. Consulta `../../aegis-backend-laravel/back-end/docs/aegis-6/` para auditoría, decisiones y reporte de verificación.

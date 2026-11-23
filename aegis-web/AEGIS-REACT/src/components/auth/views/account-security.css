@@ -1,0 +1,213 @@
+.account-security-page {
+  width: min(100% - 32px, 920px);
+  margin: 28px auto;
+  display: grid;
+  gap: 18px;
+}
+
+.account-security-heading h1,
+.account-security-card h2 {
+  margin: 0;
+  color: var(--color-text);
+}
+
+.account-security-heading p,
+.account-security-card p {
+  color: var(--color-text-muted);
+}
+
+.account-security-eyebrow {
+  margin: 0 0 6px;
+  color: var(--color-primary) !important;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.account-security-card {
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.account-security-card h2 {
+  font-size: 1.1rem;
+}
+
+.account-security-card p {
+  margin: 6px 0 0;
+}
+
+.account-security-section-heading,
+.account-security-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.account-security-badge,
+.account-session-current {
+  width: fit-content;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #dcfce7;
+  color: #166534;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.account-security-badge--pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.account-security-button {
+  width: fit-content;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.account-security-button:hover:not(:disabled) {
+  border-color: var(--color-primary);
+}
+
+.account-security-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.account-security-button--danger {
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.account-session-list,
+.account-security-notices {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.account-session,
+.account-security-notices li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.account-session > div,
+.account-security-notices li {
+  display: grid;
+  gap: 5px;
+}
+
+.account-session span,
+.account-security-notices time {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.account-session .account-session-current {
+  color: #166534;
+}
+
+.account-password-form {
+  display: grid;
+  gap: 12px;
+}
+
+.account-password-toggle {
+  justify-self: start;
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+  font: inherit;
+}
+
+.account-password-toggle:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.account-password-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.account-password-form input {
+  width: 100%;
+  min-height: 42px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.account-password-form input:focus-visible,
+.account-security-button:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.account-security-error,
+.account-security-status {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+}
+
+.account-security-error {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.account-security-status {
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.account-security-unavailable {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 560px) {
+  .account-security-page {
+    width: calc(100% - 24px);
+    margin: 18px auto;
+  }
+
+  .account-security-card {
+    padding: 16px;
+  }
+
+  .account-security-section-heading,
+  .account-security-actions,
+  .account-session {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

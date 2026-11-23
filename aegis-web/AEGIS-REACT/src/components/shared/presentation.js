@@ -35,6 +35,7 @@ export function formatCurrency(value) {
 }
 
 export function avatarUrl(user, size = 100) {
+    void size
     return '/avatar-defecto.svg'
 }
 

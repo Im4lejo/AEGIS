@@ -2,18 +2,37 @@ import { useState, useRef, useEffect } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import Sidebar from '../../layouts/Sidebar'
+import { EmptyState, ErrorState, LoadingState } from '../../shared/ApiState'
 import { useAuth } from '../../../auth/useAuth'
 import { forumApi } from '../../../services/api'
 import '../css/foro.css'
 
 const IconComment = () => (
-  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="19"
+    height="19"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
   </svg>
 )
 
 const IconShare = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <circle cx="18" cy="5" r="3" />
     <circle cx="6" cy="12" r="3" />
     <circle cx="18" cy="19" r="3" />
@@ -23,15 +42,35 @@ const IconShare = () => (
 )
 
 const IconPlus = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+  <svg
+    width="22"
+    height="22"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+  >
     <line x1="12" y1="5" x2="12" y2="19" />
     <line x1="5" y1="12" x2="19" y2="12" />
   </svg>
 )
 
 const IconChevron = ({ open }) => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-    style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    style={{
+      transform: open ? 'rotate(180deg)' : 'none',
+      transition: 'transform 0.2s',
+    }}
+  >
     <polyline points="6 9 12 15 18 9" />
   </svg>
 )
@@ -45,7 +84,7 @@ export default function Foro({ auth, onNavigate }) {
   const { token } = useAuth()
   const [posts, setPosts] = useState([])
   const [cargando, setCargando] = useState(true)
-  const [errorFeed, setErrorFeed] = useState('')
+  const [errorFeed, setErrorFeed] = useState(null)
   const [busqueda, setBusqueda] = useState('')
   const [temaActivo, setTemaActivo] = useState(null)
   const [foroMenuAbierto, setForoMenuAbierto] = useState(false)
@@ -65,35 +104,47 @@ export default function Foro({ auth, onNavigate }) {
 
   useEffect(() => {
     let active = true
-    forumApi.list()
+    forumApi
+      .list()
       .then(({ data }) => {
         if (!active) return
-        setPosts(data.map((publicacion) => ({
-          id: publicacion.id,
-          usuarioId: publicacion.usuario?.id,
-          autor: publicacion.usuario?.username || `${publicacion.usuario?.nombre || ''} ${publicacion.usuario?.apellido || ''}`.trim(),
-          avatar: publicacion.usuario?.foto_perfil,
-          fecha: publicacion.fecha_publicacion ? new Date(publicacion.fecha_publicacion).toLocaleString('es-CO') : '',
-          titulo: publicacion.titulo,
-          cuerpo: publicacion.contenido,
-          imagen: publicacion.imagenes?.[0]?.imagen || null,
-          comentarios: (publicacion.comentarios || []).map((comentario) => ({
-            id: comentario.id,
-            autor: comentario.usuario?.username || comentario.usuario?.nombre || 'Usuario',
-            avatar: comentario.usuario?.foto_perfil,
-            texto: comentario.comentario,
-            fecha: comentario.fecha_comentario || '',
+        setPosts(
+          data.map((publicacion) => ({
+            id: publicacion.id,
+            usuarioId: publicacion.usuario?.id,
+            autor:
+              publicacion.usuario?.username ||
+              `${publicacion.usuario?.nombre || ''} ${publicacion.usuario?.apellido || ''}`.trim(),
+            avatar: publicacion.usuario?.foto_perfil,
+            fecha: publicacion.fecha_publicacion
+              ? new Date(publicacion.fecha_publicacion).toLocaleString('es-CO')
+              : '',
+            titulo: publicacion.titulo,
+            cuerpo: publicacion.contenido,
+            imagen: publicacion.imagenes?.[0]?.imagen || null,
+            comentarios: (publicacion.comentarios || []).map((comentario) => ({
+              id: comentario.id,
+              autor:
+                comentario.usuario?.username ||
+                comentario.usuario?.nombre ||
+                'Usuario',
+              avatar: comentario.usuario?.foto_perfil,
+              texto: comentario.comentario,
+              fecha: comentario.fecha_comentario || '',
+            })),
           })),
-        })))
-        setErrorFeed('')
+        )
+        setErrorFeed(null)
       })
       .catch((error) => {
-        if (active) setErrorFeed(error.message)
+        if (active) setErrorFeed(error)
       })
       .finally(() => {
         if (active) setCargando(false)
       })
-    return () => { active = false }
+    return () => {
+      active = false
+    }
   }, [])
 
   useEffect(() => {
@@ -108,7 +159,8 @@ export default function Foro({ auth, onNavigate }) {
   useEffect(() => {
     if (!ordenOpen) return
     const handleClickOutside = (event) => {
-      if (ordenRef.current && !ordenRef.current.contains(event.target)) setOrdenOpen(false)
+      if (ordenRef.current && !ordenRef.current.contains(event.target))
+        setOrdenOpen(false)
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
@@ -139,7 +191,8 @@ export default function Foro({ auth, onNavigate }) {
     )
   })
 
-  if (orden === 'comentados') postsVisibles.sort((a, b) => b.comentarios.length - a.comentarios.length)
+  if (orden === 'comentados')
+    postsVisibles.sort((a, b) => b.comentarios.length - a.comentarios.length)
 
   const usuario = auth?.user?.username || auth?.user?.nombre || 'Invitado'
   const miFoto = auth?.user?.foto_perfil_url || ''
@@ -164,9 +217,13 @@ export default function Foro({ auth, onNavigate }) {
         avatar: data.usuario?.foto_perfil,
         texto: data.comentario,
       }
-      setPosts((prev) => prev.map((post) => post.id === id
-        ? { ...post, comentarios: [...post.comentarios, nuevo] }
-        : post))
+      setPosts((prev) =>
+        prev.map((post) =>
+          post.id === id
+            ? { ...post, comentarios: [...post.comentarios, nuevo] }
+            : post,
+        ),
+      )
       setNuevoComentario('')
       setToast('Comentario publicado ✓')
     } catch (error) {
@@ -180,7 +237,8 @@ export default function Foro({ auth, onNavigate }) {
       setToast('No se pudo copiar el enlace')
       return
     }
-    navigator.clipboard.writeText(enlace)
+    navigator.clipboard
+      .writeText(enlace)
       .then(function () {
         setToast('Enlace copiado al portapapeles 🔗')
       })
@@ -203,17 +261,22 @@ export default function Foro({ auth, onNavigate }) {
     const primerasLineas = texto.split('\n').filter((linea) => linea !== '')
     const titulo = primerasLineas[0] || 'Nueva publicación'
     try {
-      const { data: publicacion } = await forumApi.create({
-        titulo,
-        contenido: texto,
-        imagen: archivoNuevo,
-      }, token)
+      const { data: publicacion } = await forumApi.create(
+        {
+          titulo,
+          contenido: texto,
+          imagen: archivoNuevo,
+        },
+        token,
+      )
       const nueva = {
         id: publicacion.id,
         usuarioId: publicacion.usuario?.id,
         autor: publicacion.usuario?.username || usuario,
         avatar: publicacion.usuario?.foto_perfil,
-        fecha: publicacion.fecha_publicacion ? new Date(publicacion.fecha_publicacion).toLocaleString('es-CO') : 'Ahora mismo',
+        fecha: publicacion.fecha_publicacion
+          ? new Date(publicacion.fecha_publicacion).toLocaleString('es-CO')
+          : 'Ahora mismo',
         titulo: publicacion.titulo,
         cuerpo: publicacion.contenido,
         imagen: publicacion.imagenes?.[0]?.imagen || null,
@@ -239,7 +302,8 @@ export default function Foro({ auth, onNavigate }) {
     reader.readAsDataURL(file)
   }
 
-  const irPlantilla = (origen) => onNavigate && onNavigate(`/plantilla?origen=${origen}`)
+  const irPlantilla = (origen) =>
+    onNavigate && onNavigate(`/plantilla?origen=${origen}`)
 
   return (
     <div className="page-layout foro-layout">
@@ -273,17 +337,31 @@ export default function Foro({ auth, onNavigate }) {
       )}
 
       <div className="foro-container">
-        <Sidebar busqueda={busqueda} setBusqueda={setBusqueda} orden={orden} setOrden={setOrden} temaActivo={temaActivo} setTemaActivo={setTemaActivo} onNavigate={onNavigate} />
+        <Sidebar
+          busqueda={busqueda}
+          setBusqueda={setBusqueda}
+          orden={orden}
+          setOrden={setOrden}
+          temaActivo={temaActivo}
+          setTemaActivo={setTemaActivo}
+          onNavigate={onNavigate}
+        />
 
         <main className="foro-feed">
           {!panelAbierto ? (
             <div className="foro-composer">
-              <div className="foro-composer-avatar">{miFoto ? <img src={miFoto} alt="Mi foto" /> : '?'}</div>
+              <div className="foro-composer-avatar">
+                {miFoto ? <img src={miFoto} alt="Mi foto" /> : '?'}
+              </div>
               <div className="foro-composer-field">
                 <input
                   className="foro-composer-input"
                   type="text"
-                  placeholder={auth?.isAuthenticated ? 'Publica aquí...' : 'Inicia sesión para publicar'}
+                  placeholder={
+                    auth?.isAuthenticated
+                      ? 'Publica aquí...'
+                      : 'Inicia sesión para publicar'
+                  }
                   value={textoPublicacion}
                   onChange={(event) => setTextoPublicacion(event.target.value)}
                   readOnly={!auth?.isAuthenticated}
@@ -300,7 +378,8 @@ export default function Foro({ auth, onNavigate }) {
                   onClick={() => {
                     if (!auth?.isAuthenticated) {
                       if (onNavigate) onNavigate('/login')
-                    } else if (fileInputRef.current) fileInputRef.current.click()
+                    } else if (fileInputRef.current)
+                      fileInputRef.current.click()
                   }}
                 >
                   <IconPlus />
@@ -309,8 +388,13 @@ export default function Foro({ auth, onNavigate }) {
             </div>
           ) : (
             <div className="foro-composer-panel">
-              <div className="foro-composer" style={{ border: 'none', boxShadow: 'none', padding: 0 }}>
-                <div className="foro-composer-avatar">{miFoto ? <img src={miFoto} alt="Mi foto" /> : '?'}</div>
+              <div
+                className="foro-composer"
+                style={{ border: 'none', boxShadow: 'none', padding: 0 }}
+              >
+                <div className="foro-composer-avatar">
+                  {miFoto ? <img src={miFoto} alt="Mi foto" /> : '?'}
+                </div>
                 <div className="foro-composer-field">
                   <input
                     className="foro-composer-input"
@@ -318,8 +402,13 @@ export default function Foro({ auth, onNavigate }) {
                     placeholder="Escribe el título de tu publicación..."
                     value={textoPublicacion.split('\n')[0]}
                     onChange={(event) => {
-                      const resto = textoPublicacion.split('\n').slice(1).join('\n')
-                      setTextoPublicacion(event.target.value + (resto ? '\n' + resto : ''))
+                      const resto = textoPublicacion
+                        .split('\n')
+                        .slice(1)
+                        .join('\n')
+                      setTextoPublicacion(
+                        event.target.value + (resto ? '\n' + resto : ''),
+                      )
                     }}
                   />
                 </div>
@@ -329,18 +418,46 @@ export default function Foro({ auth, onNavigate }) {
                 required
                 value={textoPublicacion.split('\n').slice(1).join('\n')}
                 onChange={(event) =>
-                  setTextoPublicacion(textoPublicacion.split('\n')[0] + (event.target.value ? '\n' + event.target.value : ''))
+                  setTextoPublicacion(
+                    textoPublicacion.split('\n')[0] +
+                      (event.target.value ? '\n' + event.target.value : ''),
+                  )
                 }
               />
-              {imagenNueva && <img className="foro-composer-preview" src={imagenNueva} alt="Vista previa" />}
+              {imagenNueva && (
+                <img
+                  className="foro-composer-preview"
+                  src={imagenNueva}
+                  alt="Vista previa"
+                />
+              )}
               <div className="foro-composer-actions">
-                <button className="foro-btn foro-btn--ghost" type="button" onClick={() => { if (fileInputRef.current) fileInputRef.current.click() }}>
+                <button
+                  className="foro-btn foro-btn--ghost"
+                  type="button"
+                  onClick={() => {
+                    if (fileInputRef.current) fileInputRef.current.click()
+                  }}
+                >
                   📷 Imagen
                 </button>
-                <button className="foro-btn foro-btn--ghost" type="button" onClick={() => { setPanelAbierto(false); setTextoPublicacion(''); setImagenNueva(null); setArchivoNuevo(null) }}>
+                <button
+                  className="foro-btn foro-btn--ghost"
+                  type="button"
+                  onClick={() => {
+                    setPanelAbierto(false)
+                    setTextoPublicacion('')
+                    setImagenNueva(null)
+                    setArchivoNuevo(null)
+                  }}
+                >
                   Cancelar
                 </button>
-                <button className="foro-btn foro-btn--primary" type="button" onClick={publicar}>
+                <button
+                  className="foro-btn foro-btn--primary"
+                  type="button"
+                  onClick={publicar}
+                >
                   Publicar
                 </button>
               </div>
@@ -357,7 +474,11 @@ export default function Foro({ auth, onNavigate }) {
 
           <div className="foro-toolbar">
             <div className="foro-sort" ref={ordenRef}>
-              <button className="foro-sort-btn" type="button" onClick={() => setOrdenOpen(!ordenOpen)}>
+              <button
+                className="foro-sort-btn"
+                type="button"
+                onClick={() => setOrdenOpen(!ordenOpen)}
+              >
                 Ordenar Por <IconChevron open={ordenOpen} />
               </button>
               {ordenOpen && (
@@ -367,7 +488,10 @@ export default function Foro({ auth, onNavigate }) {
                       key={opcion.id}
                       type="button"
                       className={orden === opcion.id ? 'active' : ''}
-                      onClick={() => { setOrden(opcion.id); setOrdenOpen(false) }}
+                      onClick={() => {
+                        setOrden(opcion.id)
+                        setOrdenOpen(false)
+                      }}
                     >
                       {opcion.label}
                     </button>
@@ -377,24 +501,45 @@ export default function Foro({ auth, onNavigate }) {
             </div>
           </div>
 
-          {errorFeed && <div className="foro-empty" role="alert">{errorFeed}</div>}
+          {errorFeed && <ErrorState error={errorFeed} compact />}
           {cargando ? (
-            <div className="foro-empty">Cargando publicaciones...</div>
+            <LoadingState message="Cargando publicaciones..." compact />
           ) : !errorFeed && postsVisibles.length === 0 ? (
-            <div className="foro-empty">
-              {posts.length ? 'No se encontraron publicaciones que coincidan con tu búsqueda.' : 'Todavía no hay publicaciones en el foro.'}
-            </div>
-          ) : !errorFeed && (
+            <EmptyState
+              title="Sin publicaciones"
+              message={
+                posts.length
+                  ? 'No se encontraron publicaciones que coincidan con tu búsqueda.'
+                  : 'Todavía no hay publicaciones en el foro.'
+              }
+              compact
+            />
+          ) : (
+            !errorFeed &&
             postsVisibles.map((post) => (
               <article className="foro-post" key={post.id}>
                 <div
                   className="foro-post-header"
                   onClick={() => {
-                    if (auth?.user?.id === post.usuarioId && onNavigate) onNavigate('/perfil')
+                    if (auth?.user?.id === post.usuarioId && onNavigate)
+                      onNavigate('/perfil')
                   }}
                 >
                   <div className="foro-post-avatar">
-                    <img src={post.avatar || (post.autor === usuario && miFoto) || '/avatar-defecto.svg'} alt={post.autor} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                    <img
+                      src={
+                        post.avatar ||
+                        (post.autor === usuario && miFoto) ||
+                        '/avatar-defecto.svg'
+                      }
+                      alt={post.autor}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                      }}
+                    />
                   </div>
                   <div>
                     <div className="foro-post-author">{post.autor}</div>
@@ -411,7 +556,10 @@ export default function Foro({ auth, onNavigate }) {
                 </button>
 
                 {post.cuerpo && (
-                  <p className="foro-post-body pub-abrir" onClick={() => onNavigate(`/publicacion?id=${post.id}`)}>
+                  <p
+                    className="foro-post-body pub-abrir"
+                    onClick={() => onNavigate(`/publicacion?id=${post.id}`)}
+                  >
                     {post.cuerpo}
                   </p>
                 )}
@@ -454,12 +602,31 @@ export default function Foro({ auth, onNavigate }) {
                     {post.comentarios.map((comentario) => (
                       <div className="foro-comment" key={comentario.id}>
                         <div className="foro-comment-avatar">
-                          <img src={comentario.avatar || (comentario.autor === usuario && miFoto) || '/avatar-defecto.svg'} alt={comentario.autor} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                          <img
+                            src={
+                              comentario.avatar ||
+                              (comentario.autor === usuario && miFoto) ||
+                              '/avatar-defecto.svg'
+                            }
+                            alt={comentario.autor}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              borderRadius: '50%',
+                              objectFit: 'cover',
+                            }}
+                          />
                         </div>
                         <div className="foro-comment-bubble">
-                          <strong onClick={() => {
-                            if (auth?.user?.username === comentario.autor && onNavigate) onNavigate('/perfil')
-                          }}>
+                          <strong
+                            onClick={() => {
+                              if (
+                                auth?.user?.username === comentario.autor &&
+                                onNavigate
+                              )
+                                onNavigate('/perfil')
+                            }}
+                          >
                             {comentario.autor}
                           </strong>
                           <p>{comentario.texto}</p>
@@ -469,13 +636,25 @@ export default function Foro({ auth, onNavigate }) {
                     <div className="foro-comment-form">
                       <input
                         type="text"
-                        placeholder={auth?.isAuthenticated ? 'Escribe un comentario...' : 'Inicia sesión para comentar'}
+                        placeholder={
+                          auth?.isAuthenticated
+                            ? 'Escribe un comentario...'
+                            : 'Inicia sesión para comentar'
+                        }
                         value={nuevoComentario}
-                        onChange={(event) => setNuevoComentario(event.target.value)}
+                        onChange={(event) =>
+                          setNuevoComentario(event.target.value)
+                        }
                         readOnly={!auth?.isAuthenticated}
-                        onKeyDown={(event) => { if (event.key === 'Enter') agregarComentario(post.id) }}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter') agregarComentario(post.id)
+                        }}
                       />
-                      <button className="foro-btn foro-btn--primary" type="button" onClick={() => agregarComentario(post.id)}>
+                      <button
+                        className="foro-btn foro-btn--primary"
+                        type="button"
+                        onClick={() => agregarComentario(post.id)}
+                      >
                         Responder
                       </button>
                     </div>
@@ -487,11 +666,25 @@ export default function Foro({ auth, onNavigate }) {
         </main>
 
         <aside className="foro-banners">
-          <button className="foro-banner" type="button" onClick={() => irPlantilla('banner-ofertas-1')}>
-            <img src="/ofertas-banner.svg" alt="OFERTAS INCREÍBLES HASTA -50% DTO." />
+          <button
+            className="foro-banner"
+            type="button"
+            onClick={() => irPlantilla('banner-ofertas-1')}
+          >
+            <img
+              src="/ofertas-banner.svg"
+              alt="OFERTAS INCREÍBLES HASTA -50% DTO."
+            />
           </button>
-          <button className="foro-banner" type="button" onClick={() => irPlantilla('banner-ofertas-2')}>
-            <img src="/ofertas-banner.svg" alt="OFERTAS INCREÍBLES HASTA -50% DTO." />
+          <button
+            className="foro-banner"
+            type="button"
+            onClick={() => irPlantilla('banner-ofertas-2')}
+          >
+            <img
+              src="/ofertas-banner.svg"
+              alt="OFERTAS INCREÍBLES HASTA -50% DTO."
+            />
           </button>
         </aside>
       </div>

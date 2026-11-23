@@ -5,7 +5,7 @@ class Comentario extends Model
     public function findByPublicacion($publicacionId)
     {
         return $this->fetchAll(
-            'SELECT c.*, u.nombre, u.username, u.foto_perfil
+            'SELECT c.*, u.nombre, u.username, u.foto_perfil_url AS foto_perfil
              FROM comentarios_foro c
              JOIN usuarios u ON c.usuario_id = u.id
              WHERE c.publicacion_id = ?

@@ -1,0 +1,100 @@
+.auth-account-page {
+  min-height: 100vh;
+}
+
+.auth-account-page .form-container {
+  width: min(440px, calc(100% - 32px));
+  padding: 28px 0;
+}
+
+.auth-account-page .form-container h2 {
+  margin-bottom: 12px;
+}
+
+.auth-account-page .auth-form {
+  display: grid;
+  gap: 12px;
+}
+
+.auth-account-page .auth-form .input-group {
+  margin-bottom: 0;
+}
+
+.auth-account-page .auth-form .login-btn {
+  margin-top: 8px;
+}
+
+.auth-account-page .password-visibility-toggle {
+  justify-self: start;
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: #155e9b;
+  cursor: pointer;
+  font: inherit;
+}
+
+.auth-account-page .password-visibility-toggle:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.auth-account-page .auth-form-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin-top: 18px;
+}
+
+.auth-account-page .auth-form-links a {
+  color: #155e9b;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.auth-account-page .auth-alert[role='alert'],
+.auth-account-page .auth-alert[role='status'] {
+  display: block;
+}
+
+.auth-account-page .field-error {
+  display: block;
+  margin-top: 4px;
+  color: #b91c1c;
+  font-size: 12px;
+}
+
+.auth-account-page .auth-inline-status {
+  margin: 10px 0;
+  color: #166534;
+  font-size: 14px;
+}
+
+@media (max-width: 900px) {
+  .auth-account-page .left-panel {
+    display: none;
+  }
+
+  .auth-account-page .right-panel {
+    width: 100%;
+    min-height: 100vh;
+    padding: 20px 16px;
+  }
+
+  .auth-account-page .form-container {
+    width: min(100%, 440px);
+  }
+}
+
+[data-theme='dark'] .auth-account-page .right-panel {
+  background: var(--color-surface);
+}
+
+[data-theme='dark'] .auth-account-page .form-container h2,
+[data-theme='dark'] .auth-account-page .form-container .subtitle {
+  color: var(--color-text);
+}
+
+[data-theme='dark'] .auth-account-page .auth-form-links a {
+  color: var(--color-primary);
+}

@@ -63,7 +63,32 @@ Las respuestas usan JSON y están prefijadas por `/api`.
 | POST | `/api/foro` | Bearer token | Crea publicación en el foro |
 | POST | `/api/foro/{id}/comentarios` | Bearer token | Agrega comentario a una publicación |
 
-El frontend guarda token y usuario en el contexto de autenticación; las operaciones protegidas envían `Authorization: Bearer <token>`. Leer productos, categorías, publicaciones del foro y puntos físicos sigue siendo público.
+El cliente React mantiene el token web en `sessionStorage` por pestaña, el usuario en memoria y revalida la sesión con `/api/auth/web/me`; las operaciones protegidas envían `Authorization: Bearer <token>`. Leer productos, categorías, publicaciones del foro y puntos físicos sigue siendo público.
+
+### Identidad web
+
+React usa el conjunto separado `/api/auth/web/*`, conservando `/api/register`, `/api/login`, `/api/me` y `/api/logout` para clientes existentes como Expo:
+
+| Método | Endpoint | Acceso | Descripción |
+|---|---|---|---|
+| POST | `/api/auth/web/register` | Público | Registro genérico y envío de verificación; no inicia sesión |
+| POST | `/api/auth/web/login` | Público | Emite token Bearer web con expiración de ocho horas |
+| POST | `/api/auth/web/email/resend` | Público | Reenvío genérico de verificación |
+| GET | `/api/auth/web/email/verify/{id}/{hash}` | URL firmada | Verifica el correo y redirige a React |
+| POST | `/api/auth/web/password/forgot` | Público | Solicita recuperación sin confirmar si existe la cuenta |
+| POST | `/api/auth/web/password/reset` | Público | Restablece contraseña y revoca tokens existentes |
+| GET | `/api/auth/web/me` | Bearer web | Revalida la sesión actual |
+| POST | `/api/auth/web/logout` | Bearer web | Revoca el token actual |
+| GET | `/api/auth/web/sessions` | Bearer web | Lista hasta 50 sesiones sin exponer tokens |
+| DELETE | `/api/auth/web/sessions/{token}` | Bearer web | Revoca una sesión propia |
+| DELETE | `/api/auth/web/sessions` | Bearer web | Revoca todas las sesiones |
+| GET | `/api/auth/web/security-notices` | Bearer web | Lista avisos recientes de inicio |
+| PATCH | `/api/auth/web/password` | Bearer web | Cambia contraseña y revoca tokens |
+| POST | `/api/auth/web/email/verification-notification` | Bearer web | Reenvía verificación a la cuenta actual |
+
+El token de React se conserva en `sessionStorage` por pestaña; el usuario se vuelve a obtener de `/me`. El servidor aplica una caducidad de ocho horas y limita los intentos de autenticación/recuperación. Los fallos de login no distinguen cuentas desconocidas, inactivas o sin verificar. La estrategia y sus límites están en [ADR-0004](./docs/aegis-6/decisiones/ADR-0004-errores-y-auth-web.md).
+
+La identidad web es `Usuario`/`usuarios`; el scaffold `User`/`users` permanece separado. El broker de recuperación AEGIS usa `usuario_password_reset_tokens`, independiente de `password_reset_tokens`. Configura `FRONTEND_URL`, CORS y un mailer operativo antes de habilitar los flujos de verificación y recuperación en un entorno real. El token Bearer de navegador es accesible para JavaScript y no protege ante XSS; MFA/passkeys no están habilitados.
 
 ## Migración de datos y alcance pendiente
 

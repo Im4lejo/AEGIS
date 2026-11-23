@@ -649,6 +649,20 @@
   }
 }
 
+@media (min-width: 1001px) and (max-width: 1365px) {
+  .editar-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) auto;
+  }
+
+  .editar-row-help {
+    display: none;
+  }
+
+  .editar-row-form {
+    grid-column: 2 / -1;
+  }
+}
+
 @media (max-width: 860px) {
   .editar-page {
     grid-template-columns: 1fr;
