@@ -133,6 +133,18 @@ Los productos y publicaciones usan Cloudinary mediante `MediaManager` y conserva
 - Los recursos públicos excluyen email, teléfono, dirección exacta y otros campos privados.
 - La desactivación inicia 30 días de retención y revoca tokens.
 
+## Feed social
+
+El foro usa `publicaciones_foro` como entidad canónica y conserva `/api/foro`.
+
+- Tabs: `para-ti`, `siguiendo`, `recientes`.
+- Cursor estable por fecha e ID.
+- Ranking Para-ti determinista: fijados, `rank_base`, fecha e ID.
+- Estados: publicado, borrador, programado, archivado y eliminado.
+- Publicaciones, edición, archivo, fijado, etiquetas, menciones y enlaces seguros.
+- Reacciones eficientes por publicación, usuario y tipo.
+- Feed de bloques excluye usuarios bloqueados.
+
 ## Verificación
 
 ```bash

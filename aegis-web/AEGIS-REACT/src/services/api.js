@@ -195,14 +195,43 @@ export const productApi = {
 }
 
 export const forumApi = {
-  list: (page = 1) => request(`/foro${queryString({ page, per_page: 50 })}`),
+  list: (tab = 'recientes', cursor = null, perPage = 20) =>
+    request(`/foro${queryString({ tab, cursor, per_page: perPage })}`),
   create: (post, token) => {
     const body = new FormData()
     body.append('titulo', post.titulo)
     body.append('contenido', post.contenido)
     if (post.imagen) body.append('imagenes[]', post.imagen)
+    if (post.visibilidad) body.append('visibilidad', post.visibilidad)
+    if (post.estado) body.append('estado', post.estado)
+    if (post.programada_para) body.append('programada_para', post.programada_para)
+    if (post.enlace_preview_url) body.append('enlace_preview_url', post.enlace_preview_url)
+    ;(post.etiquetas || []).forEach((tag, index) => body.append(`etiquetas[${index}]`, tag))
+    ;(post.menciones || []).forEach((id, index) => body.append(`menciones[${index}]`, id))
     return request('/foro', { method: 'POST', body, token })
   },
+  update: (postId, details, token) =>
+    request(`/foro/${encodeURIComponent(postId)}`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  archive: (postId, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/archivar`, {
+      method: 'PATCH',
+      token,
+    }),
+  react: (postId, tipo, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/reacciones`, {
+      method: 'POST',
+      body: { tipo },
+      token,
+    }),
+  unreact: (postId, tipo, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/reacciones${queryString({ tipo })}`, {
+      method: 'DELETE',
+      token,
+    }),
   comment: (postId, comentario, token) =>
     request(`/foro/${postId}/comentarios`, {
       method: 'POST',

@@ -75,6 +75,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/foro', [ForoController::class, 'store']);
         Route::patch('/foro/{publicacion}', [ForoController::class, 'update'])->whereNumber('publicacion');
         Route::delete('/foro/{publicacion}', [ForoController::class, 'destroy'])->whereNumber('publicacion');
+        Route::patch('/foro/{publicacion}/archivar', [ForoController::class, 'archive'])->whereNumber('publicacion');
+        Route::post('/foro/{publicacion}/reacciones', [ForoController::class, 'react'])->whereNumber('publicacion');
+        Route::delete('/foro/{publicacion}/reacciones', [ForoController::class, 'unreact'])->whereNumber('publicacion');
         Route::post('/foro/{publicacion}/imagenes', [MediaController::class, 'storeForo'])->whereNumber('publicacion');
         Route::delete('/foro/{publicacion}/imagenes/{imagen}', [MediaController::class, 'destroyForo'])->whereNumber('publicacion')->whereNumber('imagen');
         Route::patch('/foro/{publicacion}/imagenes/orden', [MediaController::class, 'reorderForo'])->whereNumber('publicacion');

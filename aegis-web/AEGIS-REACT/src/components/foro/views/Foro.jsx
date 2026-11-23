@@ -98,6 +98,9 @@ export default function Foro({ auth, onNavigate }) {
   const [archivoNuevo, setArchivoNuevo] = useState(null)
   const [lightbox, setLightbox] = useState(null)
   const [toast, setToast] = useState(null)
+  const [feedTab, setFeedTab] = useState('recientes')
+  const [nextCursor, setNextCursor] = useState(null)
+  const [loadingMore, setLoadingMore] = useState(false)
 
   const ordenRef = useRef(null)
   const fileInputRef = useRef(null)
@@ -105,8 +108,8 @@ export default function Foro({ auth, onNavigate }) {
   useEffect(() => {
     let active = true
     forumApi
-      .list()
-      .then(({ data }) => {
+      .list(feedTab)
+      .then(({ data, meta }) => {
         if (!active) return
         setPosts(
           data.map((publicacion) => ({
@@ -135,6 +138,7 @@ export default function Foro({ auth, onNavigate }) {
           })),
         )
         setErrorFeed(null)
+        setNextCursor(meta?.next_cursor || null)
       })
       .catch((error) => {
         if (active) setErrorFeed(error)
@@ -145,7 +149,7 @@ export default function Foro({ auth, onNavigate }) {
     return () => {
       active = false
     }
-  }, [])
+  }, [feedTab])
 
   useEffect(() => {
     if (!foroMenuAbierto) return
@@ -245,6 +249,33 @@ export default function Foro({ auth, onNavigate }) {
       .catch(function () {
         setToast('No se pudo copiar el enlace')
       })
+  }
+
+  const cargarMas = async () => {
+    if (!nextCursor || loadingMore) return
+    setLoadingMore(true)
+    try {
+      const { data, meta } = await forumApi.list(feedTab, nextCursor, 20)
+      const nuevas = data.map((publicacion) => ({
+        id: publicacion.id,
+        usuarioId: publicacion.usuario?.id,
+        autor: publicacion.usuario?.username || publicacion.usuario?.nombre || 'Usuario',
+        avatar: publicacion.usuario?.foto_perfil,
+        fecha: publicacion.fecha_publicacion
+          ? new Date(publicacion.fecha_publicacion).toLocaleString('es-CO')
+          : '',
+        titulo: publicacion.titulo,
+        cuerpo: publicacion.contenido,
+        imagen: publicacion.imagenes?.[0]?.imagen || null,
+        comentarios: publicacion.comentarios || [],
+      }))
+      setPosts((previas) => [...previas, ...nuevas])
+      setNextCursor(meta?.next_cursor || null)
+    } catch (error) {
+      setToast(error.message)
+    } finally {
+      setLoadingMore(false)
+    }
   }
 
   const publicar = async () => {
@@ -348,6 +379,23 @@ export default function Foro({ auth, onNavigate }) {
         />
 
         <main className="foro-feed">
+          <nav className="foro-feed-tabs" aria-label="Filtros del feed">
+            {[
+              ['para-ti', 'Para ti'],
+              ['siguiendo', 'Siguiendo'],
+              ['recientes', 'Recientes'],
+            ].map(([id, label]) => (
+              <button
+                type="button"
+                key={id}
+                className={feedTab === id ? 'active' : ''}
+                aria-current={feedTab === id ? 'page' : undefined}
+                onClick={() => setFeedTab(id)}
+              >
+                {label}
+              </button>
+            ))}
+          </nav>
           {!panelAbierto ? (
             <div className="foro-composer">
               <div className="foro-composer-avatar">
@@ -545,6 +593,45 @@ export default function Foro({ auth, onNavigate }) {
                     <div className="foro-post-author">{post.autor}</div>
                     <div className="foro-post-date">{post.fecha}</div>
                   </div>
+                  {auth?.user?.id === post.usuarioId && (
+                    <div className="foro-post-owner-actions">
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          const contenido = window.prompt('Editar publicación', post.cuerpo || '')
+                          if (contenido === null) return
+                          try {
+                            await forumApi.update(post.id, { contenido: contenido.trim() }, token)
+                            setPosts((previas) => previas.map((item) =>
+                              item.id === post.id
+                                ? { ...item, cuerpo: contenido.trim(), titulo: contenido.trim().split('\n')[0] }
+                                : item,
+                            ))
+                            setToast('Publicación editada')
+                          } catch (error) {
+                            setToast(error.message)
+                          }
+                        }}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          if (!window.confirm('¿Archivar esta publicación?')) return
+                          try {
+                            await forumApi.archive(post.id, token)
+                            setPosts((previas) => previas.filter((item) => item.id !== post.id))
+                            setToast('Publicación archivada')
+                          } catch (error) {
+                            setToast(error.message)
+                          }
+                        }}
+                      >
+                        Archivar
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <button
@@ -574,6 +661,20 @@ export default function Foro({ auth, onNavigate }) {
                 )}
 
                 <div className="foro-post-actions">
+                  <button
+                    className="foro-action"
+                    type="button"
+                    onClick={async () => {
+                      try {
+                        await forumApi.react(post.id, 'me_gusta', token)
+                        setToast('Reacción agregada')
+                      } catch (error) {
+                        setToast(error.message)
+                      }
+                    }}
+                  >
+                    Me gusta
+                  </button>
                   <button
                     className="foro-action"
                     type="button"
@@ -662,6 +763,16 @@ export default function Foro({ auth, onNavigate }) {
                 )}
               </article>
             ))
+          )}
+          {nextCursor && (
+            <button
+              type="button"
+              className="foro-btn foro-btn--ghost"
+              disabled={loadingMore}
+              onClick={cargarMas}
+            >
+              {loadingMore ? 'Cargando...' : 'Cargar más'}
+            </button>
           )}
         </main>
 

@@ -233,6 +233,16 @@ El perfil propio se obtiene y modifica con `/api/perfil/me`. El contrato públic
 
 Los recursos públicos nunca seleccionan email, teléfono ni ciudad exacta. Un perfil privado devuelve `PROFILE_PRIVATE` salvo propietario o seguimiento aceptado. Los bloqueos mutuos devuelven `PROFILE_RESTRICTED`.
 
+### Feed social
+
+`publicaciones_foro` es la entidad canónica del feed. `GET /api/foro` conserva el contrato legado y acepta `tab`, `cursor` y `per_page`.
+
+Las publicaciones pueden estar `publicado`, `borrador`, `programado`, `archivado` o `eliminado`. `programada_para` usa Laravel Queue mediante `PublicarPostProgramado`. El cursor combina fecha e ID y evita saltos por registros con la misma fecha.
+
+Para-ti ordena fijados y `rank_base`, después fecha e ID. Siguiendo limita el resultado a seguidores aceptados. Recientes usa fecha e ID. Los bloqueos excluyen ambos lados de la relación.
+
+Las reacciones usan `reacciones_publicacion` con unicidad por publicación, usuario y tipo. Las menciones usan la tabla pivote `menciones_publicacion`. Las etiquetas mantienen registros normalizados y enlaces seguros HTTP/HTTPS.
+
 ## 6. Modelos Eloquent y relaciones
 
 | Modelo | Tabla | Relaciones definidas / comportamiento |
