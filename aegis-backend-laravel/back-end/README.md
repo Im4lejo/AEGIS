@@ -96,6 +96,16 @@ Las migraciones Laravel reproducen las tablas AEGIS (`usuarios`, `categorias`, `
 
 La API todavía no expone operaciones completas de encuentros ni perfiles privados más allá de la privacidad base de productos/publicaciones. Las operaciones de owner/admin del Incremento 04 sí están disponibles para puntos y cuentas. Los controladores MVC/HTML y las vistas no se migran.
 
+## Historias y eventos comunitarios
+
+- `GET /api/historias` y `GET /api/historias/{id}` sirven historias temporales autorizadas por audiencia, seguimiento, comunidad y bloqueos.
+- `POST /api/historias` crea una historia con imagen/video y expiración configurable; `DELETE /api/historias/{id}` exige propietario/admin.
+- `GET /api/comunidades/{id}/eventos` respeta comunidades públicas y privadas.
+- `POST /api/comunidades/{id}/eventos` exige owner/moderador comunitario; participación y cancelación tienen permisos propios.
+- Las visualizaciones son únicas por historia/usuario y las historias vencidas quedan expuestas solo como estado expirado.
+- `ExpirarHistorias` se ejecuta cada cinco minutos desde el scheduler y los recordatorios usan dedupe de notificaciones.
+- Encabezado, carrusel React y dirección de comunidad consumen estos endpoints; React no decide permisos.
+
 ## Autorización, propietarios y privacidad
 
 El Incremento 04 aplica autorización en servidor con Laravel Gates y middleware:

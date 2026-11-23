@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { EmptyState, ErrorState, LoadingState } from '../../shared/ApiState'
-import { communityApi } from '../../../services/api'
+import { advancedContentApi, communityApi } from '../../../services/api'
 import '../css/comunidades.css'
 
 export default function Comunidades({ auth, onNavigate }) {
@@ -18,6 +18,15 @@ export default function Comunidades({ auth, onNavigate }) {
     normas: '',
     categoria: '',
     visibilidad: 'publica',
+  })
+  const [events, setEvents] = useState([])
+  const [eventForm, setEventForm] = useState({
+    titulo: '',
+    descripcion: '',
+    lugar: '',
+    fecha_inicio: '',
+    fecha_fin: '',
+    cupo: '',
   })
 
   const load = () => {
@@ -37,6 +46,8 @@ export default function Comunidades({ auth, onNavigate }) {
     try {
       const { data } = await communityApi.show(id)
       setSelected(data)
+      const eventsResult = await advancedContentApi.events(id)
+      setEvents(Array.isArray(eventsResult.data) ? eventsResult.data : [])
       setError(null)
     } catch (requestError) {
       setError(requestError)
@@ -55,6 +66,41 @@ export default function Comunidades({ auth, onNavigate }) {
       setSelected(data)
       setCommunities((items) => [data, ...items])
       setToast('Comunidad creada')
+    } catch (requestError) {
+      setToast(requestError.message)
+    }
+  }
+
+  const submitEvent = async (event) => {
+    event.preventDefault()
+    if (!selected?.membership?.estado || selected.membership.estado !== 'activo') {
+      setToast('Debes pertenecer a la comunidad.')
+      return
+    }
+    try {
+      const details = {
+        ...eventForm,
+        cupo: eventForm.cupo ? Number(eventForm.cupo) : null,
+        fecha_fin: eventForm.fecha_fin || null,
+      }
+      await advancedContentApi.createEvent(selected.id, details, auth?.token)
+      const eventsResult = await advancedContentApi.events(selected.id)
+      setEvents(Array.isArray(eventsResult.data) ? eventsResult.data : [])
+      setEventForm({ titulo: '', descripcion: '', lugar: '', fecha_inicio: '', fecha_fin: '', cupo: '' })
+      setToast('Evento publicado')
+    } catch (requestError) {
+      setToast(requestError.message)
+    }
+  }
+
+  const participate = async (eventId, estado) => {
+    if (!auth?.isAuthenticated) {
+      onNavigate?.('/login')
+      return
+    }
+    try {
+      await advancedContentApi.participate(eventId, { estado, recordatorio: true }, auth.token)
+      setToast('Tu participación fue registrada')
     } catch (requestError) {
       setToast(requestError.message)
     }
@@ -169,6 +215,37 @@ export default function Comunidades({ auth, onNavigate }) {
                     ? 'Solicitar acceso'
                     : 'Unirme'}
             </button>
+            <section className="comunidad-events" aria-label="Eventos de la comunidad">
+              <h3>Eventos</h3>
+              {selected.membership?.estado === 'activo'
+                && ['owner', 'moderador'].includes(selected.membership?.rol)
+                && (
+                  <form className="comunidad-event-form" onSubmit={submitEvent}>
+                    <label>Título<input required maxLength={200} value={eventForm.titulo} onChange={(event) => setEventForm({ ...eventForm, titulo: event.target.value })} /></label>
+                    <label>Descripción<textarea maxLength={5000} value={eventForm.descripcion} onChange={(event) => setEventForm({ ...eventForm, descripcion: event.target.value })} /></label>
+                    <label>Lugar<input maxLength={255} value={eventForm.lugar} onChange={(event) => setEventForm({ ...eventForm, lugar: event.target.value })} /></label>
+                    <label>Inicio<input required type="datetime-local" value={eventForm.fecha_inicio} onChange={(event) => setEventForm({ ...eventForm, fecha_inicio: event.target.value })} /></label>
+                    <label>Fin<input type="datetime-local" value={eventForm.fecha_fin} onChange={(event) => setEventForm({ ...eventForm, fecha_fin: event.target.value })} /></label>
+                    <label>Cupo<input type="number" min="1" max="100000" value={eventForm.cupo} onChange={(event) => setEventForm({ ...eventForm, cupo: event.target.value })} /></label>
+                    <button type="submit">Crear evento</button>
+                  </form>
+                )}
+              {events.length === 0
+                ? <p>No hay eventos próximos.</p>
+                : events.map((eventItem) => (
+                    <article className="comunidad-event" key={eventItem.id}>
+                      <h4>{eventItem.titulo}</h4>
+                      <p>{eventItem.descripcion || 'Sin descripción.'}</p>
+                      <p>{eventItem.lugar || 'Lugar por confirmar'} · {new Date(eventItem.fecha_inicio).toLocaleString('es-CO')}</p>
+                      {auth?.isAuthenticated && (
+                        <div>
+                          <button type="button" onClick={() => participate(eventItem.id, 'asistira')}>Asistiré</button>
+                          <button type="button" onClick={() => participate(eventItem.id, 'interesado')}>Me interesa</button>
+                        </div>
+                      )}
+                    </article>
+                  ))}
+            </section>
           </section>
         )}
 

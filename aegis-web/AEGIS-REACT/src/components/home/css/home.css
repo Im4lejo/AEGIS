@@ -1,3 +1,90 @@
+.aegis-stories {
+  margin-bottom: 20px;
+}
+
+.aegis-stories__heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.aegis-stories__heading h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.aegis-stories__rail {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 4px 2px 10px;
+}
+
+.aegis-story {
+  min-width: 96px;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary, #111827);
+  cursor: pointer;
+  padding: 0;
+  text-align: center;
+}
+
+.aegis-story img,
+.aegis-story video {
+  width: 96px;
+  height: 96px;
+  display: block;
+  object-fit: cover;
+  border: 3px solid #a855f7;
+  border-radius: 50%;
+  background: #f3f4f6;
+}
+
+.aegis-story span {
+  display: block;
+  margin-top: 6px;
+  max-width: 96px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.aegis-story-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.92);
+  color: #fff;
+  padding: 24px;
+}
+
+.aegis-story-viewer img,
+.aegis-story-viewer video {
+  max-width: min(420px, 92vw);
+  max-height: 78vh;
+  border-radius: 12px;
+}
+
+.aegis-story-viewer button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border: 1px solid #fff;
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  padding: 8px 12px;
+}
+
+.aegis-stories__empty {
+  color: #6b7280;
+}
+
 .home-layout {
   background-image: linear-gradient(180deg, #ffffff 0%, #f7f5ff 45%, #eff6ff 100%);
   overflow-x: clip;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { productApi } from '../../../services/api'
+import { advancedContentApi, productApi } from '../../../services/api'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { route } from '../../shared/presentation'
@@ -58,6 +58,9 @@ export default function Home({ auth, message, onNavigate }) {
   const [error, setError] = useState(null)
   const [search, setSearch] = useState('')
   const [feedback, setFeedback] = useState('')
+  const [stories, setStories] = useState([])
+  const [selectedStory, setSelectedStory] = useState(null)
+  const [storyError, setStoryError] = useState('')
 
   useEffect(() => {
     let active = true
@@ -79,6 +82,32 @@ export default function Home({ auth, message, onNavigate }) {
       active = false
     }
   }, [])
+
+  useEffect(() => {
+    let active = true
+    advancedContentApi
+      .stories(auth?.token)
+      .then(({ data }) => {
+        if (active) setStories(Array.isArray(data) ? data : [])
+      })
+      .catch((requestError) => {
+        if (active) setStoryError(requestError.message)
+      })
+    return () => {
+      active = false
+    }
+  }, [auth?.token])
+
+  const openStory = async (story) => {
+    try {
+      const { data } = await advancedContentApi.story(story.id, auth?.token)
+      setSelectedStory(data)
+      setStoryError('')
+    } catch (requestError) {
+      setSelectedStory(null)
+      setStoryError(requestError.message)
+    }
+  }
 
   useEffect(() => {
     if (!message) return undefined
@@ -145,6 +174,46 @@ export default function Home({ auth, message, onNavigate }) {
             {feedback}
           </div>
         )}
+
+        <section className="aegis-stories" aria-label="Historias">
+          <div className="aegis-stories__heading">
+            <h2>Historias</h2>
+            {auth?.isAuthenticated && (
+              <span>Tu historia disponible desde el perfil</span>
+            )}
+          </div>
+          {storyError && <p role="alert">{storyError}</p>}
+          {stories.length ? (
+            <div className="aegis-stories__rail" role="list">
+              {stories.map((story) => (
+                <button
+                  type="button"
+                  role="listitem"
+                  className="aegis-story"
+                  key={story.id}
+                  onClick={() => openStory(story)}
+                  aria-label={`Abrir historia de ${story.usuario?.nombre || story.usuario?.username || 'usuario'}`}
+                >
+                  {story.tipo_media === 'video'
+                    ? <video src={story.media_url} muted aria-hidden="true" />
+                    : <img src={story.media_url} alt="" />}
+                  <span>{story.usuario?.username || story.usuario?.nombre || 'Usuario'}</span>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <p className="aegis-stories__empty">No hay historias disponibles.</p>
+          )}
+          {selectedStory && (
+            <div className="aegis-story-viewer" role="dialog" aria-modal="true" aria-label="Historia">
+              <button type="button" onClick={() => setSelectedStory(null)} aria-label="Cerrar historia">Cerrar</button>
+              {selectedStory.tipo_media === 'video'
+                ? <video src={selectedStory.media_url} controls autoPlay />
+                : <img src={selectedStory.media_url} alt={selectedStory.texto || 'Historia'} />}
+              {selectedStory.texto && <p>{selectedStory.texto}</p>}
+            </div>
+          )}
+        </section>
 
         <Card className="home-composer">
           <div>

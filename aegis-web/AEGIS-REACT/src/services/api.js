@@ -195,6 +195,40 @@ export const preferenceApi = {
     request('/preferencias/restablecer', { method: 'POST', token }),
 }
 
+export const advancedContentApi = {
+  stories: (token) => request('/historias', { token }),
+  story: (id, token) =>
+    request(`/historias/${encodeURIComponent(id)}`, { token }),
+  createStory: (details, token) =>
+    request('/historias', { method: 'POST', body: details, token }),
+  deleteStory: (id, token) =>
+    request(`/historias/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      token,
+    }),
+  events: (communityId) =>
+    request(
+      `/comunidades/${encodeURIComponent(communityId)}/eventos`,
+    ),
+  createEvent: (communityId, details, token) =>
+    request(`/comunidades/${encodeURIComponent(communityId)}/eventos`, {
+      method: 'POST',
+      body: details,
+      token,
+    }),
+  participate: (eventId, details, token) =>
+    request(`/eventos/${encodeURIComponent(eventId)}/participacion`, {
+      method: 'POST',
+      body: details,
+      token,
+    }),
+  cancelEvent: (eventId, token) =>
+    request(`/eventos/${encodeURIComponent(eventId)}/cancelar`, {
+      method: 'PATCH',
+      token,
+    }),
+}
+
 export const authApi = {
   login: (credentials) =>
     request('/auth/web/login', { method: 'POST', body: credentials }),

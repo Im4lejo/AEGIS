@@ -55,4 +55,9 @@ class Comunidad extends Model
     {
         return $this->hasMany(AccionComunidad::class, 'comunidad_id');
     }
+
+    public function eventos(): HasMany
+    {
+        return $this->hasMany(EventoComunidad::class, 'comunidad_id');
+    }
 }

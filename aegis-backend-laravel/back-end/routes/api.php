@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\MensajeController;
 use App\Http\Controllers\Api\NegociacionController;
 use App\Http\Controllers\Api\NotificacionController;
+use App\Http\Controllers\Api\ContenidoAvanzadoController;
 use App\Http\Controllers\Api\PerfilController;
 use App\Http\Controllers\Api\PreferenciaController;
 use App\Http\Controllers\Api\ProductoController;
@@ -41,6 +42,9 @@ Route::get('/perfil/{usuario}/tabs/{tab}', [PerfilController::class, 'tab'])
 Route::get('/perfil/{usuario}/seguidores', [PerfilController::class, 'followers'])->whereNumber('usuario');
 Route::get('/perfil/{usuario}/siguiendo', [PerfilController::class, 'following'])->whereNumber('usuario');
 Route::get('/puntos-fisicos', [PuntoFisicoController::class, 'index']);
+Route::get('/historias', [ContenidoAvanzadoController::class, 'stories']);
+Route::get('/historias/{historia}', [ContenidoAvanzadoController::class, 'viewStory'])->whereNumber('historia');
+Route::get('/comunidades/{comunidad}/eventos', [ContenidoAvanzadoController::class, 'events'])->whereNumber('comunidad');
 Route::get('/resenas/{ambito}/{id}/resumen', [ResenaController::class, 'summary'])->whereAlpha('ambito')->whereNumber('id');
 Route::get('/resenas/{ambito}/{id}', [ResenaController::class, 'list'])->whereAlpha('ambito')->whereNumber('id');
 Route::get('/puntos-fisicos/directorio', [EncuentroController::class, 'pointDirectory']);
@@ -86,6 +90,11 @@ Route::prefix('auth/web')->name('auth.web.')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/historias', [ContenidoAvanzadoController::class, 'createStory'])->middleware(['account.active', 'verified.web']);
+    Route::delete('/historias/{historia}', [ContenidoAvanzadoController::class, 'deleteStory'])->whereNumber('historia')->middleware('account.active');
+    Route::post('/comunidades/{comunidad}/eventos', [ContenidoAvanzadoController::class, 'createEvent'])->whereNumber('comunidad')->middleware(['account.active', 'verified.web']);
+    Route::post('/eventos/{evento}/participacion', [ContenidoAvanzadoController::class, 'participate'])->whereNumber('evento')->middleware('account.active');
+    Route::patch('/eventos/{evento}/cancelar', [ContenidoAvanzadoController::class, 'cancelEvent'])->whereNumber('evento')->middleware('account.active');
     Route::get('/preferencias', [PreferenciaController::class, 'show']);
     Route::put('/preferencias', [PreferenciaController::class, 'update']);
     Route::post('/preferencias/restablecer', [PreferenciaController::class, 'reset']);

@@ -64,7 +64,7 @@ Cliente
   -> cliente
 ```
 
-`bootstrap/app.php` registra `routes/web.php`, `routes/api.php`, `routes/console.php`, el health check `/up` y el alias `verified.web`. El prefijo `/api` lo aporta el enrutamiento API de Laravel; no se repite en los paths dentro de `routes/api.php`.
+`bootstrap/app.php` registra `routes/web.php`, `routes/api.php`, `routes/console.php`, el health check `/up`, el alias `verified.web` y el scheduler de `ExpirarHistorias`/recordatorios. El prefijo `/api` lo aporta el enrutamiento API de Laravel; no se repite en los paths dentro de `routes/api.php`.
 
 ### CLI
 
