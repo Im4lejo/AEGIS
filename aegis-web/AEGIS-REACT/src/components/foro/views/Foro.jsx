@@ -2,14 +2,9 @@ import { useState, useRef, useEffect } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import Sidebar from '../../layouts/Sidebar'
-import { fotoUsuario } from '../../shared/usuariosDemo'
+import { useAuth } from '../../../auth/useAuth'
+import { forumApi } from '../../../services/api'
 import '../css/foro.css'
-
-const IconHeart = ({ filled }) => (
-  <svg width="19" height="19" viewBox="0 0 24 24" fill={filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-  </svg>
-)
 
 const IconComment = () => (
   <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -27,13 +22,6 @@ const IconShare = () => (
   </svg>
 )
 
-const IconFlag = () => (
-  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
-    <line x1="4" y1="22" x2="4" y2="15" />
-  </svg>
-)
-
 const IconPlus = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
     <line x1="12" y1="5" x2="12" y2="19" />
@@ -48,64 +36,16 @@ const IconChevron = ({ open }) => (
   </svg>
 )
 
-export const POSTS_EJEMPLO = [
-  {
-    id: 1,
-    autor: 'TheDarkMoon7456',
-    fecha: 'Hace 2 h',
-    titulo: '¿Alguien sabe si mi GTX 1050 puede correr Cyberpunk 2077 en ultra?',
-    cuerpo: 'He visto vídeos dispares y quiero asegurarme antes de comprarlo.\nTengo un i5 y 16GB de RAM.\n\n¿Alguna sugerencia sobre rendimiento?',
-    imagen: null,
-    likes: 892,
-    comentarios: [
-      { id: 1, autor: 'TechFan01', texto: 'En ultra te va a costar, mejor bajos-medios con DLSS.', likes: 96, fecha: 'hace 1 d' },
-      { id: 2, autor: 'GamerCol', texto: 'Con ese setup mejor medium, ¡pero va a ir fluido!', likes: 41, fecha: 'hace 22 h' },
-    ],
-  },
-  {
-    id: 2,
-    autor: 'TheDarkMoon7456',
-    fecha: 'Hace 5 h',
-    titulo: '¿Alguien sabe cómo arreglar mi PC? Se queda en pantalla azul (BSOD) constantemente y no arranca.',
-    cuerpo: '',
-    imagen: '/bsod-demo.svg',
-    likes: 341,
-    comentarios: [
-      { id: 1, autor: 'SoporteAegis', texto: 'Prueba entrando en modo seguro y desinstalando el último controlador.', likes: 58, fecha: 'hace 4 h' },
-    ],
-  },
-  {
-    id: 3,
-    autor: 'NovaKatana',
-    fecha: 'Hace 1 d',
-    titulo: 'Recomendación de laptop para programar y estudiar',
-    cuerpo: 'Necesito una laptop con buen rendimiento para desarrollo (VS Code, Docker, React) y que la batería dure bastante.\n\n¿Alguna recomendación por menos de $3.000.000?',
-    imagen: null,
-    likes: 127,
-    comentarios: [],
-  },
-  {
-    id: 4,
-    autor: 'Usuario AEGIS',
-    fecha: 'Hace 2 d',
-    titulo: 'Armé mi primer PC gamer, ¿qué les parece la configuración?',
-    cuerpo: 'Ryzen 5 5600, 16GB RAM, RTX 4060 y un SSD de 1TB.\n\nTodo lo compré por piezas y lo ensamblé yo mismo. ¡Cualquier consejo de mejora es bienvenido!',
-    imagen: null,
-    likes: 76,
-    comentarios: [
-      { id: 1, autor: 'TechFan01', texto: 'Muy buen armado, la 4060 corre todo en alto sin problema.', likes: 12, fecha: 'hace 1 d' },
-    ],
-  },
-]
-
 const ORDENES = [
   { id: 'recientes', label: 'Más recientes' },
-  { id: 'populares', label: 'Más populares' },
   { id: 'comentados', label: 'Más comentados' },
 ]
 
 export default function Foro({ auth, onNavigate }) {
-  const [posts, setPosts] = useState(POSTS_EJEMPLO.map((post) => ({ ...post, comentarios: [...post.comentarios] })))
+  const { token } = useAuth()
+  const [posts, setPosts] = useState([])
+  const [cargando, setCargando] = useState(true)
+  const [errorFeed, setErrorFeed] = useState('')
   const [busqueda, setBusqueda] = useState('')
   const [temaActivo, setTemaActivo] = useState(null)
   const [foroMenuAbierto, setForoMenuAbierto] = useState(false)
@@ -116,11 +56,45 @@ export default function Foro({ auth, onNavigate }) {
   const [textoPublicacion, setTextoPublicacion] = useState('')
   const [panelAbierto, setPanelAbierto] = useState(false)
   const [imagenNueva, setImagenNueva] = useState(null)
+  const [archivoNuevo, setArchivoNuevo] = useState(null)
   const [lightbox, setLightbox] = useState(null)
   const [toast, setToast] = useState(null)
 
   const ordenRef = useRef(null)
   const fileInputRef = useRef(null)
+
+  useEffect(() => {
+    let active = true
+    forumApi.list()
+      .then(({ data }) => {
+        if (!active) return
+        setPosts(data.map((publicacion) => ({
+          id: publicacion.id,
+          usuarioId: publicacion.usuario?.id,
+          autor: publicacion.usuario?.username || `${publicacion.usuario?.nombre || ''} ${publicacion.usuario?.apellido || ''}`.trim(),
+          avatar: publicacion.usuario?.foto_perfil,
+          fecha: publicacion.fecha_publicacion ? new Date(publicacion.fecha_publicacion).toLocaleString('es-CO') : '',
+          titulo: publicacion.titulo,
+          cuerpo: publicacion.contenido,
+          imagen: publicacion.imagenes?.[0]?.imagen || null,
+          comentarios: (publicacion.comentarios || []).map((comentario) => ({
+            id: comentario.id,
+            autor: comentario.usuario?.username || comentario.usuario?.nombre || 'Usuario',
+            avatar: comentario.usuario?.foto_perfil,
+            texto: comentario.comentario,
+            fecha: comentario.fecha_comentario || '',
+          })),
+        })))
+        setErrorFeed('')
+      })
+      .catch((error) => {
+        if (active) setErrorFeed(error.message)
+      })
+      .finally(() => {
+        if (active) setCargando(false)
+      })
+    return () => { active = false }
+  }, [])
 
   useEffect(() => {
     if (!foroMenuAbierto) return
@@ -165,48 +139,39 @@ export default function Foro({ auth, onNavigate }) {
     )
   })
 
-  if (orden === 'populares') postsVisibles.sort((a, b) => b.likes - a.likes)
   if (orden === 'comentados') postsVisibles.sort((a, b) => b.comentarios.length - a.comentarios.length)
 
-  let usuario = 'Usuario AEGIS'
-  if (auth && auth.user && auth.user.nombre) usuario = auth.user.nombre
-
-  const perfilGuardado = JSON.parse(localStorage.getItem('perfilAegis') || '{}')
-  const miFoto = perfilGuardado.avatar || ''
-
-  const toggleLike = (id) => {
-    setPosts((prev) =>
-      prev.map((post) =>
-        post.id === id
-          ? { ...post, liked: !post.liked, likes: post.liked ? post.likes - 1 : post.likes + 1 }
-          : post
-      )
-    )
-  }
+  const usuario = auth?.user?.username || auth?.user?.nombre || 'Invitado'
+  const miFoto = auth?.user?.foto_perfil_url || ''
 
   const toggleComentarios = (id) => {
     setComentariosAbiertos((prev) => ({ ...prev, [id]: !prev[id] }))
     setNuevoComentario('')
   }
 
-  const agregarComentario = (id) => {
+  const agregarComentario = async (id) => {
     const texto = nuevoComentario.trim()
     if (!texto) return
-    const nuevo = { id: Date.now(), autor: usuario, texto, likes: 0, fecha: 'Ahora mismo' }
-    setPosts((prev) =>
-      prev.map((post) =>
-        post.id === id
-          ? {
-              ...post,
-              comentarios: [...post.comentarios, nuevo],
-            }
-          : post
-      )
-    )
-    const guardado = POSTS_EJEMPLO.find((post) => post.id === id)
-    if (guardado) guardado.comentarios = [...guardado.comentarios, nuevo]
-    setNuevoComentario('')
-    setToast('Comentario publicado ✓')
+    if (!auth?.isAuthenticated) {
+      if (onNavigate) onNavigate('/login')
+      return
+    }
+    try {
+      const { data } = await forumApi.comment(id, texto, token)
+      const nuevo = {
+        id: data.id,
+        autor: data.usuario?.username || data.usuario?.nombre || usuario,
+        avatar: data.usuario?.foto_perfil,
+        texto: data.comentario,
+      }
+      setPosts((prev) => prev.map((post) => post.id === id
+        ? { ...post, comentarios: [...post.comentarios, nuevo] }
+        : post))
+      setNuevoComentario('')
+      setToast('Comentario publicado ✓')
+    } catch (error) {
+      setToast(error.message)
+    }
   }
 
   const compartir = (post) => {
@@ -224,41 +189,51 @@ export default function Foro({ auth, onNavigate }) {
       })
   }
 
-  const reportar = (post) => {
-    setToast(`Publicación "${post.titulo.slice(0, 30)}..." reportada 🚩`)
-  }
-
-  const publicar = () => {
+  const publicar = async () => {
     const texto = textoPublicacion.trim()
-    if (!texto && !imagenNueva) return
+    if (!auth?.isAuthenticated) {
+      if (onNavigate) onNavigate('/login')
+      return
+    }
+    if (!texto) {
+      setToast('Escribe el contenido de tu publicación.')
+      return
+    }
 
     const primerasLineas = texto.split('\n').filter((linea) => linea !== '')
     const titulo = primerasLineas[0] || 'Nueva publicación'
-    const cuerpo = primerasLineas.slice(1).join('\n')
-
-    const nueva = {
-      id: Date.now(),
-      autor: usuario,
-      fecha: 'Ahora mismo',
-      titulo,
-      cuerpo,
-      imagen: imagenNueva,
-      liked: false,
-      likes: 0,
-      comentarios: [],
+    try {
+      const { data: publicacion } = await forumApi.create({
+        titulo,
+        contenido: texto,
+        imagen: archivoNuevo,
+      }, token)
+      const nueva = {
+        id: publicacion.id,
+        usuarioId: publicacion.usuario?.id,
+        autor: publicacion.usuario?.username || usuario,
+        avatar: publicacion.usuario?.foto_perfil,
+        fecha: publicacion.fecha_publicacion ? new Date(publicacion.fecha_publicacion).toLocaleString('es-CO') : 'Ahora mismo',
+        titulo: publicacion.titulo,
+        cuerpo: publicacion.contenido,
+        imagen: publicacion.imagenes?.[0]?.imagen || null,
+        comentarios: [],
+      }
+      setPosts((prev) => [nueva, ...prev])
+      setTextoPublicacion('')
+      setImagenNueva(null)
+      setArchivoNuevo(null)
+      setPanelAbierto(false)
+      setToast('¡Publicación creada! ✓')
+    } catch (error) {
+      setToast(error.message)
     }
-    setPosts((prev) => [nueva, ...prev])
-    POSTS_EJEMPLO.unshift(nueva)
-
-    setTextoPublicacion('')
-    setImagenNueva(null)
-    setPanelAbierto(false)
-    setToast('¡Publicación creada! ✓')
   }
 
   const seleccionarImagen = (event) => {
     const file = event.target.files[0]
     if (!file) return
+    setArchivoNuevo(file)
     const reader = new FileReader()
     reader.onload = (loadEvent) => setImagenNueva(loadEvent.target.result)
     reader.readAsDataURL(file)
@@ -308,17 +283,25 @@ export default function Foro({ auth, onNavigate }) {
                 <input
                   className="foro-composer-input"
                   type="text"
-                  placeholder="Publica Aqui...."
+                  placeholder={auth?.isAuthenticated ? 'Publica aquí...' : 'Inicia sesión para publicar'}
                   value={textoPublicacion}
                   onChange={(event) => setTextoPublicacion(event.target.value)}
-                  onFocus={() => setPanelAbierto(true)}
+                  readOnly={!auth?.isAuthenticated}
+                  onFocus={() => {
+                    if (auth?.isAuthenticated) setPanelAbierto(true)
+                    else if (onNavigate) onNavigate('/login')
+                  }}
                 />
                 <button
                   className="foro-composer-imgbtn"
                   type="button"
                   aria-label="Agregar imagen"
                   title="Agregar imagen"
-                  onClick={() => { if (fileInputRef.current) fileInputRef.current.click() }}
+                  onClick={() => {
+                    if (!auth?.isAuthenticated) {
+                      if (onNavigate) onNavigate('/login')
+                    } else if (fileInputRef.current) fileInputRef.current.click()
+                  }}
                 >
                   <IconPlus />
                 </button>
@@ -342,7 +325,8 @@ export default function Foro({ auth, onNavigate }) {
                 </div>
               </div>
               <textarea
-                placeholder="Cuéntanos más detalles... (Opcional)"
+                placeholder="Cuéntanos más detalles..."
+                required
                 value={textoPublicacion.split('\n').slice(1).join('\n')}
                 onChange={(event) =>
                   setTextoPublicacion(textoPublicacion.split('\n')[0] + (event.target.value ? '\n' + event.target.value : ''))
@@ -353,7 +337,7 @@ export default function Foro({ auth, onNavigate }) {
                 <button className="foro-btn foro-btn--ghost" type="button" onClick={() => { if (fileInputRef.current) fileInputRef.current.click() }}>
                   📷 Imagen
                 </button>
-                <button className="foro-btn foro-btn--ghost" type="button" onClick={() => { setPanelAbierto(false); setTextoPublicacion(''); setImagenNueva(null) }}>
+                <button className="foro-btn foro-btn--ghost" type="button" onClick={() => { setPanelAbierto(false); setTextoPublicacion(''); setImagenNueva(null); setArchivoNuevo(null) }}>
                   Cancelar
                 </button>
                 <button className="foro-btn foro-btn--primary" type="button" onClick={publicar}>
@@ -393,33 +377,29 @@ export default function Foro({ auth, onNavigate }) {
             </div>
           </div>
 
-          {postsVisibles.length === 0 ? (
+          {errorFeed && <div className="foro-empty" role="alert">{errorFeed}</div>}
+          {cargando ? (
+            <div className="foro-empty">Cargando publicaciones...</div>
+          ) : !errorFeed && postsVisibles.length === 0 ? (
             <div className="foro-empty">
-              No se encontraron publicaciones que coincidan con tu búsqueda. 🔍
+              {posts.length ? 'No se encontraron publicaciones que coincidan con tu búsqueda.' : 'Todavía no hay publicaciones en el foro.'}
             </div>
-          ) : (
+          ) : !errorFeed && (
             postsVisibles.map((post) => (
               <article className="foro-post" key={post.id}>
                 <div
                   className="foro-post-header"
-                  onClick={() => onNavigate(`/perfil?id=${encodeURIComponent(post.autor)}`)}
+                  onClick={() => {
+                    if (auth?.user?.id === post.usuarioId && onNavigate) onNavigate('/perfil')
+                  }}
                 >
                   <div className="foro-post-avatar">
-                    <img src={post.autor === usuario && miFoto ? miFoto : fotoUsuario(post.autor, 80)} alt={post.autor} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                    <img src={post.avatar || (post.autor === usuario && miFoto) || '/avatar-defecto.svg'} alt={post.autor} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
                   </div>
                   <div>
                     <div className="foro-post-author">{post.autor}</div>
                     <div className="foro-post-date">{post.fecha}</div>
                   </div>
-                  <button
-                    className="foro-post-report"
-                    type="button"
-                    aria-label="Reportar publicación"
-                    title="Reportar publicación"
-                    onClick={(event) => { event.stopPropagation(); reportar(post) }}
-                  >
-                    <IconFlag />
-                  </button>
                 </div>
 
                 <button
@@ -446,13 +426,6 @@ export default function Foro({ auth, onNavigate }) {
                 )}
 
                 <div className="foro-post-actions">
-                  <button
-                    className={`foro-action ${post.liked ? 'liked' : ''}`}
-                    type="button"
-                    onClick={() => toggleLike(post.id)}
-                  >
-                    <IconHeart filled={post.liked} /> {post.likes} Likes
-                  </button>
                   <button
                     className="foro-action"
                     type="button"
@@ -481,10 +454,12 @@ export default function Foro({ auth, onNavigate }) {
                     {post.comentarios.map((comentario) => (
                       <div className="foro-comment" key={comentario.id}>
                         <div className="foro-comment-avatar">
-                          <img src={comentario.autor === usuario && miFoto ? miFoto : fotoUsuario(comentario.autor, 64)} alt={comentario.autor} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                          <img src={comentario.avatar || (comentario.autor === usuario && miFoto) || '/avatar-defecto.svg'} alt={comentario.autor} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
                         </div>
                         <div className="foro-comment-bubble">
-                          <strong onClick={() => onNavigate(`/perfil?id=${encodeURIComponent(comentario.autor)}`)}>
+                          <strong onClick={() => {
+                            if (auth?.user?.username === comentario.autor && onNavigate) onNavigate('/perfil')
+                          }}>
                             {comentario.autor}
                           </strong>
                           <p>{comentario.texto}</p>
@@ -494,9 +469,10 @@ export default function Foro({ auth, onNavigate }) {
                     <div className="foro-comment-form">
                       <input
                         type="text"
-                        placeholder="Escribe un comentario..."
+                        placeholder={auth?.isAuthenticated ? 'Escribe un comentario...' : 'Inicia sesión para comentar'}
                         value={nuevoComentario}
                         onChange={(event) => setNuevoComentario(event.target.value)}
+                        readOnly={!auth?.isAuthenticated}
                         onKeyDown={(event) => { if (event.key === 'Enter') agregarComentario(post.id) }}
                       />
                       <button className="foro-btn foro-btn--primary" type="button" onClick={() => agregarComentario(post.id)}>

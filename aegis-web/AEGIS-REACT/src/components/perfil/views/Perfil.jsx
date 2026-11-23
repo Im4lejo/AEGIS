@@ -2,9 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
-import { USUARIOS_DEMO, usuarioGenerico, fotoUsuario } from '../../shared/usuariosDemo'
-import { VENDEDORES, productosDelVendedor } from '../../productos/productosDemo'
-import { POSTS_EJEMPLO } from '../../foro/views/Foro'
+import { useAuth } from '../../../auth/useAuth'
+import { forumApi, profileApi } from '../../../services/api'
 import '../css/perfil.css'
 
 function etiquetaEstado(estado) {
@@ -18,12 +17,6 @@ function badgeEstado(estado) {
   if (estado === 'reacondicionado') return 'badge-refurbished'
   return 'badge-used'
 }
-
-const IconPencil = ({ size = 15 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z" />
-  </svg>
-)
 
 const IconCrown = () => (
   <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
@@ -56,12 +49,6 @@ const IconCheck = ({ size = 14 }) => (
   </svg>
 )
 
-const IconHeart = ({ filled }) => (
-  <svg width="17" height="17" viewBox="0 0 24 24" fill={filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-  </svg>
-)
-
 const IconComment = () => (
   <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
@@ -78,13 +65,6 @@ const IconShare = () => (
   </svg>
 )
 
-const IconFlag = () => (
-  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
-    <line x1="4" y1="22" x2="4" y2="15" />
-  </svg>
-)
-
 const IconClose = ({ size = 20 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
     <line x1="18" y1="6" x2="6" y2="18" />
@@ -92,20 +72,8 @@ const IconClose = ({ size = 20 }) => (
   </svg>
 )
 
-const USUARIO_EJEMPLO = {
-  nombre: 'Luis Alejandro',
-  apellido: 'Montenegro Ojeda',
-  apodo: 'Usuario AEGIS',
-  descripcion: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus tempor elementum justo finibus tempus.',
-  lugar: 'Popayán, Caucá',
-  fechaNacimiento: '29 de marzo del 2008',
-  fechaRegistro: '30/04/2026',
-  productosVendidos: 'Tarjetas Gráficas',
-}
-
 const ORDENES = [
   { id: 'recientes', label: 'Más recientes' },
-  { id: 'populares', label: 'Más populares' },
   { id: 'comentados', label: 'Más comentados' },
 ]
 
@@ -162,31 +130,65 @@ function MenuOpciones({ trigger, triggerClass = 'perfil-menu-btn', valor, opcion
   )
 }
 
-export default function Perfil({ id, usuario = {}, publicaciones, productos, esPropio = true, auth, onNavigate }) {
-  let datosUsuario = usuario
-  if (id) {
-    const demo = USUARIOS_DEMO[id]
-    datosUsuario = demo || usuarioGenerico(id)
+export default function Perfil({ auth, onNavigate }) {
+  const { user, token } = useAuth()
+  const [perfil, setPerfil] = useState(null)
+  const [cargandoPerfil, setCargandoPerfil] = useState(true)
+  const [errorPerfil, setErrorPerfil] = useState('')
+  const userId = auth?.user?.id || user?.id
+
+  useEffect(() => {
+    let active = true
+    Promise.resolve()
+      .then(() => {
+        if (!userId) throw new Error('No se pudo identificar la sesión activa.')
+        return profileApi.show(userId)
+      })
+      .then(({ data }) => {
+        if (active) {
+          setPerfil(data)
+          setErrorPerfil('')
+        }
+      })
+      .catch((error) => {
+        if (active) setErrorPerfil(error.message)
+      })
+      .finally(() => {
+        if (active) setCargandoPerfil(false)
+      })
+    return () => { active = false }
+  }, [userId])
+
+  const datosUsuario = perfil?.perfil || auth?.user || user || {}
+  const yo = {
+    ...datosUsuario,
+    apodo: datosUsuario.username || '',
+    lugar: datosUsuario.ciudad || '',
+    fechaRegistro: datosUsuario.fecha_registro
+      ? new Date(datosUsuario.fecha_registro).toLocaleDateString('es-CO')
+      : '',
   }
-  const esMiPerfil = !id || id === 'Usuario AEGIS'
-  const guardado = esMiPerfil ? JSON.parse(localStorage.getItem('perfilAegis') || '{}') : {}
-  const yo = { ...USUARIO_EJEMPLO, ...datosUsuario, ...guardado }
-
-  const handle = id || (auth && auth.user && auth.user.nombre) || 'Usuario AEGIS'
-  const pubsDemo = publicaciones && publicaciones.length > 0
-    ? publicaciones
-    : POSTS_EJEMPLO.filter((item) => item.autor === handle)
-
-  const vendedor = VENDEDORES.find((item) => item.usuarioForo === handle) ||
-    VENDEDORES.find((item) => item.nombre === `${yo.nombre} ${yo.apellido}`.trim())
-  const prodsDemo = productos && productos.length > 0
-    ? productos
-    : (vendedor ? productosDelVendedor(vendedor) : [])
-
-  const avatar = yo.avatar || avatarUrl(yo, 160)
+  const pubsDemo = (perfil?.publicaciones || []).map((post) => ({
+    ...post,
+    autor: post.usuario?.username || post.usuario?.nombre || yo.username || yo.nombre,
+    avatar: post.usuario?.foto_perfil,
+    fecha: post.fecha_publicacion ? new Date(post.fecha_publicacion).toLocaleString('es-CO') : '',
+    cuerpo: post.contenido,
+    imagen: post.imagenes?.[0]?.imagen || null,
+    comentarios: (post.comentarios || []).map((comentario) => ({
+      ...comentario,
+      autor: comentario.usuario?.username || comentario.usuario?.nombre || 'Usuario',
+      texto: comentario.comentario,
+    })),
+  }))
+  const prodsDemo = (perfil?.productos || []).map((producto) => ({
+    ...producto,
+    nombre: producto.titulo,
+    estado: producto.estado_producto,
+    imagen: producto.imagen_principal || producto.imagenes?.[0]?.imagen || '',
+  }))
+  const avatar = yo.foto_perfil_url || avatarUrl(yo, 160)
   const [orden, setOrden] = useState('recientes')
-  const [likesActivos, setLikesActivos] = useState({})
-  const [reportadas, setReportadas] = useState({})
   const [comentariosAbiertos, setComentariosAbiertos] = useState({})
   const [textosComentario, setTextosComentario] = useState({})
   const [comentariosNuevos, setComentariosNuevos] = useState({})
@@ -209,53 +211,54 @@ export default function Perfil({ id, usuario = {}, publicaciones, productos, esP
   }, [lightbox])
 
   let publicacionesList = [...pubsDemo]
-  if (orden === 'populares') publicacionesList.sort((a, b) => Number(b.likes || 0) - Number(a.likes || 0))
   if (orden === 'comentados') publicacionesList.sort((a, b) => contarComentarios(b) - contarComentarios(a))
-
-  const alternarLike = (id) => setLikesActivos((prev) => ({ ...prev, [id]: !prev[id] }))
 
   const alternarComentarios = (id) => setComentariosAbiertos((prev) => ({ ...prev, [id]: !prev[id] }))
 
-  const publicarComentario = (id) => {
+  const publicarComentario = async (id) => {
     const texto = (textosComentario[id] || '').trim()
     if (!texto) return
-    setComentariosNuevos((prev) => ({
-      ...prev,
-      [id]: [...(prev[id] || []), { autor: 'Tu cuenta', texto }],
-    }))
-    setTextosComentario((prev) => ({ ...prev, [id]: '' }))
-    setToast('Comentario publicado')
-  }
-
-  const compartir = (publicacion) => {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href).catch(function () {
-        console.log('No se pudo copiar el enlace')
-      })
+    try {
+      const { data } = await forumApi.comment(id, texto, token)
+      setComentariosNuevos((prev) => ({
+        ...prev,
+        [id]: [...(prev[id] || []), {
+          autor: data.usuario?.username || data.usuario?.nombre || yo.nombre,
+          avatar: data.usuario?.foto_perfil,
+          texto: data.comentario,
+        }],
+      }))
+      setTextosComentario((prev) => ({ ...prev, [id]: '' }))
+      setToast('Comentario publicado')
+    } catch (error) {
+      setToast(error.message)
     }
-    setToast(`Enlace copiado: "${publicacion.titulo.slice(0, 40)}..."`)
   }
 
-  const reportar = (publicacion) => {
-    setReportadas((prev) => ({ ...prev, [publicacion.id]: true }))
-    setToast('Gracias, la publicación fue reportada')
+  const compartir = async (publicacion) => {
+    try {
+      await navigator.clipboard.writeText(window.location.href)
+      setToast(`Enlace copiado: "${publicacion.titulo.slice(0, 40)}..."`)
+    } catch {
+      setToast('No se pudo copiar el enlace.')
+    }
+  }
+
+  if (cargandoPerfil) return <main className="perfil-empty">Cargando perfil...</main>
+  if (errorPerfil || !perfil) {
+    return <main className="perfil-empty" role="alert">{errorPerfil || 'No se pudo cargar el perfil.'}</main>
   }
 
   return (
     <div className="page-layout layout-perfil">
-      <Header title={id ? 'AEGIS | Perfil' : 'AEGIS | Mi Perfil'} auth={auth} onNavigate={onNavigate} />
+      <Header title="AEGIS | Mi Perfil" auth={auth} onNavigate={onNavigate} />
 
       <main className="perfil-page">
         <section className="perfil-card">
           <div
             className="perfil-cover"
-            style={guardado.portada ? { backgroundImage: `url(${guardado.portada})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+            style={yo.img_background_url ? { backgroundImage: `url(${yo.img_background_url})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
           >
-            {esMiPerfil && (
-              <button type="button" className="perfil-cover-btn" onClick={() => onNavigate && onNavigate('/perfil/editar')}>
-                <IconPencil /> Editar Perfil
-              </button>
-            )}
           </div>
 
           <div className="perfil-identity">
@@ -281,12 +284,10 @@ export default function Perfil({ id, usuario = {}, publicaciones, productos, esP
               <div className="perfil-stat">
                 <span className="perfil-stat-rating">
                   <IconStar />
-                  <strong>4.7</strong>
+                  <strong>{Number(yo.reputacion || 0).toFixed(1)}</strong>
                 </span>
                 <span className="perfil-stat-label">Reseñas</span>
-                <span className="perfil-stat-stars">
-                  ★★★★<span className="perfil-star-half">★</span>
-                </span>
+                <span className="perfil-stat-stars">{'★'.repeat(Math.max(0, Math.min(5, Math.round(Number(yo.reputacion || 0)))))}</span>
               </div>
             </div>
           </div>
@@ -299,20 +300,20 @@ export default function Perfil({ id, usuario = {}, publicaciones, productos, esP
               <p className="perfil-desc-text">{yo.descripcion || 'Sin descripción disponible.'}</p>
               <div className="perfil-info-row">
                 <span className="perfil-info-label">Lugar de residencia</span>
-                <span className="perfil-info-value">{yo.lugar || yo.ciudad || 'Popayán, Caucá'}</span>
+                <span className="perfil-info-value">{yo.lugar || 'No registrada'}</span>
               </div>
               <div className="perfil-info-row">
                 <span className="perfil-info-label">Fecha de nacimiento</span>
-                <span className="perfil-info-value">{yo.fechaNacimiento || '29 de marzo del 2008'}</span>
+                <span className="perfil-info-value">No registrada</span>
               </div>
               <div className="perfil-info-row">
                 <span className="perfil-info-label">Fecha de registro de cuenta</span>
-                <span className="perfil-info-value">{yo.fechaRegistro || '30/04/2026'}</span>
+                <span className="perfil-info-value">{yo.fechaRegistro || 'No disponible'}</span>
               </div>
               <div className="perfil-info-row">
-                <span className="perfil-info-label">Productos más vendidos</span>
+                <span className="perfil-info-label">Productos publicados</span>
                 <span className="perfil-info-value">
-                  <span className="perfil-chip">{yo.productosVendidos || 'Tarjetas Gráficas'}</span>
+                  <span className="perfil-chip">{prodsDemo.length}</span>
                 </span>
               </div>
             </section>
@@ -335,7 +336,6 @@ export default function Perfil({ id, usuario = {}, publicaciones, productos, esP
 
               {publicacionesList.map((publicacion) => {
                 const id = publicacion.id
-                const liked = likesActivos[id]
                 const nuevos = comentariosNuevos[id] || []
                 const comentarios = contarComentarios(publicacion) + nuevos.length
                 const lista = [...listaBaseComentarios(publicacion), ...nuevos]
@@ -344,13 +344,10 @@ export default function Perfil({ id, usuario = {}, publicaciones, productos, esP
 
                 return (
                   <article className="perfil-post" key={id}>
-                    <div
-                      className="perfil-post-head"
-                      onClick={() => onNavigate && onNavigate('/perfil?id=' + encodeURIComponent(publicacion.autor))}
-                    >
+                    <div className="perfil-post-head">
                       <img
                         className="perfil-post-avatar"
-                        src={fotoUsuario(publicacion.autor, 80)}
+                        src={publicacion.avatar || avatarUrl(yo, 80)}
                         alt={publicacion.autor}
                       />
                       <div>
@@ -383,14 +380,6 @@ export default function Perfil({ id, usuario = {}, publicaciones, productos, esP
                     <div className="perfil-post-actions">
                       <button
                         type="button"
-                        className={`perfil-action ${liked ? 'active' : ''}`}
-                        onClick={() => alternarLike(id)}
-                      >
-                        <IconHeart filled={liked} />
-                        {Number(publicacion.likes || 0) + (liked ? 1 : 0)} Likes
-                      </button>
-                      <button
-                        type="button"
                         className={`perfil-action ${abierto ? 'active' : ''}`}
                         onClick={() => alternarComentarios(id)}
                       >
@@ -399,14 +388,6 @@ export default function Perfil({ id, usuario = {}, publicaciones, productos, esP
                       </button>
                       <button type="button" className="perfil-action" onClick={() => compartir(publicacion)}>
                         <IconShare />
-                      </button>
-                      <button
-                        type="button"
-                        className={`perfil-action perfil-action-flag ${reportadas[id] ? 'active' : ''}`}
-                        title="Reportar publicación"
-                        onClick={() => reportar(publicacion)}
-                      >
-                        <IconFlag />
                       </button>
                     </div>
 
@@ -417,11 +398,11 @@ export default function Perfil({ id, usuario = {}, publicaciones, productos, esP
                           <div className="perfil-comment" key={index}>
                             <img
                               className="perfil-comment-avatar"
-                              src={fotoUsuario(comentario.autor, 60)}
+                              src={comentario.avatar || avatarUrl(yo, 60)}
                               alt={comentario.autor}
                             />
                             <div>
-                              <strong onClick={() => onNavigate && onNavigate('/perfil?id=' + encodeURIComponent(comentario.autor))}>
+                              <strong>
                                 {comentario.autor}
                               </strong>
                               <p>{comentario.texto}</p>

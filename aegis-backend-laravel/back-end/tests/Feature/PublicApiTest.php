@@ -12,8 +12,10 @@ use App\Models\Usuario;
 use Database\Seeders\CategoriaSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\Sanctum;
+use Laravel\Sanctum\PersonalAccessToken;
 use Tests\TestCase;
 
 class PublicApiTest extends TestCase
@@ -85,6 +87,59 @@ class PublicApiTest extends TestCase
     {
         $this->postJson('/api/productos')
             ->assertUnauthorized();
+    }
+
+    public function test_database_credentials_create_a_revocable_sanctum_session(): void
+    {
+        $user = $this->createUser([
+            'username' => 'sesion-web',
+            'email' => 'session@example.com',
+        ]);
+
+        $login = $this->postJson('/api/login', [
+            'email' => 'session@example.com',
+            'password' => 'secret',
+        ])
+            ->assertOk()
+            ->assertJsonPath('usuario.id', $user->id)
+            ->assertJsonStructure(['token', 'usuario' => ['nombre', 'apellido', 'email']]);
+
+        $token = $login->json('token');
+
+        $this->withToken($token)
+            ->getJson('/api/me')
+            ->assertOk()
+            ->assertJsonPath('usuario.id', $user->id)
+            ->assertJsonMissingPath('usuario.password');
+
+        $tokenId = PersonalAccessToken::findToken($token)->id;
+        $this->withToken($token)->postJson('/api/logout')->assertOk();
+        $this->assertDatabaseMissing('personal_access_tokens', ['id' => $tokenId]);
+        Auth::forgetGuards();
+        $this->withToken($token)->getJson('/api/me')->assertUnauthorized();
+    }
+
+    public function test_registration_matches_the_usuario_database_fields(): void
+    {
+        $response = $this->postJson('/api/register', [
+            'nombre' => 'Ana',
+            'apellido' => 'Pérez',
+            'username' => 'ana-perez',
+            'email' => 'ana@example.com',
+            'password' => 'password-seguro',
+            'password_confirmation' => 'password-seguro',
+        ]);
+
+        $response
+            ->assertCreated()
+            ->assertJsonPath('usuario.nombre', 'Ana')
+            ->assertJsonPath('usuario.apellido', 'Pérez')
+            ->assertJsonStructure(['token']);
+
+        $this->assertDatabaseHas('usuarios', [
+            'username' => 'ana-perez',
+            'email' => 'ana@example.com',
+        ]);
     }
 
     public function test_forum_feed_contains_authors_and_comments_without_private_fields(): void
@@ -246,11 +301,11 @@ class PublicApiTest extends TestCase
 
     public function test_api_allows_cross_origin_requests_from_the_configured_frontend(): void
     {
-        $this->options('/api/productos', [
+        $this->options('/api/productos', [], [
             'Origin' => 'http://localhost:5173',
             'Access-Control-Request-Method' => 'GET',
         ])
-            ->assertOk()
+            ->assertNoContent()
             ->assertHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
     }
 

@@ -2,23 +2,9 @@ import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
-import { buscarProducto, buscarVendedor } from '../productosDemo'
+import { productApi } from '../../../services/api'
 import { agregarProducto } from '../../carrito/carritoDemo'
 import '../css/detalle.css'
-
-
-const CLAVE_COMENTARIOS = 'comentariosProducto'
-
-function comentariosDe(productoId) {
-  const todos = JSON.parse(localStorage.getItem(CLAVE_COMENTARIOS) || '{}')
-  return todos[productoId] || []
-}
-
-function guardarComentarios(productoId, lista) {
-  const todos = JSON.parse(localStorage.getItem(CLAVE_COMENTARIOS) || '{}')
-  todos[productoId] = lista
-  localStorage.setItem(CLAVE_COMENTARIOS, JSON.stringify(todos))
-}
 
 
 function insigniasVendedor(reputacion) {
@@ -65,70 +51,84 @@ const CAMPOS_FICHAS = {
 }
 
 export default function Detalle({ id, auth, onNavigate }) {
-  const producto = buscarProducto(id) || {}
+  const [respuesta, setRespuesta] = useState({ id: null, producto: {}, error: '' })
+  useEffect(() => {
+    let active = true
+    productApi.show(id)
+      .then(({ data }) => {
+        if (!active) return
+        setRespuesta({ id, error: '', producto: {
+          ...data,
+          nombre: data.titulo,
+          categoria: data.categoria?.nombre || '',
+          estado: data.estado_producto,
+          imagen: data.imagen_principal || data.imagenes?.[0]?.imagen || '',
+          fotos: (data.imagenes || []).map((imagen) => imagen.imagen).filter((imagen) => imagen !== data.imagen_principal),
+          vendedor: data.vendedor ? {
+            ...data.vendedor,
+            nombre: `${data.vendedor.nombre} ${data.vendedor.apellido || ''}`.trim(),
+            avatar: data.vendedor.foto_perfil,
+          } : null,
+        } })
+      })
+      .catch((error) => {
+        if (active) setRespuesta({ id, producto: {}, error: error.message })
+      })
+    return () => { active = false }
+  }, [id])
+
+  const cargando = respuesta.id !== id
+  const producto = cargando ? {} : respuesta.producto
+  const errorProducto = cargando ? '' : respuesta.error
   const titulo = producto.nombre || producto.titulo || 'Producto'
   const imagen = producto.imagen || ''
-  const infoVendedor = producto.vendedor && producto.vendedor.nombre
+  const infoVendedor = producto?.vendedor && producto.vendedor.nombre
     ? producto.vendedor
     : { nombre: 'Vendedor', reputacion: 0 }
-  const vendedorBuscado = infoVendedor.id ? buscarVendedor(infoVendedor.id) : null
-  const vendedor = vendedorBuscado || infoVendedor
+  const vendedor = infoVendedor
 
   const insignia = insigniasVendedor(vendedor.reputacion)
 
-  let imagenes = [imagen, imagen, imagen, imagen]
+  let imagenes = imagen ? [imagen] : ['']
   if (producto.fotos && producto.fotos.length > 0) imagenes = [imagen].concat(producto.fotos)
 
   const irVendedor = () => {
-    if (producto.mio) {
+    if (String(auth?.user?.id) === String(producto.usuario_id)) {
       if (onNavigate) onNavigate('/perfil')
-      return
     }
-    if (onNavigate) onNavigate(`/vendedor?id=${vendedor.id}`)
   }
 
-  const [imagenActiva, setImagenActiva] = useState(0)
-  const [agregado, setAgregado] = useState(false)
-  const [comentarios, setComentarios] = useState([])
-  const [comentarioNuevo, setComentarioNuevo] = useState('')
+  const [indiceImagen, setIndiceImagen] = useState(0)
+  const imagenActiva = Math.min(indiceImagen, imagenes.length - 1)
+  const [productoAgregado, setProductoAgregado] = useState(null)
+  const agregado = String(productoAgregado) === String(id)
 
   const agregarAlCarrito = () => {
     if (producto.id) {
       agregarProducto(producto.id)
-      setAgregado(true)
+      setProductoAgregado(producto.id)
     }
   }
-
-  const publicarComentario = (event) => {
-    event.preventDefault()
-    const texto = comentarioNuevo.trim()
-    if (!texto || !producto.id) return
-    const autor = auth && auth.user && auth.user.nombre ? auth.user.nombre : 'Usuario AEGIS'
-    const nuevo = {
-      id: Date.now(),
-      autor: autor,
-      fecha: new Date().toLocaleDateString('es-CO'),
-      texto: texto,
-    }
-    const actualizados = comentarios.concat(nuevo)
-    setComentarios(actualizados)
-    guardarComentarios(producto.id, actualizados)
-    setComentarioNuevo('')
-  }
-
-  useEffect(() => {
-    setAgregado(false)
-    setImagenActiva(0)
-    setComentarios(comentariosDe(producto.id))
-    setComentarioNuevo('')
-  }, [id])
 
   const imagenAnterior = () =>
-    setImagenActiva((i) => (i === 0 ? imagenes.length - 1 : i - 1))
+    setIndiceImagen((i) => (i === 0 ? imagenes.length - 1 : i - 1))
   const imagenSiguiente = () =>
-    setImagenActiva((i) => (i === imagenes.length - 1 ? 0 : i + 1))
+    setIndiceImagen((i) => (i === imagenes.length - 1 ? 0 : i + 1))
 
   const caracteristicas = Object.keys(CAMPOS_FICHAS).filter((campo) => producto[campo])
+
+  if (cargando) {
+    return <main className="no-products-message">Cargando producto...</main>
+  }
+  if (errorProducto || !producto.id) {
+    return (
+      <div className="page-layout">
+        <Header title="AEGIS | Producto" auth={auth} onNavigate={onNavigate} />
+        <main className="no-products-message" role="alert">{errorProducto || 'No se encontró el producto.'}</main>
+        <Footer onNavigate={onNavigate} />
+      </div>
+    )
+  }
 
   return (
     <div className="page-layout">
@@ -169,7 +169,7 @@ export default function Detalle({ id, auth, onNavigate }) {
                     key={indice}
                     type="button"
                     className={'detail-thumb' + (imagenActiva === indice ? ' active' : '')}
-                    onClick={() => setImagenActiva(indice)}
+                    onClick={() => setIndiceImagen(indice)}
                   >
                     {foto
                       ? <img src={foto} alt={`Vista ${indice + 1} de ${titulo}`} />
@@ -219,53 +219,13 @@ export default function Detalle({ id, auth, onNavigate }) {
               <p className="detail-text">{producto.descripcion || 'Sin descripción disponible'}</p>
             </section>
 
-            <section className="detail-section detail-comments-section">
-              <div className="detail-comments-head">
-                <h2>Comentarios del Vendedor ({comentarios.length})</h2>
-                <select className="detail-comments-filter">
-                  <option>Filtro: Todas las valoraciones</option>
-                </select>
-              </div>
-
-              <form className="detail-comment-form" onSubmit={publicarComentario}>
-                <input
-                  className="detail-comment-input"
-                  type="text"
-                  value={comentarioNuevo}
-                  onChange={(event) => setComentarioNuevo(event.target.value)}
-                  placeholder="Escribe un comentario..."
-                />
-                <button className="detail-comment-btn" type="submit">Publicar</button>
-              </form>
-
-              {comentarios.length === 0 && (
-                <p className="detail-comments-empty">Todavía no hay comentarios. Sé el primero en comentar.</p>
-              )}
-
-              {comentarios.map((comentario) => (
-                <article className="detail-comment" key={comentario.id}>
-                  <div className="detail-comment-head">
-                    <span className="detail-comment-user">
-                      <i className="fa-solid fa-circle-user" />
-                      <strong>{comentario.autor}</strong>
-                      <span>• {comentario.fecha}</span>
-                    </span>
-                    {comentario.verificado && (
-                      <span className="detail-comment-verified">Compra Verificada</span>
-                    )}
-                  </div>
-                  <p>{comentario.texto}</p>
-                  <small>{titulo}</small>
-                </article>
-              ))}
-            </section>
           </div>
 
           <aside className="detail-info">
             <div className="detail-heading">
               <p className="detail-code">Código de producto: {producto.id}</p>
               <h1 className="detail-title">{titulo}</h1>
-              <p className="detail-brand">{producto.marca || 'Sin marca'}</p>
+              <p className="detail-brand">{producto.ciudad || 'Sin ciudad'}</p>
             </div>
 
             <div
@@ -333,7 +293,7 @@ export default function Detalle({ id, auth, onNavigate }) {
                 <button
                   type="button"
                   className="detail-btn primary"
-                  onClick={() => onNavigate && onNavigate(`/mensajes?id=${producto.id}`)}
+                  onClick={() => onNavigate && onNavigate(auth?.isAuthenticated ? `/mensajes?id=${producto.id}` : '/login')}
                 >
                   Comprar Ahora
                 </button>

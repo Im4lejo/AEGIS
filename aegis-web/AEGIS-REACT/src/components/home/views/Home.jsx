@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { formatCurrency, imageUrl, route } from '../../shared/presentation'
-import { PRODUCTOS_DESTACADOS, PRODUCTOS_PROMOCION, PRODUCTOS_NOVEDADES } from '../../productos/productosDemo'
+import { productApi } from '../../../services/api'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import '../css/home.css'
@@ -16,7 +16,6 @@ const BANNER_SLIDES = [
     oldPrice: "€829.99",
     btnText: "¡CÓMPRALA YA!",
     image: "/rtx-4070.jpg",
-    productoId: 9
   },
   {
     id: 2,
@@ -28,7 +27,6 @@ const BANNER_SLIDES = [
     oldPrice: "$3.799.800",
     btnText: "COMPRAR AHORA!",
     image: "/hp-victus.jpg",
-    productoId: 10
   }
 ]
 
@@ -52,14 +50,12 @@ function TiraBanner() {
 }
 
 function TarjetaProducto({ prod, alAbrir }) {
-  const stateInfo = productState(prod.estado)
-  const srcImagen = prod.imagen && prod.imagen.startsWith('http')
-    ? prod.imagen
-    : imageUrl(prod.imagen)
+  const stateInfo = productState(prod.estado_producto)
+  const nombre = prod.titulo
+  const imagen = prod.imagen_principal || prod.imagenes?.[0]?.imagen
+  const srcImagen = imageUrl(imagen)
 
-  let vendedor = prod.vendedor
-  if (vendedor && vendedor.nombre) vendedor = vendedor.nombre
-  if (!vendedor) vendedor = 'Charlie Kirk'
+  const vendedor = prod.vendedor?.nombre || 'Vendedor AEGIS'
 
   return (
     <div
@@ -76,14 +72,14 @@ function TarjetaProducto({ prod, alAbrir }) {
       }}
     >
       <div className="product-image-container">
-        <img src={srcImagen} alt={prod.nombre} />
+        <img src={srcImagen} alt={nombre} />
         <span className={`product-state-tag ${stateInfo.className}`}>
           {stateInfo.label}
         </span>
       </div>
 
       <div className="product-info">
-        <h3 className="product-name">{prod.nombre}</h3>
+        <h3 className="product-name">{nombre}</h3>
         <p className="product-description">{prod.descripcion}</p>
 
         <p className="product-seller">
@@ -101,20 +97,38 @@ function TarjetaProducto({ prod, alAbrir }) {
   )
 }
 
-const IDS_MAS_PRODUCTOS = [13, 20, 18, 19]
-const MAS_PRODUCTOS = IDS_MAS_PRODUCTOS.map((id) => PRODUCTOS_PROMOCION.find((prod) => prod.id === id))
-
 export default function Home({ productos = [], auth, message, onNavigate }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [categoryOpen, setCategoryOpen] = useState(false)
+  const [categorias, setCategorias] = useState([])
+  const [productosInicio, setProductosInicio] = useState(productos)
+  const [errorDatos, setErrorDatos] = useState('')
   const [mensajeEmergente, setMensajeEmergente] = useState('')
   const categoryRef = useRef(null)
 
   useEffect(() => {
+    let active = true
+    Promise.all([productApi.home(), productApi.categories()])
+      .then(([productResponse, categoryResponse]) => {
+        if (!active) return
+        setProductosInicio(productResponse.data)
+        setCategorias(categoryResponse.data)
+        setErrorDatos('')
+      })
+      .catch((error) => {
+        if (active) setErrorDatos(error.message)
+      })
+    return () => { active = false }
+  }, [])
+
+  useEffect(() => {
     if (!message) return
-    setMensajeEmergente(message)
+    const show = setTimeout(() => setMensajeEmergente(message), 0)
     const timeout = setTimeout(() => setMensajeEmergente(''), 5000)
-    return () => clearTimeout(timeout)
+    return () => {
+      clearTimeout(show)
+      clearTimeout(timeout)
+    }
   }, [message])
 
   useEffect(() => {
@@ -145,12 +159,8 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
 
   const slide = BANNER_SLIDES[currentIndex]
 
-  const openProductoId = (id) => {
-    if (onNavigate) onNavigate(`/productos/detalle?id=${id}`)
-  }
-
   const openProducto = (prod) => {
-    openProductoId(prod.id)
+    if (onNavigate) onNavigate(`/productos/detalle?id=${prod.id}`)
   }
 
   const abrirCatalogo = (consulta) => {
@@ -174,16 +184,15 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
 
           {categoryOpen && (
             <div className="dropdown-menu">
-              <a href={route('/productos?categoria=Celulares')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Celulares') }}>Celulares</a>
-              <a href={route('/productos?categoria=Componentes PC')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Componentes PC') }}>Componentes PC</a>
-              <a href={route('/productos?categoria=Laptops')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Laptops') }}>Laptops</a>
-              <a href={route('/productos?categoria=Consolas')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Consolas') }}>Consolas</a>
-              <a href={route('/productos?categoria=Periféricos')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Periféricos') }}>Periféricos</a>
-              <a href={route('/productos?categoria=Wearables')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Wearables') }}>Wearables</a>
-              <a href={route('/productos?categoria=Smart Home')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Smart Home') }}>Smart Home</a>
-              <a href={route('/productos?categoria=Audio')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Audio') }}>Audio</a>
-              <a href={route('/productos?categoria=Oficina y Conectividad')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Oficina y Conectividad') }}>Oficina y Conectividad</a>
-              <a href={route('/productos?categoria=Foto y Video')} onClick={(e) => { e.preventDefault(); abrirCatalogo('?categoria=Foto y Video') }}>Foto y Video</a>
+              {categorias.map((categoria) => (
+                <a
+                  href={route(`/productos?categoria=${encodeURIComponent(categoria.nombre)}`)}
+                  key={categoria.id}
+                  onClick={(event) => { event.preventDefault(); abrirCatalogo(`?categoria=${encodeURIComponent(categoria.nombre)}`) }}
+                >
+                  {categoria.nombre}
+                </a>
+              ))}
             </div>
           )}
         </div>
@@ -200,6 +209,7 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
             <span>{mensajeEmergente}</span>
           </div>
         )}
+        {errorDatos && <div className="home-toast" role="alert">{errorDatos}</div>}
 
         <div className="main-section-header">
           <h2>Productos Destacados</h2>
@@ -207,7 +217,7 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
 
         <section className="hero-section">
 
-          <div className="hero-main" onClick={() => openProductoId(slide.productoId)}>
+          <div className="hero-main" onClick={() => abrirCatalogo('')}>
             <img
               src={slide.image}
               alt={slide.title}
@@ -266,7 +276,7 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
                 className="side-banner-link"
                 href="#/productos/detalle?id=10"
                 title="Ver producto: Portátil HP Victus"
-                onClick={(event) => { event.preventDefault(); openProductoId(10) }}
+                onClick={(event) => { event.preventDefault(); abrirCatalogo('') }}
               >
                 <img src="/hp-victus.jpg" alt="OFERTA HOT: PORTÁTIL HP VICTUS GAMING" className="side-banner-img" />
               </a>
@@ -309,9 +319,10 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
               />
             </a>
 
-            {(productos.length > 0 ? productos : PRODUCTOS_DESTACADOS).map((prod) => (
+            {productosInicio.map((prod) => (
               <TarjetaProducto key={prod.id} prod={prod} alAbrir={openProducto} />
             ))}
+            {!productosInicio.length && !errorDatos && <p>No hay productos publicados todavía.</p>}
           </div>
         </section>
 
@@ -412,7 +423,7 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
           </div>
 
           <div className="products-grid">
-            {PRODUCTOS_NOVEDADES.map((prod) => (
+            {productosInicio.slice(0, 4).map((prod) => (
               <TarjetaProducto key={prod.id} prod={prod} alAbrir={openProducto} />
             ))}
           </div>
@@ -423,7 +434,7 @@ export default function Home({ productos = [], auth, message, onNavigate }) {
             <h2>Teclados y Memorias RAM en Oferta</h2>
           </div>
           <div className="products-grid">
-            {MAS_PRODUCTOS.map((prod) => (
+            {productosInicio.slice(4, 8).map((prod) => (
               <TarjetaProducto key={prod.id} prod={prod} alAbrir={openProducto} />
             ))}
           </div>

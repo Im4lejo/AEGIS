@@ -2,7 +2,6 @@ import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
 import { buscarVendedor, productosDelVendedor } from '../../productos/productosDemo'
-import { POSTS_EJEMPLO } from '../../foro/views/Foro'
 import '../css/perfil.css'
 
 function etiquetaEstado(estado) {
@@ -54,7 +53,7 @@ export default function Vendedor({ id, auth, onNavigate }) {
   const vendedor = buscarVendedor(id) || {}
   const insignia = insigniasVendedor(vendedor.reputacion)
 
-  const publicaciones = POSTS_EJEMPLO.filter((post) => post.autor === vendedor.usuarioForo)
+  const publicaciones = []
   const productos = productosDelVendedor(vendedor)
 
   return (

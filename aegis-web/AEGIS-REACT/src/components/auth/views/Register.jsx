@@ -1,38 +1,54 @@
 import { useState } from 'react'
 import { route } from '../../shared/presentation'
+import { useAuth } from '../../../auth/useAuth'
 import '../css/auth.css'
 
-export default function Register({ error, success, onNavigate }) {
+export default function Register({ error, success, message, onNavigate }) {
+    const { register } = useAuth()
     const [nombre, setNombre] = useState('')
+    const [apellido, setApellido] = useState('')
+    const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmar, setConfirmar] = useState('')
     const [errorLocal, setErrorLocal] = useState('')
 
-    const crearCuenta = (event) => {
+    const crearCuenta = async (event) => {
         event.preventDefault()
         if (nombre.trim() === '') {
-            setErrorLocal('Ingresa tu nombre completo.')
+            setErrorLocal('Ingresa tu nombre.')
+            return
+        }
+        if (apellido.trim() === '') {
+            setErrorLocal('Ingresa tu apellido.')
             return
         }
         if (email.indexOf('@') === -1) {
             setErrorLocal('Ingresa un correo electrónico válido.')
             return
         }
-        if (password.length < 6) {
-            setErrorLocal('La contraseña debe tener al menos 6 caracteres.')
+        if (password.length < 8) {
+            setErrorLocal('La contraseña debe tener al menos 8 caracteres.')
             return
         }
         if (password !== confirmar) {
             setErrorLocal('Las contraseñas no coinciden.')
             return
         }
-        const usuarios = JSON.parse(localStorage.getItem('usuariosAegis') || '[]')
-        usuarios.push({ nombre: nombre, email: email, password: password })
-        localStorage.setItem('usuariosAegis', JSON.stringify(usuarios))
-        localStorage.setItem('sesionAegis', JSON.stringify({ email: email, nombre: nombre }))
-        setErrorLocal('')
-        if (onNavigate) onNavigate('/home')
+        try {
+            await register({
+                nombre: nombre.trim(),
+                apellido: apellido.trim(),
+                username: username.trim() || undefined,
+                email: email.trim(),
+                password,
+                password_confirmation: confirmar,
+            })
+            setErrorLocal('')
+            if (onNavigate) onNavigate('/home')
+        } catch (requestError) {
+            setErrorLocal(requestError.message)
+        }
     }
 
     const alerta = error || errorLocal
@@ -72,17 +88,39 @@ export default function Register({ error, success, onNavigate }) {
                     <h2>Crea Tu Cuenta</h2>
                     <p className="subtitle">Ingresa tus datos y rellena para empezar.</p>
                     {alerta && <div className="auth-alert auth-alert--error">{alerta}</div>}
-                    {success && <div className="auth-alert auth-alert--success">{success}</div>}
+                    {(success || message) && <div className="auth-alert auth-alert--success">{success || message}</div>}
 
                     <form onSubmit={crearCuenta}>
                         <div className="input-group">
-                            <label htmlFor="nombre">Nombre Completo</label>
+                            <label htmlFor="nombre">Nombre</label>
                             <input
                                 id="nombre"
                                 name="nombre"
                                 required
                                 value={nombre}
                                 onChange={(event) => setNombre(event.target.value)}
+                            />
+                        </div>
+
+                        <div className="input-group">
+                            <label htmlFor="apellido">Apellido</label>
+                            <input
+                                id="apellido"
+                                name="apellido"
+                                required
+                                value={apellido}
+                                onChange={(event) => setApellido(event.target.value)}
+                            />
+                        </div>
+
+                        <div className="input-group">
+                            <label htmlFor="username">Nombre de usuario (opcional)</label>
+                            <input
+                                id="username"
+                                name="username"
+                                maxLength="50"
+                                value={username}
+                                onChange={(event) => setUsername(event.target.value)}
                             />
                         </div>
 
@@ -105,7 +143,7 @@ export default function Register({ error, success, onNavigate }) {
                                 id="password"
                                 name="password"
                                 required
-                                minLength="6"
+                                minLength="8"
                                 value={password}
                                 onChange={(event) => setPassword(event.target.value)}
                             />
@@ -118,7 +156,7 @@ export default function Register({ error, success, onNavigate }) {
                                 id="password_confirm"
                                 name="password_confirm"
                                 required
-                                minLength="6"
+                                minLength="8"
                                 value={confirmar}
                                 onChange={(event) => setConfirmar(event.target.value)}
                             />

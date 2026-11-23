@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { avatarUrl, navigateTo, route } from '../shared/presentation'
-import { USUARIOS_DEMO } from '../shared/usuariosDemo'
+import { useAuth } from '../../auth/useAuth'
+import { productApi } from '../../services/api'
 import Head from './Head'
 import Navbar from './Navbar'
 import CarritoPanel from '../carrito/CarritoPanel'
@@ -8,13 +9,32 @@ import { totalUnidades } from '../carrito/carritoDemo'
 import './css/layouts.css'
 
 export default function Header({ title, stylesheet, auth, onNavigate, forumMode = false, forumMenuOpen = false, onForumMenuToggle }) {
+    const { logout } = useAuth()
     const [profileOpen, setProfileOpen] = useState(false)
     const [busqueda, setBusqueda] = useState('')
     const [carritoAbierto, setCarritoAbierto] = useState(false)
     const [menuAbierto, setMenuAbierto] = useState(false)
     const [categoriasAbiertas, setCategoriasAbiertas] = useState(false)
+    const [categorias, setCategorias] = useState([])
+    const [errorCategorias, setErrorCategorias] = useState('')
     const [unidades, setUnidades] = useState(totalUnidades())
     const profileRef = useRef(null)
+
+    useEffect(() => {
+        if (!categoriasAbiertas) return
+        let active = true
+        productApi.categories()
+            .then(({ data }) => {
+                if (active) {
+                    setCategorias(data)
+                    setErrorCategorias('')
+                }
+            })
+            .catch((error) => {
+                if (active) setErrorCategorias(error.message)
+            })
+        return () => { active = false }
+    }, [categoriasAbiertas])
 
     useEffect(() => {
         const actualizar = () => setUnidades(totalUnidades())
@@ -68,11 +88,21 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
     }
 
     const usuario = auth && auth.user ? auth.user : null
-    const guardado = JSON.parse(localStorage.getItem('perfilAegis') || '{}')
-    const demo = usuario && USUARIOS_DEMO[usuario.nombre] ? USUARIOS_DEMO[usuario.nombre] : null
-    const nombreMostrar = demo ? `${demo.nombre} ${demo.apellido}` : (usuario ? usuario.nombre : 'Invitado')
-    const apodoMostrar = demo && demo.apodo ? `@${demo.apodo}` : ''
-    let avatar = guardado.avatar || (usuario && usuario.avatar ? usuario.avatar : avatarUrl(usuario))
+    const nombreMostrar = usuario ? `${usuario.nombre || ''} ${usuario.apellido || ''}`.trim() : 'Invitado'
+    const apodoMostrar = usuario && usuario.username ? `@${usuario.username}` : ''
+    const avatar = usuario?.foto_perfil_url || usuario?.avatar || avatarUrl(usuario)
+
+    const cerrarSesion = async (event) => {
+        if (event) event.preventDefault()
+        setMenuAbierto(false)
+        setProfileOpen(false)
+        try {
+            await logout()
+            navigateTo('/login', onNavigate)
+        } catch (error) {
+            if (onNavigate) onNavigate('/login', { message: error.message })
+        }
+    }
 
     return (
         <>
@@ -126,7 +156,7 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
                                 </button>
                             </div>
 
-                            <a className="header-mobile-profile" href={route('/perfil/editar')} onClick={(event) => go(event, '/perfil/editar')}>
+                            <a className="header-mobile-profile" href={route(usuario ? '/perfil' : '/login')} onClick={(event) => go(event, usuario ? '/perfil' : '/login')}>
                                 <img src={avatar} alt="" className="profile-img" />
                                 <span className="header-mobile-profile-data">
                                     <strong>{nombreMostrar}</strong>
@@ -150,14 +180,15 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
                                 </button>
                                 {categoriasAbiertas && (
                                     <div className="header-mobile-categories">
-                                        {['Celulares', 'Componentes PC', 'Laptops', 'Consolas', 'Periféricos', 'Wearables', 'Smart Home', 'Audio', 'Oficina y Conectividad', 'Foto y Video'].map((categoria) => (
+                                        {errorCategorias && <span className="header-mobile-link">{errorCategorias}</span>}
+                                        {categorias.map((categoria) => (
                                             <a
                                                 className="header-mobile-link"
-                                                href={route(`/productos?categoria=${encodeURIComponent(categoria)}`)}
-                                                key={categoria}
-                                                onClick={(event) => go(event, `/productos?categoria=${encodeURIComponent(categoria)}`)}
+                                                href={route(`/productos?categoria=${encodeURIComponent(categoria.nombre)}`)}
+                                                key={categoria.id}
+                                                onClick={(event) => go(event, `/productos?categoria=${encodeURIComponent(categoria.nombre)}`)}
                                             >
-                                                {categoria}
+                                                {categoria.nombre}
                                             </a>
                                         ))}
                                     </div>
@@ -169,7 +200,9 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
                             </div>
                         </nav>
 
-                        <a className="header-mobile-link header-mobile-logout" href={route('/login')} onClick={(event) => go(event, '/login')}>Cerrar sesión</a>
+                        {usuario
+                            ? <a className="header-mobile-link header-mobile-logout" href={route('/login')} onClick={cerrarSesion}>Cerrar sesión</a>
+                            : <a className="header-mobile-link header-mobile-logout" href={route('/login')} onClick={(event) => go(event, '/login')}>Iniciar sesión</a>}
                     </div>
 
                     <div className="header-search">
@@ -210,11 +243,18 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
                                             {apodoMostrar && <span>{apodoMostrar}</span>}
                                         </div>
                                     </div>
-                                    <a href={route('/perfil')} onClick={(e) => go(e, '/perfil')}>Mi Perfil</a>
-                                    <a href={route('/perfil/editar?id=compras')} onClick={(e) => go(e, '/perfil/editar?id=compras')}>Mis Compras</a>
-                                    <a href={route('/perfil/editar')} onClick={(e) => go(e, '/perfil/editar')}>Configuración</a>
-                                    <hr />
-                                    <a href={route('/login')} onClick={(e) => go(e, '/login')} className="logout-link">Cerrar Sesión</a>
+                                    {usuario ? (
+                                        <>
+                                            <a href={route('/perfil')} onClick={(e) => go(e, '/perfil')}>Mi Perfil</a>
+                                            <hr />
+                                            <a href={route('/login')} onClick={cerrarSesion} className="logout-link">Cerrar Sesión</a>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <a href={route('/login')} onClick={(e) => go(e, '/login')}>Iniciar Sesión</a>
+                                            <a href={route('/register')} onClick={(e) => go(e, '/register')}>Crear cuenta</a>
+                                        </>
+                                    )}
                                 </div>
                             )}
                         </div>

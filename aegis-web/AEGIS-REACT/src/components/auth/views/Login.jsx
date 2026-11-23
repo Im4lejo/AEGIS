@@ -1,27 +1,32 @@
 import { useState } from 'react'
 import { route } from '../../shared/presentation'
+import { useAuth } from '../../../auth/useAuth'
 import '../css/auth.css'
 
-export default function Login({ error, success, onNavigate }) {
+export default function Login({ error, success, message, onNavigate }) {
+    const { login } = useAuth()
     const [showPassword, setShowPassword] = useState(false)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [errorLocal, setErrorLocal] = useState('')
 
-    const iniciarSesion = (event) => {
+    const iniciarSesion = async (event) => {
         event.preventDefault()
         if (email.indexOf('@') === -1) {
             setErrorLocal('Ingresa un correo electrónico válido.')
             return
         }
-        if (password.length < 6) {
-            setErrorLocal('La contraseña debe tener al menos 6 caracteres.')
+        if (password.length < 8) {
+            setErrorLocal('La contraseña debe tener al menos 8 caracteres.')
             return
         }
-        const usuario = { email: email, nombre: email.split('@')[0] }
-        localStorage.setItem('sesionAegis', JSON.stringify(usuario))
-        setErrorLocal('')
-        if (onNavigate) onNavigate('/home')
+        try {
+            await login({ email, password })
+            setErrorLocal('')
+            if (onNavigate) onNavigate('/home')
+        } catch (requestError) {
+            setErrorLocal(requestError.message)
+        }
     }
 
     const alerta = error || errorLocal
@@ -53,7 +58,7 @@ export default function Login({ error, success, onNavigate }) {
                     <a href={route('/home')} className="back-home">Back to Home</a>
                     <h2>Bienvenido de nuevo</h2>
                     {alerta && <div className="auth-alert auth-alert--error">{alerta}</div>}
-                    {success && <div className="auth-alert auth-alert--success">{success}</div>}
+                    {(success || message) && <div className="auth-alert auth-alert--success">{success || message}</div>}
 
                     <form onSubmit={iniciarSesion}>
                         <div className="input-group">
@@ -78,7 +83,7 @@ export default function Login({ error, success, onNavigate }) {
                                     name="password"
                                     placeholder="Contraseña"
                                     required
-                                    minLength="6"
+                                    minLength="8"
                                     value={password}
                                     onChange={(event) => setPassword(event.target.value)}
                                 />

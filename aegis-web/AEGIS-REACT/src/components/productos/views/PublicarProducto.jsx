@@ -1,27 +1,40 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
-import { guardarProductoPublicado } from '../productosDemo'
 import { formatCurrency } from '../../shared/presentation'
+import { useAuth } from '../../../auth/useAuth'
+import { productApi } from '../../../services/api'
 import '../css/publicarProducto.css'
 
 
 export default function PublicarProducto({ auth, onNavigate }) {
+    const { token } = useAuth()
     const [datos, setDatos] = useState({
         titulo: '',
-        categoria: '',
-        marca: '',
-        modelo: '',
+        categoria_id: '',
         estado: '',
         precio: '',
-        stock: '',
         descripcion: '',
+        ciudad: '',
     })
     const [fotoPrincipal, setFotoPrincipal] = useState('')
     const [fotos, setFotos] = useState(['', '', '', ''])
-    const [fotosMoviles, setFotosMoviles] = useState([])
+    const [archivos, setArchivos] = useState([])
+    const [categorias, setCategorias] = useState([])
+    const [errorCategorias, setErrorCategorias] = useState('')
     const [mensaje, setMensaje] = useState(null)
 
+    useEffect(() => {
+        let active = true
+        productApi.categories()
+            .then(({ data }) => {
+                if (active) setCategorias(data)
+            })
+            .catch((error) => {
+                if (active) setErrorCategorias(error.message)
+            })
+        return () => { active = false }
+    }, [])
 
     const cambiarDato = (campo, valor) => {
         const nuevos = { ...datos }
@@ -50,11 +63,21 @@ export default function PublicarProducto({ auth, onNavigate }) {
     }
 
     const elegirFotoPrincipal = (event) => {
-        comprimir(event.target.files[0], setFotoPrincipal)
+        const archivo = event.target.files[0]
+        if (!archivo) return
+        setArchivos((previas) => [archivo, ...previas.slice(1)])
+        comprimir(archivo, setFotoPrincipal)
     }
 
     const elegirFotoExtra = (event, indice) => {
-        comprimir(event.target.files[0], (datosFoto) => {
+        const archivo = event.target.files[0]
+        if (!archivo) return
+        setArchivos((previas) => {
+            const nuevas = [...previas]
+            nuevas[indice + 1] = archivo
+            return nuevas
+        })
+        comprimir(archivo, (datosFoto) => {
             const nuevas = [...fotos]
             nuevas[indice] = datosFoto
             setFotos(nuevas)
@@ -62,16 +85,19 @@ export default function PublicarProducto({ auth, onNavigate }) {
     }
 
     const elegirFotos = (event) => {
-        const archivos = Array.from(event.target.files)
-        archivos.forEach((archivo, indice) => {
+        const seleccionados = Array.from(event.target.files).slice(0, 5)
+        setArchivos((previas) => [...previas, ...seleccionados].slice(0, 5))
+        seleccionados.forEach((archivo, indice) => {
             comprimir(archivo, (datosFoto) => {
-                if (indice === 0) {
-                    if (fotoPrincipal) {
-                        setFotosMoviles((previas) => [fotoPrincipal, ...previas])
-                    }
+                if (indice === 0 && !fotoPrincipal) {
                     setFotoPrincipal(datosFoto)
                 } else {
-                    setFotosMoviles((previas) => [...previas, datosFoto])
+                    setFotos((previas) => {
+                        const nuevas = [...previas]
+                        const posicion = indice === 0 ? nuevas.findIndex((foto) => !foto) : indice - 1
+                        if (posicion >= 0 && posicion < nuevas.length) nuevas[posicion] = datosFoto
+                        return nuevas
+                    })
                 }
             })
         })
@@ -84,41 +110,33 @@ export default function PublicarProducto({ auth, onNavigate }) {
 
     const soloNumeros = (texto) => Number(texto.split('').filter((letra) => '0123456789'.indexOf(letra) !== -1).join(''))
 
-    const publicar = (event) => {
+    const publicar = async (event) => {
         event.preventDefault()
         const titulo = datos.titulo.trim()
         const precio = soloNumeros(datos.precio)
-        if (!titulo || !precio || !fotoPrincipal) {
-            setMensaje({ tipo: 'error', texto: 'Completa el título, el precio y añade la foto principal del producto.' })
+        if (!titulo || !precio || !datos.categoria_id || !datos.estado || !fotoPrincipal || !archivos.filter(Boolean).length) {
+            setMensaje({ tipo: 'error', texto: 'Completa título, categoría, estado, precio y añade al menos una imagen.' })
             return
         }
-        const nuevo = {
-            id: 'mio-' + Date.now(),
-            nombre: titulo,
-            titulo: titulo,
-            descripcion: datos.descripcion.trim(),
-            categoria: datos.categoria.trim(),
-            marca: datos.marca.trim(),
-            modelo: datos.modelo.trim(),
-            estado: datos.estado.trim().toLowerCase() || 'usado',
-            precio: precio,
-            stock: datos.stock.trim() === '' ? 1 : Number(datos.stock),
-            imagen: fotoPrincipal,
-            fotos: [...fotos.filter((foto) => foto), ...fotosMoviles],
-            vendedor: { id: 4, nombre: 'Luis Alejandro Montenegro Ojeda', reputacion: 4.7 },
-            mio: true,
-            publicadoEn: Date.now(),
-        }
-        guardarProductoPublicado(nuevo)
-        setMensaje(null)
-        if (onNavigate) {
-            onNavigate('/', { message: '¡El producto se ha publicado satisfactoriamente!' })
+        try {
+            await productApi.create({
+                categoria_id: datos.categoria_id,
+                titulo,
+                descripcion: datos.descripcion.trim(),
+                precio,
+                estado_producto: datos.estado,
+                ciudad: datos.ciudad.trim(),
+                imagenes: archivos.filter(Boolean),
+            }, token)
+            setMensaje(null)
+            if (onNavigate) onNavigate('/productos', { message: '¡El producto se ha publicado satisfactoriamente!' })
+        } catch (error) {
+            setMensaje({ tipo: 'error', texto: error.message })
         }
     }
 
     const precioVista = soloNumeros(datos.precio)
-    const stockVista = datos.stock === '' ? 1 : Number(datos.stock)
-    const fotosVista = fotos.filter((foto) => foto).concat(fotosMoviles)
+    const fotosVista = fotos.filter((foto) => foto)
 
     return (
         <div className="page-layout publish-layout">
@@ -177,26 +195,31 @@ export default function PublicarProducto({ auth, onNavigate }) {
 
                                     <div className="input-group">
                                         <label htmlFor="titulo">Título del anuncio</label>
-                                        <input id="titulo" type="text" value={datos.titulo} onChange={(event) => cambiarDato('titulo', event.target.value)} />
+                                        <input id="titulo" type="text" required maxLength="150" value={datos.titulo} onChange={(event) => cambiarDato('titulo', event.target.value)} />
                                     </div>
 
                                     <div className="input-group">
                                         <label htmlFor="categoria">Categoría</label>
-                                        <input id="categoria" type="text" value={datos.categoria} onChange={(event) => cambiarDato('categoria', event.target.value)} />
+                                        <select id="categoria" required value={datos.categoria_id} onChange={(event) => cambiarDato('categoria_id', event.target.value)}>
+                                            <option value="">Selecciona una categoría</option>
+                                            {categorias.map((categoria) => <option key={categoria.id} value={categoria.id}>{categoria.nombre}</option>)}
+                                        </select>
+                                        {errorCategorias && <span className="publish-alert publish-alert--error">{errorCategorias}</span>}
                                     </div>
 
-                                    <div className="triple-grid">
-                                        <div className="input-group">
-                                            <label htmlFor="marca">Marca</label>
-                                            <input id="marca" type="text" value={datos.marca} onChange={(event) => cambiarDato('marca', event.target.value)} />
-                                        </div>
-                                        <div className="input-group">
-                                            <label htmlFor="modelo">Modelo</label>
-                                            <input id="modelo" type="text" value={datos.modelo} onChange={(event) => cambiarDato('modelo', event.target.value)} />
-                                        </div>
+                                    <div className="double-grid">
                                         <div className="input-group">
                                             <label htmlFor="estado">Estado</label>
-                                            <input id="estado" type="text" value={datos.estado} onChange={(event) => cambiarDato('estado', event.target.value)} />
+                                            <select id="estado" required value={datos.estado} onChange={(event) => cambiarDato('estado', event.target.value)}>
+                                                <option value="">Selecciona el estado</option>
+                                                <option value="nuevo">Nuevo</option>
+                                                <option value="usado">Usado</option>
+                                                <option value="reacondicionado">Reacondicionado</option>
+                                            </select>
+                                        </div>
+                                        <div className="input-group">
+                                            <label htmlFor="ciudad">Ciudad (opcional)</label>
+                                            <input id="ciudad" type="text" maxLength="100" value={datos.ciudad} onChange={(event) => cambiarDato('ciudad', event.target.value)} />
                                         </div>
                                     </div>
                                 </div>
@@ -208,17 +231,13 @@ export default function PublicarProducto({ auth, onNavigate }) {
                                 <div className="double-grid">
                                     <div className="input-group">
                                         <label htmlFor="precio">Precio Referencial</label>
-                                        <input id="precio" type="text" placeholder="COP 0.00" value={datos.precio} onChange={(event) => cambiarDato('precio', event.target.value)} />
-                                    </div>
-                                    <div className="input-group">
-                                        <label htmlFor="stock">Stock Disponibles</label>
-                                        <input id="stock" type="number" placeholder="0" value={datos.stock} onChange={(event) => cambiarDato('stock', event.target.value)} />
+                                        <input id="precio" type="number" min="0" step="1" required placeholder="COP 0.00" value={datos.precio} onChange={(event) => cambiarDato('precio', event.target.value)} />
                                     </div>
                                 </div>
 
                                 <div className="input-group">
-                                    <label htmlFor="descripcion">Descripción (Opcional)</label>
-                                    <textarea id="descripcion" placeholder="Especificaciones opcionales..." value={datos.descripcion} onChange={(event) => cambiarDato('descripcion', event.target.value)} />
+                                    <label htmlFor="descripcion">Descripción</label>
+                                    <textarea id="descripcion" required placeholder="Describe el producto..." value={datos.descripcion} onChange={(event) => cambiarDato('descripcion', event.target.value)} />
                                 </div>
                             </section>
 
@@ -242,9 +261,9 @@ export default function PublicarProducto({ auth, onNavigate }) {
                                         </label>
                                     </div>
 
-                                    {fotosMoviles.length > 0 && (
+                                    {fotos.some(Boolean) && (
                                         <div className="miniaturas">
-                                            {fotosMoviles.map((foto, indice) => (
+                                            {fotos.filter(Boolean).map((foto, indice) => (
                                                 <div className="small-box" key={indice}>
                                                     <img src={foto} alt={`Foto ${indice + 1}`} />
                                                 </div>
@@ -286,14 +305,12 @@ export default function PublicarProducto({ auth, onNavigate }) {
                                     <p className="preview-price">{precioVista > 0 ? 'COP ' + formatCurrency(precioVista) : 'COP 0'}</p>
                                     <h3 className="preview-title">{datos.titulo ? datos.titulo : 'Título del anuncio'}</h3>
                                     <p className="preview-brand">
-                                        {datos.marca ? datos.marca : 'Sin marca'}
-                                        {datos.modelo ? ' · ' + datos.modelo : ''}
+                                        {datos.ciudad || 'Sin ciudad'}
                                     </p>
 
                                     <ul className="preview-specs">
-                                        <li><span>Categoría</span><strong>{datos.categoria ? datos.categoria : 'Sin categoría'}</strong></li>
+                                        <li><span>Categoría</span><strong>{categorias.find((categoria) => String(categoria.id) === String(datos.categoria_id))?.nombre || 'Sin categoría'}</strong></li>
                                         <li><span>Estado</span><strong>{datos.estado ? datos.estado : 'Usado'}</strong></li>
-                                        <li><span>Stock</span><strong>{stockVista + ' disponibles'}</strong></li>
                                     </ul>
 
                                     <p className="preview-desc">{datos.descripcion ? datos.descripcion : 'Sin descripción del producto.'}</p>
@@ -301,8 +318,8 @@ export default function PublicarProducto({ auth, onNavigate }) {
                                     <div className="preview-seller">
                                         <i className="fa-solid fa-circle-user" />
                                         <div>
-                                            <strong>Luis Alejandro Montenegro Ojeda</strong>
-                                            <span><i className="fa-regular fa-star" /> 4.7 · Vendedor estrella</span>
+                                            <strong>{auth?.user ? `${auth.user.nombre} ${auth.user.apellido}` : 'Vendedor'}</strong>
+                                            <span><i className="fa-regular fa-star" /> {auth?.user?.reputacion || 'Nuevo vendedor'}</span>
                                         </div>
                                     </div>
 
