@@ -12,7 +12,11 @@ class Publicacion extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['usuario_id', 'titulo', 'contenido'];
+    protected $attributes = [
+        'visibilidad' => 'publica',
+    ];
+
+    protected $fillable = ['usuario_id', 'titulo', 'contenido', 'visibilidad'];
 
     protected function casts(): array
     {

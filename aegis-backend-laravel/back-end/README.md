@@ -94,7 +94,22 @@ La identidad web es `Usuario`/`usuarios`; el scaffold `User`/`users` permanece s
 
 Las migraciones Laravel reproducen las tablas AEGIS (`usuarios`, `categorias`, `productos`, imágenes, foro, puntos físicos, encuentros, QR, calificaciones, reportes y notificaciones), conservando nombres de campos y relaciones. Ejecutar las migraciones crea el esquema vacío; no copia registros de `AEGIS-MVC-MODULAR/database/aegis_db.sql`.
 
-La API todavía no expone operaciones de encuentros, perfiles privados ni operaciones de owner/admin. Los controladores MVC/HTML y las vistas no se migran.
+La API todavía no expone operaciones completas de encuentros ni perfiles privados más allá de la privacidad base de productos/publicaciones. Las operaciones de owner/admin del Incremento 04 sí están disponibles para puntos y cuentas. Los controladores MVC/HTML y las vistas no se migran.
+
+## Autorización, propietarios y privacidad
+
+El Incremento 04 aplica autorización en servidor con Laravel Gates y middleware:
+
+- `usuario`, `owner` y `admin` son roles base, no sustituyen la propiedad ni las capacidades por recurso.
+- Los estados `activo`, `suspendido` y `baneado` se aplican a todas las operaciones protegidas.
+- Productos y publicaciones pueden ser `publica`, `privada` o `grupo_privado`.
+- El dueño puede editar/eliminar su producto o publicación.
+- El owner gestiona sus puntos físicos; el admin gestiona cuentas y tiene auditoría.
+- `permisos_delegados` permite delegar capacidades sobre un recurso concreto sin crear una tabla general de roles.
+- Las acciones administrativas quedan registradas en `auditoria_accesos`.
+- React recibe `estado` y `capabilities` para ocultar o deshabilitar controles, pero nunca decide autorización.
+
+Las rutas de escritura revalidan autenticación, estado activo y capacidad. Contenido privado responde `403 PRIVATE_RESOURCE`; cuentas suspendidas responden `403 ACCOUNT_NOT_ACTIVE`.
 
 ## Verificación
 

@@ -1,22 +1,23 @@
 <?php
 
+use App\Http\Controllers\Api\AdminAuthorizationController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ForoController;
 use App\Http\Controllers\Api\InicioController;
 use App\Http\Controllers\Api\PerfilController;
 use App\Http\Controllers\Api\ProductoController;
 use App\Http\Controllers\Api\PuntoFisicoController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\WebAuthController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/inicio', InicioController::class);
 Route::get('/categorias', [ProductoController::class, 'categorias']);
 Route::get('/productos', [ProductoController::class, 'index']);
 Route::get('/productos/{producto}', [ProductoController::class, 'show'])->whereNumber('producto');
 Route::get('/foro', [ForoController::class, 'index']);
+Route::get('/foro/{publicacion}', [ForoController::class, 'show'])->whereNumber('publicacion');
 Route::get('/perfil/{usuario}', [PerfilController::class, 'show'])->whereNumber('usuario');
 Route::get('/puntos-fisicos', [PuntoFisicoController::class, 'index']);
-
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -52,10 +53,19 @@ Route::prefix('auth/web')->name('auth.web.')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
-    Route::post('/productos', [ProductoController::class, 'store'])->middleware('verified.web');
-    Route::post('/foro', [ForoController::class, 'store'])->middleware('verified.web');
+    Route::middleware(['account.active', 'verified.web'])->group(function () {
+        Route::post('/productos', [ProductoController::class, 'store']);
+        Route::patch('/productos/{producto}', [ProductoController::class, 'update'])->whereNumber('producto');
+        Route::delete('/productos/{producto}', [ProductoController::class, 'destroy'])->whereNumber('producto');
+        Route::post('/foro', [ForoController::class, 'store']);
+        Route::patch('/foro/{publicacion}', [ForoController::class, 'update'])->whereNumber('publicacion');
+        Route::delete('/foro/{publicacion}', [ForoController::class, 'destroy'])->whereNumber('publicacion');
+        Route::patch('/puntos-fisicos/{punto}', [PuntoFisicoController::class, 'update'])->whereNumber('punto');
+        Route::get('/admin/usuarios', [AdminAuthorizationController::class, 'usuarios']);
+        Route::patch('/admin/usuarios/{usuario}', [AdminAuthorizationController::class, 'updateUsuario'])->whereNumber('usuario');
+    });
     Route::post('/foro/{publicacion}/comentarios', [ForoController::class, 'storeComment'])
         ->whereNumber('publicacion')
-        ->middleware('verified.web');
+        ->middleware(['account.active', 'verified.web']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });

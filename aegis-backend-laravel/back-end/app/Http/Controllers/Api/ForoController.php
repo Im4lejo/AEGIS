@@ -7,6 +7,7 @@ use App\Models\Publicacion;
 use Cloudinary\Cloudinary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
 class ForoController extends Controller
@@ -18,6 +19,7 @@ class ForoController extends Controller
         ]);
 
         $publicaciones = Publicacion::query()
+            ->where('visibilidad', 'publica')
             ->with($this->publicacionRelations())
             ->withCount('comentarios')
             ->latest('fecha_publicacion')
@@ -39,6 +41,7 @@ class ForoController extends Controller
         $validated = $request->validate([
             'titulo' => ['nullable', 'string', 'max:200'],
             'contenido' => ['required', 'string', 'max:5000'],
+            'visibilidad' => ['nullable', 'in:publica,privada,grupo_privado'],
             'imagenes' => ['nullable', 'array', 'max:5'],
             'imagenes.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ]);
@@ -62,12 +65,14 @@ class ForoController extends Controller
                 $files,
                 $cloudinary,
                 $request,
+                $validated,
                 &$imagenesSubidas
             ) {
                 $publicacion = Publicacion::query()->create([
                     'usuario_id' => $request->user()->getKey(),
                     'titulo' => $titulo,
                     'contenido' => $contenido,
+                    'visibilidad' => $validated['visibilidad'] ?? 'publica',
                 ]);
 
                 foreach ($files as $index => $file) {
@@ -128,6 +133,12 @@ class ForoController extends Controller
             'comentario' => ['required', 'string', 'max:2000'],
         ]);
         $post = Publicacion::query()->findOrFail($publicacion);
+        if (! Gate::forUser($request->user())->allows('view.post', $post)) {
+            return response()->json([
+                'message' => 'No tienes permiso para acceder a esta publicación.',
+                'code' => 'PRIVATE_RESOURCE',
+            ], 403);
+        }
         $comment = $post->comentarios()->create([
             'usuario_id' => $request->user()->getKey(),
             'comentario' => trim($validated['comentario']),
@@ -138,6 +149,78 @@ class ForoController extends Controller
                 'usuario:id,nombre,username,foto_perfil_url as foto_perfil'
             ),
         ], 201);
+    }
+
+    public function show(Request $request, int $publicacion)
+    {
+        $post = Publicacion::query()
+            ->with($this->publicacionRelations())
+            ->withCount('comentarios')
+            ->findOrFail($publicacion);
+
+        $usuario = $request->user();
+        if (
+            ! in_array($post->visibilidad, ['publica', null], true)
+            && (
+                ! $usuario
+                || ! Gate::forUser($usuario)->allows('view.post', $post)
+            )
+        ) {
+            return response()->json([
+                'message' => 'Esta publicación privada no está disponible para tu cuenta.',
+                'code' => 'PRIVATE_RESOURCE',
+            ], 403);
+        }
+
+        return response()->json(['data' => $post]);
+    }
+
+    public function update(Request $request, int $publicacion)
+    {
+        $post = Publicacion::query()->findOrFail($publicacion);
+        if (! Gate::forUser($request->user())->allows('update.post', $post)) {
+            return response()->json([
+                'message' => 'No tienes permiso para editar esta publicación.',
+                'code' => 'FORBIDDEN_RESOURCE',
+            ], 403);
+        }
+
+        $validated = $request->validate([
+            'titulo' => ['nullable', 'string', 'max:200'],
+            'contenido' => ['sometimes', 'string', 'max:5000'],
+            'visibilidad' => ['sometimes', 'in:publica,privada,grupo_privado'],
+        ]);
+        $post->update($validated);
+
+        return response()->json([
+            'data' => $post->fresh($this->publicacionRelations())->loadCount('comentarios'),
+        ]);
+    }
+
+    public function destroy(Request $request, int $publicacion)
+    {
+        $post = Publicacion::query()->findOrFail($publicacion);
+        if (! Gate::forUser($request->user())->allows('delete.post', $post)) {
+            return response()->json([
+                'message' => 'No tienes permiso para eliminar esta publicación.',
+                'code' => 'FORBIDDEN_RESOURCE',
+            ], 403);
+        }
+
+        DB::table('auditoria_accesos')->insert([
+            'actor_id' => $request->user()->id,
+            'accion' => 'eliminar',
+            'recurso_tipo' => 'Publicacion',
+            'recurso_id' => $post->id,
+            'datos' => json_encode(['propietario_id' => $post->usuario_id]),
+            'fecha' => now(),
+        ]);
+        $post->delete();
+
+        return response()->json([
+            'message' => 'Publicación eliminada correctamente.',
+            'code' => 'RESOURCE_DELETED',
+        ]);
     }
 
     private function publicacionRelations(): array

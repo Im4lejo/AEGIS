@@ -28,6 +28,7 @@ class PerfilController extends Controller
 
         $products = Producto::query()
             ->activo()
+            ->where('visibilidad', 'publica')
             ->where('usuario_id', $profile->id)
             ->with([
                 'categoria:id,nombre,descripcion',
@@ -40,6 +41,7 @@ class PerfilController extends Controller
 
         $posts = Publicacion::query()
             ->where('usuario_id', $profile->id)
+            ->where('visibilidad', 'publica')
             ->with([
                 'imagenes:id,publicacion_id,imagen,orden',
                 'comentarios' => fn ($query) => $query

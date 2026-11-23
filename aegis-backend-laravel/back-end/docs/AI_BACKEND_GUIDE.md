@@ -211,7 +211,11 @@ El uso de Bearer web evita migrar parcialmente a cookies stateful sin conocer lo
 
 `usuarios.rol` admite `usuario`, `owner` y `admin`; `usuarios.estado` admite `activo`, `suspendido` y `baneado`. El registro asigna `usuario/activo`. El login rechaza cualquier estado distinto de `activo`.
 
-No se encontró middleware de roles, policy ni gate conectado a estas rutas. En el código actual, las escrituras API del grupo Sanctum exigen autenticación, pero no asignan permisos diferentes por `rol`. No asumas autorización admin/owner por el valor guardado.
+El rol base no reemplaza la autorización. `AppServiceProvider` registra Gates por cuenta activa, propiedad, visibilidad y capacidades delegadas; `EnsureAccountActive` bloquea escrituras de cuentas suspendidas/baneadas. Los consumidores React reciben un resumen en `UsuarioAuthResource`/`capabilities`, pero el servidor revalida.
+
+Los recursos usan visibilidad `publica`, `privada` o `grupo_privado`. Los productos públicos se filtran por `estado_publicacion=activo`; las publicaciones públicas se filtran por visibilidad pública. Los recursos privados requieren propietario, admin o capacidad `leer` delegada. Los cambios externos usan `PATCH/DELETE` con Gates de propietario/delegación/admin. Los puntos físicos requieren owner del recurso o admin, y las cuentas solo pueden administrarse por admin.
+
+Las acciones administrativas pueden auditarse en `auditoria_accesos`. `permisos_delegados` permite otorgar `leer`, `editar`, `eliminar`, `moderar` o `gestionar` sobre una combinación concreta de tipo e ID de recurso.
 
 ## 6. Modelos Eloquent y relaciones
 
