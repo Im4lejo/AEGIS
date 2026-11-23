@@ -106,6 +106,15 @@ La API todavía no expone operaciones completas de encuentros ni perfiles privad
 - `ExpirarHistorias` se ejecuta cada cinco minutos desde el scheduler y los recordatorios usan dedupe de notificaciones.
 - Encabezado, carrusel React y dirección de comunidad consumen estos endpoints; React no decide permisos.
 
+## Video bajo demanda y Live
+
+- `GET /api/video/capabilities` devuelve disponibilidad real de VOD y Live.
+- Los adjuntos de foro e historia aceptan MP4, WebM y QuickTime hasta 25 MB.
+- El procesamiento de video es asíncrono e identifica estados `procesando`, `listo` y `error`.
+- React reproduce video con controles nativos, poster y carga diferida por metadata.
+- Live no está disponible sin credenciales/proveedor probado; `POST /api/live/sessions` responde `503 LIVE_UNAVAILABLE`.
+- Las variables Live y Cloudinary deben configurarse fuera de la base y nunca exponerse al cliente.
+
 ## Autorización, propietarios y privacidad
 
 El Incremento 04 aplica autorización en servidor con Laravel Gates y middleware:

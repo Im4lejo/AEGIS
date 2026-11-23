@@ -20,6 +20,10 @@ class ImagenPublicacionForo extends Model
         'height',
         'alt_text',
         'estado',
+        'poster_url',
+        'playback_url',
+        'subtitulos_url',
+        'procesamiento_estado',
     ];
 
     protected $hidden = ['public_id'];

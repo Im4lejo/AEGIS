@@ -195,6 +195,12 @@ export const preferenceApi = {
     request('/preferencias/restablecer', { method: 'POST', token }),
 }
 
+export const videoApi = {
+  capabilities: () => request('/video/capabilities'),
+  createLive: (token) =>
+    request('/live/sessions', { method: 'POST', token }),
+}
+
 export const advancedContentApi = {
   stories: (token) => request('/historias', { token }),
   story: (id, token) =>

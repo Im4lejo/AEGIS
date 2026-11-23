@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ProcesarVideoHistoria;
 use App\Models\Historia;
 use App\Models\VisualizacionHistoria;
 use App\Models\Comunidad;
@@ -57,6 +58,9 @@ class ContenidoAvanzadoController extends Controller
                 : null,
             'tipo_media' => $allowVideo ? 'video' : 'imagen',
             'media_url' => $uploaded['url'],
+            'poster_url' => $allowVideo ? $this->media->videoPosterUrl($uploaded['url']) : null,
+            'playback_url' => $allowVideo ? $uploaded['url'] : null,
+            'procesamiento_estado' => $allowVideo ? 'procesando' : 'listo',
             'media_public_id' => $uploaded['public_id'],
             'mime_type' => $uploaded['mime_type'],
             'texto' => trim((string) ($validated['texto'] ?? '')),
@@ -64,6 +68,9 @@ class ContenidoAvanzadoController extends Controller
             'estado' => 'activa',
             'expira_en' => now()->addHours($validated['horas'] ?? 24),
         ]);
+        if ($allowVideo) {
+            ProcesarVideoHistoria::dispatch($story->id);
+        }
 
         return response()->json(['data' => $story], 201);
     }

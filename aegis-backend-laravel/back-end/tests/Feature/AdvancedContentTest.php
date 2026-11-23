@@ -134,6 +134,24 @@ class AdvancedContentTest extends TestCase
             ->assertJsonPath('data.estado', 'cancelado');
     }
 
+    public function test_video_capabilities_and_live_unavailable_are_honest(): void
+    {
+        $this->getJson('/api/video/capabilities')
+            ->assertOk()
+            ->assertJsonPath('live.available', false)
+            ->assertJsonPath('vod.max_size_bytes', 26214400);
+
+        $user = $this->createUser();
+        Sanctum::actingAs($user);
+        $this->postJson('/api/live/sessions')
+            ->assertStatus(503)
+            ->assertJsonPath('code', 'LIVE_UNAVAILABLE');
+        $this->assertDatabaseHas('sesiones_live', [
+            'usuario_id' => $user->id,
+            'estado' => 'no_disponible',
+        ]);
+    }
+
     public function test_suspended_user_cannot_create_story_or_event(): void
     {
         $user = $this->createUser(['estado' => 'suspendido']);

@@ -66,6 +66,14 @@ Cliente
 
 `bootstrap/app.php` registra `routes/web.php`, `routes/api.php`, `routes/console.php`, el health check `/up`, el alias `verified.web` y el scheduler de `ExpirarHistorias`/recordatorios. El prefijo `/api` lo aporta el enrutamiento API de Laravel; no se repite en los paths dentro de `routes/api.php`.
 
+### Video y Live
+
+- El contrato público de capacidades es `GET /api/video/capabilities`.
+- VOD usa Cloudinary cuando tiene URL/credenciales operativas; no se garantiza Live.
+- Live responde `503 LIVE_UNAVAILABLE` si no existe configuración probada.
+- Los estados `procesando`, `listo` y `error` se almacenan en adjuntos e historias.
+- Los secretos Live/VOD permanecen en `.env`; nunca se serializan en posts o respuestas React.
+
 ### CLI
 
 ```text

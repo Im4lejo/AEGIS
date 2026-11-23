@@ -20,11 +20,13 @@ use App\Http\Controllers\Api\PuntoFisicoController;
 use App\Http\Controllers\Api\ResenaController;
 use App\Http\Controllers\Api\TiendaController;
 use App\Http\Controllers\Api\WebAuthController;
+use App\Http\Controllers\Api\VideoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/inicio', InicioController::class);
 Route::get('/categorias', [ProductoController::class, 'categorias']);
 Route::get('/preferencias/defaults', [PreferenciaController::class, 'defaults']);
+Route::get('/video/capabilities', [VideoController::class, 'capabilities']);
 Route::get('/busqueda', [BusquedaController::class, 'index']);
 Route::get('/busqueda/sugerencias', [BusquedaController::class, 'suggestions']);
 Route::get('/busqueda/tendencias', [BusquedaController::class, 'trends']);
@@ -90,6 +92,7 @@ Route::prefix('auth/web')->name('auth.web.')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/live/sessions', [VideoController::class, 'liveUnavailable'])->middleware('account.active');
     Route::post('/historias', [ContenidoAvanzadoController::class, 'createStory'])->middleware(['account.active', 'verified.web']);
     Route::delete('/historias/{historia}', [ContenidoAvanzadoController::class, 'deleteStory'])->whereNumber('historia')->middleware('account.active');
     Route::post('/comunidades/{comunidad}/eventos', [ContenidoAvanzadoController::class, 'createEvent'])->whereNumber('comunidad')->middleware(['account.active', 'verified.web']);

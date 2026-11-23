@@ -15,6 +15,7 @@ class Historia extends Model
     protected $fillable = [
         'usuario_id', 'comunidad_id', 'tipo_media', 'media_url', 'media_public_id',
         'mime_type', 'texto', 'audiencia', 'estado', 'expira_en', 'visualizaciones',
+        'poster_url', 'playback_url', 'subtitulos_url', 'procesamiento_estado',
     ];
 
     protected function casts(): array

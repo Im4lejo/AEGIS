@@ -4,7 +4,7 @@ import Footer from '../../layouts/Footer'
 import Sidebar from '../../layouts/Sidebar'
 import { EmptyState, ErrorState, LoadingState } from '../../shared/ApiState'
 import { useAuth } from '../../../auth/useAuth'
-import { forumApi, savedApi } from '../../../services/api'
+import { forumApi, savedApi, videoApi } from '../../../services/api'
 import '../css/foro.css'
 
 const IconComment = () => (
@@ -103,9 +103,22 @@ export default function Foro({ auth, onNavigate }) {
   const [loadingMore, setLoadingMore] = useState(false)
   const [tipoPost, setTipoPost] = useState('discusion')
   const [productoReferencia, setProductoReferencia] = useState('')
+  const [videoCapabilities, setVideoCapabilities] = useState(null)
 
   const ordenRef = useRef(null)
   const fileInputRef = useRef(null)
+
+  useEffect(() => {
+    let active = true
+    videoApi.capabilities()
+      .then(({ vod, live }) => {
+        if (active) setVideoCapabilities({ vod, live })
+      })
+      .catch(() => {
+        if (active) setVideoCapabilities(null)
+      })
+    return () => { active = false }
+  }, [])
 
   useEffect(() => {
     let active = true
@@ -127,6 +140,9 @@ export default function Foro({ auth, onNavigate }) {
             titulo: publicacion.titulo,
             cuerpo: publicacion.contenido,
             imagen: publicacion.imagenes?.[0]?.imagen || null,
+            video: publicacion.imagenes?.[0]?.mime_type?.startsWith('video/')
+              ? publicacion.imagenes[0]
+              : null,
             referencias: publicacion.referencias || [],
             comentarios: (publicacion.comentarios || []).map((comentario) => ({
               id: comentario.id,
@@ -545,10 +561,19 @@ export default function Foro({ auth, onNavigate }) {
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/*"
+            accept="image/*,video/mp4,video/webm,video/quicktime"
             hidden
             onChange={seleccionarImagen}
           />
+
+          {videoCapabilities && (
+            <p className="media-capability-status" role="status">
+              {videoCapabilities.vod.available
+                ? 'Video bajo demanda disponible.'
+                : 'Video bajo demanda no disponible hasta configurar Cloudinary.'}
+              {' '}Live: {videoCapabilities.live.available ? 'Disponible.' : 'No disponible.'}
+            </p>
+          )}
 
           <div className="foro-toolbar">
             <div className="foro-sort" ref={ordenRef}>
@@ -681,7 +706,27 @@ export default function Foro({ auth, onNavigate }) {
                   </p>
                 )}
 
-                {post.imagen && (
+                {post.video?.procesamiento_estado === 'procesando' && (
+                  <div className="media-processing" role="status">Procesando video...</div>
+                )}
+                {post.video?.procesamiento_estado === 'error' && (
+                  <div className="media-error" role="alert">El video no pudo procesarse.</div>
+                )}
+                {post.video?.procesamiento_estado !== 'procesando'
+                  && post.video?.procesamiento_estado !== 'error'
+                  && post.video
+                  && (
+                    <video
+                      className="foro-post-image"
+                      controls
+                      preload="metadata"
+                      poster={post.video.poster_url || undefined}
+                      src={post.video.playback_url || post.video.imagen}
+                    >
+                      {post.video.alt_text || 'Video de la publicación'}
+                    </video>
+                  )}
+                {!post.video && post.imagen && (
                   <img
                     className="foro-post-image"
                     src={post.imagen}
