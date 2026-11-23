@@ -287,6 +287,36 @@ Las búsquedas se registran en `busquedas_productos`; las comparaciones opcional
 
 Las preguntas viven en `preguntas_producto`. Públicamente solo aparecen las `respondida`. El vendedor propietario y administradores pueden responder/moderar. Visitantes pueden preguntar solo en anuncios activos o reservados públicos.
 
+### Tiendas e inventario
+
+`tiendas` separa identidad comercial de `Usuario`. `miembros_tienda` asigna owner/gestor/vendedor dentro de la tienda. `productos.tienda_id` vincula anuncios sin duplicar identidad.
+
+`verificaciones_tienda` conserva solicitudes protegidas y revisiones administrativas. La API pública solo expone el estado aprobado como insignia verificable.
+
+`inventario_producto` controla stock y reservas por producto. `movimientos_inventario` registra entradas, salidas, reservas, liberaciones y ajustes. Las operaciones usan bloqueo transaccional y rechazan stock negativo.
+
+### Mensajería
+
+`conversaciones` contiene DMs/contextos y grupos. `participantes_conversacion` controla acceso, rol, lectura opt-in, archivo y silencio. `mensajes` conserva contenido y cita; `adjuntos_mensaje` referencia el proveedor remoto. `lecturas_mensaje` almacena recibos solo opt-in.
+
+Las DMs usan `contexto_clave` ordenado por participante y producto para evitar duplicados. Los bloqueos impiden abrir o enviar. El backend limita envíos a 30 por minuto por cuenta.
+
+No existe proveedor WebSocket/Reverb/Pusher configurado. React usa polling cada cinco segundos contra `/api/mensajes`; no muestra presencia ni conexión falsamente.
+
+### Ofertas y operaciones comerciales
+
+`ofertas` vincula producto, comprador y vendedor. `historial_oferta` conserva cambios auditados. `reservas_producto` bloquea disponibilidad temporalmente y `operaciones_comerciales` representa el acuerdo sin procesar pagos.
+
+Aceptar una oferta crea reserva y operación pendiente. Completar solo puede hacerlo el vendedor o admin y cambia el anuncio a vendido. Cancelar/disputar conserva el estado de acuerdo y libera la reserva cuando corresponde.
+
+### Puntos físicos y encuentros
+
+Los puntos tienen owner, estado público y estado de revisión. Solo puntos activos/aprobados aparecen en el directorio.
+
+Los encuentros pueden ser propuestos por comprador y confirmados/reprogramados por vendedor. Cancelación y finalización quedan auditadas.
+
+Los QR no contienen datos personales: se genera un token opaco que el servidor no devuelve como texto persistido, salvo hash SHA-256 en `token_hash`. Expiran, se usan una vez y solo owner del punto/admin pueden validar.
+
 ## 6. Modelos Eloquent y relaciones
 
 | Modelo | Tabla | Relaciones definidas / comportamiento |

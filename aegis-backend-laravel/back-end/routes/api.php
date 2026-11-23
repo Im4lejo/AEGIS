@@ -3,13 +3,17 @@
 use App\Http\Controllers\Api\AdminAuthorizationController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ComunidadController;
+use App\Http\Controllers\Api\EncuentroController;
 use App\Http\Controllers\Api\ForoController;
 use App\Http\Controllers\Api\GuardadosController;
 use App\Http\Controllers\Api\InicioController;
 use App\Http\Controllers\Api\MediaController;
+use App\Http\Controllers\Api\MensajeController;
+use App\Http\Controllers\Api\NegociacionController;
 use App\Http\Controllers\Api\PerfilController;
 use App\Http\Controllers\Api\ProductoController;
 use App\Http\Controllers\Api\PuntoFisicoController;
+use App\Http\Controllers\Api\TiendaController;
 use App\Http\Controllers\Api\WebAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +33,9 @@ Route::get('/perfil/{usuario}/tabs/{tab}', [PerfilController::class, 'tab'])
 Route::get('/perfil/{usuario}/seguidores', [PerfilController::class, 'followers'])->whereNumber('usuario');
 Route::get('/perfil/{usuario}/siguiendo', [PerfilController::class, 'following'])->whereNumber('usuario');
 Route::get('/puntos-fisicos', [PuntoFisicoController::class, 'index']);
+Route::get('/puntos-fisicos/directorio', [EncuentroController::class, 'pointDirectory']);
+Route::get('/tiendas', [TiendaController::class, 'index']);
+Route::get('/tiendas/{tienda}', [TiendaController::class, 'show'])->whereNumber('tienda');
 Route::get('/comunidades', [ComunidadController::class, 'index']);
 Route::get('/comunidades/sugerencias', [ComunidadController::class, 'suggestions']);
 Route::get('/comunidades/{comunidad}', [ComunidadController::class, 'show'])->whereNumber('comunidad');
@@ -69,6 +76,41 @@ Route::prefix('auth/web')->name('auth.web.')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/puntos-fisicos', [PuntoFisicoController::class, 'store']);
+    Route::patch('/puntos-fisicos/{punto}/revision', [PuntoFisicoController::class, 'review'])->whereNumber('punto');
+    Route::get('/encuentros', [EncuentroController::class, 'index']);
+    Route::post('/encuentros', [EncuentroController::class, 'store']);
+    Route::patch('/encuentros/{encuentro}', [EncuentroController::class, 'update'])->whereNumber('encuentro');
+    Route::post('/encuentros/{encuentro}/qr', [EncuentroController::class, 'generateQr'])->whereNumber('encuentro');
+    Route::post('/encuentros/qr/validar', [EncuentroController::class, 'validateQr']);
+    Route::get('/negociacion', [NegociacionController::class, 'mine']);
+    Route::post('/ofertas', [NegociacionController::class, 'store']);
+    Route::patch('/ofertas/{oferta}/contraoferta', [NegociacionController::class, 'counter'])->whereNumber('oferta');
+    Route::patch('/ofertas/{oferta}/decision', [NegociacionController::class, 'decide'])->whereNumber('oferta');
+    Route::patch('/operaciones/{operacion}', [NegociacionController::class, 'transitionOperation'])->whereNumber('operacion');
+    Route::get('/mensajes', [MensajeController::class, 'inbox']);
+    Route::get('/mensajes/buscar', [MensajeController::class, 'search']);
+    Route::post('/mensajes/directo', [MensajeController::class, 'openDirect']);
+    Route::post('/mensajes/grupo', [MensajeController::class, 'createGroup']);
+    Route::get('/mensajes/{conversacion}', [MensajeController::class, 'show'])->whereNumber('conversacion');
+    Route::get('/mensajes/{conversacion}/mensajes', [MensajeController::class, 'messages'])->whereNumber('conversacion');
+    Route::post('/mensajes/{conversacion}/mensajes', [MensajeController::class, 'send'])->whereNumber('conversacion');
+    Route::delete('/mensajes/{conversacion}/mensajes/{mensaje}', [MensajeController::class, 'deleteMessage'])
+        ->whereNumber('conversacion')
+        ->whereNumber('mensaje');
+    Route::patch('/mensajes/{conversacion}/lectura', [MensajeController::class, 'markRead'])->whereNumber('conversacion');
+    Route::patch('/mensajes/{conversacion}/preferencias', [MensajeController::class, 'preferences'])->whereNumber('conversacion');
+    Route::delete('/mensajes/{conversacion}/participacion', [MensajeController::class, 'leave'])->whereNumber('conversacion');
+    Route::post('/mensajes/{conversacion}/reportar', [MensajeController::class, 'report'])->whereNumber('conversacion');
+    Route::post('/tiendas', [TiendaController::class, 'store']);
+    Route::patch('/tiendas/{tienda}', [TiendaController::class, 'update'])->whereNumber('tienda');
+    Route::post('/tiendas/{tienda}/verificacion', [TiendaController::class, 'requestVerification'])->whereNumber('tienda');
+    Route::patch('/tiendas/{tienda}/verificacion', [TiendaController::class, 'reviewVerification'])->whereNumber('tienda');
+    Route::get('/tiendas/{tienda}/inventario', [TiendaController::class, 'inventory'])->whereNumber('tienda');
+    Route::patch('/tiendas/{tienda}/inventario/{producto}', [TiendaController::class, 'adjustInventory'])
+        ->whereNumber('tienda')
+        ->whereNumber('producto');
+    Route::get('/tiendas/{tienda}/dashboard', [TiendaController::class, 'dashboard'])->whereNumber('tienda');
     Route::get('/productos/mis', [ProductoController::class, 'mine']);
     Route::get('/productos/mis/estadisticas', [ProductoController::class, 'stats']);
     Route::middleware(['account.active', 'verified.web'])->group(function () {

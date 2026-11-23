@@ -11,11 +11,25 @@ class CodigoQr extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['encuentro_id', 'codigo', 'estado'];
+    protected $fillable = [
+        'encuentro_id',
+        'codigo',
+        'token_hash',
+        'estado',
+        'expira_en',
+        'usado_en',
+        'validado_por',
+        'evidencia',
+    ];
 
     protected function casts(): array
     {
-        return ['fecha_generacion' => 'datetime'];
+        return [
+            'fecha_generacion' => 'datetime',
+            'expira_en' => 'datetime',
+            'usado_en' => 'datetime',
+            'evidencia' => 'array',
+        ];
     }
 
     public function encuentro(): BelongsTo

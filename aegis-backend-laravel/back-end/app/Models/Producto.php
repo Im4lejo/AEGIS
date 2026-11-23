@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Producto extends Model
 {
@@ -35,6 +36,7 @@ class Producto extends Model
         'editado_en',
         'motivo_archivo',
         'vistas',
+        'tienda_id',
         'politicas',
         'entrega_aprox',
         'metodo_entrega',
@@ -86,5 +88,15 @@ class Producto extends Model
     public function preguntas(): HasMany
     {
         return $this->hasMany(PreguntaProducto::class, 'producto_id');
+    }
+
+    public function tienda(): BelongsTo
+    {
+        return $this->belongsTo(Tienda::class, 'tienda_id');
+    }
+
+    public function inventario(): HasOne
+    {
+        return $this->hasOne(InventarioProducto::class, 'producto_id');
     }
 }

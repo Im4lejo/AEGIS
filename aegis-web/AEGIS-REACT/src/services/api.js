@@ -405,6 +405,41 @@ export const communityApi = {
     request(`/comunidades/${encodeURIComponent(id)}/auditoria${queryString({ page, per_page: perPage })}`, { token }),
 }
 
+export const storeApi = {
+  list: (filters = {}) => request(`/tiendas${queryString(filters)}`),
+  show: (storeId) => request(`/tiendas/${encodeURIComponent(storeId)}`),
+  create: (details, token) =>
+    request('/tiendas', { method: 'POST', body: details, token }),
+  update: (storeId, details, token) =>
+    request(`/tiendas/${encodeURIComponent(storeId)}`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  requestVerification: (storeId, documentos, nota, token) =>
+    request(`/tiendas/${encodeURIComponent(storeId)}/verificacion`, {
+      method: 'POST',
+      body: { documentos, nota },
+      token,
+    }),
+  reviewVerification: (storeId, decision, nota, token) =>
+    request(`/tiendas/${encodeURIComponent(storeId)}/verificacion`, {
+      method: 'PATCH',
+      body: { decision, nota },
+      token,
+    }),
+  inventory: (storeId, token, page = 1, perPage = 20) =>
+    request(`/tiendas/${encodeURIComponent(storeId)}/inventario${queryString({ page, per_page: perPage })}`, { token }),
+  adjustInventory: (storeId, productId, details, token) =>
+    request(`/tiendas/${encodeURIComponent(storeId)}/inventario/${encodeURIComponent(productId)}`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  dashboard: (storeId, token) =>
+    request(`/tiendas/${encodeURIComponent(storeId)}/dashboard`, { token }),
+}
+
 export const savedApi = {
   list: (filters = {}, token) =>
     request(`/guardados${queryString(filters)}`, { token }),
@@ -417,6 +452,116 @@ export const savedApi = {
     request(`/guardados${queryString(details)}`, { method: 'DELETE', token }),
   report: (details, token) =>
     request('/reportes/contextual', { method: 'POST', body: details, token }),
+}
+
+export const meetingApi = {
+  points: (filters = {}) => request(`/puntos-fisicos/directorio${queryString(filters)}`),
+  meetings: (estado = null, token) =>
+    request(`/encuentros${queryString({ estado })}`, { token }),
+  create: (details, token) =>
+    request('/encuentros', { method: 'POST', body: details, token }),
+  update: (meetingId, details, token) =>
+    request(`/encuentros/${encodeURIComponent(meetingId)}`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  generateQr: (meetingId, token) =>
+    request(`/encuentros/${encodeURIComponent(meetingId)}/qr`, {
+      method: 'POST',
+      token,
+    }),
+  validateQr: (tokenValue, evidencia, token) =>
+    request('/encuentros/qr/validar', {
+      method: 'POST',
+      body: { token: tokenValue, evidencia },
+      token,
+    }),
+}
+
+export const negotiationApi = {
+  mine: (token) => request('/negociacion', { token }),
+  create: (details, token) =>
+    request('/ofertas', { method: 'POST', body: details, token }),
+  counter: (offerId, details, token) =>
+    request(`/ofertas/${encodeURIComponent(offerId)}/contraoferta`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  decide: (offerId, decision, token) =>
+    request(`/ofertas/${encodeURIComponent(offerId)}/decision`, {
+      method: 'PATCH',
+      body: { decision },
+      token,
+    }),
+  transition: (operationId, estado, token) =>
+    request(`/operaciones/${encodeURIComponent(operationId)}`, {
+      method: 'PATCH',
+      body: { estado },
+      token,
+    }),
+}
+
+export const messageApi = {
+  inbox: (token, perPage = 30) =>
+    request(`/mensajes${queryString({ per_page: perPage })}`, { token }),
+  search: (busqueda, token, conversacionId = null) =>
+    request(`/mensajes/buscar${queryString({ busqueda, conversacion_id: conversacionId })}`, { token }),
+  openDirect: (usuarioId, productoId, token) =>
+    request('/mensajes/directo', {
+      method: 'POST',
+      body: { usuario_id: usuarioId, producto_id: productoId || undefined },
+      token,
+    }),
+  createGroup: (titulo, usuarioIds, token) =>
+    request('/mensajes/grupo', {
+      method: 'POST',
+      body: { titulo, usuario_ids: usuarioIds },
+      token,
+    }),
+  show: (conversationId, token) =>
+    request(`/mensajes/${encodeURIComponent(conversationId)}`, { token }),
+  messages: (conversationId, token, beforeId = null, perPage = 30) =>
+    request(`/mensajes/${encodeURIComponent(conversationId)}/mensajes${queryString({ before_id: beforeId, per_page: perPage })}`, { token }),
+  send: (conversationId, details, token) => {
+    const body = new FormData()
+    if (details.contenido) body.append('contenido', details.contenido)
+    if (details.respondido_a_id) body.append('respondido_a_id', details.respondido_a_id)
+    ;(details.adjuntos || []).forEach((file) => body.append('adjuntos[]', file))
+    return request(`/mensajes/${encodeURIComponent(conversationId)}/mensajes`, {
+      method: 'POST',
+      body,
+      token,
+    })
+  },
+  deleteMessage: (conversationId, messageId, token) =>
+    request(`/mensajes/${encodeURIComponent(conversationId)}/mensajes/${encodeURIComponent(messageId)}`, {
+      method: 'DELETE',
+      token,
+    }),
+  markRead: (conversationId, token) =>
+    request(`/mensajes/${encodeURIComponent(conversationId)}/lectura`, {
+      method: 'PATCH',
+      token,
+    }),
+  preferences: (conversationId, details, token) =>
+    request(`/mensajes/${encodeURIComponent(conversationId)}/preferencias`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  leave: (conversationId, token) =>
+    request(`/mensajes/${encodeURIComponent(conversationId)}/participacion`, {
+      method: 'DELETE',
+      token,
+    }),
+  report: (conversationId, details, token) =>
+    request(`/mensajes/${encodeURIComponent(conversationId)}/reportar`, {
+      method: 'POST',
+      body: details,
+      token,
+    }),
 }
 
 export const profileApi = {

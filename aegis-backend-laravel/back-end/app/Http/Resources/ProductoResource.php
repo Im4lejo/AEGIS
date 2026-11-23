@@ -55,6 +55,7 @@ class ProductoResource extends JsonResource
                 fn ($imagen) => $imagen->only(['id', 'imagen', 'principal'])
             )->values()),
             'imagen_principal' => $imagenPrincipal?->imagen,
+            'tienda_id' => $this->tienda_id,
         ];
     }
 }

@@ -22,6 +22,11 @@ class PuntoFisico extends Model
         'imagen',
         'reputacion',
         'estado',
+        'servicios',
+        'reglas',
+        'latitud',
+        'longitud',
+        'estado_revision',
     ];
 
     protected function casts(): array
@@ -29,6 +34,7 @@ class PuntoFisico extends Model
         return [
             'reputacion' => 'decimal:2',
             'fecha_registro' => 'datetime',
+            'servicios' => 'array',
         ];
     }
 

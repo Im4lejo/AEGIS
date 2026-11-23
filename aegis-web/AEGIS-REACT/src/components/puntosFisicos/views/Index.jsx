@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import '../css/verificados.css'
+import { meetingApi } from '../../../services/api'
 
 const PUNTOS = [
     {
@@ -101,8 +102,34 @@ export default function Index({ auth, onNavigate }) {
     const [abierto, setAbierto] = useState(null)
     const [verTiempo, setVerTiempo] = useState(true)
     const [destacado, setDestacado] = useState(null)
+    const [puntosReales, setPuntosReales] = useState([])
+    const [ciudad, setCiudad] = useState('')
 
-    const lugar = PUNTOS.find((punto) => punto.id === abierto)
+    useEffect(() => {
+        let active = true
+        meetingApi.points({ ciudad, per_page: 50 })
+            .then(({ data }) => {
+                if (active) setPuntosReales(data)
+            })
+            .catch(() => {
+                if (active) setPuntosReales([])
+            })
+        return () => { active = false }
+    }, [ciudad])
+
+    const lugares = puntosReales.length
+        ? puntosReales.map((punto, index) => ({
+            ...punto,
+            horario: 'Consulta horario publicado',
+            tiempo: 'Ver listado',
+            x: 40 + (index % 5) * 5,
+            y: 35 + (index % 4) * 8,
+            servicios: Array.isArray(punto.servicios)
+                ? punto.servicios.map((texto) => ({ icono: 'fa-solid fa-circle-check', texto }))
+                : [],
+        }))
+        : PUNTOS
+    const lugar = lugares.find((punto) => punto.id === abierto)
 
     const abrirLugar = (id) => {
         setAbierto(id)
@@ -126,6 +153,10 @@ export default function Index({ auth, onNavigate }) {
             <Header title="AEGIS | Puntos Verificados" auth={auth} onNavigate={onNavigate} />
 
             <div className="pv-contenido">
+                <label className="pv-ciudad-filtro">
+                    Ciudad
+                    <input type="search" value={ciudad} onChange={(event) => setCiudad(event.target.value)} />
+                </label>
                 <div className="pv-fila">
                     {lugar && (
                         <aside className="pv-panel">
@@ -139,7 +170,7 @@ export default function Index({ auth, onNavigate }) {
                     <div className="pv-zona-mapa">
                         <div className="pv-mapa-caja">
                             <img className="pv-mapa-img" src="/mapa-popayan.png" alt="Mapa de Popayan" />
-                            {PUNTOS.map((punto) => (
+                            {lugares.map((punto) => (
                                 <button
                                     key={punto.id}
                                     type="button"

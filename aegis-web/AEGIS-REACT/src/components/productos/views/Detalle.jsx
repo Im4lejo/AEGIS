@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
-import { productApi, savedApi } from '../../../services/api'
+import { productApi, savedApi, negotiationApi } from '../../../services/api'
 import { agregarProducto } from '../../carrito/carritoDemo'
 import '../css/detalle.css'
 
@@ -55,6 +55,9 @@ export default function Detalle({ id, auth, onNavigate }) {
   const [preguntas, setPreguntas] = useState([])
   const [nuevaPregunta, setNuevaPregunta] = useState('')
   const [mensajeAccion, setMensajeAccion] = useState('')
+  const [ofertaAbierta, setOfertaAbierta] = useState(false)
+  const [montoOferta, setMontoOferta] = useState('')
+  const [mensajeOferta, setMensajeOferta] = useState('')
   useEffect(() => {
     let active = true
     productApi.show(id)
@@ -125,6 +128,27 @@ export default function Detalle({ id, auth, onNavigate }) {
         recurso_id: producto.id,
       }, auth.token)
       setMensajeAccion('Producto guardado')
+    } catch (requestError) {
+      setMensajeAccion(requestError.message)
+    }
+  }
+
+  const enviarOferta = async (event) => {
+    event.preventDefault()
+    if (!auth?.isAuthenticated) {
+      onNavigate?.('/login')
+      return
+    }
+    try {
+      await negotiationApi.create({
+        producto_id: producto.id,
+        monto: montoOferta,
+        mensaje: mensajeOferta,
+      }, auth.token)
+      setOfertaAbierta(false)
+      setMontoOferta('')
+      setMensajeOferta('')
+      setMensajeAccion('Oferta enviada')
     } catch (requestError) {
       setMensajeAccion(requestError.message)
     }
@@ -390,9 +414,9 @@ export default function Detalle({ id, auth, onNavigate }) {
                 <button
                   type="button"
                   className="detail-btn primary"
-                  onClick={() => onNavigate && onNavigate(auth?.isAuthenticated ? `/mensajes?id=${producto.id}` : '/login')}
+                  onClick={() => auth?.isAuthenticated ? setOfertaAbierta(true) : onNavigate?.('/login')}
                 >
-                  Comprar Ahora
+                  Proponer precio
                 </button>
                 <button type="button" className="detail-btn outline" onClick={agregarAlCarrito}>
                   {agregado ? (
@@ -411,6 +435,26 @@ export default function Detalle({ id, auth, onNavigate }) {
           </aside>
         </section>
       </main>
+
+      {ofertaAbierta && (
+        <div className="detail-offer-modal" role="dialog" aria-modal="true" aria-label="Proponer precio">
+          <form className="detail-offer-card" onSubmit={enviarOferta}>
+            <h2>Proponer precio</h2>
+            <label>
+              Monto COP
+              <input type="number" min="0" step="0.01" required value={montoOferta} onChange={(event) => setMontoOferta(event.target.value)} />
+            </label>
+            <label>
+              Mensaje
+              <textarea maxLength={2000} value={mensajeOferta} onChange={(event) => setMensajeOferta(event.target.value)} />
+            </label>
+            <div>
+              <button type="button" onClick={() => setOfertaAbierta(false)}>Cancelar</button>
+              <button type="submit">Enviar oferta</button>
+            </div>
+          </form>
+        </div>
+      )}
 
       <Footer onNavigate={onNavigate} />
     </div>

@@ -190,6 +190,37 @@ El foro usa `publicaciones_foro` como entidad canónica y conserva `/api/foro`.
 - Los badges no se inventan a partir de likes o seguidores.
 - Productos privados y borradores usan `noindex,nofollow`.
 
+## Tiendas e inventario
+
+- Tiendas particulares, comerciales y establecimientos usan el mismo usuario propietario.
+- Roles contextuales: owner, gestor y vendedor.
+- La verificación solo muestra badge después de aprobación admin.
+- Inventario por producto incluye stock disponible y reservado.
+- Ajustes usan transacciones y movimientos auditados.
+
+## Mensajería
+
+- Conversaciones directas/grupales persistidas.
+- Conversaciones comerciales vinculadas al anuncio.
+- Adjuntos mediante el servicio de media.
+- Lecturas opt-in, bloqueo, archivo, silencio y reportes.
+- Paginación hacia atrás por ID.
+- React usa polling de 5 segundos; no hay WebSocket real configurado.
+
+## Negociación y operaciones
+
+- Las ofertas tienen 48 horas por defecto y estados auditados.
+- Aceptar reserva el anuncio y crea una operación acordada pendiente.
+- Completar la operación es una acción del vendedor y marca vendido.
+- No existe checkout ni pasarela de pagos.
+
+## Puntos físicos y encuentros
+
+- Puntos aprobados se listan por directorio y ciudad.
+- Encuentros tienen propuesta, confirmación, reprogramación, cancelación y finalización.
+- QR usa token opaco solo una vez y expira.
+- Solo owner del punto o administración valida presencialmente.
+
 ## Verificación
 
 ```bash

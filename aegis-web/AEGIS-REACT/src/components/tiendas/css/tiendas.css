@@ -1,0 +1,86 @@
+.tiendas-page {
+  max-width: 1120px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.tiendas-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.tiendas-heading h1,
+.tiendas-heading p {
+  margin: 0;
+}
+
+.tienda-form,
+.tienda-detail {
+  display: grid;
+  gap: 12px;
+  border: 1px solid #e4e7ec;
+  border-radius: 12px;
+  background: #fff;
+  padding: 18px;
+  margin: 18px 0;
+}
+
+.tienda-form label {
+  display: grid;
+  gap: 6px;
+}
+
+.tiendas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.tienda-card {
+  border: 1px solid #e4e7ec;
+  border-radius: 12px;
+  background: #fff;
+  padding: 12px;
+}
+
+.tienda-card__logo {
+  height: 110px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #eef2ff;
+  overflow: hidden;
+}
+
+.tienda-card__logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tienda-card__meta {
+  display: flex;
+  justify-content: space-between;
+  color: #667085;
+}
+
+.tiendas-toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0b2050;
+  color: #fff;
+  border-radius: 999px;
+  padding: 10px 16px;
+  z-index: 100;
+}
+
+@media (max-width: 520px) {
+  .tiendas-page {
+    padding: 16px;
+  }
+}

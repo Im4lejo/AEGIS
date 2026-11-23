@@ -10,6 +10,46 @@ use Illuminate\Support\Facades\Gate;
 
 class PuntoFisicoController extends Controller
 {
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'nombre' => ['required', 'string', 'max:150'],
+            'descripcion' => ['nullable', 'string', 'max:5000'],
+            'direccion' => ['required', 'string', 'max:255'],
+            'ciudad' => ['required', 'string', 'max:100'],
+            'telefono' => ['nullable', 'string', 'max:30'],
+            'servicios' => ['nullable', 'array', 'max:30'],
+            'reglas' => ['nullable', 'string', 'max:5000'],
+            'latitud' => ['nullable', 'numeric', 'between:-90,90'],
+            'longitud' => ['nullable', 'numeric', 'between:-180,180'],
+        ]);
+        $point = PuntoFisico::query()->create([
+            ...$validated,
+            'owner_id' => $request->user()->id,
+            'estado' => 'pendiente',
+            'estado_revision' => 'pendiente',
+        ]);
+
+        return response()->json(['data' => $point], 201);
+    }
+
+    public function review(Request $request, int $punto)
+    {
+        if ($request->user()->rol !== 'admin') {
+            return response()->json(['message' => 'Solo administración puede revisar.', 'code' => 'FORBIDDEN_RESOURCE'], 403);
+        }
+        $validated = $request->validate([
+            'decision' => ['required', 'in:aprobado,rechazado,suspendido'],
+        ]);
+        $point = PuntoFisico::query()->findOrFail($punto);
+        $point->update([
+            'estado_revision' => $validated['decision'],
+            'estado' => $validated['decision'] === 'aprobado' ? 'activo' : 'pendiente',
+        ]);
+
+        return response()->json(['data' => $point]);
+    }
+
     public function index(Request $request)
     {
         $filters = $request->validate([
