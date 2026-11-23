@@ -317,6 +317,14 @@ Los encuentros pueden ser propuestos por comprador y confirmados/reprogramados p
 
 Los QR no contienen datos personales: se genera un token opaco que el servidor no devuelve como texto persistido, salvo hash SHA-256 en `token_hash`. Expiran, se usan una vez y solo owner del punto/admin pueden validar.
 
+### Reseñas elegibles
+
+`calificaciones` requiere encuentro finalizado dentro de treinta días y contexto vendedor/comprador/punto. La unicidad es encuentro, autor y ámbito.
+
+El receptor se determina por el participante correspondiente. Las reseñas de punto usan además `punto_fisico_id`. Los estados activa/editada cuentan en agregados; disputada/anulada no.
+
+`reputacion_agregados` conserva cantidad, promedio y distribución recalculados desde calificaciones válidas.
+
 ## 6. Modelos Eloquent y relaciones
 
 | Modelo | Tabla | Relaciones definidas / comportamiento |

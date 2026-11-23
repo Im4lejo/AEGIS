@@ -479,6 +479,34 @@ export const meetingApi = {
     }),
 }
 
+export const reviewApi = {
+  eligible: (token) => request('/resenas/elegibles', { token }),
+  summary: (ambito, id) =>
+    request(`/resenas/${encodeURIComponent(ambito)}/${encodeURIComponent(id)}/resumen`),
+  list: (ambito, id, page = 1, perPage = 20) =>
+    request(`/resenas/${encodeURIComponent(ambito)}/${encodeURIComponent(id)}${queryString({ page, per_page: perPage })}`),
+  create: (details, token) =>
+    request('/resenas', { method: 'POST', body: details, token }),
+  respond: (reviewId, respuesta, token) =>
+    request(`/resenas/${encodeURIComponent(reviewId)}/respuesta`, {
+      method: 'PATCH',
+      body: { respuesta },
+      token,
+    }),
+  edit: (reviewId, details, token) =>
+    request(`/resenas/${encodeURIComponent(reviewId)}/editar`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  dispute: (reviewId, motivo, token) =>
+    request(`/resenas/${encodeURIComponent(reviewId)}/disputa`, {
+      method: 'POST',
+      body: { motivo },
+      token,
+    }),
+}
+
 export const negotiationApi = {
   mine: (token) => request('/negociacion', { token }),
   create: (details, token) =>

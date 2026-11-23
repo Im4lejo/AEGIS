@@ -221,6 +221,14 @@ El foro usa `publicaciones_foro` como entidad canónica y conserva `/api/foro`.
 - QR usa token opaco solo una vez y expira.
 - Solo owner del punto o administración valida presencialmente.
 
+## Reseñas comerciales
+
+- Solo encuentros finalizados dentro de 30 días admiten reseñas.
+- Comprador evalúa vendedor; vendedor evalúa comprador; participantes evalúan punto.
+- Duplicados y autorreseñas están bloqueados.
+- Editar está limitado a siete días.
+- Promedios y distribución provienen de reseñas activas/editadas.
+
 ## Verificación
 
 ```bash

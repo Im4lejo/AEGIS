@@ -3,7 +3,7 @@ import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
 import { useAuth } from '../../../auth/useAuth'
-import { forumApi, profileApi } from '../../../services/api'
+import { forumApi, profileApi, reviewApi } from '../../../services/api'
 import '../css/perfil.css'
 
 function etiquetaEstado(estado) {
@@ -166,6 +166,25 @@ export default function Perfil({ auth, onNavigate }) {
   useEffect(() => {
     if (!userId) return undefined
     let active = true
+    if (pestana === 'resenas') {
+      Promise.all([
+        reviewApi.summary('vendedor', userId),
+        reviewApi.list('vendedor', userId, paginaPestana, 12),
+      ])
+        .then(([summary, reviews]) => {
+          if (!active) return
+          setDatosPestana({
+            data: reviews.data,
+            meta: reviews.meta,
+            resumen: summary.data,
+          })
+          setErrorPestana('')
+        })
+        .catch((error) => {
+          if (active) setErrorPestana(error.message)
+        })
+      return () => { active = false }
+    }
     profileApi.tab(userId, pestana, paginaPestana, 12)
       .then(({ data, meta }) => {
         if (active) {
@@ -334,6 +353,12 @@ export default function Perfil({ auth, onNavigate }) {
             ))}
           </nav>
           {errorPestana && <p className="perfil-empty" role="alert">{errorPestana}</p>}
+          {pestana === 'resenas' && datosPestana?.resumen && (
+            <div className="perfil-review-summary" aria-label="Resumen de reputación comercial">
+              <strong>{Number(datosPestana.resumen.promedio).toFixed(1)} / 5</strong>
+              <span>{datosPestana.resumen.cantidad} reseñas verificadas elegibles</span>
+            </div>
+          )}
           {datosPestana?.meta && (
             <div className="perfil-tab-pagination" aria-label="Paginación de pestaña">
               <button type="button" disabled={datosPestana.meta.current_page <= 1} onClick={() => setPaginaPestana((page) => page - 1)}>Anterior</button>
