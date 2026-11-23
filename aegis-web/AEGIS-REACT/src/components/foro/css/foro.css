@@ -169,6 +169,31 @@
   color: #6d28d9;
 }
 
+.media-processing,
+.media-error,
+.media-capability-status {
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin: 8px 0;
+  font-size: 13px;
+}
+
+.media-processing {
+  background: #eff6ff;
+  color: #1e40af;
+}
+
+.media-error {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.media-capability-status {
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
 .foro-feed {
   display: flex;
   flex-direction: column;

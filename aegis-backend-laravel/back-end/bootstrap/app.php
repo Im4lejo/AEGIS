@@ -6,6 +6,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Console\Scheduling\Schedule;
+use App\Jobs\ExpirarHistorias;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -24,6 +26,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'verified.web' => EnsureWebEmailIsVerified::class,
             'account.active' => EnsureAccountActive::class,
         ]);
+    })
+    ->withSchedule(function (Schedule $schedule): void {
+        $schedule->job(new ExpirarHistorias())->everyFiveMinutes();
+        $schedule->job(new \App\Jobs\EnviarRecordatoriosEventos())->everyFiveMinutes()->withoutOverlapping();
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

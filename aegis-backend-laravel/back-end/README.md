@@ -96,6 +96,35 @@ Las migraciones Laravel reproducen las tablas AEGIS (`usuarios`, `categorias`, `
 
 La API todavía no expone operaciones completas de encuentros ni perfiles privados más allá de la privacidad base de productos/publicaciones. Las operaciones de owner/admin del Incremento 04 sí están disponibles para puntos y cuentas. Los controladores MVC/HTML y las vistas no se migran.
 
+## Historias y eventos comunitarios
+
+- `GET /api/historias` y `GET /api/historias/{id}` sirven historias temporales autorizadas por audiencia, seguimiento, comunidad y bloqueos.
+- `POST /api/historias` crea una historia con imagen/video y expiración configurable; `DELETE /api/historias/{id}` exige propietario/admin.
+- `GET /api/comunidades/{id}/eventos` respeta comunidades públicas y privadas.
+- `POST /api/comunidades/{id}/eventos` exige owner/moderador comunitario; participación y cancelación tienen permisos propios.
+- Las visualizaciones son únicas por historia/usuario y las historias vencidas quedan expuestas solo como estado expirado.
+- `ExpirarHistorias` se ejecuta cada cinco minutos desde el scheduler y los recordatorios usan dedupe de notificaciones.
+- Encabezado, carrusel React y dirección de comunidad consumen estos endpoints; React no decide permisos.
+
+## Video bajo demanda y Live
+
+- `GET /api/video/capabilities` devuelve disponibilidad real de VOD y Live.
+- Los adjuntos de foro e historia aceptan MP4, WebM y QuickTime hasta 25 MB.
+- El procesamiento de video es asíncrono e identifica estados `procesando`, `listo` y `error`.
+- React reproduce video con controles nativos, poster y carga diferida por metadata.
+- Live no está disponible sin credenciales/proveedor probado; `POST /api/live/sessions` responde `503 LIVE_UNAVAILABLE`.
+- Las variables Live y Cloudinary deben configurarse fuera de la base y nunca exponerse al cliente.
+
+## Moderación, reportes y apelaciones
+
+- Los reportes admiten usuario, post, comentario, producto, comunidad, mensaje y operación.
+- Motivos válidos: spam, estafa, acoso, contenido prohibido y suplantación.
+- Solo administradores gestionan la cola global; el reportante puede consultar únicamente sus reportes.
+- Sanciones: advertencia, suspensión temporal y baneo, siempre auditados y aplicados por API.
+- Solo la persona afectada puede apelar una resolución; aceptar revoca sanción y restaura cuenta activa.
+- Antifraude crea señales interpretables para revisión, sin etiquetar automáticamente culpable.
+- Mensajes privados no quedan abiertos al moderador; las preferencias controlan mensajes de desconocidos.
+
 ## Autorización, propietarios y privacidad
 
 El Incremento 04 aplica autorización en servidor con Laravel Gates y middleware:
@@ -243,6 +272,22 @@ El foro usa `publicaciones_foro` como entidad canónica y conserva `/api/foro`.
 - Se puede leer, marcar todas, archivar y descartar.
 - Seguridad crítica conserva notificación in-app aunque el usuario silencie categorías sociales.
 - Email y push web permanecen deshabilitados hasta configurar proveedores.
+
+## Búsqueda unificada
+
+- SQL indexado busca productos, publicaciones, personas y comunidades.
+- Las entidades privadas no aparecen.
+- URL de búsqueda incluye término y entidad.
+- Búsquedas guardadas pueden activar alertas diarias/semanales.
+- Tendencias son agregados temporales sin identidades.
+- Recomendaciones muestran el criterio usado.
+
+## Ajustes y accesibilidad
+
+- `/ajustes` guarda preferencias por cuenta.
+- Theme, densidad, contraste, movimiento y acentos tienen defaults seguros.
+- Feed, Marketplace, Mensajería, Privacidad y Notificaciones son configurables.
+- Reestablecer devuelve el paquete completo de defaults.
 
 ## Verificación
 

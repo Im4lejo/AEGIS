@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ProcesarVideoAsset;
 use App\Jobs\PublicarPostProgramado;
 use App\Models\Comentario;
 use App\Models\Comunidad;
@@ -221,19 +222,28 @@ class ForoController extends Controller
                         $file,
                         'foro_imagenes',
                         'Publicacion/'.$request->user()->getKey(),
+                        str_starts_with(strtolower((string) $file->getMimeType()), 'video/'),
                     );
                     $imagenesSubidas[] = $resultado['public_id'];
-                    $publicacion->imagenes()->create([
+                    $asset = $publicacion->imagenes()->create([
                         'imagen' => $resultado['url'],
                         'public_id' => $resultado['public_id'],
                         'mime_type' => $resultado['mime_type'],
                         'size' => $resultado['size'],
                         'width' => $resultado['width'],
                         'height' => $resultado['height'],
+                        'poster_url' => $resultado['poster_url'] ?? null,
+                        'playback_url' => $resultado['playback_url'] ?? null,
+                        'procesamiento_estado' => str_starts_with($resultado['mime_type'], 'video/')
+                            ? 'procesando'
+                            : 'listo',
                         'alt_text' => $validated['alt_text'] ?? null,
                         'estado' => 'activo',
                         'orden' => $index,
                     ]);
+                    if (str_starts_with($resultado['mime_type'], 'video/')) {
+                        ProcesarVideoAsset::dispatch($asset->id);
+                    }
                 }
 
                 if (! empty($validated['menciones'])) {

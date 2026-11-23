@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -96,5 +97,10 @@ class Usuario extends Authenticatable implements MustVerifyEmail
     public function publicacionFijada(): BelongsTo
     {
         return $this->belongsTo(Publicacion::class, 'publicacion_fijada_id');
+    }
+
+    public function preferenciasUsuario(): HasOne
+    {
+        return $this->hasOne(PreferenciaUsuario::class, 'usuario_id');
     }
 }

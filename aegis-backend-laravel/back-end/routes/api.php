@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AdminAuthorizationController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BusquedaController;
 use App\Http\Controllers\Api\ComunidadController;
 use App\Http\Controllers\Api\EncuentroController;
 use App\Http\Controllers\Api\ForoController;
@@ -11,16 +12,25 @@ use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\MensajeController;
 use App\Http\Controllers\Api\NegociacionController;
 use App\Http\Controllers\Api\NotificacionController;
+use App\Http\Controllers\Api\ContenidoAvanzadoController;
 use App\Http\Controllers\Api\PerfilController;
+use App\Http\Controllers\Api\PreferenciaController;
 use App\Http\Controllers\Api\ProductoController;
 use App\Http\Controllers\Api\PuntoFisicoController;
 use App\Http\Controllers\Api\ResenaController;
 use App\Http\Controllers\Api\TiendaController;
 use App\Http\Controllers\Api\WebAuthController;
+use App\Http\Controllers\Api\VideoController;
+use App\Http\Controllers\Api\ModeracionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/inicio', InicioController::class);
 Route::get('/categorias', [ProductoController::class, 'categorias']);
+Route::get('/preferencias/defaults', [PreferenciaController::class, 'defaults']);
+Route::get('/video/capabilities', [VideoController::class, 'capabilities']);
+Route::get('/busqueda', [BusquedaController::class, 'index']);
+Route::get('/busqueda/sugerencias', [BusquedaController::class, 'suggestions']);
+Route::get('/busqueda/tendencias', [BusquedaController::class, 'trends']);
 Route::get('/productos', [ProductoController::class, 'index']);
 Route::get('/productos/comparar', [ProductoController::class, 'compare']);
 Route::get('/productos/{producto}/similares', [ProductoController::class, 'similar'])->whereNumber('producto');
@@ -35,6 +45,9 @@ Route::get('/perfil/{usuario}/tabs/{tab}', [PerfilController::class, 'tab'])
 Route::get('/perfil/{usuario}/seguidores', [PerfilController::class, 'followers'])->whereNumber('usuario');
 Route::get('/perfil/{usuario}/siguiendo', [PerfilController::class, 'following'])->whereNumber('usuario');
 Route::get('/puntos-fisicos', [PuntoFisicoController::class, 'index']);
+Route::get('/historias', [ContenidoAvanzadoController::class, 'stories']);
+Route::get('/historias/{historia}', [ContenidoAvanzadoController::class, 'viewStory'])->whereNumber('historia');
+Route::get('/comunidades/{comunidad}/eventos', [ContenidoAvanzadoController::class, 'events'])->whereNumber('comunidad');
 Route::get('/resenas/{ambito}/{id}/resumen', [ResenaController::class, 'summary'])->whereAlpha('ambito')->whereNumber('id');
 Route::get('/resenas/{ambito}/{id}', [ResenaController::class, 'list'])->whereAlpha('ambito')->whereNumber('id');
 Route::get('/puntos-fisicos/directorio', [EncuentroController::class, 'pointDirectory']);
@@ -80,6 +93,21 @@ Route::prefix('auth/web')->name('auth.web.')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/live/sessions', [VideoController::class, 'liveUnavailable'])->middleware('account.active');
+    Route::post('/historias', [ContenidoAvanzadoController::class, 'createStory'])->middleware(['account.active', 'verified.web']);
+    Route::delete('/historias/{historia}', [ContenidoAvanzadoController::class, 'deleteStory'])->whereNumber('historia')->middleware('account.active');
+    Route::post('/comunidades/{comunidad}/eventos', [ContenidoAvanzadoController::class, 'createEvent'])->whereNumber('comunidad')->middleware(['account.active', 'verified.web']);
+    Route::post('/eventos/{evento}/participacion', [ContenidoAvanzadoController::class, 'participate'])->whereNumber('evento')->middleware('account.active');
+    Route::patch('/eventos/{evento}/cancelar', [ContenidoAvanzadoController::class, 'cancelEvent'])->whereNumber('evento')->middleware('account.active');
+    Route::get('/preferencias', [PreferenciaController::class, 'show']);
+    Route::put('/preferencias', [PreferenciaController::class, 'update']);
+    Route::post('/preferencias/restablecer', [PreferenciaController::class, 'reset']);
+    Route::get('/busqueda/guardadas', [BusquedaController::class, 'savedIndex']);
+    Route::post('/busqueda/guardadas', [BusquedaController::class, 'saveSearch']);
+    Route::delete('/busqueda/guardadas/{busqueda}', [BusquedaController::class, 'deleteSaved'])->whereNumber('busqueda');
+    Route::get('/busqueda/recentes', [BusquedaController::class, 'recent']);
+    Route::post('/busqueda/preferencia', [BusquedaController::class, 'preference']);
+    Route::get('/busqueda/recomendaciones', [BusquedaController::class, 'recommendations']);
     Route::get('/notificaciones', [NotificacionController::class, 'index']);
     Route::get('/notificaciones/no-leidas', [NotificacionController::class, 'unread']);
     Route::patch('/notificaciones/leidas-todas', [NotificacionController::class, 'readAll']);
@@ -194,6 +222,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/guardados/colecciones', [GuardadosController::class, 'collections']);
         Route::post('/guardados/colecciones', [GuardadosController::class, 'storeCollection']);
         Route::post('/reportes/contextual', [GuardadosController::class, 'report']);
+        Route::get('/reportes/mis', [ModeracionController::class, 'mine']);
+        Route::post('/reportes/{reporte}/apelacion', [ModeracionController::class, 'appeal'])->whereNumber('reporte');
+        Route::get('/moderacion/reportes', [ModeracionController::class, 'queue']);
+        Route::get('/moderacion/antifraude', [ModeracionController::class, 'fraudQueue']);
+        Route::get('/moderacion/apelaciones', [ModeracionController::class, 'appealQueue']);
+        Route::post('/moderacion/productos/{producto}/antifraude', [ModeracionController::class, 'scanFraud'])->whereNumber('producto');
+        Route::patch('/moderacion/reportes/{reporte}/asignar', [ModeracionController::class, 'assign'])->whereNumber('reporte');
+        Route::patch('/moderacion/reportes/{reporte}/resolver', [ModeracionController::class, 'resolve'])->whereNumber('reporte');
+        Route::patch('/moderacion/apelaciones/{apelacion}/resolver', [ModeracionController::class, 'resolveAppeal'])->whereNumber('apelacion');
         Route::post('/foro/{publicacion}/imagenes', [MediaController::class, 'storeForo'])->whereNumber('publicacion');
         Route::delete('/foro/{publicacion}/imagenes/{imagen}', [MediaController::class, 'destroyForo'])->whereNumber('publicacion')->whereNumber('imagen');
         Route::patch('/foro/{publicacion}/imagenes/orden', [MediaController::class, 'reorderForo'])->whereNumber('publicacion');

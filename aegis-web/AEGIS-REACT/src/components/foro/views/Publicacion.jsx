@@ -31,6 +31,9 @@ export default function Publicacion({ id, auth, onNavigate }) {
           fecha: found.fecha_publicacion ? new Date(found.fecha_publicacion).toLocaleString('es-CO') : '',
           cuerpo: found.contenido,
           imagen: found.imagenes?.[0]?.imagen || null,
+          video: found.imagenes?.[0]?.mime_type?.startsWith('video/')
+            ? found.imagenes[0]
+            : null,
           comentarios: (found.comentarios || []).map((item) => ({
             ...item,
             autor: item.usuario?.username || item.usuario?.nombre || 'Usuario',
@@ -113,7 +116,29 @@ export default function Publicacion({ id, auth, onNavigate }) {
                 <span className="foro-thread-type" role="status">Hilo cerrado</span>
               )}
               <p className="foro-post-body">{publicacion.cuerpo}</p>
-              {publicacion.imagen && <img className="foro-post-image" src={publicacion.imagen} alt={publicacion.titulo} />}
+              {publicacion.video?.procesamiento_estado === 'procesando' && (
+                <div className="media-processing" role="status">Procesando video...</div>
+              )}
+              {publicacion.video?.procesamiento_estado === 'error' && (
+                <div className="media-error" role="alert">El video no pudo procesarse.</div>
+              )}
+              {publicacion.video?.procesamiento_estado !== 'procesando'
+                && publicacion.video?.procesamiento_estado !== 'error'
+                && publicacion.video
+                && (
+                  <video
+                    className="foro-post-image"
+                    controls
+                    preload="metadata"
+                    poster={publicacion.video.poster_url || undefined}
+                    src={publicacion.video.playback_url || publicacion.video.imagen}
+                  >
+                    {publicacion.video.alt_text || 'Video de la publicación'}
+                  </video>
+                )}
+              {!publicacion.video && publicacion.imagen && (
+                <img className="foro-post-image" src={publicacion.imagen} alt={publicacion.titulo} />
+              )}
               <div className="foro-post-actions">
                 {auth?.isAuthenticated && (
                   <>

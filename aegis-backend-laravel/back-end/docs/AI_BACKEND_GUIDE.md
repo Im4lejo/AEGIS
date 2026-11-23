@@ -64,7 +64,22 @@ Cliente
   -> cliente
 ```
 
-`bootstrap/app.php` registra `routes/web.php`, `routes/api.php`, `routes/console.php`, el health check `/up` y el alias `verified.web`. El prefijo `/api` lo aporta el enrutamiento API de Laravel; no se repite en los paths dentro de `routes/api.php`.
+`bootstrap/app.php` registra `routes/web.php`, `routes/api.php`, `routes/console.php`, el health check `/up`, el alias `verified.web` y el scheduler de `ExpirarHistorias`/recordatorios. El prefijo `/api` lo aporta el enrutamiento API de Laravel; no se repite en los paths dentro de `routes/api.php`.
+
+### Video y Live
+
+- El contrato público de capacidades es `GET /api/video/capabilities`.
+- VOD usa Cloudinary cuando tiene URL/credenciales operativas; no se garantiza Live.
+- Live responde `503 LIVE_UNAVAILABLE` si no existe configuración probada.
+- Los estados `procesando`, `listo` y `error` se almacenan en adjuntos e historias.
+- Los secretos Live/VOD permanecen en `.env`; nunca se serializan en posts o respuestas React.
+
+### Moderación y reportes
+
+- `GET /api/reportes/mis` devuelve solo reportes del usuario autenticado.
+- `GET /api/moderacion/reportes`, sanciones y apelaciones requieren rol admin activo.
+- Las resoluciones crean acciones y registros encadenados en auditoría moderativa.
+- Las sanciones pueden revocarse desde una apelación aceptada.
 
 ### CLI
 
@@ -322,6 +337,18 @@ Los QR no contienen datos personales: se genera un token opaco que el servidor n
 `notificaciones` admite categoría, tipo, actor, objeto, destino, lectura, archivo y clave dedupe por usuario. `preferencias_notificacion` configura in-app, email y push web por categoría.
 
 Las notificaciones de seguridad nunca quedan silenciadas in-app. Las demás pueden deshabilitarse. Email y push no se consideran activos sin credenciales/proveedor externo configurado.
+
+### Búsqueda unificada
+
+La búsqueda global usa SQL sobre tablas existentes y el valor real de volumen no justifica Elasticsearch/Meilisearch.
+
+`busquedas_guardadas`, `historial_busqueda` y `preferencias_busqueda` conservan búsquedas, alertas, recomendaciones y preferencias. Los perfiles privados, publicaciones privadas y productos privados quedan excluidos.
+
+### Preferencias de usuario
+
+`preferencias_usuario` guarda JSON versionado por identidad AEGIS. Los valores se validan por versión y se combinan con defaults seguros.
+
+Las rutas `/api/preferencias` permiten leer, guardar y restablecer. React usa preview local y persiste servidor. Tema, densidad, contraste y movimiento no deben usar datos de otros usuarios ni alterar valores comerciales canónicos.
 
 ### Reseñas elegibles
 

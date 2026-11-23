@@ -160,6 +160,81 @@ export const notificationApi = {
     }),
 }
 
+export const searchApi = {
+  search: (filters = {}) =>
+    request(`/busqueda${queryString(filters)}`),
+  suggestions: (q) =>
+    request(`/busqueda/sugerencias${queryString({ q })}`),
+  trends: (dias = 7) =>
+    request(`/busqueda/tendencias${queryString({ dias })}`),
+  saved: (token) => request('/busqueda/guardadas', { token }),
+  save: (details, token) =>
+    request('/busqueda/guardadas', { method: 'POST', body: details, token }),
+  removeSaved: (id, token) =>
+    request(`/busqueda/guardadas/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      token,
+    }),
+  recent: (token) => request('/busqueda/recentes', { token }),
+  preference: (details, token) =>
+    request('/busqueda/preferencia', { method: 'POST', body: details, token }),
+  recommendations: (token) =>
+    request('/busqueda/recomendaciones', { token }),
+}
+
+export const preferenceApi = {
+  defaults: () => request('/preferencias/defaults'),
+  get: (token) => request('/preferencias', { token }),
+  update: (version, preferencias, token) =>
+    request('/preferencias', {
+      method: 'PUT',
+      body: { version, preferencias },
+      token,
+    }),
+  reset: (token) =>
+    request('/preferencias/restablecer', { method: 'POST', token }),
+}
+
+export const videoApi = {
+  capabilities: () => request('/video/capabilities'),
+  createLive: (token) =>
+    request('/live/sessions', { method: 'POST', token }),
+}
+
+export const advancedContentApi = {
+  stories: (token) => request('/historias', { token }),
+  story: (id, token) =>
+    request(`/historias/${encodeURIComponent(id)}`, { token }),
+  createStory: (details, token) =>
+    request('/historias', { method: 'POST', body: details, token }),
+  deleteStory: (id, token) =>
+    request(`/historias/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      token,
+    }),
+  events: (communityId) =>
+    request(
+      `/comunidades/${encodeURIComponent(communityId)}/eventos`,
+    ),
+  createEvent: (communityId, details, token) =>
+    request(`/comunidades/${encodeURIComponent(communityId)}/eventos`, {
+      method: 'POST',
+      body: details,
+      token,
+    }),
+  participate: (eventId, details, token) =>
+    request(`/eventos/${encodeURIComponent(eventId)}/participacion`, {
+      method: 'POST',
+      body: details,
+      token,
+    }),
+  cancelEvent: (eventId, token) =>
+    request(`/eventos/${encodeURIComponent(eventId)}/cancelar`, {
+      method: 'PATCH',
+      token,
+    }),
+}
+
 export const authApi = {
   login: (credentials) =>
     request('/auth/web/login', { method: 'POST', body: credentials }),
@@ -487,6 +562,44 @@ export const savedApi = {
     request(`/guardados${queryString(details)}`, { method: 'DELETE', token }),
   report: (details, token) =>
     request('/reportes/contextual', { method: 'POST', body: details, token }),
+}
+
+export const moderationApi = {
+  mine: (token) => request('/reportes/mis', { token }),
+  appeal: (reportId, argument, token) =>
+    request(`/reportes/${encodeURIComponent(reportId)}/apelacion`, {
+      method: 'POST',
+      body: { argumento: argument },
+      token,
+    }),
+  queue: (filters = {}, token) =>
+    request(`/moderacion/reportes${queryString(filters)}`, { token }),
+  assign: (reportId, token) =>
+    request(`/moderacion/reportes/${encodeURIComponent(reportId)}/asignar`, {
+      method: 'PATCH',
+      token,
+    }),
+  resolve: (reportId, details, token) =>
+    request(`/moderacion/reportes/${encodeURIComponent(reportId)}/resolver`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  appealQueue: (filters = {}, token) =>
+    request(`/moderacion/apelaciones${queryString(filters)}`, { token }),
+  resolveAppeal: (appealId, details, token) =>
+    request(`/moderacion/apelaciones/${encodeURIComponent(appealId)}/resolver`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  fraudQueue: (token) =>
+    request('/moderacion/antifraude', { token }),
+  scanProduct: (productId, token) =>
+    request(`/moderacion/productos/${encodeURIComponent(productId)}/antifraude`, {
+      method: 'POST',
+      token,
+    }),
 }
 
 export const meetingApi = {

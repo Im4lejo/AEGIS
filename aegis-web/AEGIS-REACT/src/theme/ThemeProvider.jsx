@@ -1,6 +1,7 @@
 import { useEffect, useState, useSyncExternalStore } from 'react'
 import { Select } from '../components/shared/ui'
 import { ThemeContext, useTheme } from './ThemeContext'
+import { preferenceApi } from '../services/api'
 
 const STORAGE_KEY = 'aegis.theme.preference.v1'
 const THEMES = ['system', 'light', 'dark']

@@ -11,6 +11,13 @@ class MediaManager
 {
     public function __construct(private MediaStorage $storage) {}
 
+    public function videoPosterUrl(string $secureUrl): string
+    {
+        return str_contains($secureUrl, '/upload/')
+            ? str_replace('/upload/', '/upload/so_1,w_1280,c_limit,q_auto,f_jpg/', $secureUrl)
+            : $secureUrl;
+    }
+
     public function validate(UploadedFile $file, bool $allowVideo = false): array
     {
         $mime = strtolower((string) $file->getMimeType());
@@ -74,6 +81,12 @@ class MediaManager
         return [
             'public_id' => $uploaded['public_id'],
             'url' => $uploaded['url'],
+            'poster_url' => $metadata['resource_type'] === 'video'
+                ? $this->videoPosterUrl($uploaded['url'])
+                : null,
+            'playback_url' => $metadata['resource_type'] === 'video'
+                ? $uploaded['url']
+                : null,
             'mime_type' => $metadata['mime'],
             'size' => $metadata['size'],
             'width' => $uploaded['width'] ?? $metadata['width'],
@@ -81,6 +94,11 @@ class MediaManager
             'estado' => 'activo',
             'resource_type' => $metadata['resource_type'],
         ];
+    }
+
+    public function exists(string $publicId, string $resourceType = 'image'): bool
+    {
+        return $this->storage->exists($publicId, $resourceType);
     }
 
     public function destroyWithRetry(

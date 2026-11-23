@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ProcesarVideoAsset;
 use App\Models\Producto;
 use App\Models\Publicacion;
 use App\Services\MediaManager;
@@ -155,17 +156,26 @@ class MediaController extends Controller
         foreach ($files as $index => $file) {
             $allowVideo = str_starts_with(strtolower((string) $file->getMimeType()), 'video/');
             $uploaded = $this->media->upload($file, 'foro_imagenes', 'Publicacion/'.$post->id, $allowVideo);
-            $created[] = $post->imagenes()->create([
+            $asset = $post->imagenes()->create([
                 'imagen' => $uploaded['url'],
                 'public_id' => $uploaded['public_id'],
                 'mime_type' => $uploaded['mime_type'],
                 'size' => $uploaded['size'],
                 'width' => $uploaded['width'],
                 'height' => $uploaded['height'],
+                'poster_url' => $uploaded['poster_url'] ?? null,
+                'playback_url' => $uploaded['playback_url'] ?? null,
+                'procesamiento_estado' => str_starts_with($uploaded['mime_type'], 'video/')
+                    ? 'procesando'
+                    : 'listo',
                 'alt_text' => $validated['alt_text'] ?? null,
                 'estado' => 'activo',
                 'orden' => $current + $index,
             ]);
+            $created[] = $asset;
+            if (str_starts_with($uploaded['mime_type'], 'video/')) {
+                ProcesarVideoAsset::dispatch($asset->id);
+            }
         }
 
         return response()->json([

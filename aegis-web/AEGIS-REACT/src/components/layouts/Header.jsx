@@ -104,7 +104,7 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
         if (event) event.preventDefault()
         const termino = busqueda.trim()
         setMenuAbierto(false)
-        navigateTo(termino ? `/productos?buscar=${encodeURIComponent(termino)}` : '/productos', onNavigate)
+        navigateTo(termino ? `/busqueda?buscar=${encodeURIComponent(termino)}` : '/busqueda', onNavigate)
     }
 
     const navegarDesdeMenu = (path) => {
