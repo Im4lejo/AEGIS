@@ -1,0 +1,483 @@
+# AEGIS Laravel Backend: guía operativa para agentes de IA
+
+## 0. Contrato de lectura para agentes
+
+Este documento describe el backend Laravel que existe en este repositorio. Es una guía de navegación y restricciones, no una especificación que pueda reemplazar el código.
+
+Para cualquier tarea de backend:
+
+1. Confirma el directorio de trabajo: `aegis-backend-laravel/back-end`.
+2. Lee esta guía y el `README.md` del backend.
+3. Vuelve a leer los archivos fuente de la ruta, controlador, modelo, migración y prueba afectados. El código vigente tiene prioridad si este documento quedó desactualizado.
+4. No infieras que una tabla, modelo, relación, endpoint, rol, servicio o flujo existe por su nombre. Comprueba su definición y sus consumidores.
+5. Mantén explícito el contrato HTTP: método, URI, autenticación, validación, forma de respuesta y errores.
+6. Agrega o cambia una migración solo si la funcionalidad no puede implementarse con el esquema actual. Las migraciones deben ser incrementales y reversibles cuando sea viable.
+7. Nunca ejecutes `migrate:fresh`, `migrate:refresh`, `db:wipe` ni operaciones equivalentes contra una base con datos de usuario. Para pruebas, usa el entorno configurado por PHPUnit o una base desechable.
+8. No leas, copies, imprimas ni registres valores secretos de `.env`. Documenta los nombres de variables requeridos, nunca sus valores.
+9. Si se cambia un contrato, modelo, migración, seeder o flujo de configuración, actualiza este documento y las pruebas relacionadas.
+10. No presentes una operación de una tabla como funcionalidad de API hasta que exista una ruta que la exponga.
+
+### Fuentes de verdad
+
+En orden de autoridad para el comportamiento real:
+
+1. `routes/api.php`, `routes/web.php` y `bootstrap/app.php`.
+2. Controladores bajo `app/Http/Controllers/Api`.
+3. Modelos Eloquent bajo `app/Models` y recursos bajo `app/Http/Resources`.
+4. Migraciones bajo `database/migrations`.
+5. Configuración de `config/` y variables del entorno local.
+6. Pruebas bajo `tests/`.
+7. `README.md` y este documento.
+
+## 1. Identidad, alcance y tecnologías
+
+- Proyecto: backend Laravel 12, PHP `^8.2`.
+- Contrato principal: API REST JSON bajo el prefijo `/api`.
+- Persistencia: Eloquent ORM y Query Builder de Laravel.
+- Autenticación API: Laravel Sanctum con tokens Bearer.
+- Almacenamiento de imágenes de la API: SDK de Cloudinary llamado directamente desde los controladores de producto y foro.
+- Runtime Composer: `laravel/framework` 12, `laravel/sanctum` 4, `cloudinary-labs/cloudinary-laravel` 3 y `laravel/tinker`.
+- Herramientas Composer de desarrollo: Faker, Pail, Pint, Sail, Mockery, Collision y PHPUnit.
+- Frontend React y MVC PHP: son aplicaciones hermanas, no vistas de este backend. Este repositorio no implementa ni renderiza sus pantallas.
+- Único endpoint web definido por la aplicación: `GET /`, que devuelve la vista Laravel `welcome`.
+- La ruta de salud configurada por Laravel es `/up`.
+
+No existe actualmente una capa de servicios de dominio, repositorios, DTOs, Form Requests, middleware propio, policies ni gates de autorización. Los controladores validan y orquestan directamente Eloquent, transacciones y Cloudinary. `AppServiceProvider` no registra lógica de aplicación.
+
+## 2. Inicio y ciclo de una petición
+
+### HTTP
+
+```text
+Cliente
+  -> public/index.php
+  -> vendor/autoload.php
+  -> bootstrap/app.php
+  -> rutas web.php o api.php
+  -> middleware de Laravel; auth:sanctum en rutas privadas
+  -> controlador API
+  -> validación Laravel
+  -> Eloquent / Query Builder
+  -> MySQL, MariaDB, PostgreSQL, SQL Server o SQLite según configuración
+  -> Cloudinary solo en las operaciones de imágenes indicadas
+  -> JsonResource o response()->json()
+  -> cliente
+```
+
+`bootstrap/app.php` registra `routes/web.php`, `routes/api.php`, `routes/console.php` y el health check `/up`. No añade callbacks propios de middleware ni de excepciones. El prefijo `/api` lo aporta el enrutamiento API de Laravel; no se repite en los paths dentro de `routes/api.php`.
+
+### CLI
+
+```text
+artisan
+  -> vendor/autoload.php
+  -> bootstrap/app.php
+  -> comando Artisan
+```
+
+Las tareas habituales usan Composer/Artisan. `routes/console.php` solo registra el comando scaffold `inspire`.
+
+## 3. Mapa de archivos y responsabilidades
+
+| Ruta | Responsabilidad actual |
+|---|---|
+| `artisan` | Entrada de comandos CLI Laravel. |
+| `public/index.php` | Entrada HTTP Laravel; captura la petición y la entrega a la aplicación. |
+| `bootstrap/app.php` | Registra rutas web/API/console y `/up`; no configura middleware o excepciones propias. |
+| `bootstrap/providers.php` | Registra únicamente `AppServiceProvider`. |
+| `routes/api.php` | Fuente de verdad de endpoints API y agrupación `auth:sanctum`. |
+| `routes/web.php` | Ruta `GET /` a la vista `welcome`. No contiene vistas del marketplace. |
+| `routes/console.php` | Comando scaffold `inspire`. |
+| `app/Http/Controllers/Api` | Autenticación, foro, inicio, perfiles públicos, productos y puntos físicos. |
+| `app/Http/Resources/ProductoResource.php` | Serialización pública de productos. Es el único recurso API propio identificado. |
+| `app/Models` | Modelos Eloquent del dominio y modelo scaffold `User`. |
+| `app/Providers/AppServiceProvider.php` | Sin registros o inicialización de aplicación propios. |
+| `database/migrations` | Esquema de dominio y tablas scaffold de Laravel/Sanctum. |
+| `database/seeders` | Categorías y datos de demostración idempotentes. |
+| `database/factories/UserFactory.php` | Factory scaffold para `App\Models\User` y la tabla `users`; no para `usuarios`. |
+| `config/` | Configuración Laravel, conexiones, CORS, Sanctum, Cloudinary y servicios del framework. |
+| `resources/views/welcome.blade.php` | Vista web scaffold servida por `/`. |
+| `resources/css`, `resources/js`, `vite.config.js`, `package.json` | Scaffold de Vite/Tailwind del backend; no constituye la UI React de AEGIS. |
+| `tests/Feature/PublicApiTest.php` | Pruebas del contrato API. |
+| `tests/Feature/DemoDataSeederTest.php` | Idempotencia y conservación de datos existentes al sembrar. |
+| `tests/Feature/ExampleTest.php` | Prueba scaffold de `GET /`. |
+| `phpunit.xml` | Entorno de pruebas aislado con SQLite en memoria. |
+
+### Controladores API
+
+| Controlador | Rutas |
+|---|---|
+| `AuthController` | Registro, login, usuario actual y logout. |
+| `ProductoController` | Categorías, búsqueda/listado, detalle y creación de productos. |
+| `InicioController` | Feed de hasta ocho productos activos. |
+| `ForoController` | Feed, crear publicaciones y crear comentarios. |
+| `PerfilController` | Perfil público, productos activos y publicaciones del usuario. |
+| `PuntoFisicoController` | Listado paginado de puntos físicos activos. |
+
+El controlador base `App\Http\Controllers\Controller` está vacío.
+
+## 4. Contrato HTTP existente
+
+Todas las rutas de la tabla son `/api/...`. Para recibir errores de validación JSON, los clientes deben enviar `Accept: application/json`. Los endpoints protegidos usan `Authorization: Bearer <token>`. Peticiones con archivos deben usar `multipart/form-data`; los payloads sin archivo normalmente usan JSON.
+
+### Rutas públicas
+
+| Método y ruta | Controlador | Entrada y validaciones | Resultado actual |
+|---|---|---|---|
+| `GET /api/inicio` | `InicioController::__invoke` | Sin parámetros. | Hasta 8 productos con `estado_publicacion=activo`, más recientes primero. Respuesta `ProductoResource::collection`. |
+| `GET /api/categorias` | `ProductoController::categorias` | Sin parámetros. | `{"data":[{"id","nombre","descripcion"}]}`, orden por nombre. |
+| `GET /api/productos` | `ProductoController::index` | `busqueda`: string, máx. 100; `precio_max`: numérico, mín. 0; `estado`: `todo`, `nuevo`, `usado`, `reacondicionado`; `cat`: string, máx. 100; `sort`: `reciente`, `precio-asc`, `precio-desc`; `per_page`: entero 1–50. | Productos activos, con categoría, vendedor e imágenes. Paginación de Laravel con `data`, `links` y `meta`; `per_page` predeterminado 24. |
+| `GET /api/productos/{producto}` | `ProductoController::show` | `{producto}` debe ser numérico. | Solo devuelve productos activos. Recurso `ProductoResource`; no encontrado o no activo: 404. |
+| `GET /api/foro` | `ForoController::index` | `per_page`: entero opcional 1–50. | Publicaciones con autor, imágenes, comentarios, autores de comentarios y `comentarios_count`. Orden descendente por `fecha_publicacion`; predeterminado 20. Respuesta propia `data` + `meta`. |
+| `GET /api/perfil/{usuario}` | `PerfilController::show` | `{usuario}` numérico. | `{"data":{"perfil":...,"productos":[...],"publicaciones":[...]}}`. Incluye hasta 24 productos activos y 10 publicaciones recientes; no pagina esas listas. Usuario inexistente: 404. |
+| `GET /api/puntos-fisicos` | `PuntoFisicoController::index` | `per_page`: entero opcional 1–50. | Solo puntos con `estado=activo`, owner limitado a id/nombre/apellido, por nombre. `data` + `meta`; predeterminado 24. |
+| `POST /api/register` | `AuthController::register` | `nombre` requerido string máx. 100; `apellido` requerido string máx. 100; `username` opcional string máx. 50 y único en `usuarios`; `email` requerido email máx. 150 y único; `password` requerido string mín. 8 y confirmado mediante `password_confirmation`. | 201. Crea `Usuario` con `rol=usuario`, `estado=activo`, hash de contraseña y token Sanctum. Devuelve `message`, `usuario` y `token`. |
+| `POST /api/login` | `AuthController::login` | `email` requerido con formato email; `password` requerido string. | Credenciales no válidas: ValidationException (422). Cuenta distinta de activa: 403. Éxito: `message`, `usuario` y token Sanctum. |
+
+### Rutas protegidas con `auth:sanctum`
+
+| Método y ruta | Controlador | Entrada y validaciones | Resultado actual |
+|---|---|---|---|
+| `GET /api/me` | `AuthController::me` | Token autenticado. | `{"usuario": <Usuario autenticado>}`; `password` está oculto por el modelo. |
+| `POST /api/logout` | `AuthController::logout` | Token autenticado. | Elimina el token actual y devuelve mensaje de cierre. No revoca otros tokens del usuario. |
+| `POST /api/productos` | `ProductoController::store` | `categoria_id` requerido existente; `titulo` requerido string máx. 150; `descripcion` requerida string; `precio` requerido numérico 0–9999999999.99; `estado_producto`: `nuevo`, `usado`, `reacondicionado`; `ciudad` opcional string máx. 100; `imagenes` requerida array 1–5; cada imagen debe ser JPG/JPEG/PNG/WebP y máx. 5120 KB. | 201, mensaje y producto con imágenes. Sube primero a Cloudinary en `productos`; la primera imagen queda como principal. Si falla el proceso, registra el error y trata de borrar los objetos ya subidos; responde error genérico 500. |
+| `POST /api/foro` | `ForoController::store` | `titulo` opcional string máx. 200; `contenido` requerido string máx. 5000; `imagenes` opcional array máx. 5; cada imagen requerida, JPG/JPEG/PNG/WebP y máx. 5120 KB. | 201 con publicación, relaciones cargadas y contador. Si el título queda vacío, se deriva de `contenido` limitado a 200 caracteres. Contenido y título se recortan. Las imágenes van a Cloudinary en `foro_imagenes`. Errores de integración/guardado se reportan y devuelven 500 genérico. |
+| `POST /api/foro/{publicacion}/comentarios` | `ForoController::storeComment` | `{publicacion}` numérico; `comentario` requerido string máx. 2000. | Busca la publicación o devuelve 404, guarda comentario del usuario autenticado y devuelve 201 con usuario limitado a id/nombre/username/foto. |
+
+### Convenciones de respuesta y errores
+
+- Los códigos exactos de validación se generan con `$request->validate`; para peticiones JSON, Laravel responde 422 con `message` y `errors`.
+- Autenticación ausente en rutas protegidas: 401.
+- Modelos consultados con `findOrFail`: 404.
+- Cuenta inactiva al iniciar sesión: 403.
+- Creaciones exitosas: 201.
+- El formato no es uniforme en todos los endpoints: se mezclan `JsonResource`, `ResourceCollection` y `response()->json()` con sobres propios. No normalices envelopes sin tratarlo como un cambio de contrato.
+- Las respuestas de `Usuario` ocultan `password`, pero no se deben serializar modelos completos de forma indiscriminada. Mantén las selecciones de columnas/relaciones explícitas para evitar exponer campos personales.
+
+## 5. Autenticación, identidad y autorización
+
+### Dos modelos y dos tablas distintas
+
+Este detalle es obligatorio para cualquier cambio de autenticación o persistencia:
+
+- `App\Models\User` corresponde a la tabla scaffold `users`. `config/auth.php` lo establece como modelo del proveedor Eloquent del guard web predeterminado (`AUTH_MODEL`, por defecto `User`). `UserFactory` también genera registros para esta tabla.
+- `App\Models\Usuario` corresponde a la tabla AEGIS `usuarios`. Extiende `Authenticatable`, usa `HasApiTokens`, oculta `password`, define `$fillable`, casts y relaciones del dominio.
+- Los controladores API de registro/login consultan `Usuario`; no crean cuentas AEGIS en `users`.
+- `config/auth.php` mantiene el broker scaffold `passwords.users` ligado al provider `users` y a `App\Models\User`. No hay rutas de recuperación de contraseña. Si se agrega recuperación AEGIS, debe seleccionarse explícitamente el modelo/tabla AEGIS; no asumir que el broker scaffold servirá `usuarios`.
+- Los tokens API se crean desde `Usuario` y `auth:sanctum` autentica esas peticiones Bearer.
+- No sustituyas uno por otro ni crees una migración de usuario nueva sin identificar primero qué guard, token y contrato consumirán el cambio.
+
+### Flujo del token
+
+1. Registro/login valida la entrada.
+2. Contraseña se crea/verifica con `Hash::make` / `Hash::check`.
+3. El usuario AEGIS emite un token llamado `aegis-movil`.
+4. El cliente conserva el token en su capa de autenticación y envía `Authorization: Bearer <token>`.
+5. `auth:sanctum` protege `GET /me`, logout, creación de productos y escrituras del foro.
+6. Logout elimina `currentAccessToken()`.
+
+`config/sanctum.php` deja `expiration=null` (sin caducidad global configurada), usa `guard=['web']` para autenticación stateful compatible, y permite configurar dominios stateful y prefijo del token por entorno. No hay endpoint de refresh token en `routes/api.php`.
+
+### Roles y estados
+
+`usuarios.rol` admite `usuario`, `owner` y `admin`; `usuarios.estado` admite `activo`, `suspendido` y `baneado`. El registro asigna `usuario/activo`. El login rechaza cualquier estado distinto de `activo`.
+
+No se encontró middleware de roles, policy ni gate conectado a estas rutas. En el código actual, las escrituras API del grupo Sanctum exigen autenticación, pero no asignan permisos diferentes por `rol`. No asumas autorización admin/owner por el valor guardado.
+
+## 6. Modelos Eloquent y relaciones
+
+| Modelo | Tabla | Relaciones definidas / comportamiento |
+|---|---|---|
+| `Usuario` | `usuarios` | hasMany productos, publicaciones, comentarios; hasMany puntos físicos mediante `owner_id`. Usa Sanctum, `$timestamps=false`; `password` oculto. |
+| `User` | `users` por convención | Modelo scaffold con factory, `Notifiable`, campos `name/email/password`; separado de AEGIS. |
+| `Categoria` | `categorias` | hasMany productos. `$timestamps=false`. |
+| `Producto` | `productos` | belongsTo vendedor (`Usuario`) y categoría; hasMany imágenes y encuentros; scope `activo` filtra `estado_publicacion=activo`; `$timestamps=false`. |
+| `ImagenProducto` | `imagenes_producto` | belongsTo producto; `principal` casteado a boolean; `$timestamps=false`. |
+| `Publicacion` | `publicaciones_foro` | belongsTo usuario; hasMany comentarios e imágenes del foro ordenadas por `orden`; `$timestamps=false`. |
+| `Comentario` | `comentarios_foro` | belongsTo publicación y usuario; `$timestamps=false`. |
+| `ImagenPublicacionForo` | `imagenes_publicacion_foro` | belongsTo publicación; `public_id` oculto; usa timestamps Eloquent porque la migración tiene `created_at/updated_at`. |
+| `PuntoFisico` | `puntos_fisicos` | belongsTo owner (`Usuario`); hasMany encuentros; `$timestamps=false`. |
+| `Encuentro` | `encuentros` | belongsTo comprador, vendedor, producto y punto; hasOne QR; hasMany calificaciones; `$timestamps=false`. |
+| `CodigoQr` | `codigos_qr` | belongsTo encuentro; `$timestamps=false`. |
+| `Calificacion` | `calificaciones` | belongsTo encuentro, autor y receptor; `$timestamps=false`. |
+| `Reporte` | `reportes` | belongsTo reportante y reportado; `$timestamps=false`. |
+| `Notificacion` | `notificaciones` | belongsTo usuario; `$timestamps=false`. |
+
+Los casts de fechas/reputación/precio están en cada modelo; consulta el modelo antes de cambiar serialización o formato. Las columnas de fecha de dominio tienen nombres propios (`fecha_publicacion`, `fecha_creacion`, etc.); no agregues `created_at/updated_at` por supuesto.
+
+### Serialización de producto
+
+`ProductoResource` emite:
+
+- campos base: `id`, `usuario_id`, `categoria_id`, `titulo`, `descripcion`, `precio`, `estado_producto`, `ciudad`, `estado_publicacion`, `fecha_publicacion`;
+- `categoria` solo si fue cargada: id, nombre y descripción;
+- `vendedor` solo si fue cargado: id, nombre, apellido, username, `foto_perfil` y reputación;
+- `imagenes` solo si fue cargada: id, imagen y principal;
+- `imagen_principal`: primera imagen marcada principal, o primera imagen disponible, cuando las imágenes se cargaron.
+
+En la base, la columna canónica del avatar es `usuarios.foto_perfil_url`; los eager loads API la renombran `foto_perfil` para el contrato serializado. No crees ni consultes una columna persistida `foto_perfil` por copiar ese alias.
+
+## 7. Esquema persistente y límites referenciales
+
+El esquema de AEGIS se crea con las migraciones de `database/migrations`. Las migraciones `0001_01_01_*` son tablas scaffold Laravel; las `2026_10_11_*` y posteriores representan el dominio.
+
+### Tablas de dominio
+
+| Tabla | Campos relevantes y estados | Relaciones / efectos |
+|---|---|---|
+| `usuarios` | nombre, apellido, username nullable unique, email unique, password, teléfono/ciudad, URL/ID de fondo y avatar, descripción, reputación; rol `usuario/owner/admin`; estado `activo/suspendido/baneado`; `fecha_registro`. | Entidad de identidad AEGIS. Otras tablas la referencian. |
+| `categorias` | id, nombre, descripción nullable. | Catálogo de categorías de productos. La migración no define unique sobre `nombre`. |
+| `productos` | usuario_id, categoria_id, título máx. 150, descripción, precio decimal(12,2), estado_producto `nuevo/usado/reacondicionado`, ciudad nullable, estado_publicacion `activo/vendido/oculto`, fecha_publicacion. | FK vendedor con cascade delete; FK categoría sin cascade explícito. |
+| `imagenes_producto` | producto_id, URL/ruta en `imagen`, `principal` boolean. | FK producto cascade delete. No persiste `public_id` de Cloudinary. |
+| `publicaciones_foro` | usuario_id, título máx. 200, contenido, fecha_publicacion. | FK usuario cascade delete. |
+| `comentarios_foro` | publicacion_id, usuario_id, comentario, fecha_comentario. | FK publicación y usuario; ambos cascade delete. |
+| `imagenes_publicacion_foro` | publicacion_id, imagen, `public_id`, orden, timestamps Laravel. | FK publicación cascade delete; `public_id` identifica la imagen remota. |
+| `puntos_fisicos` | owner_id, nombre, descripción, dirección, ciudad, teléfono, imagen, reputación, estado `activo/pendiente/suspendido`, fecha_registro. | FK owner cascade delete. |
+| `encuentros` | comprador_id, vendedor_id, producto_id, punto_fisico_id, fecha/hora, estado `pendiente/confirmado/cancelado/finalizado`, fecha_creacion. | FKs a usuario, producto y punto; no tienen cascade explícito en esta migración. |
+| `codigos_qr` | encuentro_id unique, código, estado `activo/usado/expirado`, fecha_generacion. | Has-one por encuentro; FK encuentro cascade delete. |
+| `calificaciones` | encuentro_id, autor_id, receptor_id, puntuación unsigned tinyint, comentario nullable, fecha_calificacion. | FK encuentro cascade delete y FKs de usuarios. |
+| `reportes` | usuario_reporta_id, usuario_reportado_id, motivo, descripción, estado `pendiente/revisado/resuelto`, fecha_reporte. | FKs de usuarios. |
+| `notificaciones` | usuario_id, título, mensaje, leida boolean, fecha_creacion. | FK usuario cascade delete. |
+
+### Tablas scaffold e infraestructura
+
+- `users`: `id`, `name`, `email` único, `email_verified_at`, `password`, `remember_token`, timestamps. Es el modelo scaffold, no la identidad API AEGIS.
+- `password_reset_tokens`: email como PK, token y fecha de creación nullable. Está vinculado al broker scaffold `users`.
+- `sessions`: id string PK, user_id nullable/index, IP, user agent, payload y last_activity index.
+- `cache`: key PK, value y expiration index. `cache_locks`: key PK, owner y expiration index.
+- `jobs`: queue/index, payload, attempts y timestamps Unix de reserva/disponibilidad/creación. `job_batches`: contadores, IDs, options y timestamps Unix. `failed_jobs`: UUID único, conexión, queue, payload, excepción y failed_at.
+- `personal_access_tokens`: id, `tokenable_type/tokenable_id` polimórficos, name, hash token único, abilities nullable, last_used_at, expires_at index y timestamps.
+- `migrations`: repositorio que registra migración y batch.
+
+La aplicación tiene relaciones Eloquent para calificaciones/reportes/notificaciones aunque actualmente no hay rutas API para gestionarlas.
+
+## 8. Persistencia, conexiones y configuración
+
+### Conexión de base de datos
+
+`config/database.php` selecciona `DB_CONNECTION` (fallback SQLite). Configura SQLite, MySQL, MariaDB, PostgreSQL y SQL Server; las credenciales se obtienen del entorno. Para MySQL/MariaDB se configura `utf8mb4`, prefijo vacío y modo estricto. `DB_URL`, cuando se define, también puede proporcionar la conexión.
+
+Variables que el agente debe conocer por nombre, sin copiar sus valores:
+
+- Aplicación: `APP_NAME`, `APP_ENV`, `APP_DEBUG`, `APP_URL`, `APP_KEY`, `APP_LOCALE`.
+- Base de datos: `DB_CONNECTION`, `DB_URL`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`, charset/collation y variables específicas del driver.
+- CORS/frontend: `FRONTEND_URL`; el frontend puede configurar `VITE_API_URL`.
+- Sanctum: `SANCTUM_STATEFUL_DOMAINS`, `SANCTUM_TOKEN_PREFIX`.
+- Imágenes: `CLOUDINARY_URL` o `CLOUDINARY_API_KEY`/`CLOUDINARY_API_SECRET` (con alias `CLOUDINARY_KEY`/`CLOUDINARY_SECRET`) y `CLOUDINARY_CLOUD_NAME`; `CLOUDINARY_NOTIFICATION_URL` es opcional.
+- Infraestructura Laravel: variables `SESSION_*`, `CACHE_*`, `QUEUE_*`, `REDIS_*`, `MAIL_*`, `AWS_*`, `LOG_*`.
+
+No se versionan credenciales. `.env.example` es una plantilla, no representa necesariamente la conexión activa de cada máquina. Nunca uses ni publiques `.env` como documento.
+
+La configuración SQLite default apunta a `database/database.sqlite`; el backend también contiene un archivo raíz llamado `aegis` con firma SQLite. No infieras que ese archivo es la base activa: la conexión elegida depende de `DB_CONNECTION` y `DB_DATABASE`.
+
+`config/app.php` fija timezone `UTC`; `APP_LOCALE`/`APP_FALLBACK_LOCALE` usan fallback `en`. La key de aplicación se toma de `APP_KEY`; no es una credencial que deba agregarse a documentación ni a commits.
+
+### CORS y sesiones/token
+
+`config/cors.php` aplica a `api/*`, permite cualquier método y header, y permite el origen indicado por `FRONTEND_URL` más `http://localhost:8081`. `supports_credentials=false`; no diseñes el cliente suponiendo cookies CORS habilitadas.
+
+Sanctum admite dominios stateful desde `SANCTUM_STATEFUL_DOMAINS`; el flujo de cliente documentado por el backend usa tokens Bearer. `config/session.php` tiene driver `SESSION_DRIVER` (fallback database), duración configurable (fallback 120 minutos), cookie `http_only=true`, `same_site=lax`; sesión no equivale al token personal utilizado por los tests/API móvil.
+
+### Cloudinary y archivos
+
+- `config/cloudinary.php` forma `cloud_url` desde `CLOUDINARY_URL` o componentes separados.
+- `ProductoController::store` y `ForoController::store` invocan `Cloudinary\Cloudinary` directamente; no usan `Storage::disk()` ni una abstracción propia de almacenamiento.
+- Producto: carpeta remota `productos`; guarda `secure_url` en `imagenes_producto.imagen`, marca principal la primera imagen y no guarda el public ID.
+- Foro: carpeta remota `foro_imagenes`; guarda URL, `public_id` y orden en `imagenes_publicacion_foro`.
+- Ambos ejecutan la escritura DB dentro de una transacción y tratan de destruir objetos subidos si falla la operación dentro del bloque protegido. La transacción SQL no incluye Cloudinary: la compensación remota es manual.
+- La construcción del cliente Cloudinary sucede antes del bloque `try` de ambos controladores; un fallo de configuración/construcción no pasa por la respuesta genérica/limpieza de ese `catch` y queda al manejo estándar de excepciones Laravel.
+- El disco `public`/S3 de `config/filesystems.php` está disponible para Laravel, pero no es el camino usado por estos dos controladores.
+- La configuración Cloudinary real es necesaria para probar una subida satisfactoria; las pruebas existentes no prueban una subida remota real.
+
+## 9. CORS, autenticación y seguridad operacional
+
+- No hay prefijo de versión (`/api/v1`); la ruta contractual actual es `/api/...`.
+- No se encontró una capa de autorización por rol, middleware de rol o policy.
+- Las rutas de lectura descritas como públicas no requieren token.
+- No incluyas `password`, tokens, teléfono u otros datos privados en nuevos recursos sin una decisión explícita de contrato y prueba de exposición.
+- `Usuario::$hidden` oculta password en serialización Eloquent. Las respuestas de perfil, vendedores y autores usan selecciones explícitas más estrechas.
+- Los errores internos de carga Cloudinary se envían a `report()` y la respuesta API es genérica; no devuelvas mensajes de proveedor, secretos ni stack traces al cliente.
+- `APP_DEBUG=true` no debe habilitarse en producción.
+- Los seeders de demostración lanzan excepción si `APP_ENV=production`.
+
+## 10. Seeders y datos de prueba
+
+`DatabaseSeeder` llama `DemoDataSeeder`; este ejecuta primero `CategoriaSeeder` y agrega datos de usuarios, productos e imágenes, publicaciones/comentarios e imagen del foro, punto físico, encuentros/QR, calificación, reporte y notificaciones.
+
+- Idempotencia: inserta solo si no encuentra el registro por su clave de identidad del seeder.
+- Conservación: no vacía tablas ni actualiza los registros encontrados.
+- Guard: no permite ejecutar datos demo con `APP_ENV=production`.
+- El comando normal para una base ya migrada es `php artisan db:seed`.
+- Para migrar y seedear en una base nueva: `php artisan migrate --seed`.
+- No uses `migrate:fresh` en una base de usuario.
+- Las cuentas locales de prueba y su contraseña común están documentadas en `README.md`. Nunca se deben tratar como credenciales productivas.
+
+El test `DemoDataSeederTest` corre con `RefreshDatabase` en SQLite en memoria; comprueba repetición y que un usuario preexistente no desaparezca.
+
+## 11. Pruebas, desarrollo y comandos
+
+### Pruebas
+
+`phpunit.xml` fuerza `APP_ENV=testing`, una `APP_KEY` determinista exclusiva de tests, `DB_CONNECTION=sqlite`, `DB_DATABASE=:memory:`, caché array, cola sync, sesión array y coste bcrypt reducido. Los tests con `RefreshDatabase` no deben operar sobre la base local MySQL.
+
+Cobertura de `PublicApiTest`:
+
+- filtros, paginación, solo productos activos y ausencia de campos privados;
+- detalle de productos;
+- autenticación requerida y requisito de imagen al crear producto;
+- login/token Sanctum, `/me`, logout y revocación;
+- registro sobre la tabla/campos `usuarios`;
+- feed del foro y campos privados de autores/comentarios;
+- creación de publicaciones y comentarios autenticados;
+- rechazo de adjuntos no imagen;
+- respuesta pública de perfil y puntos activos;
+- inicio/categorías y CORS desde el origen React configurado.
+
+No se debe afirmar que la integración Cloudinary remota está probada por esa suite.
+
+Comandos de verificación:
+
+```bash
+php artisan route:list --path=api
+php artisan test
+composer format:check
+```
+
+### Instalación y ejecución
+
+El README da como flujo base:
+
+```bash
+composer install
+php artisan migrate --seed
+php artisan serve
+```
+
+`composer.json`:
+
+- `setup`: instala Composer, crea `.env` desde ejemplo si falta, genera key, migra con `--force`, instala npm y compila assets; este script no ejecuta `--seed`.
+- `dev`: levanta concurrentemente `php artisan serve`, queue listener, Pail y Vite mediante `concurrently`.
+- `test`: limpia config y ejecuta `php artisan test`.
+- `format`: aplica Laravel Pint al backend.
+- `format:check`: verifica el estilo con Pint (`--test`). El baseline actual puede reportar archivos preexistentes; no ejecutar `composer format` sin revisar el diff de los archivos afectados.
+
+Servidor Laravel default: `http://127.0.0.1:8000`; rutas API locales, por ejemplo, `http://127.0.0.1:8000/api/productos`.
+
+## 12. Límites funcionales actuales: no asumir que están implementados
+
+Las migraciones y modelos no garantizan una API. Al inspeccionar `routes/api.php`, solo existen las 14 rutas documentadas.
+
+No hay endpoints API actuales para:
+
+- crear/editar/eliminar productos, ni eliminar imágenes;
+- actualizar perfil privado/avatar/fondo;
+- crear/administrar puntos físicos;
+- solicitar, editar o cambiar estado de encuentros;
+- administrar o validar códigos QR;
+- crear/consultar calificaciones;
+- crear/administrar reportes;
+- listar/marcar notificaciones leídas;
+- panel administrativo, moderación, gestión de roles o administración de usuarios;
+- recuperación de contraseña;
+- refresh/revocación de todos los tokens.
+
+El perfil expuesto es público y limitado; no hay un endpoint `/api/me` de escritura ni perfil privado adicional.
+
+### Diferencias de implementación que condicionan cambios
+
+1. El nombre persistido del avatar en `usuarios` es `foto_perfil_url`; `foto_perfil` en algunas consultas es un alias de salida.
+2. La tabla `users` scaffold no es `usuarios`. Toda nueva funcionalidad de cuenta AEGIS debe identificar el modelo y guard correcto.
+3. El API de productos exige 1–5 imágenes en Cloudinary. El formulario MVC PHP es otro flujo y puede tener requisitos distintos; no uses el comportamiento MVC como contrato del API Laravel.
+4. La lista de productos aplica `precio_max` solo cuando PHP evalúa su valor como no vacío; por ello `precio_max=0` no activa actualmente el filtro aunque pase validación.
+5. `ProductoResource` es la única serialización API propia; otras rutas serializan modelos/arrays y tienen envelopes distintos.
+6. `usuarios.rol` se escribe y devuelve, pero el grupo de rutas no aplica permisos por rol.
+7. `imagenes_producto` no persiste `public_id` Cloudinary. No diseñes borrado/actualización de objetos suponiendo que puede recuperar ese identificador de la tabla.
+8. No se encontró uso de Jobs, Mail, Notifications Laravel, Cache, Events, Policies o repositorios en `app/`; las tablas/configuraciones del framework disponibles no significan que esos flujos estén conectados a AEGIS.
+
+## 13. Guía de cambios para agentes
+
+### Al agregar o cambiar un endpoint
+
+1. Añade ruta API explícita y decide si es pública o dentro de `auth:sanctum`.
+2. Valida todas las entradas en el controlador o en un Form Request nuevo solo si su reutilización/alcance lo justifica.
+3. Usa `Usuario` para cuentas AEGIS; comprueba relaciones y nombres de FK en migraciones/modelos.
+4. Define y prueba status codes, envelope, campos visibles y errores.
+5. Usa transacción SQL cuando una operación crea varias filas relacionadas. Para integraciones externas, agrega compensación/limpieza y registra el error.
+6. Si usas Cloudinary, valida env y formatos/resolución de respuesta; nunca registres credenciales ni devuelvas detalles internos.
+7. Añade pruebas Feature para autenticación, validación, éxito, errores/404 y campos privados relevantes.
+8. Actualiza la tabla de endpoints y cualquier limitación que deje de ser cierta en esta guía y el README.
+
+### Al cambiar el esquema
+
+1. Comprueba primero si el cambio es imprescindible o si basta con las columnas/relaciones actuales.
+2. Agrega una nueva migración; no edites una migración ya aplicada para simular una actualización de base.
+3. Incluye FK, índice, nulabilidad, default, enum/valores y comportamiento de borrado según la regla solicitada.
+4. Actualiza fillable/casts/relaciones/serialización, validaciones y seeders dependientes.
+5. Prueba migración en el entorno SQLite de tests y verifica reversión cuando corresponda.
+6. No ejecutes comandos destructivos sobre `.env` local ni una conexión persistente.
+
+### Al trabajar con nuevas áreas de dominio
+
+No agregues “capas limpias” por convención. El patrón vigente es Controller → Eloquent/Query Builder → DB y, en dos operaciones, Cloudinary. Introduce servicio, policy, Form Request, recurso o job solo cuando tenga responsabilidad concreta y se use de forma consistente.
+
+## 14. Índice de componentes fuente
+
+### Rutas
+
+- `routes/api.php`
+- `routes/web.php`
+- `routes/console.php`
+
+### Controladores
+
+- `app/Http/Controllers/Api/AuthController.php`
+- `app/Http/Controllers/Api/ForoController.php`
+- `app/Http/Controllers/Api/InicioController.php`
+- `app/Http/Controllers/Api/PerfilController.php`
+- `app/Http/Controllers/Api/ProductoController.php`
+- `app/Http/Controllers/Api/PuntoFisicoController.php`
+- `app/Http/Controllers/Controller.php`
+
+### Modelos/recurso
+
+- `app/Models/Usuario.php`
+- `app/Models/User.php`
+- `app/Models/Categoria.php`
+- `app/Models/Producto.php`
+- `app/Models/ImagenProducto.php`
+- `app/Models/Publicacion.php`
+- `app/Models/Comentario.php`
+- `app/Models/ImagenPublicacionForo.php`
+- `app/Models/PuntoFisico.php`
+- `app/Models/Encuentro.php`
+- `app/Models/CodigoQr.php`
+- `app/Models/Calificacion.php`
+- `app/Models/Reporte.php`
+- `app/Models/Notificacion.php`
+- `app/Http/Resources/ProductoResource.php`
+
+### Migraciones AEGIS
+
+- `2026_10_11_000000_create_usuarios_table.php`
+- `2026_10_11_000001_create_categorias_table.php`
+- `2026_10_11_000002_create_productos_table.php`
+- `2026_10_11_000003_create_imagenes_producto_table.php`
+- `2026_10_11_000004_create_publicaciones_foro_table.php`
+- `2026_10_11_000005_create_comentarios_foro_table.php`
+- `2026_10_11_000006_create_puntos_fisicos_table.php`
+- `2026_10_11_000007_create_encuentros_table.php`
+- `2026_10_11_000008_create_codigos_qr_table.php`
+- `2026_10_11_000009_create_calificaciones_table.php`
+- `2026_10_11_000010_create_reportes_table.php`
+- `2026_10_11_000011_create_notificaciones_table.php`
+- `2026_10_12_191725_create_personal_access_tokens_table.php`
+- `2026_11_19_000000_create_imagenes_publicacion_foro_table.php`
+
+La migración `personal_access_tokens` es infraestructura Sanctum. Las migraciones scaffold de `users`, cache y jobs se encuentran en `0001_01_01_*`.
+
+### Configuración y pruebas
+
+- Config relevante: `config/app.php`, `auth.php`, `cache.php`, `cloudinary.php`, `cors.php`, `database.php`, `filesystems.php`, `logging.php`, `mail.php`, `queue.php`, `sanctum.php`, `services.php`, `session.php`.
+- Bootstrap: `bootstrap/app.php`, `bootstrap/providers.php`.
+- Tests: `tests/Feature/PublicApiTest.php`, `tests/Feature/DemoDataSeederTest.php`, `tests/Feature/ExampleTest.php`.
+- Seeders: `database/seeders/DatabaseSeeder.php`, `CategoriaSeeder.php`, `DemoDataSeeder.php`.
