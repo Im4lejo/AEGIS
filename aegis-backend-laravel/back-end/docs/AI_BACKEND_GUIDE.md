@@ -303,6 +303,12 @@ Las DMs usan `contexto_clave` ordenado por participante y producto para evitar d
 
 No existe proveedor WebSocket/Reverb/Pusher configurado. React usa polling cada cinco segundos contra `/api/mensajes`; no muestra presencia ni conexión falsamente.
 
+### Ofertas y operaciones comerciales
+
+`ofertas` vincula producto, comprador y vendedor. `historial_oferta` conserva cambios auditados. `reservas_producto` bloquea disponibilidad temporalmente y `operaciones_comerciales` representa el acuerdo sin procesar pagos.
+
+Aceptar una oferta crea reserva y operación pendiente. Completar solo puede hacerlo el vendedor o admin y cambia el anuncio a vendido. Cancelar/disputar conserva el estado de acuerdo y libera la reserva cuando corresponde.
+
 ## 6. Modelos Eloquent y relaciones
 
 | Modelo | Tabla | Relaciones definidas / comportamiento |

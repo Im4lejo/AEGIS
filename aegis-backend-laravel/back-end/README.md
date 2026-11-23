@@ -207,6 +207,13 @@ El foro usa `publicaciones_foro` como entidad canónica y conserva `/api/foro`.
 - Paginación hacia atrás por ID.
 - React usa polling de 5 segundos; no hay WebSocket real configurado.
 
+## Negociación y operaciones
+
+- Las ofertas tienen 48 horas por defecto y estados auditados.
+- Aceptar reserva el anuncio y crea una operación acordada pendiente.
+- Completar la operación es una acción del vendedor y marca vendido.
+- No existe checkout ni pasarela de pagos.
+
 ## Verificación
 
 ```bash

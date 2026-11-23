@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\GuardadosController;
 use App\Http\Controllers\Api\InicioController;
 use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\MensajeController;
+use App\Http\Controllers\Api\NegociacionController;
 use App\Http\Controllers\Api\PerfilController;
 use App\Http\Controllers\Api\ProductoController;
 use App\Http\Controllers\Api\PuntoFisicoController;
@@ -73,6 +74,11 @@ Route::prefix('auth/web')->name('auth.web.')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
+    Route::get('/negociacion', [NegociacionController::class, 'mine']);
+    Route::post('/ofertas', [NegociacionController::class, 'store']);
+    Route::patch('/ofertas/{oferta}/contraoferta', [NegociacionController::class, 'counter'])->whereNumber('oferta');
+    Route::patch('/ofertas/{oferta}/decision', [NegociacionController::class, 'decide'])->whereNumber('oferta');
+    Route::patch('/operaciones/{operacion}', [NegociacionController::class, 'transitionOperation'])->whereNumber('operacion');
     Route::get('/mensajes', [MensajeController::class, 'inbox']);
     Route::get('/mensajes/buscar', [MensajeController::class, 'search']);
     Route::post('/mensajes/directo', [MensajeController::class, 'openDirect']);

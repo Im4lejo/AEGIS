@@ -1,0 +1,16 @@
+.negociacion-page {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+  display: grid;
+  gap: 18px;
+}
+
+.negociacion-card {
+  border: 1px solid #e4e7ec;
+  border-radius: 10px;
+  background: #fff;
+  padding: 14px;
+  margin-top: 8px;
+}

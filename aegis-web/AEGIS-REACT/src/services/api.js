@@ -454,6 +454,30 @@ export const savedApi = {
     request('/reportes/contextual', { method: 'POST', body: details, token }),
 }
 
+export const negotiationApi = {
+  mine: (token) => request('/negociacion', { token }),
+  create: (details, token) =>
+    request('/ofertas', { method: 'POST', body: details, token }),
+  counter: (offerId, details, token) =>
+    request(`/ofertas/${encodeURIComponent(offerId)}/contraoferta`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  decide: (offerId, decision, token) =>
+    request(`/ofertas/${encodeURIComponent(offerId)}/decision`, {
+      method: 'PATCH',
+      body: { decision },
+      token,
+    }),
+  transition: (operationId, estado, token) =>
+    request(`/operaciones/${encodeURIComponent(operationId)}`, {
+      method: 'PATCH',
+      body: { estado },
+      token,
+    }),
+}
+
 export const messageApi = {
   inbox: (token, perPage = 30) =>
     request(`/mensajes${queryString({ per_page: perPage })}`, { token }),
