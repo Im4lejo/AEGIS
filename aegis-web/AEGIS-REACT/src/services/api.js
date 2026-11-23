@@ -197,11 +197,13 @@ export const productApi = {
 export const forumApi = {
   list: (tab = 'recientes', cursor = null, perPage = 20) =>
     request(`/foro${queryString({ tab, cursor, per_page: perPage })}`),
+  show: (postId) => request(`/foro/${encodeURIComponent(postId)}`),
   create: (post, token) => {
     const body = new FormData()
     body.append('titulo', post.titulo)
     body.append('contenido', post.contenido)
     if (post.imagen) body.append('imagenes[]', post.imagen)
+    if (post.tipo) body.append('tipo', post.tipo)
     if (post.visibilidad) body.append('visibilidad', post.visibilidad)
     if (post.estado) body.append('estado', post.estado)
     if (post.programada_para) body.append('programada_para', post.programada_para)
@@ -254,6 +256,40 @@ export const forumApi = {
   unrepost: (postId, token) =>
     request(`/foro/${encodeURIComponent(postId)}/reposts`, {
       method: 'DELETE',
+      token,
+    }),
+  setSolution: (postId, commentId, aceptada, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/solucion`, {
+      method: 'PATCH',
+      body: { comentario_id: commentId, aceptada },
+      token,
+    }),
+  toggleThread: (postId, estado, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/hilo`, {
+      method: 'PATCH',
+      body: { estado },
+      token,
+    }),
+  subscribe: (postId, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/suscripcion`, {
+      method: 'POST',
+      token,
+    }),
+  unsubscribe: (postId, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/suscripcion`, {
+      method: 'DELETE',
+      token,
+    }),
+  createPoll: (postId, details, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/encuesta`, {
+      method: 'PUT',
+      body: details,
+      token,
+    }),
+  votePoll: (postId, opcionId, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/encuesta/voto`, {
+      method: 'POST',
+      body: { opcion_id: opcionId },
       token,
     }),
   comment: (postId, comentario, token) =>

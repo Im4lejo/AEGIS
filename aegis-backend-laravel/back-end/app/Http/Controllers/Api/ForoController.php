@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Jobs\PublicarPostProgramado;
 use App\Models\Comentario;
 use App\Models\Comunidad;
+use App\Models\Encuesta;
 use App\Models\MembresiaComunidad;
+use App\Models\OpcionEncuesta;
 use App\Models\Publicacion;
 use App\Models\ReaccionPublicacion;
 use App\Models\Repost;
 use App\Models\Usuario;
+use App\Models\VotoEncuesta;
 use App\Services\MediaManager;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -29,6 +32,10 @@ class ForoController extends Controller
             'per_page' => ['nullable', 'integer', 'min:1', 'max:50'],
             'cursor' => ['nullable', 'string', 'max:255'],
             'tab' => ['nullable', 'in:para-ti,siguiendo,recientes'],
+            'tipo' => ['nullable', 'in:discusion,pregunta,tutorial,encuesta,anuncio'],
+            'comunidad_id' => ['nullable', 'integer', 'exists:comunidades,id'],
+            'busqueda' => ['nullable', 'string', 'max:100'],
+            'orden' => ['nullable', 'in:recientes,actividad,popularidad'],
         ]);
 
         $viewer = $request->user();
@@ -65,6 +72,18 @@ class ForoController extends Controller
                 $q->orWhereIn('comunidad_id', $communityMemberIds);
             }
         });
+        if (! empty($filters['tipo'])) {
+            $query->where('tipo', $filters['tipo']);
+        }
+        if (! empty($filters['comunidad_id'])) {
+            $query->where('comunidad_id', $filters['comunidad_id']);
+        }
+        if (! empty($filters['busqueda'])) {
+            $term = '%'.$filters['busqueda'].'%';
+            $query->where(fn ($q) => $q
+                ->where('titulo', 'like', $term)
+                ->orWhere('contenido', 'like', $term));
+        }
 
         if ($tab === 'siguiendo' && $followedIds !== []) {
             $query->whereIn('usuario_id', $followedIds);
@@ -72,7 +91,15 @@ class ForoController extends Controller
             $query->whereRaw('1 = 0');
         }
 
-        if ($tab === 'para-ti') {
+        if (($filters['orden'] ?? null) === 'actividad') {
+            $query->orderByDesc('ultima_actividad')
+                ->orderByDesc('fecha_publicacion')
+                ->orderByDesc('id');
+        } elseif (($filters['orden'] ?? null) === 'popularidad') {
+            $query->orderByDesc('actividad_score')
+                ->orderByDesc('fecha_publicacion')
+                ->orderByDesc('id');
+        } elseif ($tab === 'para-ti') {
             $query->orderByDesc('fijada')
                 ->orderByDesc('rank_base')
                 ->orderByDesc('fecha_publicacion')
@@ -127,6 +154,7 @@ class ForoController extends Controller
         $validated = $request->validate([
             'titulo' => ['nullable', 'string', 'max:200'],
             'contenido' => ['required', 'string', 'max:5000'],
+            'tipo' => ['nullable', 'in:discusion,pregunta,tutorial,encuesta,anuncio'],
             'visibilidad' => ['nullable', 'in:publica,privada,grupo_privado'],
             'estado' => ['nullable', 'in:borrador,publicado,programado'],
             'programada_para' => ['nullable', 'date'],
@@ -164,6 +192,9 @@ class ForoController extends Controller
                     'titulo' => $titulo,
                     'contenido' => $contenido,
                     'visibilidad' => $validated['visibilidad'] ?? 'publica',
+                    'tipo' => $validated['tipo'] ?? 'discusion',
+                    'interaccion_estado' => 'abierto',
+                    'ultima_actividad' => now(),
                     'estado' => $validated['estado'] ?? 'publicado',
                     'programada_para' => isset($validated['programada_para'])
                         ? Carbon::parse($validated['programada_para'])
@@ -237,6 +268,12 @@ class ForoController extends Controller
             'comentario_padre_id' => ['nullable', 'integer', 'exists:comentarios_foro,id'],
         ]);
         $post = Publicacion::query()->findOrFail($publicacion);
+        if ($post->interaccion_estado === 'cerrado') {
+            return response()->json([
+                'message' => 'El hilo está cerrado.',
+                'code' => 'THREAD_CLOSED',
+            ], 403);
+        }
         if ($post->comunidad_id) {
             $member = MembresiaComunidad::query()
                 ->where('comunidad_id', $post->comunidad_id)
@@ -288,6 +325,10 @@ class ForoController extends Controller
             'comentario' => trim($validated['comentario']),
             'comentario_padre_id' => $validated['comentario_padre_id'] ?? null,
             'estado' => 'activo',
+        ]);
+        $post->update([
+            'ultima_actividad' => now(),
+            'actividad_score' => $post->actividad_score + 1,
         ]);
 
         return response()->json([
@@ -392,6 +433,219 @@ class ForoController extends Controller
         return response()->json([
             'data' => $post->fresh($this->publicacionRelations())->loadCount('comentarios'),
         ]);
+    }
+
+    public function setSolution(Request $request, int $publicacion)
+    {
+        $post = Publicacion::query()->findOrFail($publicacion);
+        $validated = $request->validate([
+            'comentario_id' => ['required', 'integer', 'exists:comentarios_foro,id'],
+            'aceptada' => ['sometimes', 'boolean'],
+        ]);
+        $comment = Comentario::query()
+            ->whereKey($validated['comentario_id'])
+            ->where('publicacion_id', $post->id)
+            ->where('estado', '!=', 'eliminado')
+            ->first();
+        if (! $comment) {
+            throw ValidationException::withMessages([
+                'comentario_id' => ['La respuesta no pertenece a este hilo.'],
+            ]);
+        }
+
+        $isOwner = (int) $post->usuario_id === (int) $request->user()->id;
+        $isCommunityModerator = false;
+        if ($post->comunidad_id) {
+            $isCommunityModerator = MembresiaComunidad::query()
+                ->where('comunidad_id', $post->comunidad_id)
+                ->where('usuario_id', $request->user()->id)
+                ->where('estado', 'activo')
+                ->whereIn('rol', ['owner', 'moderador'])
+                ->exists();
+        }
+        if (! $isOwner && ! $isCommunityModerator && $request->user()->rol !== 'admin') {
+            return response()->json(['message' => 'Sin permiso para marcar solución.', 'code' => 'FORBIDDEN_RESOURCE'], 403);
+        }
+
+        $accepted = $validated['aceptada'] ?? true;
+        if ($accepted) {
+            Comentario::query()
+                ->where('publicacion_id', $post->id)
+                ->update(['es_solucion' => false]);
+            $comment->update(['es_solucion' => true]);
+            $post->update([
+                'respuesta_aceptada_id' => $comment->id,
+                'ultima_actividad' => now(),
+                'actividad_score' => $post->actividad_score + 5,
+            ]);
+        } else {
+            $comment->update(['es_solucion' => false]);
+            $post->update(['respuesta_aceptada_id' => null]);
+        }
+
+        return response()->json([
+            'data' => [
+                'respuesta_aceptada_id' => $post->respuesta_aceptada_id,
+                'es_solucion' => (bool) $accepted,
+            ],
+        ]);
+    }
+
+    public function toggleThread(Request $request, int $publicacion)
+    {
+        $post = Publicacion::query()->findOrFail($publicacion);
+        $isOwner = (int) $post->usuario_id === (int) $request->user()->id;
+        $isModerator = $post->comunidad_id
+            ? MembresiaComunidad::query()
+                ->where('comunidad_id', $post->comunidad_id)
+                ->where('usuario_id', $request->user()->id)
+                ->where('estado', 'activo')
+                ->whereIn('rol', ['owner', 'moderador'])
+                ->exists()
+            : false;
+        if (! $isOwner && ! $isModerator && $request->user()->rol !== 'admin') {
+            return response()->json(['message' => 'Sin permiso.', 'code' => 'FORBIDDEN_RESOURCE'], 403);
+        }
+
+        $validated = $request->validate([
+            'estado' => ['required', 'in:abierto,cerrado'],
+        ]);
+        $post->update([
+            'interaccion_estado' => $validated['estado'],
+            'cerrado_en' => $validated['estado'] === 'cerrado' ? now() : null,
+        ]);
+
+        return response()->json([
+            'data' => [
+                'interaccion_estado' => $post->interaccion_estado,
+                'cerrado_en' => $post->cerrado_en,
+            ],
+        ]);
+    }
+
+    public function subscribe(Request $request, int $publicacion)
+    {
+        $post = Publicacion::query()->findOrFail($publicacion);
+        DB::table('suscripciones_hilo')->updateOrInsert(
+            ['publicacion_id' => $post->id, 'usuario_id' => $request->user()->id],
+            [
+                'estado' => 'activa',
+                'updated_at' => now(),
+                'created_at' => now(),
+            ],
+        );
+
+        return response()->json(['data' => ['suscrito' => true]]);
+    }
+
+    public function unsubscribe(Request $request, int $publicacion)
+    {
+        DB::table('suscripciones_hilo')
+            ->where('publicacion_id', $publicacion)
+            ->where('usuario_id', $request->user()->id)
+            ->delete();
+
+        return response()->json(['data' => ['suscrito' => false]]);
+    }
+
+    public function createPoll(Request $request, int $publicacion)
+    {
+        $post = Publicacion::query()->findOrFail($publicacion);
+        if (! Gate::forUser($request->user())->allows('update.post', $post)) {
+            return response()->json(['message' => 'Sin permiso.', 'code' => 'FORBIDDEN_RESOURCE'], 403);
+        }
+        $validated = $request->validate([
+            'pregunta' => ['required', 'string', 'max:500'],
+            'permite_multiple' => ['sometimes', 'boolean'],
+            'finaliza_en' => ['nullable', 'date', 'after:now'],
+            'opciones' => ['required', 'array', 'min:2', 'max:10'],
+            'opciones.*' => ['required', 'string', 'max:255'],
+        ]);
+
+        $poll = Encuesta::query()->updateOrCreate(
+            ['publicacion_id' => $post->id],
+            [
+                'pregunta' => trim($validated['pregunta']),
+                'permite_multiple' => $validated['permite_multiple'] ?? false,
+                'finaliza_en' => isset($validated['finaliza_en'])
+                    ? Carbon::parse($validated['finaliza_en'])
+                    : null,
+            ],
+        );
+        $poll->opciones()->delete();
+        $options = [];
+        foreach (array_values(array_unique($validated['opciones'])) as $index => $text) {
+            $options[] = $poll->opciones()->create([
+                'texto' => trim($text),
+                'orden' => $index,
+            ]);
+        }
+        $post->update(['tipo' => 'encuesta', 'ultima_actividad' => now()]);
+
+        return response()->json([
+            'data' => $poll->load('opciones'),
+        ], 201);
+    }
+
+    public function votePoll(Request $request, int $publicacion)
+    {
+        $post = Publicacion::query()->findOrFail($publicacion);
+        $poll = Encuesta::query()->where('publicacion_id', $post->id)->first();
+        if (! $poll) {
+            throw ValidationException::withMessages([
+                'encuesta' => ['La publicación no tiene una encuesta.'],
+            ]);
+        }
+        if ($poll->finaliza_en && now()->greaterThan($poll->finaliza_en)) {
+            throw ValidationException::withMessages([
+                'encuesta' => ['El período de votación terminó.'],
+            ]);
+        }
+        if ($post->interaccion_estado === 'cerrado') {
+            return response()->json(['message' => 'El hilo está cerrado.', 'code' => 'THREAD_CLOSED'], 403);
+        }
+
+        $validated = $request->validate([
+            'opcion_id' => ['required', 'integer', 'exists:opciones_encuesta,id'],
+        ]);
+        $option = OpcionEncuesta::query()
+            ->whereKey($validated['opcion_id'])
+            ->where('encuesta_id', $poll->id)
+            ->first();
+        if (! $option) {
+            throw ValidationException::withMessages([
+                'opcion_id' => ['La opción no pertenece a esta encuesta.'],
+            ]);
+        }
+
+        if (! $poll->permite_multiple) {
+            VotoEncuesta::query()
+                ->where('encuesta_id', $poll->id)
+                ->where('usuario_id', $request->user()->id)
+                ->delete();
+        }
+        VotoEncuesta::query()->firstOrCreate([
+            'encuesta_id' => $poll->id,
+            'opcion_id' => $option->id,
+            'usuario_id' => $request->user()->id,
+        ]);
+
+        $results = $poll->opciones()
+            ->withCount('votos')
+            ->get(['id', 'texto', 'orden'])
+            ->map(fn (OpcionEncuesta $item) => [
+                'id' => $item->id,
+                'texto' => $item->texto,
+                'votos' => $item->votos_count,
+            ]);
+
+        return response()->json([
+            'data' => [
+                'pregunta' => $poll->pregunta,
+                'permite_multiple' => (bool) $poll->permite_multiple,
+                'opciones' => $results,
+            ],
+        ], 201);
     }
 
     public function destroy(Request $request, int $publicacion)

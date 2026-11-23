@@ -16,10 +16,10 @@ export default function Publicacion({ id, auth, onNavigate }) {
 
   useEffect(() => {
     let active = true
-    forumApi.list()
+    forumApi.show(id)
       .then(({ data }) => {
         if (!active) return
-        const found = data.find((item) => String(item.id) === String(id))
+        const found = data
         if (!found) {
           setError('No encontramos esta publicación.')
           return
@@ -106,9 +106,40 @@ export default function Publicacion({ id, auth, onNavigate }) {
                 </div>
               </div>
               <h1 className="pub-title">{publicacion.titulo}</h1>
+              {publicacion.tipo && (
+                <span className="foro-thread-type">{publicacion.tipo}</span>
+              )}
+              {publicacion.interaccion_estado === 'cerrado' && (
+                <span className="foro-thread-type" role="status">Hilo cerrado</span>
+              )}
               <p className="foro-post-body">{publicacion.cuerpo}</p>
               {publicacion.imagen && <img className="foro-post-image" src={publicacion.imagen} alt={publicacion.titulo} />}
               <div className="foro-post-actions">
+                {auth?.isAuthenticated && (
+                  <>
+                    <button
+                      className="foro-action"
+                      type="button"
+                      onClick={() => forumApi.subscribe(publicacion.id, token).catch((e) => setErrorComentario(e.message))}
+                    >
+                      Suscribirme
+                    </button>
+                    {(auth?.user?.id === publicacion.usuario_id || auth?.isAdmin) && (
+                      <button
+                        className="foro-action"
+                        type="button"
+                        onClick={() => {
+                          const estado = publicacion.interaccion_estado === 'cerrado' ? 'abierto' : 'cerrado'
+                          forumApi.toggleThread(publicacion.id, estado, token)
+                            .then(() => setPublicacion((actual) => ({ ...actual, interaccion_estado: estado })))
+                            .catch((e) => setErrorComentario(e.message))
+                        }}
+                      >
+                        {publicacion.interaccion_estado === 'cerrado' ? 'Reabrir hilo' : 'Cerrar hilo'}
+                      </button>
+                    )}
+                  </>
+                )}
                 <button className="foro-action" type="button" onClick={() => comentarioRef.current?.focus()}>
                   {publicacion.comentarios.length} Comentarios
                 </button>
@@ -123,6 +154,17 @@ export default function Publicacion({ id, auth, onNavigate }) {
                     <div className="foro-comment-bubble">
                       <strong>{item.autor}</strong>
                       <p>{item.texto}</p>
+                      {auth?.isAuthenticated && auth?.user?.id === publicacion.usuario_id && (
+                        <button
+                          type="button"
+                          className="foro-action"
+                          onClick={() => forumApi.setSolution(publicacion.id, item.id, true, token)
+                            .then(() => setErrorComentario('Respuesta marcada como solución'))
+                            .catch((e) => setErrorComentario(e.message))}
+                        >
+                          Marcar solución
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}

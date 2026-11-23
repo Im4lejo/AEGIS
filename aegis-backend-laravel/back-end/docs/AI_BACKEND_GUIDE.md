@@ -257,6 +257,14 @@ Las comunidades usan `comunidades`, `membresias_comunidad` y `acciones_comunidad
 
 Las comunidades privadas no aparecen en el directorio público ni en feeds/enlaces directos sin membresía activa. Las solicitudes usan estado `solicitado`; las invitaciones usan `invitado`.
 
+### Foro avanzado
+
+`publicaciones_foro.tipo` distingue discusión, pregunta, tutorial, encuesta y anuncio. `interaccion_estado` bloquea comentarios al cerrar un hilo.
+
+Las soluciones usan `respuesta_aceptada_id` y el índice `es_solucion`. Solo autor de la pregunta, moderador owner/moderador de comunidad o admin pueden marcar una solución.
+
+Las encuestas usan `encuestas`, `opciones_encuesta` y `votos_encuesta`. Una encuesta simple elimina votos previos del usuario antes de insertar una opción nueva. Las múltiples permiten opciones únicas.
+
 ## 6. Modelos Eloquent y relaciones
 
 | Modelo | Tabla | Relaciones definidas / comportamiento |

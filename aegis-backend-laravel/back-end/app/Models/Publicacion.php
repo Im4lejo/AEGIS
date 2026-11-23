@@ -32,6 +32,12 @@ class Publicacion extends Model
         'comunidad_id',
         'enlace_preview_url',
         'enlace_preview_titulo',
+        'tipo',
+        'interaccion_estado',
+        'respuesta_aceptada_id',
+        'cerrado_en',
+        'ultima_actividad',
+        'actividad_score',
     ];
 
     protected function casts(): array
@@ -43,6 +49,8 @@ class Publicacion extends Model
             'fijada' => 'boolean',
             'etiquetas' => 'array',
             'menciones' => 'array',
+            'cerrado_en' => 'datetime',
+            'ultima_actividad' => 'datetime',
         ];
     }
 

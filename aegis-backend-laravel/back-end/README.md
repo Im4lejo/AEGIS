@@ -163,6 +163,14 @@ El foro usa `publicaciones_foro` como entidad canónica y conserva `/api/foro`.
 - Posts comunitarios reutilizan `publicaciones_foro` mediante `comunidad_id`.
 - Auditoría local de acciones comunitarias.
 
+## Foro avanzado
+
+- Tipos: discusión, pregunta, tutorial, encuesta y anuncio.
+- Preguntas admiten una respuesta aceptada.
+- Hilos pueden cerrarse y suscribirse.
+- Encuestas permiten opciones, período y voto único simple.
+- Feed admite filtros por tipo/comunidad/búsqueda y orden por actividad/popularidad.
+
 ## Verificación
 
 ```bash

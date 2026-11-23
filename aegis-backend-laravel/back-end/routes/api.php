@@ -108,6 +108,12 @@ Route::middleware('auth:sanctum')->group(function () {
             ->whereNumber('comentario');
         Route::post('/foro/{publicacion}/reposts', [ForoController::class, 'repost'])->whereNumber('publicacion');
         Route::delete('/foro/{publicacion}/reposts', [ForoController::class, 'unrepost'])->whereNumber('publicacion');
+        Route::patch('/foro/{publicacion}/solucion', [ForoController::class, 'setSolution'])->whereNumber('publicacion');
+        Route::patch('/foro/{publicacion}/hilo', [ForoController::class, 'toggleThread'])->whereNumber('publicacion');
+        Route::post('/foro/{publicacion}/suscripcion', [ForoController::class, 'subscribe'])->whereNumber('publicacion');
+        Route::delete('/foro/{publicacion}/suscripcion', [ForoController::class, 'unsubscribe'])->whereNumber('publicacion');
+        Route::put('/foro/{publicacion}/encuesta', [ForoController::class, 'createPoll'])->whereNumber('publicacion');
+        Route::post('/foro/{publicacion}/encuesta/voto', [ForoController::class, 'votePoll'])->whereNumber('publicacion');
         Route::get('/guardados', [GuardadosController::class, 'index']);
         Route::post('/guardados', [GuardadosController::class, 'save']);
         Route::delete('/guardados', [GuardadosController::class, 'unsave']);
