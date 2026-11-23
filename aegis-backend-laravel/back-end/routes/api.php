@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/inicio', InicioController::class);
 Route::get('/categorias', [ProductoController::class, 'categorias']);
 Route::get('/productos', [ProductoController::class, 'index']);
+Route::get('/productos/comparar', [ProductoController::class, 'compare']);
+Route::get('/productos/{producto}/similares', [ProductoController::class, 'similar'])->whereNumber('producto');
 Route::get('/productos/{producto}', [ProductoController::class, 'show'])->whereNumber('producto');
 Route::get('/foro', [ForoController::class, 'index']);
 Route::get('/foro/{publicacion}', [ForoController::class, 'show'])->whereNumber('publicacion');

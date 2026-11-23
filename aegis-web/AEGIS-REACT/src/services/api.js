@@ -206,6 +206,10 @@ export const productApi = {
       method: 'POST',
       token,
     }),
+  compare: (ids) =>
+    request(`/productos/comparar${queryString({ ids: ids.join(',') })}`),
+  similar: (productId) =>
+    request(`/productos/${encodeURIComponent(productId)}/similares`),
 }
 
 export const forumApi = {

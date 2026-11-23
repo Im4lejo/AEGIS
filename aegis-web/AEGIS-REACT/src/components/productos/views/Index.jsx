@@ -15,6 +15,7 @@ const ESTADOS = [
 
 const ORDENES = [
   { valor: 'reciente', label: 'Más recientes' },
+  { valor: 'relevancia', label: 'Relevancia' },
   { valor: 'precio-asc', label: 'Precio menor a mayor' },
   { valor: 'precio-desc', label: 'Precio mayor a menor' },
 ]
@@ -50,6 +51,12 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
     filtros.filtro === 'reacondicionado' ? 'reacondicionado' : 'todo',
   )
   const [precioMax, setPrecioMax] = useState('')
+  const [precioMin, setPrecioMin] = useState('')
+  const [ciudad, setCiudad] = useState('')
+  const [marca, setMarca] = useState('')
+  const [dias, setDias] = useState('')
+  const [compararIds, setCompararIds] = useState([])
+  const [comparacion, setComparacion] = useState(null)
   const [orden, setOrden] = useState('reciente')
   const [termino, setTermino] = useState(filtros.busqueda || '')
   const [categorias, setCategorias] = useState([])
@@ -87,6 +94,10 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
       categoria,
       estado,
       precioMax,
+      precioMin,
+      ciudad,
+      marca,
+      dias,
       orden,
     ])
     productApi
@@ -95,6 +106,10 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
         cat: categoria,
         estado,
         precio_max: precioMax || undefined,
+      precio_min: precioMin || undefined,
+      ciudad,
+      marca,
+      dias: dias || undefined,
         sort: orden,
         per_page: 50,
       })
@@ -120,7 +135,7 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
     return () => {
       active = false
     }
-  }, [termino, categoria, estado, precioMax, orden])
+  }, [termino, categoria, estado, precioMax, precioMin, ciudad, marca, dias, orden])
 
   const requestKey = JSON.stringify([
     termino,
@@ -128,11 +143,32 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
     estado,
     precioMax,
     orden,
+    precioMin,
+    ciudad,
+    marca,
+    dias,
   ])
   const cargando = respuesta.key !== requestKey
   const productos = cargando ? [] : respuesta.productos
   const error = cargando ? '' : respuesta.error
   const lista = productos
+  useEffect(() => {
+    const params = new URLSearchParams()
+    if (termino) params.set('buscar', termino)
+    if (categoria) params.set('categoria', categoria)
+    if (estado !== 'todo') params.set('estado', estado)
+    if (precioMin) params.set('precio_min', precioMin)
+    if (precioMax) params.set('precio_max', precioMax)
+    if (ciudad) params.set('ciudad', ciudad)
+    if (marca) params.set('marca', marca)
+    if (dias) params.set('dias', dias)
+    if (orden !== 'reciente') params.set('sort', orden)
+    const base = window.location.hash.split('?')[0] || '#/productos'
+    window.history.replaceState(null, '', `${base}?${params.toString()}`)
+    localStorage.setItem('aegis-marketplace-filters', JSON.stringify({
+      termino, categoria, estado, precioMin, precioMax, ciudad, marca, dias, orden,
+    }))
+  }, [termino, categoria, estado, precioMin, precioMax, ciudad, marca, dias, orden])
   const titulo = termino
     ? `Resultados para "${termino}"`
     : categoria || (modoNovedades ? 'Novedades' : 'Productos')
@@ -142,12 +178,34 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
     setCategoria('')
     setEstado('todo')
     setPrecioMax('')
+    setPrecioMin('')
+    setCiudad('')
+    setMarca('')
+    setDias('')
     setOrden('reciente')
     if (onNavigate) onNavigate('/productos')
   }
 
   const abrirProducto = (producto) => {
     if (onNavigate) onNavigate(`/productos/detalle?id=${producto.id}`)
+  }
+
+  const alternarComparar = (id) => {
+    setCompararIds((actuales) => {
+      if (actuales.includes(id)) return actuales.filter((item) => item !== id)
+      if (actuales.length >= 4) return actuales
+      return [...actuales, id]
+    })
+  }
+
+  const ejecutarComparacion = async () => {
+    if (compararIds.length < 2) return
+    try {
+      const response = await productApi.compare(compararIds)
+      setComparacion(response.data)
+    } catch (requestError) {
+      setRespuesta((actual) => ({ ...actual, error: requestError }))
+    }
   }
 
   return (
@@ -180,6 +238,18 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
           </div>
         </div>
 
+        {(categoria || estado !== 'todo' || precioMin || precioMax || ciudad || marca || dias) && (
+          <div className="products-active-filters" aria-label="Filtros activos">
+            {categoria && <button type="button" onClick={() => setCategoria('')}>Categoría: {categoria} ×</button>}
+            {estado !== 'todo' && <button type="button" onClick={() => setEstado('todo')}>Estado: {estado} ×</button>}
+            {precioMin && <button type="button" onClick={() => setPrecioMin('')}>Desde COP {precioMin} ×</button>}
+            {precioMax && <button type="button" onClick={() => setPrecioMax('')}>Hasta COP {precioMax} ×</button>}
+            {ciudad && <button type="button" onClick={() => setCiudad('')}>Ciudad: {ciudad} ×</button>}
+            {marca && <button type="button" onClick={() => setMarca('')}>Marca: {marca} ×</button>}
+            {dias && <button type="button" onClick={() => setDias('')}>Últimos {dias} días ×</button>}
+          </div>
+        )}
+
         <div className="products-body">
           <aside className="products-filters">
             <div className="filters-head">
@@ -199,6 +269,27 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
                 onChange={(event) => setBusqueda(event.target.value)}
                 placeholder="Buscar productos..."
               />
+            </div>
+            <div className="filter-group">
+              <label className="filter-group-title" htmlFor="precio-minimo">Precio mínimo (COP)</label>
+              <input id="precio-minimo" type="number" min="0" value={precioMin} onChange={(event) => setPrecioMin(event.target.value)} />
+            </div>
+            <div className="filter-group">
+              <label className="filter-group-title" htmlFor="filtro-ciudad">Ubicación aproximada</label>
+              <input id="filtro-ciudad" type="text" value={ciudad} onChange={(event) => setCiudad(event.target.value)} placeholder="Ciudad" />
+            </div>
+            <div className="filter-group">
+              <label className="filter-group-title" htmlFor="filtro-marca">Marca</label>
+              <input id="filtro-marca" type="text" value={marca} onChange={(event) => setMarca(event.target.value)} placeholder="Marca" />
+            </div>
+            <div className="filter-group">
+              <label className="filter-group-title" htmlFor="filtro-dias">Publicado hace</label>
+              <select id="filtro-dias" value={dias} onChange={(event) => setDias(event.target.value)}>
+                <option value="">Cualquier fecha</option>
+                <option value="1">Últimas 24 horas</option>
+                <option value="7">Últimos 7 días</option>
+                <option value="30">Últimos 30 días</option>
+              </select>
             </div>
             <div className="filter-group">
               <span className="filter-group-title">Categoría</span>
@@ -274,6 +365,10 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
             )}
             {!cargando && !error && lista.length > 0 && (
               <div className="products-grid-container">
+                <div className="products-compare-bar">
+                  <span>{compararIds.length} seleccionado(s) · máximo 4</span>
+                  <button type="button" disabled={compararIds.length < 2} onClick={ejecutarComparacion}>Comparar</button>
+                </div>
                 {lista.map((producto) => (
                   <article
                     className="product-card"
@@ -289,6 +384,17 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
                       }
                     }}
                   >
+                    <button
+                      type="button"
+                      className="product-compare-check"
+                      onClick={(event) => {
+                        event.stopPropagation()
+                        alternarComparar(producto.id)
+                      }}
+                      aria-pressed={compararIds.includes(producto.id)}
+                    >
+                      {compararIds.includes(producto.id) ? 'Quitar de comparar' : 'Comparar'}
+                    </button>
                     <div className="product-image-container">
                       <img
                         src={imageUrl(producto.imagen)}
@@ -320,6 +426,34 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
                   </article>
                 ))}
               </div>
+            )}
+            {comparacion && (
+              <section className="products-comparison" aria-label="Comparación de productos">
+                <div className="products-comparison__head">
+                  <h2>Comparación</h2>
+                  <button type="button" onClick={() => setComparacion(null)}>Cerrar</button>
+                </div>
+                {comparacion.advertencia && <p role="status">{comparacion.advertencia}</p>}
+                <div className="products-comparison__table">
+                  {comparacion.productos.map((producto) => (
+                    <article key={producto.id}>
+                      {producto.imagen && <img src={imageUrl(producto.imagen)} alt={producto.titulo} />}
+                      <h3>{producto.titulo}</h3>
+                      <dl>
+                        <dt>Precio</dt><dd>COP {formatCurrency(producto.precio)}</dd>
+                        <dt>Condición</dt><dd>{producto.estado_producto}</dd>
+                        <dt>Ubicación</dt><dd>{producto.ciudad_aprox || 'No indicada'}</dd>
+                        {comparacion.campos.map((campo) => (
+                          <div key={campo}>
+                            <dt>{campo}</dt>
+                            <dd>{producto.atributos?.[campo] ?? 'N/D'}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    </article>
+                  ))}
+                </div>
+              </section>
             )}
           </section>
         </div>

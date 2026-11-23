@@ -10,6 +10,7 @@ use App\Services\MediaManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class ProductoController extends Controller
@@ -23,6 +24,109 @@ class ProductoController extends Controller
         ]);
     }
 
+    public function compare(Request $request)
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'string', 'regex:/^\d+(,\d+){1,3}$/'],
+        ]);
+        $ids = array_values(array_unique(array_map(
+            'intval',
+            explode(',', $validated['ids']),
+        )));
+        if (count($ids) < 2 || count($ids) > 4) {
+            throw ValidationException::withMessages([
+                'ids' => ['Selecciona entre 2 y 4 productos.'],
+            ]);
+        }
+
+        $products = Producto::query()
+            ->activo()
+            ->where('visibilidad', 'publica')
+            ->whereIn('id', $ids)
+            ->with([
+                'categoria:id,nombre,descripcion',
+                'imagenes:id,producto_id,imagen,principal',
+            ])
+            ->get();
+        if ($products->count() !== count($ids)) {
+            throw ValidationException::withMessages([
+                'ids' => ['Todos los productos deben estar activos y ser públicos.'],
+            ]);
+        }
+
+        $categoryIds = $products->pluck('categoria_id')->unique();
+        if ($categoryIds->count() > 1) {
+            $warning = 'Los productos pertenecen a categorías diferentes; campos no comparables se muestran como N/D.';
+        } else {
+            $warning = null;
+        }
+
+        $attributes = [];
+        foreach ($products as $product) {
+            foreach (($product->atributos ?? []) as $key => $value) {
+                $attributes[(string) $key] = true;
+            }
+        }
+
+        $comparison = $products->map(fn (Producto $product) => [
+            'id' => $product->id,
+            'titulo' => $product->titulo,
+            'precio' => $product->precio,
+            'estado_producto' => $product->estado_producto,
+            'ciudad_aprox' => $product->ciudad_aprox,
+            'categoria' => $product->categoria?->nombre,
+            'imagen' => $product->imagenes->first()?->imagen,
+            'atributos' => collect($attributes)->mapWithKeys(
+                fn ($unused, $key) => [
+                    $key => $product->atributos[$key] ?? null,
+                ],
+            )->all(),
+        ]);
+
+        DB::table('comparaciones_producto')->insert([
+            'usuario_id' => $request->user()?->id,
+            'sesion_key' => $request->header('X-AEGIS-Session'),
+            'producto_ids' => implode(',', $ids),
+            'fecha' => now(),
+        ]);
+
+        return response()->json([
+            'data' => [
+                'productos' => $comparison,
+                'campos' => array_keys($attributes),
+                'advertencia' => $warning,
+            ],
+        ]);
+    }
+
+    public function similar(Request $request, int $producto)
+    {
+        $base = Producto::query()
+            ->activo()
+            ->where('visibilidad', 'publica')
+            ->with(['categoria:id,nombre,descripcion', 'imagenes:id,producto_id,imagen,principal'])
+            ->findOrFail($producto);
+
+        $price = (float) $base->precio;
+        $range = max(1000, $price * 0.20);
+        $query = Producto::query()
+            ->activo()
+            ->where('visibilidad', 'publica')
+            ->whereKeyNot($base->id)
+            ->where('categoria_id', $base->categoria_id)
+            ->whereBetween('precio', [max(0, $price - $range), $price + $range])
+            ->with(['categoria:id,nombre,descripcion', 'imagenes:id,producto_id,imagen,principal'])
+            ->latest('fecha_publicacion')
+            ->limit(8);
+
+        $similar = $query->get();
+
+        return response()->json([
+            'data' => ProductoResource::collection($similar)->resolve($request),
+            'criterio' => 'misma categoría y precio dentro de ±20%',
+        ]);
+    }
+
     public function index(Request $request)
     {
         $filters = $request->validate([
@@ -31,8 +135,14 @@ class ProductoController extends Controller
             'precio_max' => ['nullable', 'numeric', 'min:0'],
             'estado' => ['nullable', 'in:todo,nuevo,usado,reacondicionado'],
             'cat' => ['nullable', 'string', 'max:100'],
-            'sort' => ['nullable', 'in:reciente,precio-asc,precio-desc'],
+            'sort' => ['nullable', 'in:reciente,relevancia,precio-asc,precio-desc'],
             'per_page' => ['nullable', 'integer', 'min:1', 'max:50'],
+            'marca' => ['nullable', 'string', 'max:100'],
+            'ciudad' => ['nullable', 'string', 'max:100'],
+            'ciudad_aprox' => ['nullable', 'string', 'max:100'],
+            'dias' => ['nullable', 'integer', 'min:1', 'max:3650'],
+            'atributos' => ['nullable', 'array', 'max:30'],
+            'atributos.*' => ['nullable', 'string', 'max:200'],
         ]);
 
         $query = Producto::query()
@@ -68,13 +178,51 @@ class ProductoController extends Controller
                 ->where('nombre', 'like', '%'.$filters['cat'].'%'));
         }
 
+        $location = $filters['ciudad_aprox'] ?? $filters['ciudad'] ?? null;
+        if ($location) {
+            $query->where(fn ($builder) => $builder
+                ->where('ciudad_aprox', 'like', '%'.$location.'%')
+                ->orWhere('ciudad', 'like', '%'.$location.'%'));
+        }
+        if (! empty($filters['dias'])) {
+            $query->where('fecha_publicacion', '>=', now()->subDays((int) $filters['dias']));
+        }
+        if (! empty($filters['marca'])) {
+            $query->whereJsonContains('atributos', ['marca' => $filters['marca']]);
+        }
+        if (! empty($filters['atributos'])) {
+            foreach ($filters['atributos'] as $attribute) {
+                $parts = explode('=', $attribute, 2);
+                if (count($parts) === 2) {
+                    $key = Str::slug(trim($parts[0]), '_');
+                    $value = trim($parts[1]);
+                    $query->whereJsonContains('atributos', [$key => $value]);
+                }
+            }
+        }
+
         match ($filters['sort'] ?? 'reciente') {
             'precio-asc' => $query->orderBy('precio'),
             'precio-desc' => $query->orderByDesc('precio'),
+            'relevancia' => $query
+                ->when(! empty($filters['busqueda']), fn ($builder) => $builder
+                    ->orderByDesc(DB::raw(
+                        'CASE WHEN titulo LIKE '.DB::getPdo()->quote('%'.$filters['busqueda'].'%').' THEN 1 ELSE 0 END',
+                    ))
+                )
+                ->latest('fecha_publicacion'),
             default => $query->latest('fecha_publicacion'),
         };
 
         $products = $query->paginate($filters['per_page'] ?? 24);
+
+        DB::table('busquedas_productos')->insert([
+            'usuario_id' => $request->user()?->id,
+            'sesion_key' => $request->header('X-AEGIS-Session'),
+            'filtros' => json_encode($filters),
+            'veces' => 1,
+            'ultima_busqueda' => now(),
+        ]);
 
         return ProductoResource::collection($products);
     }

@@ -273,6 +273,14 @@ Las encuestas usan `encuestas`, `opciones_encuesta` y `votos_encuesta`. Una encu
 
 Los filtros públicos conservan `GET /api/productos`; `precio_min` y `precio_max` usan comparación numérica, incluyendo precio cero. Las rutas `/api/productos/mis*` son propias del usuario autenticado.
 
+### Descubrimiento de marketplace
+
+`GET /api/productos` combina búsqueda, categoría, estado, precio mínimo/máximo, ubicación, marca, atributos, recencia y orden. Los filtros SQL usan índices por precio/categoría/estado/ubicación.
+
+`GET /api/productos/comparar?ids=1,2` muestra hasta cuatro productos activos públicos y una matriz de atributos JSON. `GET /api/productos/{id}/similares` usa categoría y ±20% de precio sin afirmar ranking de IA.
+
+Las búsquedas se registran en `busquedas_productos`; las comparaciones opcionales en `comparaciones_producto`. React persiste preferencias locales y sincroniza filtros activos en el hash URL.
+
 ## 6. Modelos Eloquent y relaciones
 
 | Modelo | Tabla | Relaciones definidas / comportamiento |

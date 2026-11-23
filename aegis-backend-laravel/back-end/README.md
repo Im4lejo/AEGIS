@@ -178,6 +178,9 @@ El foro usa `publicaciones_foro` como entidad canónica y conserva `/api/foro`.
 - Publicar exige campos completos e imágenes.
 - Mis productos permite tabs por estado y estadísticas almacenadas básicas.
 - `precio_max=0` incluye anuncios gratuitos.
+- Filtra por precio, ubicación aproximada, marca, atributos, recencia y categoría.
+- Comparar acepta 2–4 productos públicos.
+- Similares usa misma categoría y ±20% de precio.
 
 ## Verificación
 
