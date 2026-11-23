@@ -190,6 +190,14 @@ El foro usa `publicaciones_foro` como entidad canónica y conserva `/api/foro`.
 - Los badges no se inventan a partir de likes o seguidores.
 - Productos privados y borradores usan `noindex,nofollow`.
 
+## Tiendas e inventario
+
+- Tiendas particulares, comerciales y establecimientos usan el mismo usuario propietario.
+- Roles contextuales: owner, gestor y vendedor.
+- La verificación solo muestra badge después de aprobación admin.
+- Inventario por producto incluye stock disponible y reservado.
+- Ajustes usan transacciones y movimientos auditados.
+
 ## Verificación
 
 ```bash

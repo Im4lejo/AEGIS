@@ -153,6 +153,7 @@ class ProductoController extends Controller
                 'categoria:id,nombre,descripcion',
                 'vendedor:id,nombre,apellido,username,foto_perfil_url as foto_perfil,reputacion',
                 'imagenes:id,producto_id,imagen,principal',
+                'tienda:id,nombre,slug,tipo,estado_verificacion,verificada_en,ciudad_aprox',
             ]);
 
         if (! empty($filters['busqueda'])) {
@@ -301,7 +302,7 @@ class ProductoController extends Controller
         $resource['confianza'] = [
             'reputacion_comercial' => $product->vendedor?->reputacion,
             'resenas_verificadas' => $reviews->count(),
-            'vendedor_verificado' => false,
+            'vendedor_verificado' => $product->tienda?->estado_verificacion === 'aprobada',
             'nota' => 'Solo se muestran comprobaciones reales; ninguna insignia se infiere de likes o seguidores.',
         ];
         $resource['seguridad'] = [
@@ -332,14 +333,13 @@ class ProductoController extends Controller
             'estado_producto' => 'nullable|in:nuevo,usado,reacondicionado',
             'ciudad' => 'nullable|string|max:100',
             'ciudad_aprox' => 'nullable|string|max:100',
+            'tienda_id' => 'nullable|integer|exists:tiendas,id',
             'atributos' => 'nullable|array|max:30',
             'visibilidad' => 'nullable|in:publica,privada,grupo_privado',
             'imagenes' => 'nullable|array|max:5',
             'imagenes.*' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
             'alt_text' => 'nullable|string|max:255',
             'estado_publicacion' => 'nullable|in:borrador,activo',
-            'atributos' => 'nullable|array|max:30',
-            'ciudad_aprox' => 'nullable|string|max:100',
         ]);
 
         $estadoInicial = $validated['estado_publicacion'] ?? 'activo';
@@ -389,6 +389,7 @@ class ProductoController extends Controller
                     'estado_publicacion' => $validated['estado_publicacion'] ?? 'activo',
                     'atributos' => $validated['atributos'] ?? null,
                     'ciudad_aprox' => $validated['ciudad_aprox'] ?? null,
+                    'tienda_id' => $validated['tienda_id'] ?? null,
                     'fecha_estado' => now(),
                 ]);
 
@@ -458,6 +459,7 @@ class ProductoController extends Controller
             'ciudad' => 'nullable|string|max:100',
             'estado_publicacion' => 'sometimes|in:borrador,activo,pausado,reservado,vendido,archivado,oculto',
             'visibilidad' => 'sometimes|in:publica,privada,grupo_privado',
+            'tienda_id' => 'nullable|integer|exists:tiendas,id',
         ]);
 
         $product->update($validated);

@@ -405,6 +405,41 @@ export const communityApi = {
     request(`/comunidades/${encodeURIComponent(id)}/auditoria${queryString({ page, per_page: perPage })}`, { token }),
 }
 
+export const storeApi = {
+  list: (filters = {}) => request(`/tiendas${queryString(filters)}`),
+  show: (storeId) => request(`/tiendas/${encodeURIComponent(storeId)}`),
+  create: (details, token) =>
+    request('/tiendas', { method: 'POST', body: details, token }),
+  update: (storeId, details, token) =>
+    request(`/tiendas/${encodeURIComponent(storeId)}`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  requestVerification: (storeId, documentos, nota, token) =>
+    request(`/tiendas/${encodeURIComponent(storeId)}/verificacion`, {
+      method: 'POST',
+      body: { documentos, nota },
+      token,
+    }),
+  reviewVerification: (storeId, decision, nota, token) =>
+    request(`/tiendas/${encodeURIComponent(storeId)}/verificacion`, {
+      method: 'PATCH',
+      body: { decision, nota },
+      token,
+    }),
+  inventory: (storeId, token, page = 1, perPage = 20) =>
+    request(`/tiendas/${encodeURIComponent(storeId)}/inventario${queryString({ page, per_page: perPage })}`, { token }),
+  adjustInventory: (storeId, productId, details, token) =>
+    request(`/tiendas/${encodeURIComponent(storeId)}/inventario/${encodeURIComponent(productId)}`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  dashboard: (storeId, token) =>
+    request(`/tiendas/${encodeURIComponent(storeId)}/dashboard`, { token }),
+}
+
 export const savedApi = {
   list: (filters = {}, token) =>
     request(`/guardados${queryString(filters)}`, { token }),

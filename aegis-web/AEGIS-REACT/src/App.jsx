@@ -38,6 +38,7 @@ import { AccessRestrictedState } from './components/shared/ui'
 import { ErrorBoundary } from './components/shared/ui'
 import { ThemeProvider } from './theme/ThemeProvider'
 import Comunidades from './components/comunidades/views/Comunidades'
+import Tiendas from './components/tiendas/views/Tiendas'
 import './design-system/design-system.css'
 
 function Vista({ Componente }) {
@@ -152,6 +153,7 @@ function App() {
               <Route path="/home" element={<Vista Componente={Home} />} />
               <Route path="/foro" element={<Vista Componente={Foro} />} />
               <Route path="/comunidades" element={<Vista Componente={Comunidades} />} />
+              <Route path="/tiendas" element={<Vista Componente={Tiendas} />} />
               <Route
                 path="/publicacion"
                 element={<Vista Componente={Publicacion} />}

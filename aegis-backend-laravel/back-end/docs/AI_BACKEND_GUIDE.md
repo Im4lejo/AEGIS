@@ -287,6 +287,14 @@ Las búsquedas se registran en `busquedas_productos`; las comparaciones opcional
 
 Las preguntas viven en `preguntas_producto`. Públicamente solo aparecen las `respondida`. El vendedor propietario y administradores pueden responder/moderar. Visitantes pueden preguntar solo en anuncios activos o reservados públicos.
 
+### Tiendas e inventario
+
+`tiendas` separa identidad comercial de `Usuario`. `miembros_tienda` asigna owner/gestor/vendedor dentro de la tienda. `productos.tienda_id` vincula anuncios sin duplicar identidad.
+
+`verificaciones_tienda` conserva solicitudes protegidas y revisiones administrativas. La API pública solo expone el estado aprobado como insignia verificable.
+
+`inventario_producto` controla stock y reservas por producto. `movimientos_inventario` registra entradas, salidas, reservas, liberaciones y ajustes. Las operaciones usan bloqueo transaccional y rechazan stock negativo.
+
 ## 6. Modelos Eloquent y relaciones
 
 | Modelo | Tabla | Relaciones definidas / comportamiento |

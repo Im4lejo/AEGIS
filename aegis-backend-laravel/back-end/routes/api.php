@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\PerfilController;
 use App\Http\Controllers\Api\ProductoController;
 use App\Http\Controllers\Api\PuntoFisicoController;
+use App\Http\Controllers\Api\TiendaController;
 use App\Http\Controllers\Api\WebAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,8 @@ Route::get('/perfil/{usuario}/tabs/{tab}', [PerfilController::class, 'tab'])
 Route::get('/perfil/{usuario}/seguidores', [PerfilController::class, 'followers'])->whereNumber('usuario');
 Route::get('/perfil/{usuario}/siguiendo', [PerfilController::class, 'following'])->whereNumber('usuario');
 Route::get('/puntos-fisicos', [PuntoFisicoController::class, 'index']);
+Route::get('/tiendas', [TiendaController::class, 'index']);
+Route::get('/tiendas/{tienda}', [TiendaController::class, 'show'])->whereNumber('tienda');
 Route::get('/comunidades', [ComunidadController::class, 'index']);
 Route::get('/comunidades/sugerencias', [ComunidadController::class, 'suggestions']);
 Route::get('/comunidades/{comunidad}', [ComunidadController::class, 'show'])->whereNumber('comunidad');
@@ -69,6 +72,15 @@ Route::prefix('auth/web')->name('auth.web.')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/tiendas', [TiendaController::class, 'store']);
+    Route::patch('/tiendas/{tienda}', [TiendaController::class, 'update'])->whereNumber('tienda');
+    Route::post('/tiendas/{tienda}/verificacion', [TiendaController::class, 'requestVerification'])->whereNumber('tienda');
+    Route::patch('/tiendas/{tienda}/verificacion', [TiendaController::class, 'reviewVerification'])->whereNumber('tienda');
+    Route::get('/tiendas/{tienda}/inventario', [TiendaController::class, 'inventory'])->whereNumber('tienda');
+    Route::patch('/tiendas/{tienda}/inventario/{producto}', [TiendaController::class, 'adjustInventory'])
+        ->whereNumber('tienda')
+        ->whereNumber('producto');
+    Route::get('/tiendas/{tienda}/dashboard', [TiendaController::class, 'dashboard'])->whereNumber('tienda');
     Route::get('/productos/mis', [ProductoController::class, 'mine']);
     Route::get('/productos/mis/estadisticas', [ProductoController::class, 'stats']);
     Route::middleware(['account.active', 'verified.web'])->group(function () {
