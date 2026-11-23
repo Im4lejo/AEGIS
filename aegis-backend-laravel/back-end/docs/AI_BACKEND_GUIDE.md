@@ -329,6 +329,12 @@ La búsqueda global usa SQL sobre tablas existentes y el valor real de volumen n
 
 `busquedas_guardadas`, `historial_busqueda` y `preferencias_busqueda` conservan búsquedas, alertas, recomendaciones y preferencias. Los perfiles privados, publicaciones privadas y productos privados quedan excluidos.
 
+### Preferencias de usuario
+
+`preferencias_usuario` guarda JSON versionado por identidad AEGIS. Los valores se validan por versión y se combinan con defaults seguros.
+
+Las rutas `/api/preferencias` permiten leer, guardar y restablecer. React usa preview local y persiste servidor. Tema, densidad, contraste y movimiento no deben usar datos de otros usuarios ni alterar valores comerciales canónicos.
+
 ### Reseñas elegibles
 
 `calificaciones` requiere encuentro finalizado dentro de treinta días y contexto vendedor/comprador/punto. La unicidad es encuentro, autor y ámbito.

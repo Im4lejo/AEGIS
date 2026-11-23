@@ -42,6 +42,7 @@ import Tiendas from './components/tiendas/views/Tiendas'
 import Negociacion from './components/negociacion/views/Negociacion'
 import Notificaciones from './components/notificaciones/views/Notificaciones'
 import Busqueda from './components/busqueda/views/Busqueda'
+import Ajustes from './components/ajustes/views/Ajustes'
 import './design-system/design-system.css'
 
 function Vista({ Componente }) {
@@ -160,6 +161,7 @@ function App() {
               <Route path="/negociacion" element={<Vista Componente={Negociacion} />} />
               <Route path="/notificaciones" element={<Vista Componente={Notificaciones} />} />
               <Route path="/busqueda" element={<Vista Componente={Busqueda} />} />
+              <Route path="/ajustes" element={<Vista Componente={Ajustes} />} />
               <Route
                 path="/publicacion"
                 element={<Vista Componente={Publicacion} />}

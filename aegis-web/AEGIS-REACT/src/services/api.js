@@ -182,6 +182,19 @@ export const searchApi = {
     request('/busqueda/recomendaciones', { token }),
 }
 
+export const preferenceApi = {
+  defaults: () => request('/preferencias/defaults'),
+  get: (token) => request('/preferencias', { token }),
+  update: (version, preferencias, token) =>
+    request('/preferencias', {
+      method: 'PUT',
+      body: { version, preferencias },
+      token,
+    }),
+  reset: (token) =>
+    request('/preferencias/restablecer', { method: 'POST', token }),
+}
+
 export const authApi = {
   login: (credentials) =>
     request('/auth/web/login', { method: 'POST', body: credentials }),

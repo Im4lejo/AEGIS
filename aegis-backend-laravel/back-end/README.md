@@ -253,6 +253,13 @@ El foro usa `publicaciones_foro` como entidad canónica y conserva `/api/foro`.
 - Tendencias son agregados temporales sin identidades.
 - Recomendaciones muestran el criterio usado.
 
+## Ajustes y accesibilidad
+
+- `/ajustes` guarda preferencias por cuenta.
+- Theme, densidad, contraste, movimiento y acentos tienen defaults seguros.
+- Feed, Marketplace, Mensajería, Privacidad y Notificaciones son configurables.
+- Reestablecer devuelve el paquete completo de defaults.
+
 ## Verificación
 
 ```bash

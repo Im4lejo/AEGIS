@@ -15,6 +15,30 @@ body {
   font-family: var(--font-family-sans);
 }
 
+html[data-density='compacta'] {
+  --density-gap: 8px;
+}
+
+html[data-density='espaciada'] {
+  --density-gap: 20px;
+}
+
+html[data-contrast='alto'] {
+  --color-text: #101828;
+  --color-border: #344054;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 button,
 input,
 select,

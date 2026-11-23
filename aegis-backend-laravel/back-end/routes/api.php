@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\MensajeController;
 use App\Http\Controllers\Api\NegociacionController;
 use App\Http\Controllers\Api\NotificacionController;
 use App\Http\Controllers\Api\PerfilController;
+use App\Http\Controllers\Api\PreferenciaController;
 use App\Http\Controllers\Api\ProductoController;
 use App\Http\Controllers\Api\PuntoFisicoController;
 use App\Http\Controllers\Api\ResenaController;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/inicio', InicioController::class);
 Route::get('/categorias', [ProductoController::class, 'categorias']);
+Route::get('/preferencias/defaults', [PreferenciaController::class, 'defaults']);
 Route::get('/busqueda', [BusquedaController::class, 'index']);
 Route::get('/busqueda/sugerencias', [BusquedaController::class, 'suggestions']);
 Route::get('/busqueda/tendencias', [BusquedaController::class, 'trends']);
@@ -84,6 +86,9 @@ Route::prefix('auth/web')->name('auth.web.')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
+    Route::get('/preferencias', [PreferenciaController::class, 'show']);
+    Route::put('/preferencias', [PreferenciaController::class, 'update']);
+    Route::post('/preferencias/restablecer', [PreferenciaController::class, 'reset']);
     Route::get('/busqueda/guardadas', [BusquedaController::class, 'savedIndex']);
     Route::post('/busqueda/guardadas', [BusquedaController::class, 'saveSearch']);
     Route::delete('/busqueda/guardadas/{busqueda}', [BusquedaController::class, 'deleteSaved'])->whereNumber('busqueda');
