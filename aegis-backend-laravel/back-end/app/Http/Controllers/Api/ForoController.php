@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\PublicarPostProgramado;
+use App\Models\Comentario;
 use App\Models\Publicacion;
 use App\Models\ReaccionPublicacion;
+use App\Models\Repost;
 use App\Models\Usuario;
 use App\Services\MediaManager;
 use Carbon\Carbon;
@@ -214,6 +216,7 @@ class ForoController extends Controller
     {
         $validated = $request->validate([
             'comentario' => ['required', 'string', 'max:2000'],
+            'comentario_padre_id' => ['nullable', 'integer', 'exists:comentarios_foro,id'],
         ]);
         $post = Publicacion::query()->findOrFail($publicacion);
         if (! Gate::forUser($request->user())->allows('view.post', $post)) {
@@ -222,9 +225,37 @@ class ForoController extends Controller
                 'code' => 'PRIVATE_RESOURCE',
             ], 403);
         }
+        if (! empty($validated['comentario_padre_id'])) {
+            $parent = Comentario::query()
+                ->whereKey($validated['comentario_padre_id'])
+                ->where('publicacion_id', $post->id)
+                ->whereNull('comentario_padre_id')
+                ->where('estado', '!=', 'eliminado')
+                ->first();
+            if (! $parent) {
+                throw ValidationException::withMessages([
+                    'comentario_padre_id' => ['Solo se permiten respuestas a un comentario principal.'],
+                ]);
+            }
+        }
+        if ($this->isBlockedFromPost($request->user(), $post)) {
+            return response()->json(['message' => 'No puedes interactuar.', 'code' => 'PROFILE_RESTRICTED'], 403);
+        }
+        $recentComments = Comentario::query()
+            ->where('usuario_id', $request->user()->id)
+            ->where('fecha_comentario', '>=', now()->subMinute())
+            ->count();
+        if ($recentComments >= 10) {
+            return response()->json([
+                'message' => 'Has alcanzado el límite temporal de comentarios.',
+                'code' => 'COMMENT_RATE_LIMIT',
+            ], 429);
+        }
         $comment = $post->comentarios()->create([
             'usuario_id' => $request->user()->getKey(),
             'comentario' => trim($validated['comentario']),
+            'comentario_padre_id' => $validated['comentario_padre_id'] ?? null,
+            'estado' => 'activo',
         ]);
 
         return response()->json([
@@ -400,6 +431,135 @@ class ForoController extends Controller
         return response()->json(['data' => ['tipo' => $validated['tipo'], 'count' => $count]]);
     }
 
+    public function comments(Request $request, int $publicacion)
+    {
+        $post = Publicacion::query()->findOrFail($publicacion);
+        $viewer = $request->user();
+        $allowed = in_array($post->visibilidad, ['publica', null], true)
+            || ($viewer && Gate::forUser($viewer)->allows('view.post', $post));
+        if (! $allowed) {
+            return response()->json(['message' => 'Sin acceso.', 'code' => 'PRIVATE_RESOURCE'], 403);
+        }
+
+        $perPage = max(1, min(50, (int) $request->integer('per_page', 20)));
+        $comments = Comentario::query()
+            ->where('publicacion_id', $post->id)
+            ->whereNull('comentario_padre_id')
+            ->where('estado', '!=', 'eliminado')
+            ->with([
+                'usuario:id,nombre,username,foto_perfil_url',
+                'respuestas' => fn ($query) => $query
+                    ->with('usuario:id,nombre,username,foto_perfil_url')
+                    ->orderBy('fecha_comentario')
+                    ->limit(20),
+            ])
+            ->orderByDesc('fecha_comentario')
+            ->orderByDesc('id')
+            ->paginate($perPage);
+
+        return response()->json([
+            'data' => $comments->items(),
+            'meta' => [
+                'current_page' => $comments->currentPage(),
+                'per_page' => $comments->perPage(),
+                'total' => $comments->total(),
+                'last_page' => $comments->lastPage(),
+            ],
+        ]);
+    }
+
+    public function updateComment(Request $request, int $publicacion, int $comentario)
+    {
+        $post = Publicacion::query()->findOrFail($publicacion);
+        $comment = Comentario::query()
+            ->whereKey($comentario)
+            ->where('publicacion_id', $post->id)
+            ->firstOrFail();
+
+        if ((int) $comment->usuario_id !== (int) $request->user()->id
+            && $request->user()->rol !== 'admin'
+        ) {
+            return response()->json(['message' => 'Sin permiso.', 'code' => 'FORBIDDEN_RESOURCE'], 403);
+        }
+
+        $validated = $request->validate([
+            'comentario' => ['required', 'string', 'max:2000'],
+        ]);
+        $comment->update([
+            'comentario' => trim($validated['comentario']),
+            'estado' => 'editado',
+            'editado_en' => now(),
+        ]);
+
+        return response()->json(['data' => $comment->fresh('usuario')]);
+    }
+
+    public function destroyComment(Request $request, int $publicacion, int $comentario)
+    {
+        $comment = Comentario::query()
+            ->whereKey($comentario)
+            ->where('publicacion_id', $publicacion)
+            ->firstOrFail();
+
+        if ((int) $comment->usuario_id !== (int) $request->user()->id
+            && $request->user()->rol !== 'admin'
+        ) {
+            return response()->json(['message' => 'Sin permiso.', 'code' => 'FORBIDDEN_RESOURCE'], 403);
+        }
+
+        $comment->update([
+            'estado' => 'eliminado',
+            'comentario' => '[comentario eliminado]',
+        ]);
+
+        return response()->json([
+            'message' => 'Comentario eliminado.',
+            'code' => 'RESOURCE_DELETED',
+        ]);
+    }
+
+    public function repost(Request $request, int $publicacion)
+    {
+        $post = Publicacion::query()->findOrFail($publicacion);
+        if (! Gate::forUser($request->user())->allows('view.post', $post)
+            && $post->visibilidad !== 'publica'
+        ) {
+            return response()->json(['message' => 'Sin acceso.', 'code' => 'PRIVATE_RESOURCE'], 403);
+        }
+
+        $validated = $request->validate([
+            'comentario' => ['nullable', 'string', 'max:500'],
+        ]);
+        $repost = Repost::query()->firstOrCreate([
+            'usuario_id' => $request->user()->id,
+            'publicacion_id' => $post->id,
+        ], [
+            'comentario' => trim($validated['comentario'] ?? ''),
+        ]);
+
+        return response()->json([
+            'message' => 'Publicación compartida.',
+            'data' => [
+                'id' => $repost->id,
+                'count' => Repost::query()->where('publicacion_id', $post->id)->count(),
+            ],
+        ], 201);
+    }
+
+    public function unrepost(Request $request, int $publicacion)
+    {
+        Repost::query()
+            ->where('usuario_id', $request->user()->id)
+            ->where('publicacion_id', $publicacion)
+            ->delete();
+
+        return response()->json([
+            'data' => [
+                'count' => Repost::query()->where('publicacion_id', $publicacion)->count(),
+            ],
+        ]);
+    }
+
     private function publicacionRelations(): array
     {
         return [
@@ -430,6 +590,22 @@ class ForoController extends Controller
             ->unique()
             ->values()
             ->all();
+    }
+
+    private function isBlockedFromPost(Usuario $viewer, Publicacion $post): bool
+    {
+        return DB::table('bloqueos_usuario')
+            ->where('tipo', 'bloqueo')
+            ->where(function ($query) use ($viewer, $post): void {
+                $query->where(function ($sub) use ($viewer, $post): void {
+                    $sub->where('bloqueador_id', $viewer->id)
+                        ->where('bloqueado_id', $post->usuario_id);
+                })->orWhere(function ($sub) use ($viewer, $post): void {
+                    $sub->where('bloqueador_id', $post->usuario_id)
+                        ->where('bloqueado_id', $viewer->id);
+                });
+            })
+            ->exists();
     }
 
     private function safePreviewUrl(?string $url): ?string

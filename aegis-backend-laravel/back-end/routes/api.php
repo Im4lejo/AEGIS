@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AdminAuthorizationController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ForoController;
+use App\Http\Controllers\Api\GuardadosController;
 use App\Http\Controllers\Api\InicioController;
 use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\PerfilController;
@@ -17,9 +18,12 @@ Route::get('/productos', [ProductoController::class, 'index']);
 Route::get('/productos/{producto}', [ProductoController::class, 'show'])->whereNumber('producto');
 Route::get('/foro', [ForoController::class, 'index']);
 Route::get('/foro/{publicacion}', [ForoController::class, 'show'])->whereNumber('publicacion');
+Route::get('/foro/{publicacion}/comentarios', [ForoController::class, 'comments'])->whereNumber('publicacion');
 Route::get('/perfil/{usuario}', [PerfilController::class, 'show'])->whereNumber('usuario');
 Route::get('/perfil/{usuario}/tabs/{tab}', [PerfilController::class, 'tab'])
     ->whereNumber('usuario');
+Route::get('/perfil/{usuario}/seguidores', [PerfilController::class, 'followers'])->whereNumber('usuario');
+Route::get('/perfil/{usuario}/siguiendo', [PerfilController::class, 'following'])->whereNumber('usuario');
 Route::get('/puntos-fisicos', [PuntoFisicoController::class, 'index']);
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -78,6 +82,20 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/foro/{publicacion}/archivar', [ForoController::class, 'archive'])->whereNumber('publicacion');
         Route::post('/foro/{publicacion}/reacciones', [ForoController::class, 'react'])->whereNumber('publicacion');
         Route::delete('/foro/{publicacion}/reacciones', [ForoController::class, 'unreact'])->whereNumber('publicacion');
+        Route::patch('/foro/{publicacion}/comentarios/{comentario}', [ForoController::class, 'updateComment'])
+            ->whereNumber('publicacion')
+            ->whereNumber('comentario');
+        Route::delete('/foro/{publicacion}/comentarios/{comentario}', [ForoController::class, 'destroyComment'])
+            ->whereNumber('publicacion')
+            ->whereNumber('comentario');
+        Route::post('/foro/{publicacion}/reposts', [ForoController::class, 'repost'])->whereNumber('publicacion');
+        Route::delete('/foro/{publicacion}/reposts', [ForoController::class, 'unrepost'])->whereNumber('publicacion');
+        Route::get('/guardados', [GuardadosController::class, 'index']);
+        Route::post('/guardados', [GuardadosController::class, 'save']);
+        Route::delete('/guardados', [GuardadosController::class, 'unsave']);
+        Route::get('/guardados/colecciones', [GuardadosController::class, 'collections']);
+        Route::post('/guardados/colecciones', [GuardadosController::class, 'storeCollection']);
+        Route::post('/reportes/contextual', [GuardadosController::class, 'report']);
         Route::post('/foro/{publicacion}/imagenes', [MediaController::class, 'storeForo'])->whereNumber('publicacion');
         Route::delete('/foro/{publicacion}/imagenes/{imagen}', [MediaController::class, 'destroyForo'])->whereNumber('publicacion')->whereNumber('imagen');
         Route::patch('/foro/{publicacion}/imagenes/orden', [MediaController::class, 'reorderForo'])->whereNumber('publicacion');

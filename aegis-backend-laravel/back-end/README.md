@@ -145,6 +145,15 @@ El foro usa `publicaciones_foro` como entidad canónica y conserva `/api/foro`.
 - Reacciones eficientes por publicación, usuario y tipo.
 - Feed de bloques excluye usuarios bloqueados.
 
+## Interacciones sociales
+
+- Comentarios admiten respuestas al comentario principal y edición/borrado lógico.
+- Reacciones y reposts son idempotentes.
+- Guardados soportan posts, productos y discusiones y colecciones personales.
+- Seguir mantiene el modelo de seguidores; no se agregó una entidad de amistad redundante.
+- Los reportes incluyen recurso contextual.
+- Los comentarios tienen límite temporal y los bloqueos impiden interacción cruzada.
+
 ## Verificación
 
 ```bash

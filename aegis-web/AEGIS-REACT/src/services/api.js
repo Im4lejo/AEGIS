@@ -232,6 +232,30 @@ export const forumApi = {
       method: 'DELETE',
       token,
     }),
+  comments: (postId, page = 1, perPage = 20) =>
+    request(`/foro/${encodeURIComponent(postId)}/comentarios${queryString({ page, per_page: perPage })}`),
+  updateComment: (postId, commentId, comentario, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/comentarios/${encodeURIComponent(commentId)}`, {
+      method: 'PATCH',
+      body: { comentario },
+      token,
+    }),
+  deleteComment: (postId, commentId, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/comentarios/${encodeURIComponent(commentId)}`, {
+      method: 'DELETE',
+      token,
+    }),
+  repost: (postId, comentario, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/reposts`, {
+      method: 'POST',
+      body: comentario ? { comentario } : {},
+      token,
+    }),
+  unrepost: (postId, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/reposts`, {
+      method: 'DELETE',
+      token,
+    }),
   comment: (postId, comentario, token) =>
     request(`/foro/${postId}/comentarios`, {
       method: 'POST',
@@ -262,6 +286,20 @@ export const forumApi = {
     }),
 }
 
+export const savedApi = {
+  list: (filters = {}, token) =>
+    request(`/guardados${queryString(filters)}`, { token }),
+  collections: (token) => request('/guardados/colecciones', { token }),
+  createCollection: (details, token) =>
+    request('/guardados/colecciones', { method: 'POST', body: details, token }),
+  save: (details, token) =>
+    request('/guardados', { method: 'POST', body: details, token }),
+  unsave: (details, token) =>
+    request(`/guardados${queryString(details)}`, { method: 'DELETE', token }),
+  report: (details, token) =>
+    request('/reportes/contextual', { method: 'POST', body: details, token }),
+}
+
 export const profileApi = {
   show: (userId) => request(`/perfil/${encodeURIComponent(userId)}`),
   own: (token) => request('/perfil/me', { token }),
@@ -273,6 +311,10 @@ export const profileApi = {
     request(`/perfil/${encodeURIComponent(userId)}/seguir`, { method: 'POST', token }),
   unfollow: (userId, token) =>
     request(`/perfil/${encodeURIComponent(userId)}/seguir`, { method: 'DELETE', token }),
+  followers: (userId, page = 1, perPage = 20) =>
+    request(`/perfil/${encodeURIComponent(userId)}/seguidores${queryString({ page, per_page: perPage })}`),
+  following: (userId, page = 1, perPage = 20) =>
+    request(`/perfil/${encodeURIComponent(userId)}/siguiendo${queryString({ page, per_page: perPage })}`),
   restrict: (userId, tipo, token) =>
     request(`/perfil/${encodeURIComponent(userId)}/restriccion`, {
       method: 'POST',

@@ -243,6 +243,12 @@ Para-ti ordena fijados y `rank_base`, después fecha e ID. Siguiendo limita el r
 
 Las reacciones usan `reacciones_publicacion` con unicidad por publicación, usuario y tipo. Las menciones usan la tabla pivote `menciones_publicacion`. Las etiquetas mantienen registros normalizados y enlaces seguros HTTP/HTTPS.
 
+### Interacciones sociales
+
+Los comentarios mantienen profundidad máxima de una respuesta sobre el comentario principal. Se editan con `estado=editado` y se eliminan con estado `eliminado`; se conserva el hilo.
+
+`reposts` tiene unicidad actor/publicación. `guardados` usa `recurso_tipo/recurso_id` con unicidad por usuario/recurso y colecciones opcionales propias. `reportes` admite contexto por tipo e ID. Los endpoints revalidan propiedad, visibilidad y bloqueos.
+
 ## 6. Modelos Eloquent y relaciones
 
 | Modelo | Tabla | Relaciones definidas / comportamiento |

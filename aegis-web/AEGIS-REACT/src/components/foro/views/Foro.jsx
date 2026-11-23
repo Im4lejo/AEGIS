@@ -4,7 +4,7 @@ import Footer from '../../layouts/Footer'
 import Sidebar from '../../layouts/Sidebar'
 import { EmptyState, ErrorState, LoadingState } from '../../shared/ApiState'
 import { useAuth } from '../../../auth/useAuth'
-import { forumApi } from '../../../services/api'
+import { forumApi, savedApi } from '../../../services/api'
 import '../css/foro.css'
 
 const IconComment = () => (
@@ -690,6 +690,37 @@ export default function Foro({ auth, onNavigate }) {
                     onClick={() => compartir(post)}
                   >
                     <IconShare />
+                  </button>
+                  <button
+                    className="foro-action"
+                    type="button"
+                    onClick={async () => {
+                      try {
+                        await forumApi.repost(post.id, '', token)
+                        setToast('Publicación compartida')
+                      } catch (error) {
+                        setToast(error.message)
+                      }
+                    }}
+                  >
+                    Compartir
+                  </button>
+                  <button
+                    className="foro-action"
+                    type="button"
+                    onClick={async () => {
+                      try {
+                        await savedApi.save({
+                          recurso_tipo: 'post',
+                          recurso_id: post.id,
+                        }, token)
+                        setToast('Guardado en tu colección')
+                      } catch (error) {
+                        setToast(error.message)
+                      }
+                    }}
+                  >
+                    Guardar
                   </button>
                 </div>
 

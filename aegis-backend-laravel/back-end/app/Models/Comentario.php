@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Comentario extends Model
 {
@@ -11,11 +12,21 @@ class Comentario extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['publicacion_id', 'usuario_id', 'comentario'];
+    protected $fillable = [
+        'publicacion_id',
+        'usuario_id',
+        'comentario_padre_id',
+        'comentario',
+        'estado',
+        'editado_en',
+    ];
 
     protected function casts(): array
     {
-        return ['fecha_comentario' => 'datetime'];
+        return [
+            'fecha_comentario' => 'datetime',
+            'editado_en' => 'datetime',
+        ];
     }
 
     public function publicacion(): BelongsTo
@@ -26,5 +37,17 @@ class Comentario extends Model
     public function usuario(): BelongsTo
     {
         return $this->belongsTo(Usuario::class, 'usuario_id');
+    }
+
+    public function padre(): BelongsTo
+    {
+        return $this->belongsTo(Comentario::class, 'comentario_padre_id');
+    }
+
+    public function respuestas(): HasMany
+    {
+        return $this->hasMany(Comentario::class, 'comentario_padre_id')
+            ->where('estado', '!=', 'eliminado')
+            ->orderBy('fecha_comentario');
     }
 }

@@ -294,6 +294,70 @@ class PerfilController extends Controller
         return response()->json(['message' => 'Dejaste de seguir esta cuenta.']);
     }
 
+    public function followers(Request $request, int $usuario)
+    {
+        $profile = Usuario::query()->findOrFail($usuario);
+        if (! $this->canViewProfile($request->user(), $profile)
+            || ! $profile->mostrar_seguidores
+        ) {
+            return response()->json([
+                'message' => 'La lista de seguidores no está disponible.',
+                'code' => 'PROFILE_RESTRICTED',
+            ], 403);
+        }
+
+        $followers = Usuario::query()
+            ->whereHas('seguimientoRecibido', fn ($query) => $query
+                ->where('estado', 'aceptado'))
+            ->whereIn('id', DB::table('seguimientos')
+                ->where('seguido_id', $profile->id)
+                ->where('estado', 'aceptado')
+                ->pluck('seguidor_id'))
+            ->select(['id', 'nombre', 'apellido', 'username', 'foto_perfil_url'])
+            ->paginate((int) $request->integer('per_page', 20));
+
+        return response()->json([
+            'data' => $followers->items(),
+            'meta' => [
+                'current_page' => $followers->currentPage(),
+                'per_page' => $followers->perPage(),
+                'total' => $followers->total(),
+                'last_page' => $followers->lastPage(),
+            ],
+        ]);
+    }
+
+    public function following(Request $request, int $usuario)
+    {
+        $profile = Usuario::query()->findOrFail($usuario);
+        if (! $this->canViewProfile($request->user(), $profile)
+            || ! $profile->mostrar_seguidores
+        ) {
+            return response()->json([
+                'message' => 'La lista de seguidos no está disponible.',
+                'code' => 'PROFILE_RESTRICTED',
+            ], 403);
+        }
+
+        $following = Usuario::query()
+            ->whereIn('id', DB::table('seguimientos')
+                ->where('seguidor_id', $profile->id)
+                ->where('estado', 'aceptado')
+                ->pluck('seguido_id'))
+            ->select(['id', 'nombre', 'apellido', 'username', 'foto_perfil_url'])
+            ->paginate((int) $request->integer('per_page', 20));
+
+        return response()->json([
+            'data' => $following->items(),
+            'meta' => [
+                'current_page' => $following->currentPage(),
+                'per_page' => $following->perPage(),
+                'total' => $following->total(),
+                'last_page' => $following->lastPage(),
+            ],
+        ]);
+    }
+
     public function restrict(Request $request, int $usuario)
     {
         $validated = $request->validate([
