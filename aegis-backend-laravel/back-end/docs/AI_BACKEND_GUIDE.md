@@ -323,6 +323,12 @@ Los QR no contienen datos personales: se genera un token opaco que el servidor n
 
 Las notificaciones de seguridad nunca quedan silenciadas in-app. Las demás pueden deshabilitarse. Email y push no se consideran activos sin credenciales/proveedor externo configurado.
 
+### Búsqueda unificada
+
+La búsqueda global usa SQL sobre tablas existentes y el valor real de volumen no justifica Elasticsearch/Meilisearch.
+
+`busquedas_guardadas`, `historial_busqueda` y `preferencias_busqueda` conservan búsquedas, alertas, recomendaciones y preferencias. Los perfiles privados, publicaciones privadas y productos privados quedan excluidos.
+
 ### Reseñas elegibles
 
 `calificaciones` requiere encuentro finalizado dentro de treinta días y contexto vendedor/comprador/punto. La unicidad es encuentro, autor y ámbito.

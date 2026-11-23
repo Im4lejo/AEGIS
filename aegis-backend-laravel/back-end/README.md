@@ -244,6 +244,15 @@ El foro usa `publicaciones_foro` como entidad canónica y conserva `/api/foro`.
 - Seguridad crítica conserva notificación in-app aunque el usuario silencie categorías sociales.
 - Email y push web permanecen deshabilitados hasta configurar proveedores.
 
+## Búsqueda unificada
+
+- SQL indexado busca productos, publicaciones, personas y comunidades.
+- Las entidades privadas no aparecen.
+- URL de búsqueda incluye término y entidad.
+- Búsquedas guardadas pueden activar alertas diarias/semanales.
+- Tendencias son agregados temporales sin identidades.
+- Recomendaciones muestran el criterio usado.
+
 ## Verificación
 
 ```bash

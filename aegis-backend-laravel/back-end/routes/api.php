@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AdminAuthorizationController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BusquedaController;
 use App\Http\Controllers\Api\ComunidadController;
 use App\Http\Controllers\Api\EncuentroController;
 use App\Http\Controllers\Api\ForoController;
@@ -21,6 +22,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/inicio', InicioController::class);
 Route::get('/categorias', [ProductoController::class, 'categorias']);
+Route::get('/busqueda', [BusquedaController::class, 'index']);
+Route::get('/busqueda/sugerencias', [BusquedaController::class, 'suggestions']);
+Route::get('/busqueda/tendencias', [BusquedaController::class, 'trends']);
 Route::get('/productos', [ProductoController::class, 'index']);
 Route::get('/productos/comparar', [ProductoController::class, 'compare']);
 Route::get('/productos/{producto}/similares', [ProductoController::class, 'similar'])->whereNumber('producto');
@@ -80,6 +84,12 @@ Route::prefix('auth/web')->name('auth.web.')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
+    Route::get('/busqueda/guardadas', [BusquedaController::class, 'savedIndex']);
+    Route::post('/busqueda/guardadas', [BusquedaController::class, 'saveSearch']);
+    Route::delete('/busqueda/guardadas/{busqueda}', [BusquedaController::class, 'deleteSaved'])->whereNumber('busqueda');
+    Route::get('/busqueda/recentes', [BusquedaController::class, 'recent']);
+    Route::post('/busqueda/preferencia', [BusquedaController::class, 'preference']);
+    Route::get('/busqueda/recomendaciones', [BusquedaController::class, 'recommendations']);
     Route::get('/notificaciones', [NotificacionController::class, 'index']);
     Route::get('/notificaciones/no-leidas', [NotificacionController::class, 'unread']);
     Route::patch('/notificaciones/leidas-todas', [NotificacionController::class, 'readAll']);

@@ -160,6 +160,28 @@ export const notificationApi = {
     }),
 }
 
+export const searchApi = {
+  search: (filters = {}) =>
+    request(`/busqueda${queryString(filters)}`),
+  suggestions: (q) =>
+    request(`/busqueda/sugerencias${queryString({ q })}`),
+  trends: (dias = 7) =>
+    request(`/busqueda/tendencias${queryString({ dias })}`),
+  saved: (token) => request('/busqueda/guardadas', { token }),
+  save: (details, token) =>
+    request('/busqueda/guardadas', { method: 'POST', body: details, token }),
+  removeSaved: (id, token) =>
+    request(`/busqueda/guardadas/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      token,
+    }),
+  recent: (token) => request('/busqueda/recentes', { token }),
+  preference: (details, token) =>
+    request('/busqueda/preferencia', { method: 'POST', body: details, token }),
+  recommendations: (token) =>
+    request('/busqueda/recomendaciones', { token }),
+}
+
 export const authApi = {
   login: (credentials) =>
     request('/auth/web/login', { method: 'POST', body: credentials }),
