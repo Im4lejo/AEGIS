@@ -317,6 +317,12 @@ Los encuentros pueden ser propuestos por comprador y confirmados/reprogramados p
 
 Los QR no contienen datos personales: se genera un token opaco que el servidor no devuelve como texto persistido, salvo hash SHA-256 en `token_hash`. Expiran, se usan una vez y solo owner del punto/admin pueden validar.
 
+### Notificaciones
+
+`notificaciones` admite categoría, tipo, actor, objeto, destino, lectura, archivo y clave dedupe por usuario. `preferencias_notificacion` configura in-app, email y push web por categoría.
+
+Las notificaciones de seguridad nunca quedan silenciadas in-app. Las demás pueden deshabilitarse. Email y push no se consideran activos sin credenciales/proveedor externo configurado.
+
 ### Reseñas elegibles
 
 `calificaciones` requiere encuentro finalizado dentro de treinta días y contexto vendedor/comprador/punto. La unicidad es encuentro, autor y ámbito.

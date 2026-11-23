@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { avatarUrl, navigateTo, route } from '../shared/presentation'
 import { useAuth } from '../../auth/useAuth'
-import { productApi } from '../../services/api'
+import { productApi, notificationApi } from '../../services/api'
 import Head from './Head'
 import Navbar from './Navbar'
 import WorkspaceChrome from './WorkspaceChrome'
@@ -18,6 +18,9 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
     const [menuAbierto, setMenuAbierto] = useState(false)
     const [categoriasAbiertas, setCategoriasAbiertas] = useState(false)
     const [categorias, setCategorias] = useState([])
+    const [notificaciones, setNotificaciones] = useState([])
+    const [noLeidas, setNoLeidas] = useState(0)
+    const [notificacionesAbiertas, setNotificacionesAbiertas] = useState(false)
     const [errorCategorias, setErrorCategorias] = useState('')
     const [unidades, setUnidades] = useState(totalUnidades())
     const profileRef = useRef(null)
@@ -43,6 +46,27 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
         window.addEventListener('carrito-cambio', actualizar)
         return () => window.removeEventListener('carrito-cambio', actualizar)
     }, [])
+
+    useEffect(() => {
+        if (!auth?.token) return undefined
+        let active = true
+        const cargar = () => {
+            notificationApi.inbox({ per_page: 8 }, auth.token)
+                .then(({ data, meta }) => {
+                    if (active) {
+                        setNotificaciones(data)
+                        setNoLeidas(meta.no_leidas || 0)
+                    }
+                })
+                .catch(() => {})
+        }
+        cargar()
+        const interval = window.setInterval(cargar, 15000)
+        return () => {
+            active = false
+            window.clearInterval(interval)
+        }
+    }, [auth?.token])
 
     useEffect(() => {
         if (!profileOpen) return
@@ -234,9 +258,39 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
                         <a className="header-message-link" href={route('/mensajes')} onClick={(event) => go(event, '/mensajes')}>
                             Mensajes
                         </a>
-                        <span className="header-notification-status" role="status" title="La bandeja de notificaciones aún no está disponible">
-                            Notificaciones · próximamente
-                        </span>
+                        <div className="header-notification">
+                            <button
+                                type="button"
+                                className="header-notification-button"
+                                aria-expanded={notificacionesAbiertas}
+                                aria-label={`Notificaciones${noLeidas ? `, ${noLeidas} no leídas` : ''}`}
+                                onClick={() => setNotificacionesAbiertas((open) => !open)}
+                            >
+                                Notificaciones
+                                {noLeidas > 0 && <span className="header-notification-badge">{noLeidas}</span>}
+                            </button>
+                            {notificacionesAbiertas && (
+                                <div className="header-notification-panel" role="region" aria-label="Novedades">
+                                    {notificaciones.length === 0 ? (
+                                        <p>No tienes notificaciones.</p>
+                                    ) : notificaciones.map((notification) => (
+                                        <button
+                                            type="button"
+                                            className={notification.leida ? 'header-notification-item' : 'header-notification-item unread'}
+                                            key={notification.id}
+                                            onClick={async () => {
+                                                await notificationApi.read(notification.id, auth.token)
+                                                if (notification.destino) go(null, notification.destino)
+                                                setNotificacionesAbiertas(false)
+                                            }}
+                                        >
+                                            <strong>{notification.titulo}</strong>
+                                            <span>{notification.mensaje}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                         <ThemeSelector className="theme-select--desktop" />
                         <div className="profile-dropdown-container" ref={profileRef}>
                             <button

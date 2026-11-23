@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\InicioController;
 use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\MensajeController;
 use App\Http\Controllers\Api\NegociacionController;
+use App\Http\Controllers\Api\NotificacionController;
 use App\Http\Controllers\Api\PerfilController;
 use App\Http\Controllers\Api\ProductoController;
 use App\Http\Controllers\Api\PuntoFisicoController;
@@ -79,6 +80,15 @@ Route::prefix('auth/web')->name('auth.web.')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
+    Route::get('/notificaciones', [NotificacionController::class, 'index']);
+    Route::get('/notificaciones/no-leidas', [NotificacionController::class, 'unread']);
+    Route::patch('/notificaciones/leidas-todas', [NotificacionController::class, 'readAll']);
+    Route::patch('/notificaciones/{notificacion}/leer', [NotificacionController::class, 'read'])->whereNumber('notificacion');
+    Route::patch('/notificaciones/{notificacion}/archivar', [NotificacionController::class, 'archive'])->whereNumber('notificacion');
+    Route::delete('/notificaciones/{notificacion}', [NotificacionController::class, 'delete'])->whereNumber('notificacion');
+    Route::get('/notificaciones/preferencias', [NotificacionController::class, 'preferences']);
+    Route::patch('/notificaciones/preferencias', [NotificacionController::class, 'updatePreferences']);
+    Route::post('/notificaciones/probar', [NotificacionController::class, 'emitTest']);
     Route::get('/resenas/elegibles', [ResenaController::class, 'eligible']);
     Route::post('/resenas', [ResenaController::class, 'store']);
     Route::patch('/resenas/{resena}/respuesta', [ResenaController::class, 'respond'])->whereNumber('resena');

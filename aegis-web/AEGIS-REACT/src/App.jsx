@@ -40,6 +40,7 @@ import { ThemeProvider } from './theme/ThemeProvider'
 import Comunidades from './components/comunidades/views/Comunidades'
 import Tiendas from './components/tiendas/views/Tiendas'
 import Negociacion from './components/negociacion/views/Negociacion'
+import Notificaciones from './components/notificaciones/views/Notificaciones'
 import './design-system/design-system.css'
 
 function Vista({ Componente }) {
@@ -156,6 +157,7 @@ function App() {
               <Route path="/comunidades" element={<Vista Componente={Comunidades} />} />
               <Route path="/tiendas" element={<Vista Componente={Tiendas} />} />
               <Route path="/negociacion" element={<Vista Componente={Negociacion} />} />
+              <Route path="/notificaciones" element={<Vista Componente={Notificaciones} />} />
               <Route
                 path="/publicacion"
                 element={<Vista Componente={Publicacion} />}

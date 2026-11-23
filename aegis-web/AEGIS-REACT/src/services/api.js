@@ -126,6 +126,40 @@ function queryString(params) {
   return serialized ? `?${serialized}` : ''
 }
 
+export const notificationApi = {
+  inbox: (filters = {}, token) =>
+    request(`/notificaciones${queryString(filters)}`, { token }),
+  unread: (token) => request('/notificaciones/no-leidas', { token }),
+  read: (id, token) =>
+    request(`/notificaciones/${encodeURIComponent(id)}/leer`, {
+      method: 'PATCH',
+      token,
+    }),
+  readAll: (categoria, token) =>
+    request('/notificaciones/leidas-todas', {
+      method: 'PATCH',
+      body: categoria ? { categoria } : {},
+      token,
+    }),
+  archive: (id, token) =>
+    request(`/notificaciones/${encodeURIComponent(id)}/archivar`, {
+      method: 'PATCH',
+      token,
+    }),
+  remove: (id, token) =>
+    request(`/notificaciones/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      token,
+    }),
+  preferences: (token) => request('/notificaciones/preferencias', { token }),
+  updatePreference: (details, token) =>
+    request('/notificaciones/preferencias', {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+}
+
 export const authApi = {
   login: (credentials) =>
     request('/auth/web/login', { method: 'POST', body: credentials }),

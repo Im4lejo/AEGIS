@@ -236,6 +236,14 @@ El foro usa `publicaciones_foro` como entidad canónica y conserva `/api/foro`.
 - Privados, borrados, archivados, vendidos y ocultos no generan compra.
 - El feed admite un tab Marketplace basado en referencias activas/reservadas.
 
+## Notificaciones
+
+- Cabecera muestra contador real y dropdown.
+- Bandeja filtra Social, Marketplace, Comunidades, Seguridad y Sistema.
+- Se puede leer, marcar todas, archivar y descartar.
+- Seguridad crítica conserva notificación in-app aunque el usuario silencie categorías sociales.
+- Email y push web permanecen deshabilitados hasta configurar proveedores.
+
 ## Verificación
 
 ```bash
