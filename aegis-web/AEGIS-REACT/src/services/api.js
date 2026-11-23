@@ -286,6 +286,63 @@ export const forumApi = {
     }),
 }
 
+export const communityApi = {
+  list: (filters = {}) =>
+    request(`/comunidades${queryString(filters)}`),
+  suggestions: (categoria = '') =>
+    request(`/comunidades/sugerencias${queryString({ categoria })}`),
+  show: (id) => request(`/comunidades/${encodeURIComponent(id)}`),
+  create: (details, token) =>
+    request('/comunidades', { method: 'POST', body: details, token }),
+  update: (id, details, token) =>
+    request(`/comunidades/${encodeURIComponent(id)}`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  archive: (id, token) =>
+    request(`/comunidades/${encodeURIComponent(id)}/archivar`, {
+      method: 'PATCH',
+      token,
+    }),
+  membership: (id, token) =>
+    request(`/comunidades/${encodeURIComponent(id)}/membresia`, {
+      method: 'POST',
+      token,
+    }),
+  leave: (id, token) =>
+    request(`/comunidades/${encodeURIComponent(id)}/membresia`, {
+      method: 'DELETE',
+      token,
+    }),
+  members: (id, page = 1, perPage = 20) =>
+    request(`/comunidades/${encodeURIComponent(id)}/miembros${queryString({ page, per_page: perPage })}`),
+  posts: (id, page = 1, perPage = 20) =>
+    request(`/comunidades/${encodeURIComponent(id)}/posts${queryString({ page, per_page: perPage })}`),
+  createPost: (id, details, token) =>
+    request(`/comunidades/${encodeURIComponent(id)}/posts`, {
+      method: 'POST',
+      body: details,
+      token,
+    }),
+  pending: (id, token, page = 1, perPage = 20) =>
+    request(`/comunidades/${encodeURIComponent(id)}/solicitudes${queryString({ page, per_page: perPage })}`, { token }),
+  decide: (id, userId, decision, token) =>
+    request(`/comunidades/${encodeURIComponent(id)}/membresias/${encodeURIComponent(userId)}`, {
+      method: 'PATCH',
+      body: { decision },
+      token,
+    }),
+  invite: (id, userId, token) =>
+    request(`/comunidades/${encodeURIComponent(id)}/invitar`, {
+      method: 'POST',
+      body: { usuario_id: userId },
+      token,
+    }),
+  audit: (id, token, page = 1, perPage = 20) =>
+    request(`/comunidades/${encodeURIComponent(id)}/auditoria${queryString({ page, per_page: perPage })}`, { token }),
+}
+
 export const savedApi = {
   list: (filters = {}, token) =>
     request(`/guardados${queryString(filters)}`, { token }),

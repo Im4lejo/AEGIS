@@ -29,6 +29,7 @@ class Publicacion extends Model
         'rank_base',
         'etiquetas',
         'menciones',
+        'comunidad_id',
         'enlace_preview_url',
         'enlace_preview_titulo',
     ];
@@ -74,5 +75,10 @@ class Publicacion extends Model
             'publicacion_id',
             'usuario_id',
         )->withTimestamps();
+    }
+
+    public function comunidad(): BelongsTo
+    {
+        return $this->belongsTo(Comunidad::class, 'comunidad_id');
     }
 }

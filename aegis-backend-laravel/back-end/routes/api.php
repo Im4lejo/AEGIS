@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AdminAuthorizationController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ComunidadController;
 use App\Http\Controllers\Api\ForoController;
 use App\Http\Controllers\Api\GuardadosController;
 use App\Http\Controllers\Api\InicioController;
@@ -25,6 +26,11 @@ Route::get('/perfil/{usuario}/tabs/{tab}', [PerfilController::class, 'tab'])
 Route::get('/perfil/{usuario}/seguidores', [PerfilController::class, 'followers'])->whereNumber('usuario');
 Route::get('/perfil/{usuario}/siguiendo', [PerfilController::class, 'following'])->whereNumber('usuario');
 Route::get('/puntos-fisicos', [PuntoFisicoController::class, 'index']);
+Route::get('/comunidades', [ComunidadController::class, 'index']);
+Route::get('/comunidades/sugerencias', [ComunidadController::class, 'suggestions']);
+Route::get('/comunidades/{comunidad}', [ComunidadController::class, 'show'])->whereNumber('comunidad');
+Route::get('/comunidades/{comunidad}/posts', [ComunidadController::class, 'posts'])->whereNumber('comunidad');
+Route::get('/comunidades/{comunidad}/miembros', [ComunidadController::class, 'members'])->whereNumber('comunidad');
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -76,6 +82,18 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/perfil/{usuario}/restriccion', [PerfilController::class, 'restrict'])->whereNumber('usuario');
         Route::delete('/perfil/{usuario}/restriccion', [PerfilController::class, 'unrestrict'])->whereNumber('usuario');
         Route::post('/perfil/me/desactivar', [PerfilController::class, 'deactivate']);
+        Route::post('/comunidades', [ComunidadController::class, 'store']);
+        Route::patch('/comunidades/{comunidad}', [ComunidadController::class, 'update'])->whereNumber('comunidad');
+        Route::patch('/comunidades/{comunidad}/archivar', [ComunidadController::class, 'archive'])->whereNumber('comunidad');
+        Route::post('/comunidades/{comunidad}/membresia', [ComunidadController::class, 'membershipAction'])->whereNumber('comunidad');
+        Route::delete('/comunidades/{comunidad}/membresia', [ComunidadController::class, 'leave'])->whereNumber('comunidad');
+        Route::get('/comunidades/{comunidad}/solicitudes', [ComunidadController::class, 'pending'])->whereNumber('comunidad');
+        Route::patch('/comunidades/{comunidad}/membresias/{usuario}', [ComunidadController::class, 'decideMembership'])
+            ->whereNumber('comunidad')
+            ->whereNumber('usuario');
+        Route::post('/comunidades/{comunidad}/invitar', [ComunidadController::class, 'invite'])->whereNumber('comunidad');
+        Route::post('/comunidades/{comunidad}/posts', [ComunidadController::class, 'storePost'])->whereNumber('comunidad');
+        Route::get('/comunidades/{comunidad}/auditoria', [ComunidadController::class, 'auditLog'])->whereNumber('comunidad');
         Route::post('/foro', [ForoController::class, 'store']);
         Route::patch('/foro/{publicacion}', [ForoController::class, 'update'])->whereNumber('publicacion');
         Route::delete('/foro/{publicacion}', [ForoController::class, 'destroy'])->whereNumber('publicacion');

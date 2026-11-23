@@ -154,6 +154,15 @@ El foro usa `publicaciones_foro` como entidad canónica y conserva `/api/foro`.
 - Los reportes incluyen recurso contextual.
 - Los comentarios tienen límite temporal y los bloqueos impiden interacción cruzada.
 
+## Comunidades
+
+- Directorio público y sugerencias explícitas por categoría.
+- Comunidades públicas, privadas y por invitación.
+- Membresías contextuales owner/moderador/miembro.
+- Solicitudes, invitaciones, aprobación, rechazo, expulsión y baneo.
+- Posts comunitarios reutilizan `publicaciones_foro` mediante `comunidad_id`.
+- Auditoría local de acciones comunitarias.
+
 ## Verificación
 
 ```bash

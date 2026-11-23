@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Jobs\PublicarPostProgramado;
 use App\Models\Comentario;
+use App\Models\Comunidad;
+use App\Models\MembresiaComunidad;
 use App\Models\Publicacion;
 use App\Models\ReaccionPublicacion;
 use App\Models\Repost;
@@ -39,6 +41,13 @@ class ForoController extends Controller
                 ->pluck('seguido_id')
                 ->all()
             : [];
+        $communityMemberIds = $viewer
+            ? MembresiaComunidad::query()
+                ->where('usuario_id', $viewer->id)
+                ->where('estado', 'activo')
+                ->pluck('comunidad_id')
+                ->all()
+            : [];
 
         $query = Publicacion::query()
             ->where('estado', 'publicado')
@@ -47,6 +56,15 @@ class ForoController extends Controller
             ->when($blockedIds !== [], fn ($q) => $q->whereNotIn('usuario_id', $blockedIds))
             ->with($this->publicacionRelations())
             ->withCount(['comentarios', 'reacciones']);
+        $query->where(function ($q) use ($communityMemberIds): void {
+            $q->whereNull('comunidad_id')
+                ->orWhereHas('comunidad', fn ($community) => $community
+                    ->where('visibilidad', 'publica')
+                    ->where('estado', 'activa'));
+            if ($communityMemberIds !== []) {
+                $q->orWhereIn('comunidad_id', $communityMemberIds);
+            }
+        });
 
         if ($tab === 'siguiendo' && $followedIds !== []) {
             $query->whereIn('usuario_id', $followedIds);
@@ -219,6 +237,20 @@ class ForoController extends Controller
             'comentario_padre_id' => ['nullable', 'integer', 'exists:comentarios_foro,id'],
         ]);
         $post = Publicacion::query()->findOrFail($publicacion);
+        if ($post->comunidad_id) {
+            $member = MembresiaComunidad::query()
+                ->where('comunidad_id', $post->comunidad_id)
+                ->where('usuario_id', $request->user()->id)
+                ->where('estado', 'activo')
+                ->exists();
+            $community = Comunidad::query()->find($post->comunidad_id);
+            if ($community && $community->visibilidad === 'privada' && ! $member) {
+                return response()->json([
+                    'message' => 'Debes pertenecer a la comunidad para comentar.',
+                    'code' => 'COMMUNITY_PRIVATE',
+                ], 403);
+            }
+        }
         if (! Gate::forUser($request->user())->allows('view.post', $post)) {
             return response()->json([
                 'message' => 'No tienes permiso para acceder a esta publicación.',
@@ -273,6 +305,26 @@ class ForoController extends Controller
             ->findOrFail($publicacion);
 
         $usuario = $request->user();
+        if ($post->comunidad_id) {
+            $community = Comunidad::query()->find($post->comunidad_id);
+            $member = $usuario
+                ? MembresiaComunidad::query()
+                    ->where('comunidad_id', $post->comunidad_id)
+                    ->where('usuario_id', $usuario->id)
+                    ->where('estado', 'activo')
+                    ->exists()
+                : false;
+            if (
+                $community
+                && $community->visibilidad === 'privada'
+                && ! $member
+            ) {
+                return response()->json([
+                    'message' => 'Esta publicación pertenece a una comunidad privada.',
+                    'code' => 'COMMUNITY_PRIVATE',
+                ], 403);
+            }
+        }
         if (
             ! in_array($post->visibilidad, ['publica', null], true)
             && (

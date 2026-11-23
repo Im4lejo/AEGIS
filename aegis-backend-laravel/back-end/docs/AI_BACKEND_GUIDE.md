@@ -249,6 +249,14 @@ Los comentarios mantienen profundidad máxima de una respuesta sobre el comentar
 
 `reposts` tiene unicidad actor/publicación. `guardados` usa `recurso_tipo/recurso_id` con unicidad por usuario/recurso y colecciones opcionales propias. `reportes` admite contexto por tipo e ID. Los endpoints revalidan propiedad, visibilidad y bloqueos.
 
+### Comunidades
+
+Las comunidades usan `comunidades`, `membresias_comunidad` y `acciones_comunidad`. Los roles owner/moderador/miembro son exclusivos de una comunidad y no otorgan permisos globales.
+
+`publicaciones_foro.comunidad_id` vincula posts comunitarios sin duplicar la entidad de publicación. Los posts privados usan `grupo_privado` y el controlador exige membresía activa.
+
+Las comunidades privadas no aparecen en el directorio público ni en feeds/enlaces directos sin membresía activa. Las solicitudes usan estado `solicitado`; las invitaciones usan `invitado`.
+
 ## 6. Modelos Eloquent y relaciones
 
 | Modelo | Tabla | Relaciones definidas / comportamiento |
