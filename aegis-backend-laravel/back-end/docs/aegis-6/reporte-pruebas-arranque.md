@@ -114,3 +114,38 @@ El worktree ya contenía cambios de usuario anteriores en README, Composer lock,
 2. Ejecutar smoke visual de rutas 404 y `plantilla` en navegador.
 3. Decidir autenticación web stateful/cookie frente al Bearer actual antes de ampliar operaciones privadas.
 4. No aplicar throttle server-side ni afirmar cobertura de 403/409/429 hasta implementar sus casos y pruebas backend.
+
+## Incremento 02 — Design System y responsive
+
+### Cambios
+
+- Se añadieron tokens semánticos, modo claro/oscuro/sistema con preferencia local versionada y componentes React accesibles reutilizables; el alcance se limita a web.
+- Se integró un armazón con navegación lateral y panel de contexto en escritorio, y navegación inferior en tamaños compactos. Foro y Mensajes conservan sus layouts internos para evitar columnas duplicadas.
+- Inicio ahora consulta el endpoint existente, permite buscar productos y presenta carga, error y vacío. La personalización y el feed de seguidos no se anuncian como funciones disponibles.
+- No se modificaron endpoints, contratos, roles, permisos, dependencias backend ni esquema de datos. No hubo lecturas ni escrituras de DB en este incremento.
+
+### Verificación
+
+| Comando / comprobación | Resultado |
+|---|---|
+| `npm run format` y `npm run format:check` | Éxito |
+| `npm test` | Éxito: 13 pruebas de componentes y 7 pruebas del cliente API |
+| `npm run lint` | Éxito |
+| `npm run build` | Éxito: build de producción Vite |
+| Navegador, Inicio, Marketplace, `/perfil` (redirige a login), Comunidad, Mensajes y Ajustes en 360, 768, 1280 y 1440 px | 24 comprobaciones, sin overflow horizontal. Navegación compacta visible en 360/768 y oculta en 1280/1440 |
+| Tema | Cambio a oscuro y almacenamiento local comprobados; al volver a Sistema guarda `system` y aplica el tema del sistema operativo |
+| API de Inicio en navegador | No disponible en `127.0.0.1:8000` durante esta comprobación; se verificó el estado de error de conexión, no datos reales |
+| Capturas de navegador | Inicio desktop 1440 × 1000 y móvil 360 × 800 adjuntas al resultado de la sesión; no se copiaron como archivos del repositorio |
+
+La primera pasada detectó desbordamiento de la cabecera y de las filas de Ajustes a 1280 px. Se ajustaron los breakpoints de la cabecera y la grilla de datos de Ajustes; la matriz completa de 24 comprobaciones pasó después del cambio. La verificación no equivale a una auditoría de contraste/teclado de toda la aplicación. Las pantallas heredadas aún requieren revisión visual dedicada, especialmente en tema oscuro. No se ejecutó backend porque no hubo cambios de backend.
+
+### Archivos propios de Incremento 02
+
+Componentes y tokens en `aegis-web/AEGIS-REACT/src/components/shared/ui/` y `src/design-system/`; proveedor de tema en `src/theme/`; armazón en `src/components/layouts/WorkspaceChrome.jsx`; vista de Inicio y estilos; integración en `src/App.jsx`, `Header.jsx`, `Navbar.jsx` y `ApiState.jsx`; ajustes responsive en `src/design-system/design-system.css` y `src/components/perfil/css/editar.css`; pruebas/configuración frontend y dependencias de desarrollo en `package.json`/lockfile; guía de React y ADR-0005.
+
+Los archivos de MVC PHP marcados como modificados ya estaban en el worktree antes de esta implementación y no fueron modificados para el Incremento 02. Se respetaron sin revertirlos.
+
+### Pendientes
+
+1. Repetir comprobación visual sobre Perfil con sesión autenticada y revisar Comunidad/Mensajes/Ajustes con teclado, contraste y tema oscuro.
+2. Levantar API con el origen Vite permitido para revisar datos reales integrados y estados de autorización.
