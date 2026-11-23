@@ -29,6 +29,8 @@ class ProductoResource extends JsonResource
             'precio' => $this->precio,
             'estado_producto' => $this->estado_producto,
             'ciudad' => $this->ciudad,
+            'ciudad_aprox' => $this->ciudad_aprox,
+            'atributos' => $this->whenNotNull($this->atributos),
             'estado_publicacion' => $this->estado_publicacion,
             'fecha_publicacion' => $this->fecha_publicacion,
             'categoria' => $this->whenLoaded('categoria', fn () => $this->categoria->only([

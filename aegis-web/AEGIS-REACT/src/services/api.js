@@ -192,6 +192,20 @@ export const productApi = {
       body: { orden: ids },
       token,
     }),
+  mine: (estado = 'todos', page = 1, perPage = 24, token) =>
+    request(`/productos/mis${queryString({ estado, page, per_page: perPage })}`, { token }),
+  stats: (token) => request('/productos/mis/estadisticas', { token }),
+  transition: (productId, estado, token, motivo = '') =>
+    request(`/productos/${encodeURIComponent(productId)}/estado`, {
+      method: 'PATCH',
+      body: { estado, motivo },
+      token,
+    }),
+  renew: (productId, token) =>
+    request(`/productos/${encodeURIComponent(productId)}/renovar`, {
+      method: 'POST',
+      token,
+    }),
 }
 
 export const forumApi = {

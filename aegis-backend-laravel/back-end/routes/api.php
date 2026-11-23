@@ -66,10 +66,14 @@ Route::prefix('auth/web')->name('auth.web.')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
+    Route::get('/productos/mis', [ProductoController::class, 'mine']);
+    Route::get('/productos/mis/estadisticas', [ProductoController::class, 'stats']);
     Route::middleware(['account.active', 'verified.web'])->group(function () {
         Route::post('/productos', [ProductoController::class, 'store']);
         Route::patch('/productos/{producto}', [ProductoController::class, 'update'])->whereNumber('producto');
         Route::delete('/productos/{producto}', [ProductoController::class, 'destroy'])->whereNumber('producto');
+        Route::patch('/productos/{producto}/estado', [ProductoController::class, 'transition'])->whereNumber('producto');
+        Route::post('/productos/{producto}/renovar', [ProductoController::class, 'renew'])->whereNumber('producto');
         Route::post('/productos/{producto}/imagenes', [MediaController::class, 'storeProducto'])->whereNumber('producto');
         Route::delete('/productos/{producto}/imagenes/{imagen}', [MediaController::class, 'destroyProducto'])->whereNumber('producto')->whereNumber('imagen');
         Route::patch('/productos/{producto}/imagenes/orden', [MediaController::class, 'reorderProducto'])->whereNumber('producto');

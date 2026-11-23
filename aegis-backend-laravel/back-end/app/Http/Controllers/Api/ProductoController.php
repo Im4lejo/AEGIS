@@ -10,6 +10,7 @@ use App\Services\MediaManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\ValidationException;
 
 class ProductoController extends Controller
 {
@@ -26,6 +27,7 @@ class ProductoController extends Controller
     {
         $filters = $request->validate([
             'busqueda' => ['nullable', 'string', 'max:100'],
+            'precio_min' => ['nullable', 'numeric', 'min:0'],
             'precio_max' => ['nullable', 'numeric', 'min:0'],
             'estado' => ['nullable', 'in:todo,nuevo,usado,reacondicionado'],
             'cat' => ['nullable', 'string', 'max:100'],
@@ -49,7 +51,11 @@ class ProductoController extends Controller
                 ->orWhere('descripcion', 'like', $term));
         }
 
-        if (! empty($filters['precio_max'])) {
+        if (array_key_exists('precio_min', $filters) && $filters['precio_min'] !== null) {
+            $query->where('precio', '>=', $filters['precio_min']);
+        }
+
+        if (array_key_exists('precio_max', $filters) && $filters['precio_max'] !== null) {
             $query->where('precio', '<=', $filters['precio_max']);
         }
 
@@ -113,17 +119,47 @@ class ProductoController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'categoria_id' => 'required|exists:categorias,id',
-            'titulo' => 'required|string|max:150',
-            'descripcion' => 'required|string',
-            'precio' => 'required|numeric|min:0|max:9999999999.99',
-            'estado_producto' => 'required|in:nuevo,usado,reacondicionado',
+            'categoria_id' => 'nullable|exists:categorias,id',
+            'titulo' => 'nullable|string|max:150',
+            'descripcion' => 'nullable|string',
+            'precio' => 'nullable|numeric|min:0|max:9999999999.99',
+            'estado_producto' => 'nullable|in:nuevo,usado,reacondicionado',
             'ciudad' => 'nullable|string|max:100',
+            'ciudad_aprox' => 'nullable|string|max:100',
+            'atributos' => 'nullable|array|max:30',
             'visibilidad' => 'nullable|in:publica,privada,grupo_privado',
-            'imagenes' => 'required|array|min:1|max:5',
+            'imagenes' => 'nullable|array|max:5',
             'imagenes.*' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
             'alt_text' => 'nullable|string|max:255',
+            'estado_publicacion' => 'nullable|in:borrador,activo',
+            'atributos' => 'nullable|array|max:30',
+            'ciudad_aprox' => 'nullable|string|max:100',
         ]);
+
+        $estadoInicial = $validated['estado_publicacion'] ?? 'activo';
+        if ($estadoInicial === 'activo') {
+            $publishErrors = [];
+            foreach ([
+                'categoria_id' => 'La categoría es obligatoria.',
+                'titulo' => 'El título es obligatorio.',
+                'descripcion' => 'La descripción es obligatoria.',
+                'precio' => 'El precio es obligatorio.',
+                'estado_producto' => 'La condición es obligatoria.',
+            ] as $field => $message) {
+                if (! array_key_exists($field, $validated)
+                    || $validated[$field] === null
+                    || $validated[$field] === ''
+                ) {
+                    $publishErrors[$field] = [$message];
+                }
+            }
+            if (empty($validated['imagenes'])) {
+                $publishErrors['imagenes'] = ['Debe incluir al menos una imagen.'];
+            }
+            if ($publishErrors !== []) {
+                throw ValidationException::withMessages($publishErrors);
+            }
+        }
 
         $usuarioId = $request->user()->getKey();
 
@@ -137,16 +173,20 @@ class ProductoController extends Controller
             ) {
                 $producto = Producto::create([
                     'usuario_id' => $usuarioId,
-                    'categoria_id' => $validated['categoria_id'],
-                    'titulo' => $validated['titulo'],
-                    'descripcion' => $validated['descripcion'],
-                    'precio' => $validated['precio'],
-                    'estado_producto' => $validated['estado_producto'],
+                    'categoria_id' => $validated['categoria_id'] ?? null,
+                    'titulo' => $validated['titulo'] ?? null,
+                    'descripcion' => $validated['descripcion'] ?? null,
+                    'precio' => $validated['precio'] ?? null,
+                    'estado_producto' => $validated['estado_producto'] ?? null,
                     'ciudad' => $validated['ciudad'] ?? null,
                     'visibilidad' => $validated['visibilidad'] ?? 'publica',
+                    'estado_publicacion' => $validated['estado_publicacion'] ?? 'activo',
+                    'atributos' => $validated['atributos'] ?? null,
+                    'ciudad_aprox' => $validated['ciudad_aprox'] ?? null,
+                    'fecha_estado' => now(),
                 ]);
 
-                foreach ($validated['imagenes'] as $index => $file) {
+                foreach ($validated['imagenes'] ?? [] as $index => $file) {
                     $resultado = $this->media->upload(
                         $file,
                         'productos',
@@ -210,7 +250,7 @@ class ProductoController extends Controller
             'precio' => 'sometimes|numeric|min:0|max:9999999999.99',
             'estado_producto' => 'sometimes|in:nuevo,usado,reacondicionado',
             'ciudad' => 'nullable|string|max:100',
-            'estado_publicacion' => 'sometimes|in:activo,vendido,oculto',
+            'estado_publicacion' => 'sometimes|in:borrador,activo,pausado,reservado,vendido,archivado,oculto',
             'visibilidad' => 'sometimes|in:publica,privada,grupo_privado',
         ]);
 
@@ -220,6 +260,160 @@ class ProductoController extends Controller
             'message' => 'Producto actualizado correctamente.',
             'data' => new ProductoResource($product->fresh(['categoria', 'vendedor', 'imagenes'])),
         ]);
+    }
+
+    public function mine(Request $request)
+    {
+        $filters = $request->validate([
+            'estado' => ['nullable', 'in:borrador,activo,pausado,reservado,vendido,archivado,oculto,todos'],
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:50'],
+        ]);
+        $estado = $filters['estado'] ?? 'todos';
+
+        $query = Producto::query()
+            ->where('usuario_id', $request->user()->id)
+            ->with([
+                'categoria:id,nombre,descripcion',
+                'imagenes:id,producto_id,imagen,principal',
+            ])
+            ->latest('fecha_publicacion');
+
+        if ($estado !== 'todos') {
+            $query->where('estado_publicacion', $estado);
+        }
+
+        $products = $query->paginate($filters['per_page'] ?? 24);
+
+        return response()->json([
+            'data' => ProductoResource::collection($products->items())->resolve($request),
+            'meta' => [
+                'current_page' => $products->currentPage(),
+                'per_page' => $products->perPage(),
+                'total' => $products->total(),
+                'last_page' => $products->lastPage(),
+            ],
+            'estadisticas' => [
+                'total' => (clone $query)->count(),
+            ],
+        ]);
+    }
+
+    public function transition(Request $request, int $producto)
+    {
+        $product = Producto::query()->findOrFail($producto);
+        if (! Gate::forUser($request->user())->allows('update.product', $product)) {
+            return response()->json([
+                'message' => 'No tienes permiso para modificar este anuncio.',
+                'code' => 'FORBIDDEN_RESOURCE',
+            ], 403);
+        }
+
+        $validated = $request->validate([
+            'estado' => ['required', 'in:borrador,activo,pausado,reservado,vendido,archivado,oculto'],
+            'motivo' => ['nullable', 'string', 'max:255'],
+        ]);
+        $target = $validated['estado'];
+        $current = $product->estado_publicacion;
+
+        $allowed = match ($current) {
+            'borrador' => ['activo', 'archivado'],
+            'activo' => ['pausado', 'reservado', 'vendido', 'archivado', 'activo'],
+            'pausado' => ['activo', 'reservado', 'vendido', 'archivado'],
+            'reservado' => ['activo', 'vendido', 'archivado'],
+            'vendido' => ['archivado', 'activo'],
+            'archivado' => ['activo'],
+            'oculto' => ['activo', 'archivado'],
+            default => ['activo', 'archivado'],
+        };
+
+        if (! in_array($target, $allowed, true)) {
+            return response()->json([
+                'message' => 'La transición solicitada no está permitida.',
+                'code' => 'INVALID_PRODUCT_TRANSITION',
+                'estado_actual' => $current,
+                'estado_nuevo' => $target,
+            ], 409);
+        }
+
+        if ($target === 'activo') {
+            $this->validatePublishableProduct($product);
+        }
+
+        $previous = $product->estado_publicacion;
+        $product->update([
+            'estado_publicacion' => $target,
+            'fecha_estado' => now(),
+            'fecha_renovacion' => $target === 'activo' && $previous !== 'activo'
+                ? now()
+                : $product->fecha_renovacion,
+            'motivo_archivo' => in_array($target, ['archivado', 'vendido'], true)
+                ? ($validated['motivo'] ?? null)
+                : null,
+        ]);
+
+        DB::table('historial_producto')->insert([
+            'producto_id' => $product->id,
+            'actor_id' => $request->user()->id,
+            'accion' => $target === 'activo' ? 'publicar_renovar' : 'cambiar_estado',
+            'estado_anterior' => $previous,
+            'estado_nuevo' => $target,
+            'datos' => json_encode(['motivo' => $validated['motivo'] ?? null]),
+            'fecha' => now(),
+        ]);
+
+        return response()->json([
+            'message' => 'Estado actualizado.',
+            'data' => new ProductoResource($product->fresh(['categoria', 'vendedor', 'imagenes'])),
+        ]);
+    }
+
+    public function renew(Request $request, int $producto)
+    {
+        return $this->transition(
+            $request->merge(['estado' => 'activo']),
+            $producto,
+        );
+    }
+
+    public function stats(Request $request)
+    {
+        $base = Producto::query()->where('usuario_id', $request->user()->id);
+
+        return response()->json([
+            'data' => [
+                'total' => (clone $base)->count(),
+                'activos' => (clone $base)->where('estado_publicacion', 'activo')->count(),
+                'borradores' => (clone $base)->where('estado_publicacion', 'borrador')->count(),
+                'reservados' => (clone $base)->where('estado_publicacion', 'reservado')->count(),
+                'vendidos' => (clone $base)->where('estado_publicacion', 'vendido')->count(),
+                'archivados' => (clone $base)->where('estado_publicacion', 'archivado')->count(),
+            ],
+            'nota' => 'Solo incluye registros almacenados; no representa métricas externas.',
+        ]);
+    }
+
+    private function validatePublishableProduct(Producto $product): void
+    {
+        $errors = [];
+        if (trim((string) $product->titulo) === '') {
+            $errors['titulo'] = ['El título es obligatorio.'];
+        }
+        if (trim((string) $product->descripcion) === '') {
+            $errors['descripcion'] = ['La descripción es obligatoria.'];
+        }
+        if ((float) $product->precio < 0) {
+            $errors['precio'] = ['El precio no puede ser negativo.'];
+        }
+        if (! $product->categoria_id) {
+            $errors['categoria_id'] = ['La categoría es obligatoria.'];
+        }
+        if (! $product->imagenes()->where('estado', 'activo')->exists()) {
+            $errors['imagenes'] = ['Debe existir al menos una imagen activa.'];
+        }
+
+        if ($errors !== []) {
+            throw ValidationException::withMessages($errors);
+        }
     }
 
     public function destroy(Request $request, int $producto)

@@ -171,6 +171,14 @@ El foro usa `publicaciones_foro` como entidad canónica y conserva `/api/foro`.
 - Encuestas permiten opciones, período y voto único simple.
 - Feed admite filtros por tipo/comunidad/búsqueda y orden por actividad/popularidad.
 
+## Marketplace
+
+- Conserva `POST/GET /api/productos`.
+- Estados: borrador, activo, pausado, reservado, vendido, archivado y oculto.
+- Publicar exige campos completos e imágenes.
+- Mis productos permite tabs por estado y estadísticas almacenadas básicas.
+- `precio_max=0` incluye anuncios gratuitos.
+
 ## Verificación
 
 ```bash

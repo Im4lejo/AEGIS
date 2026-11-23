@@ -265,6 +265,14 @@ Las soluciones usan `respuesta_aceptada_id` y el índice `es_solucion`. Solo aut
 
 Las encuestas usan `encuestas`, `opciones_encuesta` y `votos_encuesta`. Una encuesta simple elimina votos previos del usuario antes de insertar una opción nueva. Las múltiples permiten opciones únicas.
 
+### Marketplace
+
+`productos.estado_publicacion` evoluciona entre borrador, activo, pausado, reservado, vendido, archivado y oculto. Los campos pueden quedar parciales solo para borradores.
+
+`PATCH /api/productos/{id}/estado` aplica transiciones permitidas y registra `historial_producto`. `POST /api/productos/{id}/renovar` activa/renueva un anuncio validable.
+
+Los filtros públicos conservan `GET /api/productos`; `precio_min` y `precio_max` usan comparación numérica, incluyendo precio cero. Las rutas `/api/productos/mis*` son propias del usuario autenticado.
+
 ## 6. Modelos Eloquent y relaciones
 
 | Modelo | Tabla | Relaciones definidas / comportamiento |

@@ -27,6 +27,14 @@ class Producto extends Model
         'ciudad',
         'estado_publicacion',
         'visibilidad',
+        'titulo_breve',
+        'atributos',
+        'ciudad_aprox',
+        'fecha_estado',
+        'fecha_renovacion',
+        'editado_en',
+        'motivo_archivo',
+        'vistas',
     ];
 
     protected function casts(): array
@@ -34,6 +42,10 @@ class Producto extends Model
         return [
             'precio' => 'decimal:2',
             'fecha_publicacion' => 'datetime',
+            'fecha_estado' => 'datetime',
+            'fecha_renovacion' => 'datetime',
+            'editado_en' => 'datetime',
+            'atributos' => 'array',
         ];
     }
 
