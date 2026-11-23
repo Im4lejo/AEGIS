@@ -16,10 +16,16 @@ class CategoriaSeeder extends Seeder
             ['Consolas', 'PlayStation, Xbox, Nintendo'],
             ['Periféricos', 'Mouse, teclados, audífonos'],
         ] as [$nombre, $descripcion]) {
-            DB::table('categorias')->updateOrInsert(
-                ['nombre' => $nombre],
-                ['descripcion' => $descripcion]
-            );
+            $existe = DB::table('categorias')
+                ->where('nombre', $nombre)
+                ->exists();
+
+            if (! $existe) {
+                DB::table('categorias')->insert([
+                    'nombre' => $nombre,
+                    'descripcion' => $descripcion,
+                ]);
+            }
         }
     }
 }

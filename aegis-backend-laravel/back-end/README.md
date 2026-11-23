@@ -2,6 +2,10 @@
 
 Backend Laravel 12 para reemplazar progresivamente el MVC modular PHP de AEGIS. Expone una API REST JSON; no contiene migración de vistas ni código de frontend.
 
+Para agentes que necesiten conocer el flujo de código, API, modelos, esquema, configuración y límites funcionales, consultar la [guía operativa del backend](./docs/AI_BACKEND_GUIDE.md).
+La auditoría inicial de React/Laravel, matriz funcional, arquitectura objetivo y verificación de este incremento se encuentra en [docs/aegis-6](./docs/aegis-6/00-auditoria.md).
+El reporte de Incremento 01 documenta el adaptador de errores web, pruebas, formato y el estado de compatibilidad: [reporte de pruebas y arranque](./docs/aegis-6/reporte-pruebas-arranque.md).
+
 ## Requisitos y configuración
 
 - PHP 8.2+
@@ -18,7 +22,18 @@ php artisan migrate --seed
 php artisan serve
 ```
 
-El seeder instala las cinco categorías iniciales. No crea cuentas de administrador ni importa datos personales de la base legada.
+`php artisan db:seed` agrega categorías y datos de demostración para usuarios, productos, foro, puntos físicos, encuentros, códigos QR, calificaciones, reportes y notificaciones. Es idempotente: reutiliza sus registros de demostración y no elimina ni actualiza los registros existentes.
+
+Para poblar una base ya migrada sin reiniciarla, ejecuta `php artisan db:seed`. No uses `migrate:fresh` si quieres conservar sus datos.
+También puedes ejecutar solo los datos de demostración con `php artisan db:seed --class='Database\Seeders\DemoDataSeeder'`.
+El seeder rechaza la ejecución cuando `APP_ENV=production`.
+
+Las cuentas de demostración usan la contraseña `password`:
+
+- `admin.demo@aegis.test` (administrador)
+- `owner.demo@aegis.test` (propietario de punto físico)
+- `ana.demo@aegis.test` (vendedora)
+- `carlos.demo@aegis.test` (comprador)
 
 ## API pública disponible
 
