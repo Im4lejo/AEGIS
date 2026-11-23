@@ -34,6 +34,7 @@ import Encuentros from './components/puntosFisicos/views/Encuentros'
 import Admin from './components/admin/views/Dashboard'
 import Plantilla from './components/shared/Plantilla'
 import { NotFoundPage } from './components/shared/ApiState'
+import { AccessRestrictedState } from './components/shared/ui'
 import { ErrorBoundary } from './components/shared/ui'
 import { ThemeProvider } from './theme/ThemeProvider'
 import './design-system/design-system.css'
@@ -68,12 +69,22 @@ function Vista({ Componente }) {
   const auth = {
     isAuthenticated: session.isAuthenticated,
     isAdmin: session.user?.rol === 'admin',
+    isOwner: session.user?.rol === 'owner',
+    isSuspended: session.user?.estado && session.user.estado !== 'activo',
+    capabilities: session.user?.capabilities || {},
     user: session.user,
     token: session.token,
   }
-  const requiereSesion = ['/productos/crear', '/perfil', '/seguridad'].includes(
-    location.pathname,
-  )
+  const requiereSesion = [
+    '/productos/crear',
+    '/productos/mis-productos',
+    '/perfil',
+    '/perfil/editar',
+    '/seguridad',
+    '/mensajes',
+    '/configurar-encuentro',
+    '/admin',
+  ].includes(location.pathname)
 
   if (requiereSesion && session.loading) {
     return (
@@ -94,6 +105,24 @@ function Vista({ Componente }) {
   }
   if (requiereSesion && !session.isAuthenticated) {
     return <Navigate to="/login" replace state={{ from: location.pathname }} />
+  }
+  if (session.isAuthenticated && session.user?.estado !== 'activo') {
+    return (
+      <AccessRestrictedState
+        message="Cuenta suspendida: no puedes realizar operaciones ni acceder a funciones protegidas."
+      />
+    )
+  }
+  if (
+    location.pathname === '/admin'
+    && session.isAuthenticated
+    && session.user?.rol !== 'admin'
+  ) {
+    return (
+      <AccessRestrictedState
+        message="Esta sección requiere permisos de administración."
+      />
+    )
   }
 
   return (

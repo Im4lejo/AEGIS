@@ -13,6 +13,10 @@ class Producto extends Model
 
     public $timestamps = false;
 
+    protected $attributes = [
+        'visibilidad' => 'publica',
+    ];
+
     protected $fillable = [
         'usuario_id',
         'categoria_id',
@@ -22,6 +26,7 @@ class Producto extends Model
         'estado_producto',
         'ciudad',
         'estado_publicacion',
+        'visibilidad',
     ];
 
     protected function casts(): array

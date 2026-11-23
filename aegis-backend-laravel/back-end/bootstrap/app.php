@@ -1,11 +1,11 @@
 <?php
 
+use App\Http\Middleware\EnsureAccountActive;
+use App\Http\Middleware\EnsureWebEmailIsVerified;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\EnsureWebEmailIsVerified;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -22,11 +22,12 @@ return Application::configure(basePath: dirname(__DIR__))
         );
         $middleware->alias([
             'verified.web' => EnsureWebEmailIsVerified::class,
+            'account.active' => EnsureAccountActive::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
-            fn (Request $request, \Throwable $exception): bool => $request->is('api/*')
+            fn (Request $request, Throwable $exception): bool => $request->is('api/*')
                 || $request->expectsJson(),
         );
 

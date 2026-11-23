@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductoResource;
 use App\Models\Categoria;
 use App\Models\Producto;
+use Cloudinary\Cloudinary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Cloudinary\Cloudinary;
+use Illuminate\Support\Facades\Gate;
+
 class ProductoController extends Controller
 {
     public function categorias()
@@ -31,6 +33,7 @@ class ProductoController extends Controller
 
         $query = Producto::query()
             ->activo()
+            ->where('visibilidad', 'publica')
             ->with([
                 'categoria:id,nombre,descripcion',
                 'vendedor:id,nombre,apellido,username,foto_perfil_url as foto_perfil,reputacion',
@@ -68,10 +71,9 @@ class ProductoController extends Controller
         return ProductoResource::collection($products);
     }
 
-    public function show(int $producto)
+    public function show(Request $request, int $producto)
     {
         $product = Producto::query()
-            ->activo()
             ->with([
                 'categoria:id,nombre,descripcion',
                 'vendedor:id,nombre,apellido,username,foto_perfil_url as foto_perfil,reputacion',
@@ -79,8 +81,33 @@ class ProductoController extends Controller
             ])
             ->findOrFail($producto);
 
+        $usuario = $request->user();
+        if (
+            ! in_array($product->visibilidad, ['publica', null], true)
+            && (
+                ! $usuario
+                || ! Gate::forUser($usuario)->allows('view.product', $product)
+            )
+        ) {
+            return response()->json([
+                'message' => 'Este contenido privado no está disponible para tu cuenta.',
+                'code' => 'PRIVATE_RESOURCE',
+            ], 403);
+        }
+
+        if (
+            $product->estado_publicacion !== 'activo'
+            && (
+                ! $usuario
+                || ! Gate::forUser($usuario)->allows('update.product', $product)
+            )
+        ) {
+            abort(404);
+        }
+
         return new ProductoResource($product);
     }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -90,6 +117,7 @@ class ProductoController extends Controller
             'precio' => 'required|numeric|min:0|max:9999999999.99',
             'estado_producto' => 'required|in:nuevo,usado,reacondicionado',
             'ciudad' => 'nullable|string|max:100',
+            'visibilidad' => 'nullable|in:publica,privada,grupo_privado',
             'imagenes' => 'required|array|min:1|max:5',
             'imagenes.*' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
@@ -114,6 +142,7 @@ class ProductoController extends Controller
                     'precio' => $validated['precio'],
                     'estado_producto' => $validated['estado_producto'],
                     'ciudad' => $validated['ciudad'] ?? null,
+                    'visibilidad' => $validated['visibilidad'] ?? 'publica',
                 ]);
 
                 foreach ($validated['imagenes'] as $index => $file) {
@@ -155,5 +184,62 @@ class ProductoController extends Controller
                 'message' => 'Error al crear el producto.',
             ], 500);
         }
+    }
+
+    public function update(Request $request, int $producto)
+    {
+        $product = Producto::query()->findOrFail($producto);
+
+        if (! Gate::forUser($request->user())->allows('update.product', $product)) {
+            return response()->json([
+                'message' => 'No tienes permiso para editar este producto.',
+                'code' => 'FORBIDDEN_RESOURCE',
+            ], 403);
+        }
+
+        $validated = $request->validate([
+            'categoria_id' => 'sometimes|exists:categorias,id',
+            'titulo' => 'sometimes|string|max:150',
+            'descripcion' => 'sometimes|string',
+            'precio' => 'sometimes|numeric|min:0|max:9999999999.99',
+            'estado_producto' => 'sometimes|in:nuevo,usado,reacondicionado',
+            'ciudad' => 'nullable|string|max:100',
+            'estado_publicacion' => 'sometimes|in:activo,vendido,oculto',
+            'visibilidad' => 'sometimes|in:publica,privada,grupo_privado',
+        ]);
+
+        $product->update($validated);
+
+        return response()->json([
+            'message' => 'Producto actualizado correctamente.',
+            'data' => new ProductoResource($product->fresh(['categoria', 'vendedor', 'imagenes'])),
+        ]);
+    }
+
+    public function destroy(Request $request, int $producto)
+    {
+        $product = Producto::query()->findOrFail($producto);
+
+        if (! Gate::forUser($request->user())->allows('delete.product', $product)) {
+            return response()->json([
+                'message' => 'No tienes permiso para eliminar este producto.',
+                'code' => 'FORBIDDEN_RESOURCE',
+            ], 403);
+        }
+
+        $product->delete();
+        DB::table('auditoria_accesos')->insert([
+            'actor_id' => $request->user()->id,
+            'accion' => 'eliminar',
+            'recurso_tipo' => 'Producto',
+            'recurso_id' => $producto,
+            'datos' => json_encode(['propietario_id' => $product->usuario_id]),
+            'fecha' => now(),
+        ]);
+
+        return response()->json([
+            'message' => 'Producto eliminado correctamente.',
+            'code' => 'RESOURCE_DELETED',
+        ]);
     }
 }

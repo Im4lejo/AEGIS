@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UsuarioAuthResource;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -49,8 +50,8 @@ class AuthController extends Controller
         $usuario = Usuario::where('email', $datos['email'])->first();
 
         if (
-            !$usuario ||
-            !Hash::check($datos['password'], $usuario->password)
+            ! $usuario ||
+            ! Hash::check($datos['password'], $usuario->password)
         ) {
             throw ValidationException::withMessages([
                 'email' => ['Las credenciales no son correctas.'],
@@ -83,8 +84,14 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
+        $resource = (new UsuarioAuthResource($request->user()))
+            ->resolve($request);
+
         return response()->json([
-            'usuario' => $request->user(),
+            'usuario' => array_merge($request->user()->toArray(), [
+                'estado' => $request->user()->estado,
+                'capabilities' => $resource['capabilities'],
+            ]),
         ]);
     }
 }
