@@ -111,6 +111,58 @@ El Incremento 04 aplica autorización en servidor con Laravel Gates y middleware
 
 Las rutas de escritura revalidan autenticación, estado activo y capacidad. Contenido privado responde `403 PRIVATE_RESOURCE`; cuentas suspendidas responden `403 ACCOUNT_NOT_ACTIVE`.
 
+## Gestión de media
+
+Los productos y publicaciones usan Cloudinary mediante `MediaManager` y conservan tablas SQL separadas por compatibilidad:
+
+- Imágenes: JPEG, PNG y WebP, máximo 5 MB y 5000 x 5000 píxeles.
+- Video: MP4, WebM y MOV, máximo 25 MB.
+- Máximo 5 adjuntos por producto o publicación.
+- Las cargas generan metadatos, `public_id`, URL segura, orden y texto alternativo.
+- Cambiar orden o eliminar adjuntos exige ser propietario/admin/capacidad delegada.
+- Fallos remotos crean operaciones pendientes para reintento; los registros históricos sin `public_id` no se borran remotamente.
+- Avatar y portada se reemplazan mediante endpoints propios del usuario autenticado.
+
+## Perfiles sociales
+
+- `GET/PATCH /api/perfil/me` administra el perfil propio y su actividad.
+- `GET /api/perfil/{id}` conserva el contrato público anterior.
+- `GET /api/perfil/{id}/tabs/{tab}` pagina Publicaciones, Productos, Comunidades, Reseñas e Información.
+- `perfil_privado`, seguidores, presencia y publicación fijada tienen reglas persistidas.
+- Seguir, bloquear y silenciar tienen endpoints propios.
+- Los recursos públicos excluyen email, teléfono, dirección exacta y otros campos privados.
+- La desactivación inicia 30 días de retención y revoca tokens.
+
+## Feed social
+
+El foro usa `publicaciones_foro` como entidad canónica y conserva `/api/foro`.
+
+- Tabs: `para-ti`, `siguiendo`, `recientes`.
+- Cursor estable por fecha e ID.
+- Ranking Para-ti determinista: fijados, `rank_base`, fecha e ID.
+- Estados: publicado, borrador, programado, archivado y eliminado.
+- Publicaciones, edición, archivo, fijado, etiquetas, menciones y enlaces seguros.
+- Reacciones eficientes por publicación, usuario y tipo.
+- Feed de bloques excluye usuarios bloqueados.
+
+## Interacciones sociales
+
+- Comentarios admiten respuestas al comentario principal y edición/borrado lógico.
+- Reacciones y reposts son idempotentes.
+- Guardados soportan posts, productos y discusiones y colecciones personales.
+- Seguir mantiene el modelo de seguidores; no se agregó una entidad de amistad redundante.
+- Los reportes incluyen recurso contextual.
+- Los comentarios tienen límite temporal y los bloqueos impiden interacción cruzada.
+
+## Comunidades
+
+- Directorio público y sugerencias explícitas por categoría.
+- Comunidades públicas, privadas y por invitación.
+- Membresías contextuales owner/moderador/miembro.
+- Solicitudes, invitaciones, aprobación, rechazo, expulsión y baneo.
+- Posts comunitarios reutilizan `publicaciones_foro` mediante `comunidad_id`.
+- Auditoría local de acciones comunitarias.
+
 ## Verificación
 
 ```bash

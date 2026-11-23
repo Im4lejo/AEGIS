@@ -136,6 +136,10 @@ export default function Perfil({ auth, onNavigate }) {
   const [cargandoPerfil, setCargandoPerfil] = useState(true)
   const [errorPerfil, setErrorPerfil] = useState('')
   const userId = auth?.user?.id || user?.id
+  const [pestana, setPestana] = useState('publicaciones')
+  const [paginaPestana, setPaginaPestana] = useState(1)
+  const [datosPestana, setDatosPestana] = useState(null)
+  const [errorPestana, setErrorPestana] = useState('')
 
   useEffect(() => {
     let active = true
@@ -158,6 +162,22 @@ export default function Perfil({ auth, onNavigate }) {
       })
     return () => { active = false }
   }, [userId])
+
+  useEffect(() => {
+    if (!userId) return undefined
+    let active = true
+    profileApi.tab(userId, pestana, paginaPestana, 12)
+      .then(({ data, meta }) => {
+        if (active) {
+          setDatosPestana({ data, meta })
+          setErrorPestana('')
+        }
+      })
+      .catch((error) => {
+        if (active) setErrorPestana(error.message)
+      })
+    return () => { active = false }
+  }, [userId, pestana, paginaPestana])
 
   const datosUsuario = perfil?.perfil || auth?.user || user || {}
   const yo = {
@@ -291,6 +311,36 @@ export default function Perfil({ auth, onNavigate }) {
               </div>
             </div>
           </div>
+          <nav className="perfil-tabs" aria-label="Secciones del perfil">
+            {[
+              ['publicaciones', 'Publicaciones'],
+              ['productos', 'Productos'],
+              ['comunidades', 'Comunidades'],
+              ['resenas', 'Reseñas'],
+              ['informacion', 'Información'],
+            ].map(([id, label]) => (
+              <button
+                type="button"
+                key={id}
+                className={pestana === id ? 'active' : ''}
+                aria-current={pestana === id ? 'page' : undefined}
+                onClick={() => {
+                  setPestana(id)
+                  setPaginaPestana(1)
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </nav>
+          {errorPestana && <p className="perfil-empty" role="alert">{errorPestana}</p>}
+          {datosPestana?.meta && (
+            <div className="perfil-tab-pagination" aria-label="Paginación de pestaña">
+              <button type="button" disabled={datosPestana.meta.current_page <= 1} onClick={() => setPaginaPestana((page) => page - 1)}>Anterior</button>
+              <span>Página {datosPestana.meta.current_page} de {datosPestana.meta.last_page}</span>
+              <button type="button" disabled={datosPestana.meta.current_page >= datosPestana.meta.last_page} onClick={() => setPaginaPestana((page) => page + 1)}>Siguiente</button>
+            </div>
+          )}
         </section>
 
         <div className="perfil-grid">

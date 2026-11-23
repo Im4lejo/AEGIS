@@ -171,25 +171,230 @@ export const productApi = {
     })
     return request('/productos', { method: 'POST', body, token })
   },
+  addMedia: (productId, files, token, altText = '') => {
+    const body = new FormData()
+    files.forEach((file) => body.append('imagenes[]', file))
+    if (altText) body.append('alt_text', altText)
+    return request(`/productos/${encodeURIComponent(productId)}/imagenes`, {
+      method: 'POST',
+      body,
+      token,
+    })
+  },
+  deleteMedia: (productId, imageId, token) =>
+    request(`/productos/${encodeURIComponent(productId)}/imagenes/${encodeURIComponent(imageId)}`, {
+      method: 'DELETE',
+      token,
+    }),
+  reorderMedia: (productId, ids, token) =>
+    request(`/productos/${encodeURIComponent(productId)}/imagenes/orden`, {
+      method: 'PATCH',
+      body: { orden: ids },
+      token,
+    }),
 }
 
 export const forumApi = {
-  list: (page = 1) => request(`/foro${queryString({ page, per_page: 50 })}`),
+  list: (tab = 'recientes', cursor = null, perPage = 20) =>
+    request(`/foro${queryString({ tab, cursor, per_page: perPage })}`),
   create: (post, token) => {
     const body = new FormData()
     body.append('titulo', post.titulo)
     body.append('contenido', post.contenido)
     if (post.imagen) body.append('imagenes[]', post.imagen)
+    if (post.visibilidad) body.append('visibilidad', post.visibilidad)
+    if (post.estado) body.append('estado', post.estado)
+    if (post.programada_para) body.append('programada_para', post.programada_para)
+    if (post.enlace_preview_url) body.append('enlace_preview_url', post.enlace_preview_url)
+    ;(post.etiquetas || []).forEach((tag, index) => body.append(`etiquetas[${index}]`, tag))
+    ;(post.menciones || []).forEach((id, index) => body.append(`menciones[${index}]`, id))
     return request('/foro', { method: 'POST', body, token })
   },
+  update: (postId, details, token) =>
+    request(`/foro/${encodeURIComponent(postId)}`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  archive: (postId, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/archivar`, {
+      method: 'PATCH',
+      token,
+    }),
+  react: (postId, tipo, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/reacciones`, {
+      method: 'POST',
+      body: { tipo },
+      token,
+    }),
+  unreact: (postId, tipo, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/reacciones${queryString({ tipo })}`, {
+      method: 'DELETE',
+      token,
+    }),
+  comments: (postId, page = 1, perPage = 20) =>
+    request(`/foro/${encodeURIComponent(postId)}/comentarios${queryString({ page, per_page: perPage })}`),
+  updateComment: (postId, commentId, comentario, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/comentarios/${encodeURIComponent(commentId)}`, {
+      method: 'PATCH',
+      body: { comentario },
+      token,
+    }),
+  deleteComment: (postId, commentId, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/comentarios/${encodeURIComponent(commentId)}`, {
+      method: 'DELETE',
+      token,
+    }),
+  repost: (postId, comentario, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/reposts`, {
+      method: 'POST',
+      body: comentario ? { comentario } : {},
+      token,
+    }),
+  unrepost: (postId, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/reposts`, {
+      method: 'DELETE',
+      token,
+    }),
   comment: (postId, comentario, token) =>
     request(`/foro/${postId}/comentarios`, {
       method: 'POST',
       body: { comentario },
       token,
     }),
+  addMedia: (postId, { images = [], videos = [] }, token, altText = '') => {
+    const body = new FormData()
+    images.forEach((file) => body.append('imagenes[]', file))
+    videos.forEach((file) => body.append('videos[]', file))
+    if (altText) body.append('alt_text', altText)
+    return request(`/foro/${encodeURIComponent(postId)}/imagenes`, {
+      method: 'POST',
+      body,
+      token,
+    })
+  },
+  deleteMedia: (postId, imageId, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/imagenes/${encodeURIComponent(imageId)}`, {
+      method: 'DELETE',
+      token,
+    }),
+  reorderMedia: (postId, ids, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/imagenes/orden`, {
+      method: 'PATCH',
+      body: { orden: ids },
+      token,
+    }),
+}
+
+export const communityApi = {
+  list: (filters = {}) =>
+    request(`/comunidades${queryString(filters)}`),
+  suggestions: (categoria = '') =>
+    request(`/comunidades/sugerencias${queryString({ categoria })}`),
+  show: (id) => request(`/comunidades/${encodeURIComponent(id)}`),
+  create: (details, token) =>
+    request('/comunidades', { method: 'POST', body: details, token }),
+  update: (id, details, token) =>
+    request(`/comunidades/${encodeURIComponent(id)}`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  archive: (id, token) =>
+    request(`/comunidades/${encodeURIComponent(id)}/archivar`, {
+      method: 'PATCH',
+      token,
+    }),
+  membership: (id, token) =>
+    request(`/comunidades/${encodeURIComponent(id)}/membresia`, {
+      method: 'POST',
+      token,
+    }),
+  leave: (id, token) =>
+    request(`/comunidades/${encodeURIComponent(id)}/membresia`, {
+      method: 'DELETE',
+      token,
+    }),
+  members: (id, page = 1, perPage = 20) =>
+    request(`/comunidades/${encodeURIComponent(id)}/miembros${queryString({ page, per_page: perPage })}`),
+  posts: (id, page = 1, perPage = 20) =>
+    request(`/comunidades/${encodeURIComponent(id)}/posts${queryString({ page, per_page: perPage })}`),
+  createPost: (id, details, token) =>
+    request(`/comunidades/${encodeURIComponent(id)}/posts`, {
+      method: 'POST',
+      body: details,
+      token,
+    }),
+  pending: (id, token, page = 1, perPage = 20) =>
+    request(`/comunidades/${encodeURIComponent(id)}/solicitudes${queryString({ page, per_page: perPage })}`, { token }),
+  decide: (id, userId, decision, token) =>
+    request(`/comunidades/${encodeURIComponent(id)}/membresias/${encodeURIComponent(userId)}`, {
+      method: 'PATCH',
+      body: { decision },
+      token,
+    }),
+  invite: (id, userId, token) =>
+    request(`/comunidades/${encodeURIComponent(id)}/invitar`, {
+      method: 'POST',
+      body: { usuario_id: userId },
+      token,
+    }),
+  audit: (id, token, page = 1, perPage = 20) =>
+    request(`/comunidades/${encodeURIComponent(id)}/auditoria${queryString({ page, per_page: perPage })}`, { token }),
+}
+
+export const savedApi = {
+  list: (filters = {}, token) =>
+    request(`/guardados${queryString(filters)}`, { token }),
+  collections: (token) => request('/guardados/colecciones', { token }),
+  createCollection: (details, token) =>
+    request('/guardados/colecciones', { method: 'POST', body: details, token }),
+  save: (details, token) =>
+    request('/guardados', { method: 'POST', body: details, token }),
+  unsave: (details, token) =>
+    request(`/guardados${queryString(details)}`, { method: 'DELETE', token }),
+  report: (details, token) =>
+    request('/reportes/contextual', { method: 'POST', body: details, token }),
 }
 
 export const profileApi = {
   show: (userId) => request(`/perfil/${encodeURIComponent(userId)}`),
+  own: (token) => request('/perfil/me', { token }),
+  updateOwn: (details, token) =>
+    request('/perfil/me', { method: 'PATCH', body: details, token }),
+  tab: (userId, tab, page = 1, perPage = 12) =>
+    request(`/perfil/${encodeURIComponent(userId)}/tabs/${encodeURIComponent(tab)}${queryString({ page, per_page: perPage })}`),
+  follow: (userId, token) =>
+    request(`/perfil/${encodeURIComponent(userId)}/seguir`, { method: 'POST', token }),
+  unfollow: (userId, token) =>
+    request(`/perfil/${encodeURIComponent(userId)}/seguir`, { method: 'DELETE', token }),
+  followers: (userId, page = 1, perPage = 20) =>
+    request(`/perfil/${encodeURIComponent(userId)}/seguidores${queryString({ page, per_page: perPage })}`),
+  following: (userId, page = 1, perPage = 20) =>
+    request(`/perfil/${encodeURIComponent(userId)}/siguiendo${queryString({ page, per_page: perPage })}`),
+  restrict: (userId, tipo, token) =>
+    request(`/perfil/${encodeURIComponent(userId)}/restriccion`, {
+      method: 'POST',
+      body: { tipo },
+      token,
+    }),
+  unrestrict: (userId, token) =>
+    request(`/perfil/${encodeURIComponent(userId)}/restriccion`, {
+      method: 'DELETE',
+      token,
+    }),
+  deactivate: (token) =>
+    request('/perfil/me/desactivar', { method: 'POST', token }),
+  replaceAvatar: (file, token, altText = 'Foto de perfil') => {
+    const body = new FormData()
+    body.append('imagen', file)
+    body.append('alt_text', altText)
+    return request('/perfil/media/avatar', { method: 'POST', body, token })
+  },
+  replaceCover: (file, token, altText = 'Portada de perfil') => {
+    const body = new FormData()
+    body.append('imagen', file)
+    body.append('alt_text', altText)
+    return request('/perfil/media/portada', { method: 'POST', body, token })
+  },
 }

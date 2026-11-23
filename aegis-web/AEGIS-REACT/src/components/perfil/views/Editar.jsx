@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { avatarUrl } from '../../shared/presentation'
+import { profileApi } from '../../../services/api'
 import '../css/editar.css'
 
 const IconPencil = ({ size = 15 }) => (
@@ -173,6 +174,27 @@ export default function Editar({ auth, onNavigate, id }) {
   const [toast, setToast] = useState(null)
 
   useEffect(() => {
+    if (!auth?.token) return
+    let active = true
+    profileApi.own(auth.token)
+      .then(({ data }) => {
+        if (!active) return
+        const perfil = data.perfil
+        setAvatar(perfil.foto_perfil_url || avatar)
+        setPortada(perfil.img_background_url || null)
+        setDescripcion(perfil.descripcion || '')
+        setAjustes((previas) => ({
+          ...previas,
+          perfil_privado: perfil.perfil_privado,
+          mostrar_seguidores: perfil.mostrar_seguidores,
+          mostrar_presencia: perfil.mostrar_presencia,
+        }))
+      })
+      .catch((error) => setToast(error.message))
+    return () => { active = false }
+  }, [auth?.token])
+
+  useEffect(() => {
     if (!toast) return
     const timer = setTimeout(() => setToast(null), 2600)
     return () => clearTimeout(timer)
@@ -216,31 +238,32 @@ export default function Editar({ auth, onNavigate, id }) {
     setToast('Foto guardada ✓')
   }
 
-  const leerImagen = (file, campo) => {
+  const leerImagen = async (file, campo) => {
     if (!file) return
-    const reader = new FileReader()
-    reader.onload = (loadEvent) => {
-      const imagen = new Image()
-      imagen.onload = () => {
-        const escala = Math.min(1, 900 / Math.max(imagen.width, imagen.height))
-        const ancho = Math.round(imagen.width * escala)
-        const alto = Math.round(imagen.height * escala)
-        const lienzo = document.createElement('canvas')
-        lienzo.width = ancho
-        lienzo.height = alto
-        lienzo.getContext('2d').drawImage(imagen, 0, 0, ancho, alto)
-        aplicarFoto(campo, lienzo.toDataURL('image/jpeg', 0.85))
-      }
-      imagen.src = loadEvent.target.result
+    try {
+      const response = campo === 'avatar'
+        ? await profileApi.replaceAvatar(file, auth?.token)
+        : await profileApi.replaceCover(file, auth?.token)
+      aplicarFoto(campo, response.data.url)
+    } catch (error) {
+      setToast(error.message)
     }
-    reader.readAsDataURL(file)
   }
 
-  const guardarModal = () => {
+  const guardarModal = async () => {
     setAvatar(borradorAvatar)
     setPortada(borradorPortada)
     setDescripcion(borradorDesc.trim())
-    localStorage.setItem('perfilAegis', JSON.stringify({ avatar: borradorAvatar, portada: borradorPortada, descripcion: borradorDesc.trim() }))
+    try {
+      await profileApi.updateOwn({
+        descripcion: borradorDesc.trim(),
+        perfil_privado: Boolean(ajustes.perfil_privado),
+        mostrar_seguidores: Boolean(ajustes.mostrar_seguidores),
+        mostrar_presencia: Boolean(ajustes.mostrar_presencia),
+      }, auth?.token)
+    } catch (error) {
+      setToast(error.message)
+    }
     setModalAbierto(false)
     setToast('Cambios guardados')
   }
@@ -254,10 +277,18 @@ export default function Editar({ auth, onNavigate, id }) {
     setToast('Cambios guardados')
   }
 
-  const alternarAjuste = (id) => {
+  const alternarAjuste = async (id) => {
     const nuevos = { ...ajustes, [id]: !ajustes[id] }
     setAjustes(nuevos)
     localStorage.setItem('ajustesPerfilAegis', JSON.stringify(nuevos))
+    const privacyKeys = ['perfil_privado', 'mostrar_seguidores', 'mostrar_presencia']
+    if (privacyKeys.includes(id) && auth?.token) {
+      try {
+        await profileApi.updateOwn({ [id]: nuevos[id] }, auth.token)
+      } catch (error) {
+        setToast(error.message)
+      }
+    }
   }
 
   const seccionActual = SECCIONES.find((item) => item.id === seccion)

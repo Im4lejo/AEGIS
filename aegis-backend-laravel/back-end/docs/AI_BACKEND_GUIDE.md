@@ -217,6 +217,46 @@ Los recursos usan visibilidad `publica`, `privada` o `grupo_privado`. Los produc
 
 Las acciones administrativas pueden auditarse en `auditoria_accesos`. `permisos_delegados` permite otorgar `leer`, `editar`, `eliminar`, `moderar` o `gestionar` sobre una combinación concreta de tipo e ID de recurso.
 
+### Media y adjuntos
+
+`MediaManager` centraliza MIME, tamaño, dimensiones, carga y compensación. `CloudinaryMediaStorage` conserva Cloudinary como proveedor externo. Los controladores de producto y foro usan las tablas `imagenes_producto` e `imagenes_publicacion_foro`, con metadatos mínimos y `public_id` extensible.
+
+Las rutas de adjuntos son operaciones protegidas y revalidan el Gate del recurso. Las imágenes permiten máximo 5 MB y 5000 x 5000 píxeles; los videos permiten máximo 25 MB y se suben como recurso `video`. Avatar y portada reemplazan IDs anteriores y eliminan de Cloudinary solo después de actualizar la cuenta.
+
+`operaciones_media` contiene eliminaciones remotas pendientes con clave idempotente, estado, intentos y próximo intento. Los registros históricos sin `public_id` se mantienen y no generan borrado remoto.
+
+### Perfiles sociales
+
+El perfil propio se obtiene y modifica con `/api/perfil/me`. El contrato público `/api/perfil/{usuario}` permanece compatible y limita campos a información autorizada. Las pestañas públicas usan `/api/perfil/{usuario}/tabs/{tab}` y paginan por `per_page` con máximo 50.
+
+`usuarios.url_publica`, `ciudad_aprox`, `perfil_privado`, `mostrar_seguidores`, `mostrar_presencia`, `ultima_actividad` y `publicacion_fijada_id` modelan identidad visible y privacidad. `enlaces_perfil` limita enlaces a tipos conocidos y URLs HTTP/HTTPS. `seguimientos` distingue pendiente/aceptado. `bloqueos_usuario` diferencia bloqueo y silencio. `desactivaciones_usuario` conserva una ventana de retención antes de procesar la desactivación.
+
+Los recursos públicos nunca seleccionan email, teléfono ni ciudad exacta. Un perfil privado devuelve `PROFILE_PRIVATE` salvo propietario o seguimiento aceptado. Los bloqueos mutuos devuelven `PROFILE_RESTRICTED`.
+
+### Feed social
+
+`publicaciones_foro` es la entidad canónica del feed. `GET /api/foro` conserva el contrato legado y acepta `tab`, `cursor` y `per_page`.
+
+Las publicaciones pueden estar `publicado`, `borrador`, `programado`, `archivado` o `eliminado`. `programada_para` usa Laravel Queue mediante `PublicarPostProgramado`. El cursor combina fecha e ID y evita saltos por registros con la misma fecha.
+
+Para-ti ordena fijados y `rank_base`, después fecha e ID. Siguiendo limita el resultado a seguidores aceptados. Recientes usa fecha e ID. Los bloqueos excluyen ambos lados de la relación.
+
+Las reacciones usan `reacciones_publicacion` con unicidad por publicación, usuario y tipo. Las menciones usan la tabla pivote `menciones_publicacion`. Las etiquetas mantienen registros normalizados y enlaces seguros HTTP/HTTPS.
+
+### Interacciones sociales
+
+Los comentarios mantienen profundidad máxima de una respuesta sobre el comentario principal. Se editan con `estado=editado` y se eliminan con estado `eliminado`; se conserva el hilo.
+
+`reposts` tiene unicidad actor/publicación. `guardados` usa `recurso_tipo/recurso_id` con unicidad por usuario/recurso y colecciones opcionales propias. `reportes` admite contexto por tipo e ID. Los endpoints revalidan propiedad, visibilidad y bloqueos.
+
+### Comunidades
+
+Las comunidades usan `comunidades`, `membresias_comunidad` y `acciones_comunidad`. Los roles owner/moderador/miembro son exclusivos de una comunidad y no otorgan permisos globales.
+
+`publicaciones_foro.comunidad_id` vincula posts comunitarios sin duplicar la entidad de publicación. Los posts privados usan `grupo_privado` y el controlador exige membresía activa.
+
+Las comunidades privadas no aparecen en el directorio público ni en feeds/enlaces directos sin membresía activa. Las solicitudes usan estado `solicitado`; las invitaciones usan `invitado`.
+
 ## 6. Modelos Eloquent y relaciones
 
 | Modelo | Tabla | Relaciones definidas / comportamiento |

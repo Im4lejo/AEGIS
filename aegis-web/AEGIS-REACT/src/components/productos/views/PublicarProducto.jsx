@@ -4,6 +4,7 @@ import Footer from '../../layouts/Footer'
 import { formatCurrency } from '../../shared/presentation'
 import { useAuth } from '../../../auth/useAuth'
 import { productApi } from '../../../services/api'
+import MediaDropzone from '../../shared/MediaDropzone'
 import '../css/publicarProducto.css'
 
 
@@ -23,6 +24,8 @@ export default function PublicarProducto({ auth, onNavigate }) {
     const [categorias, setCategorias] = useState([])
     const [errorCategorias, setErrorCategorias] = useState('')
     const [mensaje, setMensaje] = useState(null)
+    const [mediaFiles, setMediaFiles] = useState([])
+    const [mediaAltText, setMediaAltText] = useState('')
 
     useEffect(() => {
         let active = true
@@ -114,7 +117,8 @@ export default function PublicarProducto({ auth, onNavigate }) {
         event.preventDefault()
         const titulo = datos.titulo.trim()
         const precio = soloNumeros(datos.precio)
-        if (!titulo || !precio || !datos.categoria_id || !datos.estado || !fotoPrincipal || !archivos.filter(Boolean).length) {
+        const imagenes = mediaFiles.length ? mediaFiles : archivos.filter(Boolean)
+        if (!titulo || !precio || !datos.categoria_id || !datos.estado || !imagenes.length) {
             setMensaje({ tipo: 'error', texto: 'Completa título, categoría, estado, precio y añade al menos una imagen.' })
             return
         }
@@ -126,7 +130,8 @@ export default function PublicarProducto({ auth, onNavigate }) {
                 precio,
                 estado_producto: datos.estado,
                 ciudad: datos.ciudad.trim(),
-                imagenes: archivos.filter(Boolean),
+                imagenes,
+                alt_text: mediaAltText,
             }, token)
             setMensaje(null)
             if (onNavigate) onNavigate('/productos', { message: '¡El producto se ha publicado satisfactoriamente!' })
@@ -144,6 +149,14 @@ export default function PublicarProducto({ auth, onNavigate }) {
 
             <main className="main-content publish-page">
                 <form onSubmit={publicar}>
+
+                    <MediaDropzone
+                        value={mediaFiles}
+                        onChange={setMediaFiles}
+                        altText={mediaAltText}
+                        onAltTextChange={setMediaAltText}
+                        maxFiles={5}
+                    />
 
                     <div className="publish-header">
                         <div className="publish-title">

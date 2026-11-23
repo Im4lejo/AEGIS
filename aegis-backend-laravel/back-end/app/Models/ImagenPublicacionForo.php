@@ -14,6 +14,12 @@ class ImagenPublicacionForo extends Model
         'imagen',
         'public_id',
         'orden',
+        'mime_type',
+        'size',
+        'width',
+        'height',
+        'alt_text',
+        'estado',
     ];
 
     protected $hidden = ['public_id'];
