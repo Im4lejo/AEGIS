@@ -9,8 +9,10 @@ use App\Models\Comunidad;
 use App\Models\Encuesta;
 use App\Models\MembresiaComunidad;
 use App\Models\OpcionEncuesta;
+use App\Models\Producto;
 use App\Models\Publicacion;
 use App\Models\ReaccionPublicacion;
+use App\Models\ReferenciaPublicacion;
 use App\Models\Repost;
 use App\Models\Usuario;
 use App\Models\VotoEncuesta;
@@ -31,7 +33,7 @@ class ForoController extends Controller
         $filters = $request->validate([
             'per_page' => ['nullable', 'integer', 'min:1', 'max:50'],
             'cursor' => ['nullable', 'string', 'max:255'],
-            'tab' => ['nullable', 'in:para-ti,siguiendo,recientes'],
+            'tab' => ['nullable', 'in:para-ti,siguiendo,recientes,marketplace'],
             'tipo' => ['nullable', 'in:discusion,pregunta,tutorial,encuesta,anuncio'],
             'comunidad_id' => ['nullable', 'integer', 'exists:comunidades,id'],
             'busqueda' => ['nullable', 'string', 'max:100'],
@@ -89,6 +91,13 @@ class ForoController extends Controller
             $query->whereIn('usuario_id', $followedIds);
         } elseif ($tab === 'siguiendo') {
             $query->whereRaw('1 = 0');
+        }
+        if ($tab === 'marketplace') {
+            $query->whereHas('referencias', fn ($reference) => $reference
+                ->where('tipo', 'producto')
+                ->whereHas('producto', fn ($product) => $product
+                    ->where('visibilidad', 'publica')
+                    ->whereIn('estado_publicacion', ['activo', 'reservado'])));
         }
 
         if (($filters['orden'] ?? null) === 'actividad') {
@@ -167,6 +176,8 @@ class ForoController extends Controller
             'imagenes' => ['nullable', 'array', 'max:5'],
             'imagenes.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'alt_text' => ['nullable', 'string', 'max:255'],
+            'producto_id' => ['nullable', 'integer', 'exists:productos,id'],
+            'comunidad_id_referencia' => ['nullable', 'integer', 'exists:comunidades,id'],
         ]);
         $contenido = trim($validated['contenido']);
         $titulo = trim($validated['titulo'] ?? '');
@@ -229,6 +240,26 @@ class ForoController extends Controller
                     $publicacion->menciones()->sync($validated['menciones']);
                 }
 
+                if (! empty($validated['producto_id'])) {
+                    $product = Producto::query()->find($validated['producto_id']);
+                    if (
+                        ! $product
+                        || $product->visibilidad !== 'publica'
+                        || $product->estado_publicacion === 'borrador'
+                        || $product->estado_publicacion === 'archivado'
+                    ) {
+                        throw ValidationException::withMessages([
+                            'producto_id' => ['El anuncio no está disponible para compartir.'],
+                        ]);
+                    }
+                    ReferenciaPublicacion::query()->create([
+                        'publicacion_id' => $publicacion->id,
+                        'tipo' => 'producto',
+                        'producto_id' => $product->id,
+                        'orden' => 0,
+                    ]);
+                }
+
                 if (($validated['estado'] ?? 'publicado') === 'programado'
                     && $publicacion->programada_para
                 ) {
@@ -245,6 +276,9 @@ class ForoController extends Controller
                     ->loadCount('comentarios'),
             ], 201);
         } catch (\Throwable $e) {
+            if ($e instanceof ValidationException) {
+                throw $e;
+            }
             foreach ($imagenesSubidas as $publicId) {
                 try {
                     $this->media->destroyWithRetry($publicId, 'image', 'foro-store-'.uniqid());
@@ -379,7 +413,43 @@ class ForoController extends Controller
             ], 403);
         }
 
-        return response()->json(['data' => $post]);
+        $payload = $post->toArray();
+        $payload['referencias_comerciales'] = $post->referencias()
+            ->where('tipo', 'producto')
+            ->with(['producto.imagenes:id,producto_id,imagen,principal'])
+            ->get()
+            ->map(function (ReferenciaPublicacion $reference): ?array {
+                $product = $reference->producto;
+                if (
+                    ! $product
+                    || $product->visibilidad !== 'publica'
+                    || in_array($product->estado_publicacion, ['borrador', 'archivado', 'vendido', 'oculto'], true)
+                ) {
+                    return [
+                        'tipo' => 'producto',
+                        'producto_id' => $reference->producto_id,
+                        'disponible' => false,
+                        'razon' => 'El anuncio ya no está disponible.',
+                    ];
+                }
+
+                return [
+                    'tipo' => 'producto',
+                    'producto_id' => $product->id,
+                    'disponible' => $product->estado_publicacion === 'activo',
+                    'titulo' => $product->titulo,
+                    'precio' => $product->precio,
+                    'estado_producto' => $product->estado_producto,
+                    'estado_publicacion' => $product->estado_publicacion,
+                    'ciudad_aprox' => $product->ciudad_aprox,
+                    'imagen' => $product->imagenes->firstWhere('principal', true)?->imagen
+                        ?? $product->imagenes->first()?->imagen,
+                ];
+            })
+            ->filter()
+            ->values();
+
+        return response()->json(['data' => $payload]);
     }
 
     public function update(Request $request, int $publicacion)
@@ -872,6 +942,9 @@ class ForoController extends Controller
             'usuario:id,nombre,username,foto_perfil_url as foto_perfil',
             'imagenes:id,publicacion_id,imagen,orden',
             'menciones:id,nombre,username,foto_perfil_url as foto_perfil',
+            'referencias:id,publicacion_id,tipo,producto_id,orden',
+            'referencias.producto:id,titulo,precio,estado_publicacion,estado_producto,ciudad_aprox,visibilidad',
+            'referencias.producto.imagenes:id,producto_id,imagen,principal',
             'comentarios' => fn ($query) => $query
                 ->with('usuario:id,nombre,username,foto_perfil_url as foto_perfil')
                 ->orderBy('fecha_comentario'),

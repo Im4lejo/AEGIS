@@ -102,6 +102,7 @@ export default function Foro({ auth, onNavigate }) {
   const [nextCursor, setNextCursor] = useState(null)
   const [loadingMore, setLoadingMore] = useState(false)
   const [tipoPost, setTipoPost] = useState('discusion')
+  const [productoReferencia, setProductoReferencia] = useState('')
 
   const ordenRef = useRef(null)
   const fileInputRef = useRef(null)
@@ -126,6 +127,7 @@ export default function Foro({ auth, onNavigate }) {
             titulo: publicacion.titulo,
             cuerpo: publicacion.contenido,
             imagen: publicacion.imagenes?.[0]?.imagen || null,
+            referencias: publicacion.referencias || [],
             comentarios: (publicacion.comentarios || []).map((comentario) => ({
               id: comentario.id,
               autor:
@@ -268,6 +270,7 @@ export default function Foro({ auth, onNavigate }) {
         titulo: publicacion.titulo,
         cuerpo: publicacion.contenido,
         imagen: publicacion.imagenes?.[0]?.imagen || null,
+        referencias: publicacion.referencias || [],
         comentarios: publicacion.comentarios || [],
       }))
       setPosts((previas) => [...previas, ...nuevas])
@@ -299,6 +302,7 @@ export default function Foro({ auth, onNavigate }) {
           contenido: texto,
           imagen: archivoNuevo,
           tipo: tipoPost,
+          producto_id: productoReferencia || undefined,
         },
         token,
       )
@@ -313,12 +317,15 @@ export default function Foro({ auth, onNavigate }) {
         titulo: publicacion.titulo,
         cuerpo: publicacion.contenido,
         imagen: publicacion.imagenes?.[0]?.imagen || null,
+        referencias: publicacion.referencias || [],
         comentarios: [],
       }
       setPosts((prev) => [nueva, ...prev])
       setTextoPublicacion('')
       setImagenNueva(null)
       setArchivoNuevo(null)
+      setProductoReferencia('')
+      setProductoReferencia('')
       setPanelAbierto(false)
       setToast('¡Publicación creada! ✓')
     } catch (error) {
@@ -348,6 +355,16 @@ export default function Foro({ auth, onNavigate }) {
         forumMenuOpen={foroMenuAbierto}
         onForumMenuToggle={() => setForoMenuAbierto((abierto) => !abierto)}
       />
+      <label className="foro-composer-type">
+        Referencia comercial
+        <input
+          type="number"
+          min="1"
+          value={productoReferencia}
+          onChange={(event) => setProductoReferencia(event.target.value)}
+          placeholder="ID de anuncio"
+        />
+      </label>
       <label className="foro-composer-type">
         Tipo de publicación
         <select value={tipoPost} onChange={(event) => setTipoPost(event.target.value)}>
@@ -396,6 +413,7 @@ export default function Foro({ auth, onNavigate }) {
               ['para-ti', 'Para ti'],
               ['siguiendo', 'Siguiendo'],
               ['recientes', 'Recientes'],
+              ['marketplace', 'Marketplace'],
             ].map(([id, label]) => (
               <button
                 type="button"
@@ -671,6 +689,22 @@ export default function Foro({ auth, onNavigate }) {
                     onClick={() => setLightbox(post.imagen)}
                   />
                 )}
+                {(post.referencias || []).filter((reference) => reference.tipo === 'producto').map((reference) => (
+                  <article className="foro-product-reference" key={reference.id || reference.producto_id}>
+                    {reference.producto ? (
+                      <button
+                        type="button"
+                        onClick={() => onNavigate?.(`/productos/detalle?id=${reference.producto.id}`)}
+                      >
+                        <strong>{reference.producto.titulo}</strong>
+                        <span>COP {Number(reference.producto.precio || 0).toLocaleString('es-CO')}</span>
+                        <span>{reference.producto.estado_publicacion}</span>
+                      </button>
+                    ) : (
+                      <p>El anuncio ya no está disponible.</p>
+                    )}
+                  </article>
+                ))}
 
                 <div className="foro-post-actions">
                   <button

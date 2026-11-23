@@ -325,6 +325,12 @@ El receptor se determina por el participante correspondiente. Las reseñas de pu
 
 `reputacion_agregados` conserva cantidad, promedio y distribución recalculados desde calificaciones válidas.
 
+### Integración cruzada
+
+`referencias_publicacion` vincula explícitamente una publicación con producto, publicación, comunidad o punto. La referencia comercial mantiene solo IDs/FK y consulta el producto original al serializar.
+
+No se copian precio, stock ni estado. Anuncios privados, borradores, archivados, vendidos u ocultos generan una tarjeta no disponible.
+
 ## 6. Modelos Eloquent y relaciones
 
 | Modelo | Tabla | Relaciones definidas / comportamiento |

@@ -89,4 +89,10 @@ class Publicacion extends Model
     {
         return $this->belongsTo(Comunidad::class, 'comunidad_id');
     }
+
+    public function referencias(): HasMany
+    {
+        return $this->hasMany(ReferenciaPublicacion::class, 'publicacion_id')
+            ->orderBy('orden');
+    }
 }

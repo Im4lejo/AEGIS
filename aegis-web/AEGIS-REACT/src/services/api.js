@@ -234,6 +234,7 @@ export const forumApi = {
     if (post.estado) body.append('estado', post.estado)
     if (post.programada_para) body.append('programada_para', post.programada_para)
     if (post.enlace_preview_url) body.append('enlace_preview_url', post.enlace_preview_url)
+    if (post.producto_id) body.append('producto_id', post.producto_id)
     ;(post.etiquetas || []).forEach((tag, index) => body.append(`etiquetas[${index}]`, tag))
     ;(post.menciones || []).forEach((id, index) => body.append(`menciones[${index}]`, id))
     return request('/foro', { method: 'POST', body, token })

@@ -229,6 +229,13 @@ El foro usa `publicaciones_foro` como entidad canónica y conserva `/api/foro`.
 - Editar está limitado a siete días.
 - Promedios y distribución provienen de reseñas activas/editadas.
 
+## Integración social-comercial
+
+- Las publicaciones pueden referenciar productos mediante `referencias_publicacion`.
+- Las tarjetas leen precio/estado/foto directamente del producto.
+- Privados, borrados, archivados, vendidos y ocultos no generan compra.
+- El feed admite un tab Marketplace basado en referencias activas/reservadas.
+
 ## Verificación
 
 ```bash
