@@ -564,6 +564,44 @@ export const savedApi = {
     request('/reportes/contextual', { method: 'POST', body: details, token }),
 }
 
+export const moderationApi = {
+  mine: (token) => request('/reportes/mis', { token }),
+  appeal: (reportId, argument, token) =>
+    request(`/reportes/${encodeURIComponent(reportId)}/apelacion`, {
+      method: 'POST',
+      body: { argumento: argument },
+      token,
+    }),
+  queue: (filters = {}, token) =>
+    request(`/moderacion/reportes${queryString(filters)}`, { token }),
+  assign: (reportId, token) =>
+    request(`/moderacion/reportes/${encodeURIComponent(reportId)}/asignar`, {
+      method: 'PATCH',
+      token,
+    }),
+  resolve: (reportId, details, token) =>
+    request(`/moderacion/reportes/${encodeURIComponent(reportId)}/resolver`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  appealQueue: (filters = {}, token) =>
+    request(`/moderacion/apelaciones${queryString(filters)}`, { token }),
+  resolveAppeal: (appealId, details, token) =>
+    request(`/moderacion/apelaciones/${encodeURIComponent(appealId)}/resolver`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  fraudQueue: (token) =>
+    request('/moderacion/antifraude', { token }),
+  scanProduct: (productId, token) =>
+    request(`/moderacion/productos/${encodeURIComponent(productId)}/antifraude`, {
+      method: 'POST',
+      token,
+    }),
+}
+
 export const meetingApi = {
   points: (filters = {}) => request(`/puntos-fisicos/directorio${queryString(filters)}`),
   meetings: (estado = null, token) =>

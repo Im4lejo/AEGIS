@@ -9,6 +9,7 @@ use App\Models\Mensaje;
 use App\Models\ParticipanteConversacion;
 use App\Models\Producto;
 use App\Models\Usuario;
+use App\Models\PreferenciaUsuario;
 use App\Services\MediaManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -69,6 +70,24 @@ class MensajeController extends Controller
         $product = isset($validated['producto_id'])
             ? Producto::query()->findOrFail($validated['producto_id'])
             : null;
+        $preference = PreferenciaUsuario::query()
+            ->where('usuario_id', $other->id)
+            ->first();
+        $preferencesJson = $preference?->preferencias;
+        $unknownPolicy = is_array($preferencesJson)
+            ? data_get($preferencesJson, 'mensajeria.mensajes_desconocidos', 'todos')
+            : 'todos';
+        $following = DB::table('seguimientos')
+            ->where('seguidor_id', $request->user()->id)
+            ->where('seguido_id', $other->id)
+            ->where('estado', 'aceptado')
+            ->exists();
+        if ($unknownPolicy === 'nadie' || ($unknownPolicy === 'solicitud' && ! $following && ! $product)) {
+            return response()->json([
+                'message' => 'Esta cuenta restringió mensajes de usuarios desconocidos.',
+                'code' => 'MESSAGE_REQUEST_REQUIRED',
+            ], 403);
+        }
         $ids = collect([$request->user()->id, $other->id])->sort()->values()->all();
         $key = 'direct:'.$ids[0].':'.$ids[1].':'.($product?->id ?? 0);
 

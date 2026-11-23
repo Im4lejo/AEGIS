@@ -349,6 +349,33 @@ export default function Foro({ auth, onNavigate }) {
     }
   }
 
+  const reportPost = async (post) => {
+    if (!auth?.isAuthenticated) {
+      onNavigate?.('/login')
+      return
+    }
+    const reason = window.prompt(
+      'Motivo: spam, estafa, acoso, contenido_prohibido o suplantacion',
+    )
+    if (!reason) return
+    const allowed = ['spam', 'estafa', 'acoso', 'contenido_prohibido', 'suplantacion']
+    if (!allowed.includes(reason.trim())) {
+      setToast('Selecciona uno de los motivos permitidos.')
+      return
+    }
+    try {
+      await savedApi.report({
+        recurso_tipo: 'post',
+        recurso_id: post.id,
+        motivo: reason.trim(),
+        descripcion: 'Reporte enviado desde el contexto de la publicación.',
+      }, token)
+      setToast('Reporte enviado de forma privada.')
+    } catch (requestError) {
+      setToast(requestError.message)
+    }
+  }
+
   const seleccionarImagen = (event) => {
     const file = event.target.files[0]
     if (!file) return
@@ -772,6 +799,13 @@ export default function Foro({ auth, onNavigate }) {
                     onClick={() => toggleComentarios(post.id)}
                   >
                     <IconComment /> {post.comentarios.length} Comentarios
+                  </button>
+                  <button
+                    className="foro-action"
+                    type="button"
+                    onClick={() => reportPost(post)}
+                  >
+                    Reportar
                   </button>
                   <button
                     className="foro-action"

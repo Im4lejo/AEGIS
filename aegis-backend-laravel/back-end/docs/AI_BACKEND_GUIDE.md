@@ -74,6 +74,13 @@ Cliente
 - Los estados `procesando`, `listo` y `error` se almacenan en adjuntos e historias.
 - Los secretos Live/VOD permanecen en `.env`; nunca se serializan en posts o respuestas React.
 
+### Moderación y reportes
+
+- `GET /api/reportes/mis` devuelve solo reportes del usuario autenticado.
+- `GET /api/moderacion/reportes`, sanciones y apelaciones requieren rol admin activo.
+- Las resoluciones crean acciones y registros encadenados en auditoría moderativa.
+- Las sanciones pueden revocarse desde una apelación aceptada.
+
 ### CLI
 
 ```text

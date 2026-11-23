@@ -141,12 +141,30 @@ class GuardadosController extends Controller
     public function report(Request $request)
     {
         $validated = $request->validate([
-            'recurso_tipo' => ['required', 'in:usuario,post,comentario,producto,discusion'],
+            'recurso_tipo' => ['required', 'in:usuario,post,comentario,producto,discusion,comunidad,mensaje,operacion'],
             'recurso_id' => ['required', 'integer', 'min:1'],
             'usuario_reportado_id' => ['nullable', 'integer', 'exists:usuarios,id'],
-            'motivo' => ['required', 'string', 'max:255'],
+            'motivo' => ['required', 'string', 'min:2', 'max:255'],
             'descripcion' => ['nullable', 'string', 'max:2000'],
+            'evidencia' => ['nullable', 'array', 'max:5'],
+            'evidencia.*' => ['nullable', 'string', 'url', 'max:2048'],
         ]);
+        $this->assertResourceExists(
+            $validated['recurso_tipo'],
+            (int) $validated['recurso_id'],
+        );
+        $legacyReason = mb_strtolower(trim($validated['motivo']), 'UTF-8');
+        $motivoNormalizado = match ($legacyReason) {
+            'contenido inapropiado', 'contenido_inapropiado' => 'contenido_prohibido',
+            'spam', 'estafa', 'acoso', 'suplantacion', 'suplantación' => $legacyReason === 'suplantación'
+                ? 'suplantacion'
+                : $legacyReason,
+            default => 'spam',
+        };
+        $allowed = ['spam', 'estafa', 'acoso', 'contenido_prohibido', 'suplantacion'];
+        if (in_array($legacyReason, $allowed, true)) {
+            $motivoNormalizado = $legacyReason;
+        }
 
         $reportedId = $validated['usuario_reportado_id'] ?? null;
         if (! $reportedId) {
@@ -157,15 +175,38 @@ class GuardadosController extends Controller
                 'recurso_id' => ['No se pudo identificar el recurso reportado.'],
             ]);
         }
+        $fingerprint = hash(
+            'sha256',
+            implode(':', [
+                $request->user()->id,
+                $validated['recurso_tipo'],
+                (int) $validated['recurso_id'],
+                $motivoNormalizado,
+            ]),
+        );
+        $existing = DB::table('reportes')
+            ->where('fingerprint', $fingerprint)
+            ->whereIn('estado', ['pendiente', 'en_revision'])
+            ->exists();
+        if ($existing) {
+            throw ValidationException::withMessages([
+                'recurso_id' => ['Ya existe un reporte activo para este recurso.'],
+            ]);
+        }
 
         $id = DB::table('reportes')->insertGetId([
             'usuario_reporta_id' => $request->user()->id,
             'usuario_reportado_id' => $reportedId,
-            'motivo' => trim($validated['motivo']),
+            'motivo' => $motivoNormalizado,
             'descripcion' => $validated['descripcion'] ?? null,
             'recurso_tipo' => $validated['recurso_tipo'],
             'recurso_id' => (int) $validated['recurso_id'],
             'estado' => 'pendiente',
+            'prioridad' => in_array($motivoNormalizado, ['estafa', 'acoso', 'contenido_prohibido'], true)
+                ? 'alta'
+                : 'normal',
+            'evidencia' => json_encode(array_values($validated['evidencia'] ?? [])),
+            'fingerprint' => $fingerprint,
             'fecha_reporte' => now(),
         ]);
 
@@ -180,6 +221,12 @@ class GuardadosController extends Controller
         $exists = match ($tipo) {
             'post', 'discusion' => Publicacion::query()->whereKey($id)->exists(),
             'producto' => Producto::query()->whereKey($id)->exists(),
+            'usuario' => Usuario::query()->whereKey($id)->exists(),
+            'comentario' => DB::table('comentarios_foro')->where('id', $id)->exists(),
+            'comunidad' => DB::table('comunidades')->where('id', $id)->exists(),
+            'mensaje' => DB::table('mensajes')->where('id', $id)->exists(),
+            'operacion' => DB::table('operaciones_comerciales')->where('id', $id)->exists()
+                || DB::table('operaciones')->where('id', $id)->exists(),
         };
         if (! $exists) {
             throw ValidationException::withMessages([
@@ -195,6 +242,10 @@ class GuardadosController extends Controller
             'post', 'discusion' => Publicacion::query()->whereKey($id)->value('usuario_id'),
             'producto' => Producto::query()->whereKey($id)->value('usuario_id'),
             'comentario' => DB::table('comentarios_foro')->where('id', $id)->value('usuario_id'),
+            'comunidad' => DB::table('comunidades')->where('id', $id)->value('owner_id'),
+            'mensaje' => DB::table('mensajes')->where('id', $id)->value('autor_id'),
+            'operacion' => DB::table('operaciones_comerciales')->where('id', $id)->value('comprador_id')
+                ?? DB::table('operaciones')->where('id', $id)->value('comprador_id'),
             default => null,
         };
     }

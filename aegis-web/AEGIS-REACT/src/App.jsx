@@ -32,6 +32,7 @@ import PuntosFisicos from './components/puntosFisicos/views/Index'
 import Mensajes from './components/mensajes/views/Mensajes'
 import Encuentros from './components/puntosFisicos/views/Encuentros'
 import Admin from './components/admin/views/Dashboard'
+import AdminReportes from './components/admin/views/Reportes'
 import Plantilla from './components/shared/Plantilla'
 import { NotFoundPage } from './components/shared/ApiState'
 import { AccessRestrictedState } from './components/shared/ui'
@@ -43,6 +44,7 @@ import Negociacion from './components/negociacion/views/Negociacion'
 import Notificaciones from './components/notificaciones/views/Notificaciones'
 import Busqueda from './components/busqueda/views/Busqueda'
 import Ajustes from './components/ajustes/views/Ajustes'
+import MisReportes from './components/notificaciones/views/MisReportes'
 import './design-system/design-system.css'
 
 function Vista({ Componente }) {
@@ -90,6 +92,8 @@ function Vista({ Componente }) {
     '/mensajes',
     '/configurar-encuentro',
     '/admin',
+    '/admin/reportes',
+    '/mis-reportes',
   ].includes(location.pathname)
 
   if (requiereSesion && session.loading) {
@@ -120,7 +124,7 @@ function Vista({ Componente }) {
     )
   }
   if (
-    location.pathname === '/admin'
+    location.pathname.startsWith('/admin')
     && session.isAuthenticated
     && session.user?.rol !== 'admin'
   ) {
@@ -162,6 +166,7 @@ function App() {
               <Route path="/notificaciones" element={<Vista Componente={Notificaciones} />} />
               <Route path="/busqueda" element={<Vista Componente={Busqueda} />} />
               <Route path="/ajustes" element={<Vista Componente={Ajustes} />} />
+              <Route path="/mis-reportes" element={<Vista Componente={MisReportes} />} />
               <Route
                 path="/publicacion"
                 element={<Vista Componente={Publicacion} />}
@@ -208,6 +213,7 @@ function App() {
                 element={<Vista Componente={Encuentros} />}
               />
               <Route path="/admin" element={<Vista Componente={Admin} />} />
+              <Route path="/admin/reportes" element={<Vista Componente={AdminReportes} />} />
               <Route path="/login" element={<Vista Componente={Login} />} />
               <Route
                 path="/forgot-password"

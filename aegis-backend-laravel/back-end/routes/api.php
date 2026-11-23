@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\ResenaController;
 use App\Http\Controllers\Api\TiendaController;
 use App\Http\Controllers\Api\WebAuthController;
 use App\Http\Controllers\Api\VideoController;
+use App\Http\Controllers\Api\ModeracionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/inicio', InicioController::class);
@@ -221,6 +222,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/guardados/colecciones', [GuardadosController::class, 'collections']);
         Route::post('/guardados/colecciones', [GuardadosController::class, 'storeCollection']);
         Route::post('/reportes/contextual', [GuardadosController::class, 'report']);
+        Route::get('/reportes/mis', [ModeracionController::class, 'mine']);
+        Route::post('/reportes/{reporte}/apelacion', [ModeracionController::class, 'appeal'])->whereNumber('reporte');
+        Route::get('/moderacion/reportes', [ModeracionController::class, 'queue']);
+        Route::get('/moderacion/antifraude', [ModeracionController::class, 'fraudQueue']);
+        Route::get('/moderacion/apelaciones', [ModeracionController::class, 'appealQueue']);
+        Route::post('/moderacion/productos/{producto}/antifraude', [ModeracionController::class, 'scanFraud'])->whereNumber('producto');
+        Route::patch('/moderacion/reportes/{reporte}/asignar', [ModeracionController::class, 'assign'])->whereNumber('reporte');
+        Route::patch('/moderacion/reportes/{reporte}/resolver', [ModeracionController::class, 'resolve'])->whereNumber('reporte');
+        Route::patch('/moderacion/apelaciones/{apelacion}/resolver', [ModeracionController::class, 'resolveAppeal'])->whereNumber('apelacion');
         Route::post('/foro/{publicacion}/imagenes', [MediaController::class, 'storeForo'])->whereNumber('publicacion');
         Route::delete('/foro/{publicacion}/imagenes/{imagen}', [MediaController::class, 'destroyForo'])->whereNumber('publicacion')->whereNumber('imagen');
         Route::patch('/foro/{publicacion}/imagenes/orden', [MediaController::class, 'reorderForo'])->whereNumber('publicacion');

@@ -115,6 +115,16 @@ La API todavía no expone operaciones completas de encuentros ni perfiles privad
 - Live no está disponible sin credenciales/proveedor probado; `POST /api/live/sessions` responde `503 LIVE_UNAVAILABLE`.
 - Las variables Live y Cloudinary deben configurarse fuera de la base y nunca exponerse al cliente.
 
+## Moderación, reportes y apelaciones
+
+- Los reportes admiten usuario, post, comentario, producto, comunidad, mensaje y operación.
+- Motivos válidos: spam, estafa, acoso, contenido prohibido y suplantación.
+- Solo administradores gestionan la cola global; el reportante puede consultar únicamente sus reportes.
+- Sanciones: advertencia, suspensión temporal y baneo, siempre auditados y aplicados por API.
+- Solo la persona afectada puede apelar una resolución; aceptar revoca sanción y restaura cuenta activa.
+- Antifraude crea señales interpretables para revisión, sin etiquetar automáticamente culpable.
+- Mensajes privados no quedan abiertos al moderador; las preferencias controlan mensajes de desconocidos.
+
 ## Autorización, propietarios y privacidad
 
 El Incremento 04 aplica autorización en servidor con Laravel Gates y middleware:
