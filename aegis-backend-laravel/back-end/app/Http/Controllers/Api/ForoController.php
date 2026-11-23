@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Publicacion;
-use Cloudinary\Cloudinary;
+use App\Services\MediaManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -12,6 +12,8 @@ use Illuminate\Support\Str;
 
 class ForoController extends Controller
 {
+    public function __construct(private MediaManager $media) {}
+
     public function index(Request $request)
     {
         $filters = $request->validate([
@@ -44,6 +46,7 @@ class ForoController extends Controller
             'visibilidad' => ['nullable', 'in:publica,privada,grupo_privado'],
             'imagenes' => ['nullable', 'array', 'max:5'],
             'imagenes.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'alt_text' => ['nullable', 'string', 'max:255'],
         ]);
         $contenido = trim($validated['contenido']);
         $titulo = trim($validated['titulo'] ?? '');
@@ -53,9 +56,6 @@ class ForoController extends Controller
             $titulo = Str::limit($contenido, 200, '');
         }
 
-        $cloudinary = $files === []
-            ? null
-            : new Cloudinary(config('cloudinary.cloud_url'));
         $imagenesSubidas = [];
 
         try {
@@ -63,7 +63,6 @@ class ForoController extends Controller
                 $contenido,
                 $titulo,
                 $files,
-                $cloudinary,
                 $request,
                 $validated,
                 &$imagenesSubidas
@@ -76,28 +75,21 @@ class ForoController extends Controller
                 ]);
 
                 foreach ($files as $index => $file) {
-                    if ($cloudinary === null) {
-                        throw new \RuntimeException('Cloudinary no está configurado.');
-                    }
-
-                    $resultado = $cloudinary->uploadApi()->upload(
-                        $file->getRealPath(),
-                        [
-                            'folder' => 'foro_imagenes',
-                            'resource_type' => 'image',
-                        ]
+                    $resultado = $this->media->upload(
+                        $file,
+                        'foro_imagenes',
+                        'Publicacion/'.$request->user()->getKey(),
                     );
-                    $publicId = $resultado['public_id'] ?? null;
-                    $secureUrl = $resultado['secure_url'] ?? null;
-
-                    if (! $publicId || ! $secureUrl) {
-                        throw new \RuntimeException('Cloudinary no devolvió los datos de la imagen.');
-                    }
-
-                    $imagenesSubidas[] = $publicId;
+                    $imagenesSubidas[] = $resultado['public_id'];
                     $publicacion->imagenes()->create([
-                        'imagen' => $secureUrl,
-                        'public_id' => $publicId,
+                        'imagen' => $resultado['url'],
+                        'public_id' => $resultado['public_id'],
+                        'mime_type' => $resultado['mime_type'],
+                        'size' => $resultado['size'],
+                        'width' => $resultado['width'],
+                        'height' => $resultado['height'],
+                        'alt_text' => $validated['alt_text'] ?? null,
+                        'estado' => 'activo',
                         'orden' => $index,
                     ]);
                 }
@@ -113,7 +105,7 @@ class ForoController extends Controller
         } catch (\Throwable $e) {
             foreach ($imagenesSubidas as $publicId) {
                 try {
-                    $cloudinary?->uploadApi()->destroy($publicId);
+                    $this->media->destroyWithRetry($publicId, 'image', 'foro-store-'.uniqid());
                 } catch (\Throwable $error) {
                     report($error);
                 }

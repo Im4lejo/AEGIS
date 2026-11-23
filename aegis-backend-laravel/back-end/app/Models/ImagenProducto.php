@@ -11,7 +11,19 @@ class ImagenProducto extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['producto_id', 'imagen', 'principal'];
+    protected $fillable = [
+        'producto_id',
+        'imagen',
+        'public_id',
+        'mime_type',
+        'size',
+        'width',
+        'height',
+        'alt_text',
+        'estado',
+        'principal',
+        'orden',
+    ];
 
     protected function casts(): array
     {

@@ -6,13 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductoResource;
 use App\Models\Categoria;
 use App\Models\Producto;
-use Cloudinary\Cloudinary;
+use App\Services\MediaManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class ProductoController extends Controller
 {
+    public function __construct(private MediaManager $media) {}
+
     public function categorias()
     {
         return response()->json([
@@ -120,17 +122,16 @@ class ProductoController extends Controller
             'visibilidad' => 'nullable|in:publica,privada,grupo_privado',
             'imagenes' => 'required|array|min:1|max:5',
             'imagenes.*' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'alt_text' => 'nullable|string|max:255',
         ]);
 
         $usuarioId = $request->user()->getKey();
-        $cloudinary = new Cloudinary(config('cloudinary.cloud_url'));
 
         $imagenesSubidas = [];
 
         try {
             $producto = DB::transaction(function () use (
                 $validated,
-                $cloudinary,
                 $usuarioId,
                 &$imagenesSubidas
             ) {
@@ -146,18 +147,23 @@ class ProductoController extends Controller
                 ]);
 
                 foreach ($validated['imagenes'] as $index => $file) {
-                    $resultado = $cloudinary->uploadApi()->upload(
-                        $file->getRealPath(),
-                        [
-                            'folder' => 'productos',
-                            'resource_type' => 'image',
-                        ]
+                    $resultado = $this->media->upload(
+                        $file,
+                        'productos',
+                        'Producto/'.$usuarioId,
                     );
-
                     $imagenesSubidas[] = $resultado['public_id'];
 
                     $producto->imagenes()->create([
-                        'imagen' => $resultado['secure_url'],
+                        'imagen' => $resultado['url'],
+                        'public_id' => $resultado['public_id'],
+                        'mime_type' => $resultado['mime_type'],
+                        'size' => $resultado['size'],
+                        'width' => $resultado['width'],
+                        'height' => $resultado['height'],
+                        'alt_text' => $validated['alt_text'] ?? null,
+                        'estado' => 'activo',
+                        'orden' => $index,
                         'principal' => $index === 0,
                     ]);
                 }
@@ -172,7 +178,7 @@ class ProductoController extends Controller
         } catch (\Throwable $e) {
             foreach ($imagenesSubidas as $publicId) {
                 try {
-                    $cloudinary->uploadApi()->destroy($publicId);
+                    $this->media->destroyWithRetry($publicId, 'image', 'producto-store-'.uniqid());
                 } catch (\Throwable $error) {
                     report($error);
                 }

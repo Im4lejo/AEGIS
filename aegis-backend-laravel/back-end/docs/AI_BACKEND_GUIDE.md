@@ -217,6 +217,14 @@ Los recursos usan visibilidad `publica`, `privada` o `grupo_privado`. Los produc
 
 Las acciones administrativas pueden auditarse en `auditoria_accesos`. `permisos_delegados` permite otorgar `leer`, `editar`, `eliminar`, `moderar` o `gestionar` sobre una combinación concreta de tipo e ID de recurso.
 
+### Media y adjuntos
+
+`MediaManager` centraliza MIME, tamaño, dimensiones, carga y compensación. `CloudinaryMediaStorage` conserva Cloudinary como proveedor externo. Los controladores de producto y foro usan las tablas `imagenes_producto` e `imagenes_publicacion_foro`, con metadatos mínimos y `public_id` extensible.
+
+Las rutas de adjuntos son operaciones protegidas y revalidan el Gate del recurso. Las imágenes permiten máximo 5 MB y 5000 x 5000 píxeles; los videos permiten máximo 25 MB y se suben como recurso `video`. Avatar y portada reemplazan IDs anteriores y eliminan de Cloudinary solo después de actualizar la cuenta.
+
+`operaciones_media` contiene eliminaciones remotas pendientes con clave idempotente, estado, intentos y próximo intento. Los registros históricos sin `public_id` se mantienen y no generan borrado remoto.
+
 ## 6. Modelos Eloquent y relaciones
 
 | Modelo | Tabla | Relaciones definidas / comportamiento |

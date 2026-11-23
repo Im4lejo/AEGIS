@@ -111,6 +111,18 @@ El Incremento 04 aplica autorización en servidor con Laravel Gates y middleware
 
 Las rutas de escritura revalidan autenticación, estado activo y capacidad. Contenido privado responde `403 PRIVATE_RESOURCE`; cuentas suspendidas responden `403 ACCOUNT_NOT_ACTIVE`.
 
+## Gestión de media
+
+Los productos y publicaciones usan Cloudinary mediante `MediaManager` y conservan tablas SQL separadas por compatibilidad:
+
+- Imágenes: JPEG, PNG y WebP, máximo 5 MB y 5000 x 5000 píxeles.
+- Video: MP4, WebM y MOV, máximo 25 MB.
+- Máximo 5 adjuntos por producto o publicación.
+- Las cargas generan metadatos, `public_id`, URL segura, orden y texto alternativo.
+- Cambiar orden o eliminar adjuntos exige ser propietario/admin/capacidad delegada.
+- Fallos remotos crean operaciones pendientes para reintento; los registros históricos sin `public_id` no se borran remotamente.
+- Avatar y portada se reemplazan mediante endpoints propios del usuario autenticado.
+
 ## Verificación
 
 ```bash

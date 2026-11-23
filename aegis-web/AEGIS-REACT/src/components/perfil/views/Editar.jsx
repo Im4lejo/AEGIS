@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { avatarUrl } from '../../shared/presentation'
+import { profileApi } from '../../../services/api'
 import '../css/editar.css'
 
 const IconPencil = ({ size = 15 }) => (
@@ -216,24 +217,16 @@ export default function Editar({ auth, onNavigate, id }) {
     setToast('Foto guardada ✓')
   }
 
-  const leerImagen = (file, campo) => {
+  const leerImagen = async (file, campo) => {
     if (!file) return
-    const reader = new FileReader()
-    reader.onload = (loadEvent) => {
-      const imagen = new Image()
-      imagen.onload = () => {
-        const escala = Math.min(1, 900 / Math.max(imagen.width, imagen.height))
-        const ancho = Math.round(imagen.width * escala)
-        const alto = Math.round(imagen.height * escala)
-        const lienzo = document.createElement('canvas')
-        lienzo.width = ancho
-        lienzo.height = alto
-        lienzo.getContext('2d').drawImage(imagen, 0, 0, ancho, alto)
-        aplicarFoto(campo, lienzo.toDataURL('image/jpeg', 0.85))
-      }
-      imagen.src = loadEvent.target.result
+    try {
+      const response = campo === 'avatar'
+        ? await profileApi.replaceAvatar(file, auth?.token)
+        : await profileApi.replaceCover(file, auth?.token)
+      aplicarFoto(campo, response.data.url)
+    } catch (error) {
+      setToast(error.message)
     }
-    reader.readAsDataURL(file)
   }
 
   const guardarModal = () => {

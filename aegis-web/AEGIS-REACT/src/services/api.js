@@ -171,6 +171,27 @@ export const productApi = {
     })
     return request('/productos', { method: 'POST', body, token })
   },
+  addMedia: (productId, files, token, altText = '') => {
+    const body = new FormData()
+    files.forEach((file) => body.append('imagenes[]', file))
+    if (altText) body.append('alt_text', altText)
+    return request(`/productos/${encodeURIComponent(productId)}/imagenes`, {
+      method: 'POST',
+      body,
+      token,
+    })
+  },
+  deleteMedia: (productId, imageId, token) =>
+    request(`/productos/${encodeURIComponent(productId)}/imagenes/${encodeURIComponent(imageId)}`, {
+      method: 'DELETE',
+      token,
+    }),
+  reorderMedia: (productId, ids, token) =>
+    request(`/productos/${encodeURIComponent(productId)}/imagenes/orden`, {
+      method: 'PATCH',
+      body: { orden: ids },
+      token,
+    }),
 }
 
 export const forumApi = {
@@ -188,8 +209,42 @@ export const forumApi = {
       body: { comentario },
       token,
     }),
+  addMedia: (postId, { images = [], videos = [] }, token, altText = '') => {
+    const body = new FormData()
+    images.forEach((file) => body.append('imagenes[]', file))
+    videos.forEach((file) => body.append('videos[]', file))
+    if (altText) body.append('alt_text', altText)
+    return request(`/foro/${encodeURIComponent(postId)}/imagenes`, {
+      method: 'POST',
+      body,
+      token,
+    })
+  },
+  deleteMedia: (postId, imageId, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/imagenes/${encodeURIComponent(imageId)}`, {
+      method: 'DELETE',
+      token,
+    }),
+  reorderMedia: (postId, ids, token) =>
+    request(`/foro/${encodeURIComponent(postId)}/imagenes/orden`, {
+      method: 'PATCH',
+      body: { orden: ids },
+      token,
+    }),
 }
 
 export const profileApi = {
   show: (userId) => request(`/perfil/${encodeURIComponent(userId)}`),
+  replaceAvatar: (file, token, altText = 'Foto de perfil') => {
+    const body = new FormData()
+    body.append('imagen', file)
+    body.append('alt_text', altText)
+    return request('/perfil/media/avatar', { method: 'POST', body, token })
+  },
+  replaceCover: (file, token, altText = 'Portada de perfil') => {
+    const body = new FormData()
+    body.append('imagen', file)
+    body.append('alt_text', altText)
+    return request('/perfil/media/portada', { method: 'POST', body, token })
+  },
 }

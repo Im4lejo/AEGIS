@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Contracts\MediaStorage;
 use App\Models\Producto;
 use App\Models\Publicacion;
 use App\Models\PuntoFisico;
 use App\Models\Usuario;
+use App\Services\CloudinaryMediaStorage;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\DB;
@@ -34,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(MediaStorage::class, CloudinaryMediaStorage::class);
     }
 
     /**
