@@ -17,6 +17,13 @@ class Calificacion extends Model
         'receptor_id',
         'puntuacion',
         'comentario',
+        'ambito',
+        'estado',
+        'respuesta',
+        'respondida_en',
+        'editada_en',
+        'anulada_en',
+        'punto_fisico_id',
     ];
 
     protected function casts(): array
@@ -24,6 +31,9 @@ class Calificacion extends Model
         return [
             'puntuacion' => 'integer',
             'fecha_calificacion' => 'datetime',
+            'respondida_en' => 'datetime',
+            'editada_en' => 'datetime',
+            'anulada_en' => 'datetime',
         ];
     }
 

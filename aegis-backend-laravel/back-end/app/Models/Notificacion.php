@@ -11,13 +11,29 @@ class Notificacion extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['usuario_id', 'titulo', 'mensaje', 'leida'];
+    protected $fillable = [
+        'usuario_id',
+        'categoria',
+        'tipo',
+        'actor_id',
+        'objeto_tipo',
+        'objeto_id',
+        'destino',
+        'dedupe_key',
+        'titulo',
+        'mensaje',
+        'leida',
+        'leida_en',
+        'archivada_en',
+    ];
 
     protected function casts(): array
     {
         return [
             'leida' => 'boolean',
             'fecha_creacion' => 'datetime',
+            'leida_en' => 'datetime',
+            'archivada_en' => 'datetime',
         ];
     }
 

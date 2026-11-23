@@ -126,6 +126,40 @@ function queryString(params) {
   return serialized ? `?${serialized}` : ''
 }
 
+export const notificationApi = {
+  inbox: (filters = {}, token) =>
+    request(`/notificaciones${queryString(filters)}`, { token }),
+  unread: (token) => request('/notificaciones/no-leidas', { token }),
+  read: (id, token) =>
+    request(`/notificaciones/${encodeURIComponent(id)}/leer`, {
+      method: 'PATCH',
+      token,
+    }),
+  readAll: (categoria, token) =>
+    request('/notificaciones/leidas-todas', {
+      method: 'PATCH',
+      body: categoria ? { categoria } : {},
+      token,
+    }),
+  archive: (id, token) =>
+    request(`/notificaciones/${encodeURIComponent(id)}/archivar`, {
+      method: 'PATCH',
+      token,
+    }),
+  remove: (id, token) =>
+    request(`/notificaciones/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      token,
+    }),
+  preferences: (token) => request('/notificaciones/preferencias', { token }),
+  updatePreference: (details, token) =>
+    request('/notificaciones/preferencias', {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+}
+
 export const authApi = {
   login: (credentials) =>
     request('/auth/web/login', { method: 'POST', body: credentials }),
@@ -234,6 +268,7 @@ export const forumApi = {
     if (post.estado) body.append('estado', post.estado)
     if (post.programada_para) body.append('programada_para', post.programada_para)
     if (post.enlace_preview_url) body.append('enlace_preview_url', post.enlace_preview_url)
+    if (post.producto_id) body.append('producto_id', post.producto_id)
     ;(post.etiquetas || []).forEach((tag, index) => body.append(`etiquetas[${index}]`, tag))
     ;(post.menciones || []).forEach((id, index) => body.append(`menciones[${index}]`, id))
     return request('/foro', { method: 'POST', body, token })
@@ -475,6 +510,34 @@ export const meetingApi = {
     request('/encuentros/qr/validar', {
       method: 'POST',
       body: { token: tokenValue, evidencia },
+      token,
+    }),
+}
+
+export const reviewApi = {
+  eligible: (token) => request('/resenas/elegibles', { token }),
+  summary: (ambito, id) =>
+    request(`/resenas/${encodeURIComponent(ambito)}/${encodeURIComponent(id)}/resumen`),
+  list: (ambito, id, page = 1, perPage = 20) =>
+    request(`/resenas/${encodeURIComponent(ambito)}/${encodeURIComponent(id)}${queryString({ page, per_page: perPage })}`),
+  create: (details, token) =>
+    request('/resenas', { method: 'POST', body: details, token }),
+  respond: (reviewId, respuesta, token) =>
+    request(`/resenas/${encodeURIComponent(reviewId)}/respuesta`, {
+      method: 'PATCH',
+      body: { respuesta },
+      token,
+    }),
+  edit: (reviewId, details, token) =>
+    request(`/resenas/${encodeURIComponent(reviewId)}/editar`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  dispute: (reviewId, motivo, token) =>
+    request(`/resenas/${encodeURIComponent(reviewId)}/disputa`, {
+      method: 'POST',
+      body: { motivo },
       token,
     }),
 }

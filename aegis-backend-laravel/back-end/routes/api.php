@@ -10,9 +10,11 @@ use App\Http\Controllers\Api\InicioController;
 use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\MensajeController;
 use App\Http\Controllers\Api\NegociacionController;
+use App\Http\Controllers\Api\NotificacionController;
 use App\Http\Controllers\Api\PerfilController;
 use App\Http\Controllers\Api\ProductoController;
 use App\Http\Controllers\Api\PuntoFisicoController;
+use App\Http\Controllers\Api\ResenaController;
 use App\Http\Controllers\Api\TiendaController;
 use App\Http\Controllers\Api\WebAuthController;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +35,8 @@ Route::get('/perfil/{usuario}/tabs/{tab}', [PerfilController::class, 'tab'])
 Route::get('/perfil/{usuario}/seguidores', [PerfilController::class, 'followers'])->whereNumber('usuario');
 Route::get('/perfil/{usuario}/siguiendo', [PerfilController::class, 'following'])->whereNumber('usuario');
 Route::get('/puntos-fisicos', [PuntoFisicoController::class, 'index']);
+Route::get('/resenas/{ambito}/{id}/resumen', [ResenaController::class, 'summary'])->whereAlpha('ambito')->whereNumber('id');
+Route::get('/resenas/{ambito}/{id}', [ResenaController::class, 'list'])->whereAlpha('ambito')->whereNumber('id');
 Route::get('/puntos-fisicos/directorio', [EncuentroController::class, 'pointDirectory']);
 Route::get('/tiendas', [TiendaController::class, 'index']);
 Route::get('/tiendas/{tienda}', [TiendaController::class, 'show'])->whereNumber('tienda');
@@ -76,6 +80,20 @@ Route::prefix('auth/web')->name('auth.web.')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
+    Route::get('/notificaciones', [NotificacionController::class, 'index']);
+    Route::get('/notificaciones/no-leidas', [NotificacionController::class, 'unread']);
+    Route::patch('/notificaciones/leidas-todas', [NotificacionController::class, 'readAll']);
+    Route::patch('/notificaciones/{notificacion}/leer', [NotificacionController::class, 'read'])->whereNumber('notificacion');
+    Route::patch('/notificaciones/{notificacion}/archivar', [NotificacionController::class, 'archive'])->whereNumber('notificacion');
+    Route::delete('/notificaciones/{notificacion}', [NotificacionController::class, 'delete'])->whereNumber('notificacion');
+    Route::get('/notificaciones/preferencias', [NotificacionController::class, 'preferences']);
+    Route::patch('/notificaciones/preferencias', [NotificacionController::class, 'updatePreferences']);
+    Route::post('/notificaciones/probar', [NotificacionController::class, 'emitTest']);
+    Route::get('/resenas/elegibles', [ResenaController::class, 'eligible']);
+    Route::post('/resenas', [ResenaController::class, 'store']);
+    Route::patch('/resenas/{resena}/respuesta', [ResenaController::class, 'respond'])->whereNumber('resena');
+    Route::patch('/resenas/{resena}/editar', [ResenaController::class, 'edit'])->whereNumber('resena');
+    Route::post('/resenas/{resena}/disputa', [ResenaController::class, 'dispute'])->whereNumber('resena');
     Route::post('/puntos-fisicos', [PuntoFisicoController::class, 'store']);
     Route::patch('/puntos-fisicos/{punto}/revision', [PuntoFisicoController::class, 'review'])->whereNumber('punto');
     Route::get('/encuentros', [EncuentroController::class, 'index']);
