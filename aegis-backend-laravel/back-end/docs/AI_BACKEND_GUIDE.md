@@ -95,6 +95,13 @@ Cliente
 - Exportación propia usa JSON, confirmación y hash SHA-256.
 - Desactivación revoca tokens; eliminación física no ocurre automáticamente y conserva referencias retenibles.
 
+### Rendimiento
+
+- Inicio usa caché pública breve e invalidación desde cambios de producto.
+- Las rutas privadas no deben usar caché compartida.
+- La migración 000030 agrega índices por estado/fecha para feeds y mensajes.
+- Antes de nuevos índices o materializaciones se debe medir `EXPLAIN` con un volumen representativo.
+
 ### CLI
 
 ```text

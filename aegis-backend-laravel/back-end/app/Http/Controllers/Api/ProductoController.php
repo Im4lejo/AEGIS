@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\ValidationException;
 
 class ProductoController extends Controller
@@ -91,6 +92,7 @@ class ProductoController extends Controller
             'producto_ids' => implode(',', $ids),
             'fecha' => now(),
         ]);
+        Cache::forget('inicio:productos:v1');
 
         return response()->json([
             'data' => [
@@ -463,6 +465,11 @@ class ProductoController extends Controller
 
                 return $producto;
             });
+            if (($producto->estado_publicacion ?? null) === 'activo'
+                && ($producto->visibilidad ?? null) === 'publica'
+            ) {
+                Cache::forget('inicio:productos:v1');
+            }
 
             return response()->json([
                 'message' => 'Producto creado correctamente',

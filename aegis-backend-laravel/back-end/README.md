@@ -140,6 +140,14 @@ La API todavía no expone operaciones completas de encuentros ni perfiles privad
 - `/datos-personales` permite historial, exportación JSON y solicitudes de desactivación/eliminación.
 - La eliminación no borra automáticamente referencias comerciales, investigaciones o auditorías retenibles.
 
+## Optimización y rendimiento
+
+- React divide rutas secundarias en chunks bajo demanda; el entry se redujo de 565.17 KB a 239.01 KB minificados.
+- Inicio usa caché pública de 60 segundos e invalidación explícita al publicar/cambiar productos.
+- Respuestas privadas no se cachean.
+- Migración 000030 agrega índices para rutas públicas de productos, feed, mensajes y notificaciones.
+- Core Web Vitals requiere Lighthouse/browser real; el proyecto no declara números sin medición.
+
 ## Autorización, propietarios y privacidad
 
 El Incremento 04 aplica autorización en servidor con Laravel Gates y middleware:

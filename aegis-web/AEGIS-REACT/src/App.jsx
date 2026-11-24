@@ -1,5 +1,5 @@
 import './App.css'
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import {
   HashRouter,
   Routes,
@@ -12,44 +12,53 @@ import {
 import { AuthProvider } from './auth/AuthProvider'
 import { useAuth } from './auth/useAuth'
 import Home from './components/home/views/Home'
-import Foro from './components/foro/views/Foro'
-import Publicacion from './components/foro/views/Publicacion'
-import ProductosIndex from './components/productos/views/Index'
-import PublicarProducto from './components/productos/views/PublicarProducto'
-import DetalleProducto from './components/productos/views/Detalle'
-import MisProductos from './components/productos/views/MisProductos'
-import Perfil from './components/perfil/views/Perfil'
-import Vendedor from './components/perfil/views/Vendedor'
-import EditarPerfil from './components/perfil/views/Editar'
-import Login from './components/auth/views/Login'
-import Register from './components/auth/views/Register'
-import ForgotPassword from './components/auth/views/ForgotPassword'
-import ResetPassword from './components/auth/views/ResetPassword'
-import VerifyEmail from './components/auth/views/VerifyEmail'
-import EmailVerified from './components/auth/views/EmailVerified'
-import AccountSecurity from './components/auth/views/AccountSecurity'
-import PuntosFisicos from './components/puntosFisicos/views/Index'
-import Mensajes from './components/mensajes/views/Mensajes'
-import Encuentros from './components/puntosFisicos/views/Encuentros'
-import Admin from './components/admin/views/Dashboard'
-import AdminReportes from './components/admin/views/Reportes'
-import AdminUsuarios from './components/admin/views/Usuarios'
-import AdminAuditoria from './components/admin/views/Auditoria'
-import AdminConfiguracion from './components/admin/views/Configuracion'
-import Plantilla from './components/shared/Plantilla'
+const Foro = lazy(() => import('./components/foro/views/Foro'))
+const Publicacion = lazy(() => import('./components/foro/views/Publicacion'))
+const ProductosIndex = lazy(() => import('./components/productos/views/Index'))
+const PublicarProducto = lazy(() => import('./components/productos/views/PublicarProducto'))
+const DetalleProducto = lazy(() => import('./components/productos/views/Detalle'))
+const MisProductos = lazy(() => import('./components/productos/views/MisProductos'))
+const Perfil = lazy(() => import('./components/perfil/views/Perfil'))
+const Vendedor = lazy(() => import('./components/perfil/views/Vendedor'))
+const EditarPerfil = lazy(() => import('./components/perfil/views/Editar'))
+const Login = lazy(() => import('./components/auth/views/Login'))
+const Register = lazy(() => import('./components/auth/views/Register'))
+const ForgotPassword = lazy(() => import('./components/auth/views/ForgotPassword'))
+const ResetPassword = lazy(() => import('./components/auth/views/ResetPassword'))
+const VerifyEmail = lazy(() => import('./components/auth/views/VerifyEmail'))
+const EmailVerified = lazy(() => import('./components/auth/views/EmailVerified'))
+const AccountSecurity = lazy(() => import('./components/auth/views/AccountSecurity'))
+const PuntosFisicos = lazy(() => import('./components/puntosFisicos/views/Index'))
+const Mensajes = lazy(() => import('./components/mensajes/views/Mensajes'))
+const Encuentros = lazy(() => import('./components/puntosFisicos/views/Encuentros'))
+const Admin = lazy(() => import('./components/admin/views/Dashboard'))
+const AdminReportes = lazy(() => import('./components/admin/views/Reportes'))
+const AdminUsuarios = lazy(() => import('./components/admin/views/Usuarios'))
+const AdminAuditoria = lazy(() => import('./components/admin/views/Auditoria'))
+const AdminConfiguracion = lazy(() => import('./components/admin/views/Configuracion'))
+const Plantilla = lazy(() => import('./components/shared/Plantilla'))
 import { NotFoundPage } from './components/shared/ApiState'
 import { AccessRestrictedState } from './components/shared/ui'
 import { ErrorBoundary } from './components/shared/ui'
 import { ThemeProvider } from './theme/ThemeProvider'
-import Comunidades from './components/comunidades/views/Comunidades'
-import Tiendas from './components/tiendas/views/Tiendas'
-import Negociacion from './components/negociacion/views/Negociacion'
-import Notificaciones from './components/notificaciones/views/Notificaciones'
-import Busqueda from './components/busqueda/views/Busqueda'
-import Ajustes from './components/ajustes/views/Ajustes'
-import MisReportes from './components/notificaciones/views/MisReportes'
-import DatosPersonales from './components/ajustes/views/DatosPersonales'
+const Comunidades = lazy(() => import('./components/comunidades/views/Comunidades'))
+const Tiendas = lazy(() => import('./components/tiendas/views/Tiendas'))
+const Negociacion = lazy(() => import('./components/negociacion/views/Negociacion'))
+const Notificaciones = lazy(() => import('./components/notificaciones/views/Notificaciones'))
+const Busqueda = lazy(() => import('./components/busqueda/views/Busqueda'))
+const Ajustes = lazy(() => import('./components/ajustes/views/Ajustes'))
+const MisReportes = lazy(() => import('./components/notificaciones/views/MisReportes'))
+const DatosPersonales = lazy(() => import('./components/ajustes/views/DatosPersonales'))
 import './design-system/design-system.css'
+
+function RouteLoadingFallback() {
+  return (
+    <main className="route-loading" role="status" aria-live="polite">
+      <div className="route-loading__bar" aria-hidden="true" />
+      Cargando contenido…
+    </main>
+  )
+}
 
 function Vista({ Componente }) {
   const navigate = useNavigate()
@@ -164,7 +173,8 @@ function App() {
       <ThemeProvider>
         <AuthProvider>
           <HashRouter>
-            <Routes>
+            <Suspense fallback={<RouteLoadingFallback />}>
+              <Routes>
               <Route path="/" element={<Vista Componente={Home} />} />
               <Route path="/home" element={<Vista Componente={Home} />} />
               <Route path="/foro" element={<Vista Componente={Foro} />} />
@@ -257,6 +267,7 @@ function App() {
               />
               <Route path="*" element={<Vista Componente={NotFoundPage} />} />
             </Routes>
+            </Suspense>
           </HashRouter>
         </AuthProvider>
       </ThemeProvider>
