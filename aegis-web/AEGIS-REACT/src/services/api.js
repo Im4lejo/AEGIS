@@ -602,6 +602,26 @@ export const moderationApi = {
     }),
 }
 
+export const personalDataApi = {
+  sellerStats: (periodo, token) =>
+    request(`/datos-vendedor${queryString({ periodo })}`, { token }),
+  activity: (filters = {}, token) =>
+    request(`/mi-actividad${queryString(filters)}`, { token }),
+  exportData: (token) =>
+    request('/datos/exportacion', {
+      method: 'POST',
+      body: { confirmacion: 'EXPORTAR' },
+      token,
+    }),
+  privacyRequest: (tipo, motivo, token) =>
+    request('/datos/privacidad', {
+      method: 'POST',
+      body: { tipo, motivo, confirmacion: 'CONFIRME' },
+      token,
+    }),
+  privacyRequests: (token) => request('/datos/privacidad', { token }),
+}
+
 export const adminApi = {
   dashboard: (periodo, token) =>
     request(`/admin/dashboard${queryString({ periodo })}`, { token }),

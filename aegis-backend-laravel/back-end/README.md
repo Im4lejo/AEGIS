@@ -133,6 +133,13 @@ La API todavía no expone operaciones completas de encuentros ni perfiles privad
 - Cambios críticos de cuenta exigen confirmación explícita.
 - Auditoría y exportación CSV controlada en `/api/admin/auditoria`.
 
+## Analítica comercial y datos personales
+
+- Mis productos muestra vistas válidas, contactos, ofertas, reservas y ventas completadas por periodo.
+- Las vistas se deduplican por usuario/sesión y día; no se registran IP/UA completas.
+- `/datos-personales` permite historial, exportación JSON y solicitudes de desactivación/eliminación.
+- La eliminación no borra automáticamente referencias comerciales, investigaciones o auditorías retenibles.
+
 ## Autorización, propietarios y privacidad
 
 El Incremento 04 aplica autorización en servidor con Laravel Gates y middleware:

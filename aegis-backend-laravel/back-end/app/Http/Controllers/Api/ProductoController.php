@@ -8,6 +8,7 @@ use App\Models\Calificacion;
 use App\Models\Categoria;
 use App\Models\Producto;
 use App\Services\MediaManager;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -261,6 +262,51 @@ class ProductoController extends Controller
             )
         ) {
             abort(404);
+        }
+
+        if ($product->estado_publicacion === 'activo'
+            && $product->visibilidad === 'publica'
+            && (! $usuario || (int) $usuario->id !== (int) $product->usuario_id)
+            && Schema::hasTable('eventos_comerciales_usuario')
+        ) {
+            $identity = $usuario
+                ? 'u'.$usuario->id
+                : 'a'.substr(hash('sha256', $request->ip().'|'.$request->header('User-Agent', '')), 0, 32);
+            $fingerprint = hash('sha256', $identity.'|'.$product->id.'|'.now()->format('Y-m-d'));
+            $exists = DB::table('eventos_comerciales_usuario')
+                ->where('fingerprint', $fingerprint)
+                ->where('tipo', 'vista')
+                ->exists();
+            if (! $exists) {
+                DB::table('eventos_comerciales_usuario')->insert([
+                    'usuario_id' => $usuario?->id,
+                    'producto_id' => $product->id,
+                    'tipo' => 'vista',
+                    'fingerprint' => $fingerprint,
+                    'fecha' => now(),
+                ]);
+                DB::table('productos')->where('id', $product->id)->increment('vistas');
+                $rollupKey = [
+                        'usuario_id' => $product->usuario_id,
+                        'producto_id' => $product->id,
+                        'fecha' => now()->toDateString(),
+                        'tipo' => 'vista',
+                    ];
+                $existingRollup = DB::table('rollups_comerciales_usuario')->where($rollupKey)->first();
+                if ($existingRollup) {
+                    DB::table('rollups_comerciales_usuario')
+                        ->where($rollupKey)
+                        ->update([
+                            'cantidad' => (int) $existingRollup->cantidad + 1,
+                            'actualizado_en' => now(),
+                        ]);
+                } else {
+                    DB::table('rollups_comerciales_usuario')->insert(array_merge($rollupKey, [
+                        'cantidad' => 1,
+                        'actualizado_en' => now(),
+                    ]));
+                }
+            }
         }
 
         $questions = $product->preguntas()
@@ -586,6 +632,36 @@ class ProductoController extends Controller
     public function stats(Request $request)
     {
         $base = Producto::query()->where('usuario_id', $request->user()->id);
+        $periodo = $request->input('periodo', '30d');
+        $days = $periodo === '7d' ? 7 : ($periodo === '90d' ? 90 : 30);
+        $since = now()->subDays($days);
+        $sellerId = $request->user()->id;
+
+        $views = DB::table('eventos_comerciales_usuario')
+            ->whereIn('producto_id', (clone $base)->select('id'))
+            ->where('tipo', 'vista')
+            ->where('fecha', '>=', $since)
+            ->count();
+        $offers = DB::table('ofertas')
+            ->where('vendedor_id', $sellerId)
+            ->where('created_at', '>=', $since)
+            ->count();
+        $reservations = DB::table('reservas_producto')
+            ->whereIn('producto_id', (clone $base)->select('id'))
+            ->where('fecha', '>=', $since)
+            ->count();
+        $sold = DB::table('operaciones_comerciales')
+            ->where('vendedor_id', $sellerId)
+            ->where('estado', 'completada')
+            ->where('fecha_completada', '>=', $since)
+            ->count();
+        $contacts = DB::table('mensajes')
+            ->join('conversaciones', 'conversaciones.id', '=', 'mensajes.conversacion_id')
+            ->whereIn('conversaciones.producto_id', (clone $base)->select('id'))
+            ->where('mensajes.autor_id', '!=', $sellerId)
+            ->where('mensajes.fecha_envio', '>=', $since)
+            ->distinct()
+            ->count('mensajes.autor_id');
 
         return response()->json([
             'data' => [
@@ -595,8 +671,23 @@ class ProductoController extends Controller
                 'reservados' => (clone $base)->where('estado_publicacion', 'reservado')->count(),
                 'vendidos' => (clone $base)->where('estado_publicacion', 'vendido')->count(),
                 'archivados' => (clone $base)->where('estado_publicacion', 'archivado')->count(),
+                'vistas_validas' => $views,
+                'contactos' => $contacts,
+                'ofertas' => $offers,
+                'reservas' => $reservations,
+                'vendidos_periodo' => $sold,
             ],
-            'nota' => 'Solo incluye registros almacenados; no representa métricas externas.',
+            'periodo' => $periodo,
+            'desde' => $since->toIso8601String(),
+            'hasta' => now()->toIso8601String(),
+            'fuentes' => [
+                'vistas_validas' => 'eventos comerciales deduplicados por usuario/sesión y día',
+                'contactos' => 'autores distintos que enviaron mensajes asociados a anuncios',
+                'ofertas' => 'ofertas recibidas por el vendedor',
+                'reservas' => 'reservas asociadas a anuncios del vendedor',
+                'vendidos_periodo' => 'operaciones completadas',
+            ],
+            'nota' => 'Solo incluye registros almacenados en AEGIS; no representa tráfico externo ni ventas fuera de la plataforma.',
         ]);
     }
 

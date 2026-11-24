@@ -88,6 +88,13 @@ Cliente
 - Categorías, avisos, configuración y auditoría tienen rutas separadas y capacidades delegables.
 - Configuración global usa versionado optimista y auditoría encadenada.
 
+### Datos personales y analítica comercial
+
+- Las métricas vendedor usan registros reales de vistas, mensajes, ofertas, reservas y operaciones.
+- Las vistas se deduplican y se resumen en rollups diarios.
+- Exportación propia usa JSON, confirmación y hash SHA-256.
+- Desactivación revoca tokens; eliminación física no ocurre automáticamente y conserva referencias retenibles.
+
 ### CLI
 
 ```text

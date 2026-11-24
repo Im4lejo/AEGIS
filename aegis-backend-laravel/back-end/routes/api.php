@@ -23,6 +23,7 @@ use App\Http\Controllers\Api\WebAuthController;
 use App\Http\Controllers\Api\VideoController;
 use App\Http\Controllers\Api\ModeracionController;
 use App\Http\Controllers\Api\AdminCenterController;
+use App\Http\Controllers\Api\PersonalDataController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/inicio', InicioController::class);
@@ -94,6 +95,11 @@ Route::prefix('auth/web')->name('auth.web.')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
+    Route::get('/mi-actividad', [PersonalDataController::class, 'activity']);
+    Route::get('/datos-vendedor', [PersonalDataController::class, 'sellerStats']);
+    Route::post('/datos/exportacion', [PersonalDataController::class, 'exportData']);
+    Route::post('/datos/privacidad', [PersonalDataController::class, 'privacyRequest']);
+    Route::get('/datos/privacidad', [PersonalDataController::class, 'privacyRequests']);
     Route::post('/live/sessions', [VideoController::class, 'liveUnavailable'])->middleware('account.active');
     Route::post('/historias', [ContenidoAvanzadoController::class, 'createStory'])->middleware(['account.active', 'verified.web']);
     Route::delete('/historias/{historia}', [ContenidoAvanzadoController::class, 'deleteStory'])->whereNumber('historia')->middleware('account.active');

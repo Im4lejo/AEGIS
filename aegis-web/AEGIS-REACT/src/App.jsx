@@ -48,6 +48,7 @@ import Notificaciones from './components/notificaciones/views/Notificaciones'
 import Busqueda from './components/busqueda/views/Busqueda'
 import Ajustes from './components/ajustes/views/Ajustes'
 import MisReportes from './components/notificaciones/views/MisReportes'
+import DatosPersonales from './components/ajustes/views/DatosPersonales'
 import './design-system/design-system.css'
 
 function Vista({ Componente }) {
@@ -100,6 +101,7 @@ function Vista({ Componente }) {
     '/admin/auditoria',
     '/admin/configuracion',
     '/mis-reportes',
+    '/datos-personales',
   ].includes(location.pathname)
 
   if (requiereSesion && session.loading) {
@@ -173,6 +175,7 @@ function App() {
               <Route path="/busqueda" element={<Vista Componente={Busqueda} />} />
               <Route path="/ajustes" element={<Vista Componente={Ajustes} />} />
               <Route path="/mis-reportes" element={<Vista Componente={MisReportes} />} />
+              <Route path="/datos-personales" element={<Vista Componente={DatosPersonales} />} />
               <Route
                 path="/publicacion"
                 element={<Vista Componente={Publicacion} />}
