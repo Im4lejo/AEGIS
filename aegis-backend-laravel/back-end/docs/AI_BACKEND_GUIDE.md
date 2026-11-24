@@ -81,6 +81,13 @@ Cliente
 - Las resoluciones crean acciones y registros encadenados en auditoría moderativa.
 - Las sanciones pueden revocarse desde una apelación aceptada.
 
+### Centro administrativo
+
+- Las métricas admin son agregaciones SQL reales con periodos explícitos.
+- `/api/admin/users` y cambios críticos requieren permiso operativo o rol admin.
+- Categorías, avisos, configuración y auditoría tienen rutas separadas y capacidades delegables.
+- Configuración global usa versionado optimista y auditoría encadenada.
+
 ### CLI
 
 ```text

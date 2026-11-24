@@ -125,6 +125,14 @@ La API todavía no expone operaciones completas de encuentros ni perfiles privad
 - Antifraude crea señales interpretables para revisión, sin etiquetar automáticamente culpable.
 - Mensajes privados no quedan abiertos al moderador; las preferencias controlan mensajes de desconocidos.
 
+## Centro administrativo
+
+- Dashboard real con periodos 24h, 7d y 30d.
+- Gestión filtrable de cuentas, categorías, avisos y configuración versionada.
+- Permisos operativos delegables sin convertir a un usuario en administrador.
+- Cambios críticos de cuenta exigen confirmación explícita.
+- Auditoría y exportación CSV controlada en `/api/admin/auditoria`.
+
 ## Autorización, propietarios y privacidad
 
 El Incremento 04 aplica autorización en servidor con Laravel Gates y middleware:

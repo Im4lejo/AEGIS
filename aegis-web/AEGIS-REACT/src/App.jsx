@@ -33,6 +33,9 @@ import Mensajes from './components/mensajes/views/Mensajes'
 import Encuentros from './components/puntosFisicos/views/Encuentros'
 import Admin from './components/admin/views/Dashboard'
 import AdminReportes from './components/admin/views/Reportes'
+import AdminUsuarios from './components/admin/views/Usuarios'
+import AdminAuditoria from './components/admin/views/Auditoria'
+import AdminConfiguracion from './components/admin/views/Configuracion'
 import Plantilla from './components/shared/Plantilla'
 import { NotFoundPage } from './components/shared/ApiState'
 import { AccessRestrictedState } from './components/shared/ui'
@@ -93,6 +96,9 @@ function Vista({ Componente }) {
     '/configurar-encuentro',
     '/admin',
     '/admin/reportes',
+    '/admin/usuarios',
+    '/admin/auditoria',
+    '/admin/configuracion',
     '/mis-reportes',
   ].includes(location.pathname)
 
@@ -214,6 +220,9 @@ function App() {
               />
               <Route path="/admin" element={<Vista Componente={Admin} />} />
               <Route path="/admin/reportes" element={<Vista Componente={AdminReportes} />} />
+              <Route path="/admin/usuarios" element={<Vista Componente={AdminUsuarios} />} />
+              <Route path="/admin/auditoria" element={<Vista Componente={AdminAuditoria} />} />
+              <Route path="/admin/configuracion" element={<Vista Componente={AdminConfiguracion} />} />
               <Route path="/login" element={<Vista Componente={Login} />} />
               <Route
                 path="/forgot-password"
