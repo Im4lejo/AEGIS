@@ -1,4 +1,5 @@
 import Header from '../../layouts/Header'
+import WorkspaceChrome from '../../layouts/WorkspaceChrome'
 import Footer from '../../layouts/Footer'
 import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
 import { buscarVendedor, productosDelVendedor } from '../../productos/productosDemo'
@@ -59,6 +60,7 @@ export default function Vendedor({ id, auth, onNavigate }) {
   return (
     <div className="page-layout layout-perfil">
       <Header title={`AEGIS | ${vendedor.nombre || 'Vendedor'}`} auth={auth} onNavigate={onNavigate} />
+      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
 
       <main className="perfil-page">
         <section className="perfil-card">
@@ -198,6 +200,7 @@ export default function Vendedor({ id, auth, onNavigate }) {
         </div>
       </main>
 
+      </WorkspaceChrome>
       <Footer onNavigate={onNavigate} />
     </div>
   )

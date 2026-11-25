@@ -1,15 +1,16 @@
 .comunidades-page {
   max-width: 1120px;
   width: 100%;
+  min-width: 0;
   margin: 0 auto;
-  padding: 24px;
+  padding: var(--space-5);
 }
 
 .comunidades-heading {
   display: flex;
   justify-content: space-between;
   align-items: end;
-  gap: 16px;
+  gap: var(--space-4);
 }
 
 .comunidades-heading h1,
@@ -17,42 +18,122 @@
   margin: 0;
 }
 
+.comunidades-heading p,
+.comunidad-card__meta,
+.comunidad-event p {
+  color: var(--color-text-muted);
+}
+
+.comunidad-form,
+.comunidad-detail,
+.comunidad-card {
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-card);
+}
+
 .comunidad-form,
 .comunidad-detail {
   display: grid;
-  gap: 12px;
-  background: #fff;
-  border: 1px solid #e4e7ec;
-  border-radius: 12px;
-  padding: 18px;
-  margin: 18px 0;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  margin: var(--space-5) 0;
 }
 
-.comunidad-form label {
+.comunidad-form label,
+.comunidad-event-form label {
   display: grid;
-  gap: 6px;
+  min-width: 0;
+  gap: var(--space-2);
+  font-weight: 600;
+}
+
+.comunidades-page :is(input, select, textarea) {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.comunidades-page textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.comunidades-page button {
+  min-height: 44px;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.comunidades-page button:hover {
+  background: var(--color-surface-muted);
+}
+
+.comunidades-heading button,
+.comunidad-card > button,
+.comunidad-form > button,
+.comunidad-event-form > button {
+  background: var(--color-action);
+  border-color: var(--color-action);
+  color: var(--color-action-text);
+}
+
+.comunidades-heading button:hover,
+.comunidad-card > button:hover,
+.comunidad-form > button:hover,
+.comunidad-event-form > button:hover {
+  background: var(--color-action-hover);
 }
 
 .comunidades-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 14px;
-  margin-top: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-5);
 }
 
 .comunidad-card {
-  border: 1px solid #e4e7ec;
-  border-radius: 12px;
-  padding: 12px;
-  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.comunidad-card h2,
+.comunidad-card p,
+.comunidad-event h4,
+.comunidad-event p {
+  margin: 0;
+}
+
+.comunidad-card h2 {
+  font-size: var(--font-size-lg);
 }
 
 .comunidad-card__cover {
   height: 110px;
   display: grid;
   place-items: center;
-  border-radius: 8px;
-  background: #eef2ff;
+  border-radius: var(--radius-control);
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+  font-size: 2rem;
+  font-weight: 700;
   overflow: hidden;
 }
 
@@ -64,33 +145,61 @@
 
 .comunidad-card__meta {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  font-size: 13px;
-  color: #667085;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+}
+
+.comunidad-card > button {
+  margin-top: auto;
 }
 
 .comunidad-detail__close {
   justify-self: end;
 }
 
+.comunidad-events,
+.comunidad-event-form,
+.comunidad-event {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.comunidad-event-form,
+.comunidad-event {
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface-muted);
+}
+
+.comunidad-event > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
 .comunidades-toast {
   position: fixed;
-  bottom: 20px;
+  bottom: calc(20px + var(--workspace-bottom-height, 0px));
   left: 50%;
   transform: translateX(-50%);
-  background: #0b2050;
+  background: var(--color-chrome);
   color: #fff;
-  border-radius: 999px;
-  padding: 10px 16px;
+  border-radius: var(--radius-control);
+  padding: var(--space-3) var(--space-4);
   z-index: 100;
 }
 
 @media (max-width: 520px) {
   .comunidades-heading {
     align-items: start;
+    flex-wrap: wrap;
   }
 
   .comunidades-page {
-    padding: 16px;
+    padding: var(--space-4);
   }
 }

@@ -1,201 +1,132 @@
 import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
+import WorkspaceChrome from '../../layouts/WorkspaceChrome'
 import Footer from '../../layouts/Footer'
 import '../css/verificados.css'
 import { meetingApi } from '../../../services/api'
 
-const PUNTOS = [
-    {
-        id: 1,
-        nombre: 'TeachHub Center',
-        direccion: 'Av. Principal 123, Local 4',
-        horario: 'Lunes a Viernes, 9:00 AM - 6:00 PM',
-        tiempo: '10 min',
-        x: 49,
-        y: 47.2,
-        servicios: [
-            { icono: 'fa-solid fa-square-parking', texto: 'Estacionamiento Disponible' },
-            { icono: 'fa-solid fa-wifi', texto: 'Conexion Wi-Fi gratuita' },
-            { icono: 'fa-solid fa-star', texto: 'Atencion Personalizada' },
-        ],
-    },
-    {
-        id: 2,
-        nombre: 'Punto AEGIS Parque Caldas',
-        direccion: 'Carrera 6 #15-40, Parque Caldas',
-        horario: 'Lunes a Sabado, 8:00 AM - 7:00 PM',
-        tiempo: '8 min',
-        x: 44.8,
-        y: 49.4,
-        servicios: [
-            { icono: 'fa-solid fa-handshake', texto: 'Entrega de productos' },
-            { icono: 'fa-solid fa-wifi', texto: 'Conexion Wi-Fi gratuita' },
-            { icono: 'fa-solid fa-star', texto: 'Atencion Personalizada' },
-        ],
-    },
-    {
-        id: 3,
-        nombre: 'Punto AEGIS Los Almendros',
-        direccion: 'Calle 5 #32-10, Barrio Los Almendros',
-        horario: 'Lunes a Viernes, 8:00 AM - 5:00 PM',
-        tiempo: '12 min',
-        x: 41.6,
-        y: 34.4,
-        servicios: [
-            { icono: 'fa-solid fa-square-parking', texto: 'Estacionamiento Disponible' },
-            { icono: 'fa-solid fa-wifi', texto: 'Conexion Wi-Fi gratuita' },
-            { icono: 'fa-solid fa-star', texto: 'Atencion Personalizada' },
-        ],
-    },
-    {
-        id: 4,
-        nombre: 'Punto AEGIS El Poblado',
-        direccion: 'Calle 17 #24-40, Barrio El Poblado',
-        horario: 'Todos los dias, 9:00 AM - 8:00 PM',
-        tiempo: '15 min',
-        x: 47.4,
-        y: 65.7,
-        servicios: [
-            { icono: 'fa-solid fa-handshake', texto: 'Entrega de productos' },
-            { icono: 'fa-solid fa-wifi', texto: 'Conexion Wi-Fi gratuita' },
-            { icono: 'fa-solid fa-star', texto: 'Atencion Personalizada' },
-        ],
-    },
-    {
-        id: 5,
-        nombre: 'Punto AEGIS Centro Comercial',
-        direccion: 'Carrera 3 #12-20, Centro',
-        horario: 'Lunes a Viernes, 8:30 AM - 6:30 PM',
-        tiempo: '9 min',
-        x: 58.5,
-        y: 39.5,
-        servicios: [
-            { icono: 'fa-solid fa-square-parking', texto: 'Estacionamiento Disponible' },
-            { icono: 'fa-solid fa-wifi', texto: 'Conexion Wi-Fi gratuita' },
-            { icono: 'fa-solid fa-star', texto: 'Atencion Personalizada' },
-        ],
-    },
-]
+function InfoLugar({ punto }) {
+  const servicios = Array.isArray(punto.servicios) ? punto.servicios : []
 
-function InfoLugar({ punto, onVer }) {
-    return (
-        <div className="pv-info">
-            <div className="pv-verificado">
-                <i className="fa-solid fa-circle-check" />
-                <span>Sitio Verificado</span>
-            </div>
-            <h3 className="pv-nombre">{punto.nombre}</h3>
-            <p className="pv-dato">{punto.direccion}</p>
-            <p className="pv-dato"><strong>Horario:</strong> {punto.horario}</p>
-            {punto.servicios.map((servicio) => (
-                <p className="pv-servicio" key={servicio.texto}>
-                    <i className={servicio.icono} />
-                    <span>{servicio.texto}</span>
-                </p>
-            ))}
-            <button type="button" className="pv-boton" onClick={onVer}>VER UBICACIÓN</button>
-        </div>
-    )
+  return (
+    <div className="pv-info">
+      <div className="pv-verificado">
+        <i className="fa-solid fa-location-dot" aria-hidden="true" />
+        <span>Punto de encuentro registrado</span>
+      </div>
+      <h2 className="pv-nombre">{punto.nombre}</h2>
+      {punto.direccion && <p className="pv-dato">{punto.direccion}</p>}
+      {punto.ciudad && <p className="pv-dato">{punto.ciudad}</p>}
+      {punto.horario && <p className="pv-dato"><strong>Horario:</strong> {punto.horario}</p>}
+      {servicios.map((servicio) => {
+        const texto = typeof servicio === 'string' ? servicio : servicio.texto
+        return (
+          <p className="pv-servicio" key={texto}>
+            <i className="fa-solid fa-circle-check" aria-hidden="true" />
+            <span>{texto}</span>
+          </p>
+        )
+      })}
+      <p className="pv-aviso">Confirma la dirección y las condiciones del punto antes de desplazarte.</p>
+    </div>
+  )
 }
 
 export default function Index({ auth, onNavigate }) {
-    const [abierto, setAbierto] = useState(null)
-    const [verTiempo, setVerTiempo] = useState(true)
-    const [destacado, setDestacado] = useState(null)
-    const [puntosReales, setPuntosReales] = useState([])
-    const [ciudad, setCiudad] = useState('')
+  const [selectedId, setSelectedId] = useState(null)
+  const [points, setPoints] = useState([])
+  const [city, setCity] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
-    useEffect(() => {
-        let active = true
-        meetingApi.points({ ciudad, per_page: 50 })
-            .then(({ data }) => {
-                if (active) setPuntosReales(data)
-            })
-            .catch(() => {
-                if (active) setPuntosReales([])
-            })
-        return () => { active = false }
-    }, [ciudad])
+  useEffect(() => {
+    let active = true
+    meetingApi.points({ ciudad: city, per_page: 50 })
+      .then(({ data }) => {
+        if (active) {
+          setPoints(data)
+          setSelectedId(null)
+        }
+      })
+      .catch((requestError) => {
+        if (active) {
+          setPoints([])
+          setError(requestError.message)
+        }
+      })
+      .finally(() => {
+        if (active) setLoading(false)
+      })
+    return () => { active = false }
+  }, [city])
 
-    const lugares = puntosReales.length
-        ? puntosReales.map((punto, index) => ({
-            ...punto,
-            horario: 'Consulta horario publicado',
-            tiempo: 'Ver listado',
-            x: 40 + (index % 5) * 5,
-            y: 35 + (index % 4) * 8,
-            servicios: Array.isArray(punto.servicios)
-                ? punto.servicios.map((texto) => ({ icono: 'fa-solid fa-circle-check', texto }))
-                : [],
-        }))
-        : PUNTOS
-    const lugar = lugares.find((punto) => punto.id === abierto)
+  const selected = points.find((point) => point.id === selectedId)
 
-    const abrirLugar = (id) => {
-        setAbierto(id)
-        setDestacado(null)
-        setVerTiempo(true)
-    }
-
-    const enfocarLugar = () => {
-        setDestacado(lugar ? lugar.id : null)
-        setVerTiempo(true)
-    }
-
-    const clasePunto = (punto) => {
-        if (abierto === punto.id) return 'pv-punto pv-punto-activo'
-        if (destacado === punto.id) return 'pv-punto pv-punto-destacado'
-        return 'pv-punto'
-    }
-
-    return (
-        <div className="page-layout verificados-layout">
-            <Header title="AEGIS | Puntos Verificados" auth={auth} onNavigate={onNavigate} />
-
-            <div className="pv-contenido">
-                <label className="pv-ciudad-filtro">
-                    Ciudad
-                    <input type="search" value={ciudad} onChange={(event) => setCiudad(event.target.value)} />
-                </label>
-                <div className="pv-fila">
-                    {lugar && (
-                        <aside className="pv-panel">
-                            <button type="button" className="pv-cerrar" onClick={() => setAbierto(null)} aria-label="Cerrar">
-                                <i className="fa-solid fa-xmark" />
-                            </button>
-                            <InfoLugar punto={lugar} onVer={enfocarLugar} />
-                        </aside>
-                    )}
-
-                    <div className="pv-zona-mapa">
-                        <div className="pv-mapa-caja">
-                            <img className="pv-mapa-img" src="/mapa-popayan.png" alt="Mapa de Popayan" />
-                            {lugares.map((punto) => (
-                                <button
-                                    key={punto.id}
-                                    type="button"
-                                    className={clasePunto(punto)}
-                                    style={{ left: punto.x + '%', top: punto.y + '%' }}
-                                    title={punto.nombre}
-                                    aria-label={punto.nombre}
-                                    onClick={() => abrirLugar(punto.id)}
-                                />
-                            ))}
-                        </div>
-                        <button type="button" className="pv-ruta" onClick={() => setVerTiempo(!verTiempo)}>
-                            <i className="fa-solid fa-person-walking" />
-                            <span>Mostrar Ruta</span>
-                        </button>
-                        {verTiempo && (
-                            <div className="pv-tiempo">
-                                Tiempo estimado: {lugar ? lugar.tiempo : '10 min'}
-                            </div>
-                        )}
-                    </div>
-                </div>
+  return (
+    <div className="page-layout verificados-layout">
+      <Header title="AEGIS | Puntos Verificados" auth={auth} onNavigate={onNavigate} />
+      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
+        <main className="pv-contenido">
+          <header className="pv-encabezado">
+            <p>Puntos físicos disponibles</p>
+            <h1>Puntos de encuentro</h1>
+            <p>Consulta la información publicada. La ruta y distancia no están disponibles en este momento.</p>
+          </header>
+          <label className="pv-ciudad-filtro">
+            Ciudad
+            <input
+              type="search"
+              value={city}
+              onChange={(event) => {
+                const nextCity = event.target.value
+                if (nextCity !== city) {
+                  setLoading(true)
+                  setError('')
+                  setPoints([])
+                  setSelectedId(null)
+                  setCity(nextCity)
+                }
+              }}
+            />
+          </label>
+          <div className="pv-fila">
+            <section className="pv-lista" aria-label="Puntos de encuentro disponibles">
+              {loading && <p role="status">Cargando puntos...</p>}
+              {error && <p role="alert">{error}</p>}
+              {!loading && !error && points.length === 0 && (
+                <p role="status">No hay puntos registrados para esta búsqueda.</p>
+              )}
+              {points.map((point) => (
+                <button
+                  key={point.id}
+                  type="button"
+                  className={selectedId === point.id ? 'pv-lugar pv-lugar-activo' : 'pv-lugar'}
+                  aria-pressed={selectedId === point.id}
+                  onClick={() => setSelectedId(point.id)}
+                >
+                  <strong>{point.nombre}</strong>
+                  {point.direccion && <span>{point.direccion}</span>}
+                  {point.ciudad && <span>{point.ciudad}</span>}
+                </button>
+              ))}
+            </section>
+            {selected && (
+              <aside className="pv-panel" aria-label={`Detalles de ${selected.nombre}`}>
+                <button type="button" className="pv-cerrar" onClick={() => setSelectedId(null)} aria-label="Cerrar detalles">
+                  <i className="fa-solid fa-xmark" aria-hidden="true" />
+                </button>
+                <InfoLugar punto={selected} />
+              </aside>
+            )}
+            <div className="pv-mapa-placeholder" role="note">
+              <i className="fa-solid fa-map-location-dot" aria-hidden="true" />
+              <strong>Mapa no disponible</strong>
+              <span>No se muestran marcadores ni tiempos de ruta porque el servicio de mapas no está configurado.</span>
             </div>
-
-            <Footer onNavigate={onNavigate} />
-        </div>
-    )
+          </div>
+        </main>
+      </WorkspaceChrome>
+      <Footer onNavigate={onNavigate} />
+    </div>
+  )
 }

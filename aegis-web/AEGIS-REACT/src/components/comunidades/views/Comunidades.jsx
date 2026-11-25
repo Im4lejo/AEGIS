@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
+import WorkspaceChrome from '../../layouts/WorkspaceChrome'
 import Footer from '../../layouts/Footer'
 import { EmptyState, ErrorState, LoadingState } from '../../shared/ApiState'
 import { advancedContentApi, communityApi } from '../../../services/api'
@@ -126,6 +127,7 @@ export default function Comunidades({ auth, onNavigate }) {
   return (
     <div className="page-layout comunidades-layout">
       <Header title="AEGIS | Comunidades" auth={auth} onNavigate={onNavigate} />
+      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
       <main className="comunidades-page">
         <div className="comunidades-heading">
           <div>
@@ -172,9 +174,9 @@ export default function Comunidades({ auth, onNavigate }) {
         {error && <ErrorState error={error} compact />}
         {loading ? (
           <LoadingState message="Cargando comunidades..." />
-        ) : communities.length === 0 ? (
+        ) : !error && communities.length === 0 ? (
           <EmptyState title="Sin comunidades" message="Sé el primero en crear una comunidad." />
-        ) : (
+        ) : communities.length > 0 ? (
           <div className="comunidades-grid">
             {communities.map((community) => (
               <article className="comunidad-card" key={community.id}>
@@ -193,7 +195,7 @@ export default function Comunidades({ auth, onNavigate }) {
               </article>
             ))}
           </div>
-        )}
+        ) : null}
 
         {selected && (
           <section className="comunidad-detail" aria-label={`Comunidad ${selected.nombre}`}>
@@ -251,6 +253,7 @@ export default function Comunidades({ auth, onNavigate }) {
 
         {toast && <div className="comunidades-toast" role="status">{toast}</div>}
       </main>
+      </WorkspaceChrome>
       <Footer onNavigate={onNavigate} />
     </div>
   )

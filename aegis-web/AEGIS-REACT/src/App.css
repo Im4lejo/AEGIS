@@ -90,7 +90,6 @@ textarea {
   border-radius: 20px;
   border: none;
   font-size: 13px;
-  outline: none;
 }
 
 .search-btn {
@@ -106,6 +105,8 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
 }
 
 .header-user-actions {
@@ -249,7 +250,7 @@ textarea {
 
 .footer-description {
   font-size: 12px;
-  color: #9ca3af;
+  color: var(--color-chrome-muted);
   line-height: 1.5;
   max-width: 320px;
 }
@@ -277,19 +278,20 @@ textarea {
 }
 
 .footer-column a {
-  color: #9ca3af;
+  color: var(--color-chrome-muted);
   text-decoration: none;
   font-size: 12px;
   transition: color 0.2s;
 }
 
 .footer-column a:hover {
-  color: #a855f7;
+  color: var(--color-chrome-text);
+  text-decoration: underline;
 }
 
 .footer-column p {
   font-size: 12px;
-  color: #9ca3af;
+  color: var(--color-chrome-muted);
   margin: 4px 0;
 }
 
@@ -300,7 +302,7 @@ textarea {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   text-align: center;
   font-size: 11px;
-  color: #6b7280;
+  color: var(--color-chrome-muted);
 }
 
 .plantilla-container {
@@ -506,6 +508,35 @@ textarea {
     -webkit-overflow-scrolling: touch;
 }
 
+.table-scroll-region {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-page .table-scroll-region > table {
+    display: table;
+    min-width: 600px;
+    overflow: visible;
+}
+
+.table-scroll-region:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 3px;
+}
+
+.table-scroll-hint {
+    margin: 8px 0;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+}
+
+@media (min-width: 701px) {
+    .table-scroll-hint {
+        display: none;
+    }
+}
+
 .admin-page {
     width: calc(100% - 40px);
     max-width: 1100px;
@@ -674,10 +705,6 @@ textarea {
 
     .header-mobile-menu.is-open {
         display: flex;
-    }
-
-    .main-header.menu-open .menu-toggle {
-        visibility: hidden;
     }
 
     .header-mobile-top {

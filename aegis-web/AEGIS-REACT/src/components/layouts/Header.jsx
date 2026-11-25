@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { avatarUrl, navigateTo, route } from '../shared/presentation'
 import { useAuth } from '../../auth/useAuth'
 import { productApi, notificationApi } from '../../services/api'
 import Head from './Head'
 import Navbar from './Navbar'
-import WorkspaceChrome from './WorkspaceChrome'
+import { WorkspacePrimaryNav } from './WorkspaceChrome'
+import { useDialogFocus } from '../shared/ui/useDialogFocus'
 import { ThemeSelector } from '../../theme/ThemeProvider'
 import CarritoPanel from '../carrito/CarritoPanel'
 import { totalUnidades } from '../carrito/carritoDemo'
@@ -24,6 +25,10 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
     const [errorCategorias, setErrorCategorias] = useState('')
     const [unidades, setUnidades] = useState(totalUnidades())
     const profileRef = useRef(null)
+    const menuRef = useRef(null)
+    const menuToggleRef = useRef(null)
+    const closeMenu = useCallback(() => setMenuAbierto(false), [])
+    useDialogFocus(menuAbierto, closeMenu, menuRef, menuToggleRef)
 
     useEffect(() => {
         if (!categoriasAbiertas) return
@@ -81,17 +86,12 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
 
     useEffect(() => {
         if (!menuAbierto) return
-        const overflowAnterior = document.body.style.overflow
-        const handleKeyDown = (event) => {
-            if (event.key === 'Escape') setMenuAbierto(false)
+        const handleResize = () => {
+            if (window.innerWidth > 900) closeMenu()
         }
-        document.body.style.overflow = 'hidden'
-        document.addEventListener('keydown', handleKeyDown)
-        return () => {
-            document.body.style.overflow = overflowAnterior
-            document.removeEventListener('keydown', handleKeyDown)
-        }
-    }, [menuAbierto])
+        window.addEventListener('resize', handleResize)
+        return () => window.removeEventListener('resize', handleResize)
+    }, [menuAbierto, closeMenu])
 
     const go = (event, path) => {
         if (event) event.preventDefault()
@@ -141,6 +141,7 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
                             type="button"
                             aria-label={forumMenuOpen ? 'Cerrar menú del foro' : 'Abrir menú del foro'}
                             aria-expanded={forumMenuOpen}
+                            aria-controls="foro-mobile-menu"
                             onClick={onForumMenuToggle}
                         >
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -158,6 +159,7 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
 
                     <button
                         className="menu-toggle"
+                        ref={menuToggleRef}
                         type="button"
                         aria-label={menuAbierto ? 'Cerrar menú' : 'Abrir menú'}
                         aria-expanded={menuAbierto}
@@ -169,7 +171,7 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
                         <span />
                     </button>
 
-                    <div id="header-mobile-menu" className={`header-mobile-menu${menuAbierto ? ' is-open' : ''}`}>
+                    <div id="header-mobile-menu" ref={menuRef} role={menuAbierto ? 'dialog' : undefined} aria-modal={menuAbierto ? 'true' : undefined} aria-label={menuAbierto ? 'Menú principal' : undefined} tabIndex={menuAbierto ? -1 : undefined} className={`header-mobile-menu${menuAbierto ? ' is-open' : ''}`}>
                         <div className="header-mobile-top">
                             <div className="header-mobile-topbar">
                                 <div className="header-mobile-brand">
@@ -186,12 +188,14 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
                                 <img src={avatar} alt="" className="profile-img" />
                                 <span className="header-mobile-profile-data">
                                     <strong>{nombreMostrar}</strong>
-                                    <span>Ir a ajustes de cuenta</span>
+                                    <span>{usuario ? 'Ir a perfil' : 'Iniciar sesión'}</span>
                                 </span>
                             </a>
                         </div>
 
                         <Navbar onNavigate={navegarDesdeMenu} />
+
+                        <WorkspacePrimaryNav auth={auth} onNavigate={navegarDesdeMenu} menu />
 
                         <nav className="header-mobile-links" aria-label="Navegación móvil">
                             <div className="header-mobile-group">
@@ -231,7 +235,7 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
                             ? <a className="header-mobile-link header-mobile-logout" href={route('/login')} onClick={cerrarSesion}>Cerrar sesión</a>
                             : <a className="header-mobile-link header-mobile-logout" href={route('/login')} onClick={(event) => go(event, '/login')}>Iniciar sesión</a>}
                         {usuario && (
-                            <a className="header-mobile-link" href={route('/seguridad')} onClick={(event) => go(event, '/seguridad')}>
+                            <a className="header-mobile-link header-mobile-security" href={route('/seguridad')} onClick={(event) => go(event, '/seguridad')}>
                                 Seguridad de cuenta
                             </a>
                         )}
@@ -332,18 +336,16 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
 
                         <button
                             className="cart-btn"
-                            aria-label="Carrito de compras"
+                            aria-label={`Carrito de compras, ${unidades} ${unidades === 1 ? 'artículo' : 'artículos'}`}
                             type="button"
                             onClick={() => setCarritoAbierto(!carritoAbierto)}
                         >
-                            🛒
-                            <span className="cart-badge">{unidades}</span>
+                            <span aria-hidden="true">🛒</span>
+                            <span className="cart-badge" aria-hidden="true">{unidades}</span>
                         </button>
                     </div>
                 </div>
             </header>
-
-            <WorkspaceChrome auth={auth} onNavigate={onNavigate} />
 
             {carritoAbierto && (
                 <CarritoPanel

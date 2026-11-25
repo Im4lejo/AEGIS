@@ -1,4 +1,5 @@
 import Header from '../layouts/Header'
+import WorkspaceChrome from '../layouts/WorkspaceChrome'
 
 /**
  * Plantilla base para páginas todavía no asignadas.
@@ -13,6 +14,7 @@ export default function Plantilla({ origen = 'Página', auth, onNavigate }) {
     <div className="page-layout">
       <Header title={`AEGIS | ${origenTitulo}`} auth={auth} onNavigate={onNavigate} />
 
+      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
       <main className="plantilla-container">
         <div className="plantilla-card">
           <span className="plantilla-icon" role="img" aria-label="En construcción">🚧</span>
@@ -29,6 +31,7 @@ export default function Plantilla({ origen = 'Página', auth, onNavigate }) {
           </button>
         </div>
       </main>
+      </WorkspaceChrome>
     </div>
   )
 }

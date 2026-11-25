@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
+import WorkspaceChrome from '../../layouts/WorkspaceChrome'
 import Footer from '../../layouts/Footer'
 import { EmptyState, ErrorState, LoadingState } from '../../shared/ApiState'
 import { formatCurrency, imageUrl } from '../../shared/presentation'
@@ -142,11 +143,11 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
     categoria,
     estado,
     precioMax,
-    orden,
     precioMin,
     ciudad,
     marca,
     dias,
+    orden,
   ])
   const cargando = respuesta.key !== requestKey
   const productos = cargando ? [] : respuesta.productos
@@ -215,6 +216,7 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
         auth={auth}
         onNavigate={onNavigate}
       />
+      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
       <main className="products-page">
         <div className="products-topbar">
           <div className="products-title-row">
@@ -224,8 +226,9 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
             </span>
           </div>
           <div className="products-sort">
-            <span>Ordenar por</span>
+            <label htmlFor="productos-orden">Ordenar por</label>
             <select
+              id="productos-orden"
               value={orden}
               onChange={(event) => setOrden(event.target.value)}
             >
@@ -236,6 +239,20 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
               ))}
             </select>
           </div>
+          <label className="products-mobile-bar" htmlFor="productos-orden-movil">
+            Ordenar por
+            <select
+              id="productos-orden-movil"
+              value={orden}
+              onChange={(event) => setOrden(event.target.value)}
+            >
+              {ORDENES.map((opcion) => (
+                <option key={opcion.valor} value={opcion.valor}>
+                  {opcion.label}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
 
         {(categoria || estado !== 'todo' || precioMin || precioMax || ciudad || marca || dias) && (
@@ -370,59 +387,49 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
                   <button type="button" disabled={compararIds.length < 2} onClick={ejecutarComparacion}>Comparar</button>
                 </div>
                 {lista.map((producto) => (
-                  <article
-                    className="product-card"
-                    key={producto.id}
-                    role="button"
-                    tabIndex={0}
-                    title="Ver detalle del producto"
-                    onClick={() => abrirProducto(producto)}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault()
-                        abrirProducto(producto)
-                      }
-                    }}
-                  >
+                  <article className="product-card" key={producto.id}>
                     <button
                       type="button"
                       className="product-compare-check"
-                      onClick={(event) => {
-                        event.stopPropagation()
-                        alternarComparar(producto.id)
-                      }}
+                      onClick={() => alternarComparar(producto.id)}
                       aria-pressed={compararIds.includes(producto.id)}
                     >
                       {compararIds.includes(producto.id) ? 'Quitar de comparar' : 'Comparar'}
                     </button>
-                    <div className="product-image-container">
-                      <img
-                        src={imageUrl(producto.imagen)}
-                        alt={producto.nombre}
-                      />
-                      <span
-                        className={`product-state-tag ${badgeEstado(producto.estado)}`}
-                      >
-                        {etiquetaEstado(producto.estado)}
-                      </span>
-                    </div>
-                    <div className="product-info">
-                      <span className="product-brand">
-                        {producto.categoriaNombre}
-                      </span>
-                      <h3 className="product-name">{producto.nombre}</h3>
-                      <div className="product-price-row">
-                        <span className="product-current-price">
-                          COP {formatCurrency(producto.precio)}
+                    <button
+                      type="button"
+                      className="product-card-open"
+                      onClick={() => abrirProducto(producto)}
+                    >
+                      <div className="product-image-container">
+                        <img
+                          src={imageUrl(producto.imagen)}
+                          alt=""
+                        />
+                        <span
+                          className={`product-state-tag ${badgeEstado(producto.estado)}`}
+                        >
+                          {etiquetaEstado(producto.estado)}
                         </span>
                       </div>
-                      <p className="product-seller">
-                        Vendido por:{' '}
-                        <span>
-                          {producto.vendedor?.nombre || 'Vendedor AEGIS'}
+                      <div className="product-info">
+                        <span className="product-brand">
+                          {producto.categoriaNombre}
                         </span>
-                      </p>
-                    </div>
+                        <h3 className="product-name">{producto.nombre}</h3>
+                        <div className="product-price-row">
+                          <span className="product-current-price">
+                            COP {formatCurrency(producto.precio)}
+                          </span>
+                        </div>
+                        <p className="product-seller">
+                          Vendido por:{' '}
+                          <span>
+                            {producto.vendedor?.nombre || 'Vendedor AEGIS'}
+                          </span>
+                        </p>
+                      </div>
+                    </button>
                   </article>
                 ))}
               </div>
@@ -458,6 +465,7 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
           </section>
         </div>
       </main>
+      </WorkspaceChrome>
       <Footer onNavigate={onNavigate} />
     </div>
   )

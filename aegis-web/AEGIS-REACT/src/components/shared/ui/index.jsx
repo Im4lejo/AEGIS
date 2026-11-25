@@ -7,17 +7,9 @@ import {
   useState,
 } from 'react'
 import { formatCurrency, imageUrl, route } from '../presentation'
+import { useDialogFocus } from './useDialogFocus'
 import './ui.css'
 import '../ApiState.css'
-
-const FOCUSABLE = [
-  'a[href]',
-  'button:not([disabled])',
-  'input:not([disabled])',
-  'select:not([disabled])',
-  'textarea:not([disabled])',
-  '[tabindex]:not([tabindex="-1"])',
-].join(',')
 
 function classNames(...values) {
   return values.filter(Boolean).join(' ')
@@ -123,53 +115,6 @@ export function Select({ children, ...props }) {
       {children}
     </Field>
   )
-}
-
-function useDialogFocus(open, onClose, dialogRef) {
-  useEffect(() => {
-    if (!open) return undefined
-
-    const previousFocus = document.activeElement
-    const previousOverflow = document.body.style.overflow
-    const dialog = dialogRef.current
-    const firstFocusable = dialog?.querySelector(FOCUSABLE)
-    ;(firstFocusable || dialog)?.focus()
-    document.body.style.overflow = 'hidden'
-
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape') {
-        event.preventDefault()
-        onClose?.()
-        return
-      }
-
-      if (event.key !== 'Tab' || !dialog) return
-      const focusable = Array.from(dialog.querySelectorAll(FOCUSABLE))
-      if (focusable.length === 0) {
-        event.preventDefault()
-        dialog.focus()
-        return
-      }
-
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault()
-        last.focus()
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault()
-        first.focus()
-      }
-    }
-
-    document.addEventListener('keydown', handleKeyDown)
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-      document.body.style.overflow = previousOverflow
-      if (previousFocus instanceof HTMLElement && previousFocus.isConnected)
-        previousFocus.focus()
-    }
-  }, [open, onClose, dialogRef])
 }
 
 export function Modal({
@@ -485,7 +430,7 @@ export function ProductCard({ product, onSelect }) {
   const content = (
     <>
       <img
-        alt={name}
+        alt=""
         className="ui-product-card__image"
         loading="lazy"
         src={imageUrl(product?.imagen_principal || product?.imagen)}
@@ -505,7 +450,6 @@ export function ProductCard({ product, onSelect }) {
   const href = route(`/productos/detalle?id=${encodeURIComponent(product.id)}`)
   return (
     <a
-      aria-label={`${name}, COP ${formatCurrency(product?.precio)}`}
       className="ui-card ui-product-card"
       href={href}
       onClick={

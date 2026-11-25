@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
+import WorkspaceChrome from '../../layouts/WorkspaceChrome'
 import Footer from '../../layouts/Footer'
 import { EmptyState, ErrorState, LoadingState } from '../../shared/ApiState'
 import { storeApi } from '../../../services/api'
@@ -64,6 +65,7 @@ export default function Tiendas({ auth, onNavigate }) {
   return (
     <div className="page-layout tiendas-layout">
       <Header title="AEGIS | Tiendas" auth={auth} onNavigate={onNavigate} />
+      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
       <main className="tiendas-page">
         <div className="tiendas-heading">
           <div>
@@ -145,6 +147,7 @@ export default function Tiendas({ auth, onNavigate }) {
 
         {toast && <div className="tiendas-toast" role="status">{toast}</div>}
       </main>
+      </WorkspaceChrome>
       <Footer onNavigate={onNavigate} />
     </div>
   )

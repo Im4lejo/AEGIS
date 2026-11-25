@@ -76,30 +76,51 @@ export default function MisProductos({ auth, onNavigate }) {
           ))}
         </nav>
         {error && <p role="alert">{error}</p>}
-        <table>
-          <thead><tr><th>Título</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr></thead>
-          <tbody>
-            {productos.map((product) => (
-              <tr key={product.id}>
-                <td>{product.titulo}</td>
-                <td>COP {formatCurrency(product.precio)}</td>
-                <td>{product.estado_publicacion}</td>
-                <td>
-                  <button type="button" onClick={() => onNavigate?.(`/productos/detalle?id=${product.id}`)}>Ver</button>
-                  {product.estado_publicacion === 'borrador' && (
-                    <button type="button" onClick={() => cambiarEstado(product, 'activo')}>Publicar</button>
-                  )}
-                  {product.estado_publicacion === 'activo' && (
-                    <button type="button" onClick={() => cambiarEstado(product, 'pausado')}>Pausar</button>
-                  )}
-                  {product.estado_publicacion === 'pausado' && (
-                    <button type="button" onClick={() => cambiarEstado(product, 'activo')}>Reactivar</button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <p className="table-scroll-hint" id="mis-productos-table-hint">
+          Desliza horizontalmente para ver todas las columnas.
+        </p>
+        <div
+          className="table-scroll-region"
+          role="region"
+          aria-label="Productos propios"
+          aria-describedby="mis-productos-table-hint"
+          tabIndex={0}
+          onKeyDown={(event) => {
+            if (event.target !== event.currentTarget) return
+            const direction = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0
+            if (direction) {
+              event.preventDefault()
+              event.currentTarget.scrollBy({ left: direction * Math.max(80, event.currentTarget.clientWidth * 0.8) })
+            }
+          }}
+        >
+          <table>
+            <thead><tr><th>Título</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody>
+              {productos.map((product) => (
+                <tr key={product.id}>
+                  <td>{product.titulo}</td>
+                  <td>COP {formatCurrency(product.precio)}</td>
+                  <td>{product.estado_publicacion}</td>
+                  <td>
+                    <div className="mis-productos-actions">
+                      <button type="button" onClick={() => onNavigate?.(`/productos/detalle?id=${product.id}`)}>Ver</button>
+                      {product.estado_publicacion === 'borrador' && (
+                        <button type="button" onClick={() => cambiarEstado(product, 'activo')}>Publicar</button>
+                      )}
+                      {product.estado_publicacion === 'activo' && (
+                        <button type="button" onClick={() => cambiarEstado(product, 'pausado')}>Pausar</button>
+                      )}
+                      {product.estado_publicacion === 'pausado' && (
+                        <button type="button" onClick={() => cambiarEstado(product, 'activo')}>Reactivar</button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </main>
     </PageFrame>
   )

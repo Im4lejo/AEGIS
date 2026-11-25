@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "test": "vitest run --config vitest.config.js && node --test",
     "test:ui": "vitest run --config vitest.config.js",
+    "test:visual": "playwright test --config playwright.config.cjs --update-snapshots=none",
     "format": "prettier --write src/App.jsx src/auth/AuthProvider.jsx src/components/auth/components/AuthFrame.jsx src/components/auth/views/*.jsx src/components/auth/views/*.css src/components/auth/css/auth-account.css src/components/shared/ApiState.jsx src/components/shared/ApiState.css src/components/shared/ui/index.jsx src/components/shared/ui/ui.css src/components/shared/ui/ui.test.jsx src/components/home/views/Home.jsx src/components/home/css/home-foundation.css src/components/layouts/WorkspaceChrome.jsx src/components/productos/views/Index.jsx src/services/api.js src/services/api.test.js src/theme/ThemeContext.js src/theme/ThemeProvider.jsx src/design-system/*.css vitest.config.js",
     "format:check": "prettier --check src/App.jsx src/auth/AuthProvider.jsx src/components/auth/components/AuthFrame.jsx src/components/auth/views/*.jsx src/components/auth/views/*.css src/components/auth/css/auth-account.css src/components/shared/ApiState.jsx src/components/shared/ApiState.css src/components/shared/ui/index.jsx src/components/shared/ui/ui.css src/components/shared/ui/ui.test.jsx src/components/home/views/Home.jsx src/components/home/css/home-foundation.css src/components/layouts/WorkspaceChrome.jsx src/components/productos/views/Index.jsx src/services/api.js src/services/api.test.js src/theme/ThemeContext.js src/theme/ThemeProvider.jsx src/design-system/*.css vitest.config.js",
     "preview": "vite preview"
@@ -19,6 +20,7 @@
     "react-router-dom": "^7.18.4"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@babel/core": "^7.29.7",
     "@eslint/js": "^10.0.1",
     "@rolldown/plugin-babel": "^0.2.3",
@@ -33,6 +35,7 @@
     "eslint-plugin-react-refresh": "^0.5.6",
     "globals": "^17.12.0",
     "jsdom": "^31.0.1",
+    "playwright": "^1.65.1",
     "prettier": "^3.10.1",
     "vite": "^8.3.0",
     "vitest": "^5.1.1"

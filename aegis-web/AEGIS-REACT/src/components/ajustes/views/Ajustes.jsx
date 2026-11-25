@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
+import WorkspaceChrome from '../../layouts/WorkspaceChrome'
 import Footer from '../../layouts/Footer'
+import PageFrame from '../../shared/PageFrame'
 import { preferenceApi } from '../../../services/api'
 import '../css/ajustes.css'
 
@@ -72,12 +74,21 @@ export default function Ajustes({ auth, onNavigate }) {
   }
 
   if (!preferences) {
-    return <main className="ajustes-loading">Cargando ajustes...</main>
+    return (
+      <PageFrame title="AEGIS | Ajustes" auth={auth} onNavigate={onNavigate}>
+        <main className="ajustes-page">
+          {error ? <p role="alert">{error}</p> : auth?.token
+            ? <p role="status">Cargando ajustes...</p>
+            : <p>Inicia sesión para consultar tus ajustes.</p>}
+        </main>
+      </PageFrame>
+    )
   }
 
   return (
     <div className="page-layout">
       <Header title="AEGIS | Ajustes" auth={auth} onNavigate={onNavigate} />
+      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
       <main className="ajustes-page">
         <h1>Ajustes</h1>
         {error && <p role="alert">{error}</p>}
@@ -192,6 +203,7 @@ export default function Ajustes({ auth, onNavigate }) {
           </section>
         </div>
       </main>
+      </WorkspaceChrome>
       <Footer onNavigate={onNavigate} />
     </div>
   )

@@ -37,7 +37,11 @@ const AdminUsuarios = lazy(() => import('./components/admin/views/Usuarios'))
 const AdminAuditoria = lazy(() => import('./components/admin/views/Auditoria'))
 const AdminConfiguracion = lazy(() => import('./components/admin/views/Configuracion'))
 const Plantilla = lazy(() => import('./components/shared/Plantilla'))
+const Styleguide = import.meta.env.DEV
+  ? lazy(() => import('./components/shared/ui/Styleguide'))
+  : null
 import { NotFoundPage } from './components/shared/ApiState'
+import PageFrame from './components/shared/PageFrame'
 import { AccessRestrictedState } from './components/shared/ui'
 import { ErrorBoundary } from './components/shared/ui'
 import { ThemeProvider } from './theme/ThemeProvider'
@@ -115,19 +119,23 @@ function Vista({ Componente }) {
 
   if (requiereSesion && session.loading) {
     return (
-      <main className="auth-loading" aria-live="polite">
-        Verificando sesión...
-      </main>
+      <PageFrame title="AEGIS | Verificando sesión" auth={auth} onNavigate={onNavigate}>
+        <main className="auth-loading" aria-live="polite">
+          Verificando sesión...
+        </main>
+      </PageFrame>
     )
   }
   if (requiereSesion && session.token && session.error) {
     return (
-      <main className="auth-loading" role="alert">
-        <p>No se pudo verificar tu sesión: {session.error}</p>
-        <button type="button" onClick={session.retrySession}>
-          Reintentar
-        </button>
-      </main>
+      <PageFrame title="AEGIS | Error de sesión" auth={auth} onNavigate={onNavigate}>
+        <main className="auth-loading" role="alert">
+          <p>No se pudo verificar tu sesión: {session.error}</p>
+          <button type="button" onClick={session.retrySession}>
+            Reintentar
+          </button>
+        </main>
+      </PageFrame>
     )
   }
   if (requiereSesion && !session.isAuthenticated) {
@@ -135,9 +143,13 @@ function Vista({ Componente }) {
   }
   if (session.isAuthenticated && session.user?.estado !== 'activo') {
     return (
-      <AccessRestrictedState
-        message="Cuenta suspendida: no puedes realizar operaciones ni acceder a funciones protegidas."
-      />
+      <PageFrame title="AEGIS | Acceso restringido" auth={auth} onNavigate={onNavigate}>
+        <main>
+          <AccessRestrictedState
+            message="Cuenta suspendida: no puedes realizar operaciones ni acceder a funciones protegidas."
+          />
+        </main>
+      </PageFrame>
     )
   }
   if (
@@ -146,9 +158,13 @@ function Vista({ Componente }) {
     && session.user?.rol !== 'admin'
   ) {
     return (
-      <AccessRestrictedState
-        message="Esta sección requiere permisos de administración."
-      />
+      <PageFrame title="AEGIS | Acceso restringido" auth={auth} onNavigate={onNavigate}>
+        <main>
+          <AccessRestrictedState
+            message="Esta sección requiere permisos de administración."
+          />
+        </main>
+      </PageFrame>
     )
   }
 
@@ -217,7 +233,11 @@ function App() {
               />
               <Route
                 path="/vendedor"
-                element={<Vista Componente={Vendedor} />}
+                element={
+                  <main role="alert" className="route-loading">
+                    Esta vista requiere un identificador real de perfil. Usa el perfil público del anuncio.
+                  </main>
+                }
               />
               <Route
                 path="/puntos-fisicos"
@@ -265,6 +285,9 @@ function App() {
                 path="/plantilla"
                 element={<Vista Componente={Plantilla} />}
               />
+              {import.meta.env.DEV && (
+                <Route path="/styleguide" element={<Styleguide />} />
+              )}
               <Route path="*" element={<Vista Componente={NotFoundPage} />} />
             </Routes>
             </Suspense>

@@ -170,9 +170,13 @@ export default function CarritoPanel({ onCerrar, onNavigate }) {
               type="button"
               className="car-btn-finalizar"
               disabled={visibles.length === 0}
-              onClick={onCerrar}
+              onClick={() => {
+                window.alert(
+                  'El checkout no está disponible. Puedes ofrecer, reservar y coordinar encuentros desde el anuncio.',
+                )
+              }}
             >
-              Finalizar Compra
+              Finalizar compra · no disponible
             </button>
           </div>
         </div>

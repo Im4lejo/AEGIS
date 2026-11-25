@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
+import WorkspaceChrome from '../../layouts/WorkspaceChrome'
+import PageFrame from '../../shared/PageFrame'
 import Footer from '../../layouts/Footer'
 import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
 import { productApi, savedApi, negotiationApi } from '../../../services/api'
@@ -7,18 +9,9 @@ import { agregarProducto } from '../../carrito/carritoDemo'
 import '../css/detalle.css'
 
 
-function insigniasVendedor(reputacion) {
-  const rep = Number(reputacion || 0)
-  let nivel = 'Nivel 1'
-  if (rep >= 4.5) nivel = 'Nivel 3'
-  else if (rep >= 3.5) nivel = 'Nivel 2'
-
-  return {
-    servicio: 'Plataforma',
-    estrella: nivel,
-    rating: rep.toFixed(1),
-    estrellas: rep > 0 ? '★'.repeat(Math.round(rep)) : '☆☆☆☆☆',
-  }
+function formatearReputacionVendedor(reputacion) {
+  const valor = Number(reputacion || 0)
+  return valor > 0 ? valor.toFixed(1) : null
 }
 
 function etiquetaEstado(estado) {
@@ -94,7 +87,7 @@ export default function Detalle({ id, auth, onNavigate }) {
     : { nombre: 'Vendedor', reputacion: 0 }
   const vendedor = infoVendedor
 
-  const insignia = insigniasVendedor(vendedor.reputacion)
+  const reputacion = formatearReputacionVendedor(vendedor.reputacion)
 
   let imagenes = imagen ? [imagen] : ['']
   if (producto.fotos && producto.fotos.length > 0) imagenes = [imagen].concat(producto.fotos)
@@ -198,13 +191,19 @@ export default function Detalle({ id, auth, onNavigate }) {
   }, [producto?.seo?.title, producto?.seo?.description, producto?.seo?.robots])
 
   if (cargando) {
-    return <main className="no-products-message">Cargando producto...</main>
+    return (
+      <PageFrame title="AEGIS | Producto" auth={auth} onNavigate={onNavigate}>
+        <main className="no-products-message" role="status">Cargando producto...</main>
+      </PageFrame>
+    )
   }
   if (errorProducto || !producto.id) {
     return (
       <div className="page-layout">
         <Header title="AEGIS | Producto" auth={auth} onNavigate={onNavigate} />
+        <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
         <main className="no-products-message" role="alert">{errorProducto || 'No se encontró el producto.'}</main>
+        </WorkspaceChrome>
         <Footer onNavigate={onNavigate} />
       </div>
     )
@@ -213,6 +212,7 @@ export default function Detalle({ id, auth, onNavigate }) {
   return (
     <div className="page-layout">
       <Header title={`AEGIS | ${titulo}`} auth={auth} onNavigate={onNavigate} />
+      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
 
       <main className="product-detail-page">
         <nav className="detail-breadcrumb" aria-label="Ruta de navegación">
@@ -349,38 +349,27 @@ export default function Detalle({ id, auth, onNavigate }) {
               <p className="detail-brand">{producto.ciudad || 'Sin ciudad'}</p>
             </div>
 
-            <div
-              className="detail-seller"
-              role="button"
-              tabIndex={0}
-              onClick={irVendedor}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') irVendedor()
-              }}
-            >
+            <div className="detail-seller">
               <img className="detail-seller-avatar" src={vendedor.avatar || avatarUrl(vendedor, 100)} alt={vendedor.nombre} />
               <div className="detail-seller-data">
                 <strong className="detail-seller-name">{vendedor.nombre}</strong>
                 <div className="detail-badges">
-                  <span className="detail-badge blue" title={`Nivel de Servicio: ${insignia.servicio}`}>
-                    <i className="fa-solid fa-crown" />
-                  </span>
-                  <span className="detail-badge purple" title={`Vendedor Estrella: ${insignia.estrella}`}>
-                    <i className="fa-solid fa-shield" />
-                  </span>
-                  <span className="detail-badge rating" title={`Reputación: ${insignia.rating}`}>
-                    <i className="fa-regular fa-star" /> {insignia.rating}
+                  <span className="detail-badge rating" aria-label={reputacion ? `Reputación ${reputacion} de 5` : 'Sin valoraciones'}>
+                    <i className="fa-regular fa-star" />
+                    {reputacion || 'Sin valoraciones'}
                   </span>
                 </div>
               </div>
-              <button
-                type="button"
-                className="detail-seller-arrow"
-                aria-label="Ver perfil del vendedor"
-                onClick={irVendedor}
-              >
-                <i className="fa-solid fa-arrow-right" />
-              </button>
+              {String(auth?.user?.id) === String(producto.usuario_id) && (
+                <button
+                  type="button"
+                  className="detail-seller-arrow"
+                  aria-label="Ver mi perfil"
+                  onClick={irVendedor}
+                >
+                  <i className="fa-solid fa-arrow-right" />
+                </button>
+              )}
             </div>
 
             <div className="detail-specs">
@@ -456,6 +445,7 @@ export default function Detalle({ id, auth, onNavigate }) {
         </div>
       )}
 
+      </WorkspaceChrome>
       <Footer onNavigate={onNavigate} />
     </div>
   )

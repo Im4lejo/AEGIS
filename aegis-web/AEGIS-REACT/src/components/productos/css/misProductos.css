@@ -1,0 +1,37 @@
+.mis-productos-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-3) 0;
+}
+
+.mis-productos-stats > span {
+  padding: 6px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+}
+
+.mis-productos-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-4) 0;
+}
+
+.mis-productos-tabs button {
+  text-transform: capitalize;
+}
+
+.mis-productos-tabs button.active {
+  border-color: var(--color-action);
+  background: var(--color-action);
+  color: var(--color-action-text);
+}
+
+.mis-productos-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}

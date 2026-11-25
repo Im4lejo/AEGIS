@@ -3,6 +3,16 @@
   overflow: hidden;
 }
 
+.mensajes-layout .workspace-shell {
+  min-height: 0;
+  align-items: stretch;
+}
+
+.mensajes-layout .workspace-content {
+  display: flex;
+  min-height: 0;
+}
+
 .msg-pagina {
   width: 100%;
   display: flex;
@@ -72,6 +82,7 @@
 
 .msg-buscar input {
   width: 100%;
+  min-height: 44px;
   box-sizing: border-box;
   padding: 9px 16px 9px 38px;
   border: 1.5px solid #9955f7;
@@ -299,12 +310,41 @@
 
 .msg-zona {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: 16px;
   background: #ffffff;
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.msg-composer {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.msg-composer input[type="text"],
+.msg-composer button {
+  min-height: 44px;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.msg-composer input[type="text"] {
+  flex: 1;
+  min-width: 0;
+}
+
+.msg-composer button:disabled {
+  opacity: 0.6;
 }
 
 .msg-hoy {
@@ -587,6 +627,34 @@
   }
 }
 
+.msg-fila-mio .msg-burbuja {
+  border: 1px solid var(--color-action);
+  border-bottom-right-radius: 4px;
+  background: var(--color-action);
+  color: var(--color-action-text);
+}
+
+.msg-fila:not(.msg-fila-mio) .msg-burbuja {
+  border: 1px solid var(--color-border);
+  border-bottom-left-radius: 4px;
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+}
+
+.msg-fila-mio .msg-burbuja > p {
+  color: var(--color-action-text);
+}
+
+.msg-fila:not(.msg-fila-mio) .msg-burbuja > p {
+  color: var(--color-text);
+}
+
+@media (max-width: 700px) {
+  .mensajes-layout .workspace-content {
+    height: 100%;
+  }
+}
+
 @media (max-width: 420px) {
   .msg-producto-acciones {
     gap: 6px;
@@ -608,5 +676,191 @@
 
   .msg-encuentro {
     padding: 12px;
+  }
+}
+
+.mensajes-layout {
+  color: var(--color-text);
+  background: var(--color-canvas);
+}
+
+.msg-lista,
+.msg-chat {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+.msg-lista {
+  border-right: 1px solid var(--color-border);
+}
+
+.msg-lista-top::after {
+  height: 1px;
+  background: var(--color-border);
+}
+
+.msg-titulo,
+.msg-item-nombre,
+.msg-producto-nombre,
+.msg-encuentro-info h4 {
+  color: var(--color-text);
+}
+
+.msg-buscar input,
+.msg-input input,
+.msg-composer input[type="text"] {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.msg-buscar input:focus,
+.msg-input input:focus {
+  border-color: var(--color-action);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus) 24%, transparent);
+}
+
+.msg-item:hover,
+.msg-conversaciones .msg-item-activo {
+  background: var(--color-surface-muted);
+}
+
+.msg-item-activo {
+  border-left-color: var(--color-action);
+}
+
+.msg-item-activo .msg-item-nombre {
+  color: var(--color-text);
+}
+
+.msg-item-hora,
+.msg-item-vendedor,
+.msg-item-preview,
+.msg-vacio,
+.msg-producto-vendedor,
+.msg-encuentro-info p {
+  color: var(--color-text-muted);
+}
+
+.msg-item-badge,
+.msg-encuentro-icono {
+  background: var(--color-info-soft);
+  color: var(--color-info-text);
+}
+
+.msg-producto-precio {
+  color: var(--color-action);
+}
+
+.msg-producto-vendedor i {
+  color: var(--color-success);
+}
+
+.msg-btn-ver,
+.msg-btn-mas,
+.msg-encuentro-btn,
+.msg-back {
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.msg-btn-ver:hover,
+.msg-btn-mas:hover,
+.msg-back:hover {
+  background: var(--color-surface-muted);
+}
+
+.msg-seguridad {
+  border-color: var(--color-border);
+  background: var(--color-info-soft);
+  color: var(--color-info-text);
+}
+
+.msg-hoy,
+.msg-burbuja-vendedor {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+}
+
+.msg-avatar-vendedor {
+  background: var(--color-chrome);
+  color: var(--color-chrome-text);
+}
+
+.msg-avatar-mio {
+  background: var(--color-info-soft);
+  color: var(--color-info-text);
+}
+
+.msg-burbuja-mio,
+.msg-enviar {
+  background: var(--color-action);
+  color: var(--color-action-text);
+}
+
+.msg-enviar:hover {
+  background: var(--color-action-hover);
+}
+
+.msg-encuentro,
+.msg-producto {
+  border-color: var(--color-border);
+  background: var(--color-surface);
+}
+
+.msg-clip:hover {
+  background: var(--color-surface-muted);
+}
+
+.msg-back {
+  display: none;
+}
+
+.msg-chat-empty {
+  margin: auto;
+  padding: var(--space-5);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.mensajes-layout :is(button, input):focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+@media (max-width: 760px) {
+  .msg-lista {
+    display: none;
+    flex: 1 1 0;
+    min-height: 0;
+    max-height: none;
+    width: 100%;
+  }
+
+  .msg-chat {
+    display: none;
+    flex: 1 1 0;
+    min-height: 0;
+    width: 100%;
+  }
+
+  .msg-pagina--list .msg-lista,
+  .msg-pagina--conversation .msg-chat {
+    display: flex;
+  }
+
+  .msg-back {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    margin: var(--space-2);
   }
 }

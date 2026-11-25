@@ -208,7 +208,6 @@
   gap: 12px;
   padding: 12px 0;
   border-bottom: 1px solid #e5e7eb;
-  cursor: pointer;
 }
 
 .detail-seller-avatar {
@@ -842,6 +841,49 @@
   }
 }
 
+.product-detail-page {
+  background: var(--color-canvas);
+}
+
+.product-detail-page .detail-breadcrumb a {
+  color: var(--color-action);
+}
+
+.product-detail-page .detail-breadcrumb strong,
+.product-detail-page .detail-features li,
+.product-detail-page .detail-features li span,
+.product-detail-page .detail-specs-row span,
+.product-detail-page .detail-stock,
+.product-detail-page .detail-shipping {
+  color: var(--color-text-muted);
+}
+
+.product-detail-page .detail-badge.rating {
+  min-width: 44px;
+  min-height: 32px;
+  height: auto;
+  padding: var(--space-1) var(--space-2);
+  border-color: var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-info-soft);
+  color: var(--color-info-text);
+}
+
+.product-detail-page .detail-stock {
+  color: var(--color-success-text);
+}
+
+.product-detail-page .detail-shipping {
+  background: var(--color-info-soft);
+  color: var(--color-info-text);
+}
+
+.product-detail-page .detail-seller-arrow {
+  min-width: 44px;
+  min-height: 44px;
+  border-color: var(--color-border-strong);
+}
+
   .detail-offer-modal {
     position: fixed;
     inset: 0;
@@ -865,3 +907,138 @@
     display: grid;
     gap: 6px;
   }
+
+.product-detail-page {
+  color: var(--color-text);
+}
+
+.detail-breadcrumb,
+.detail-breadcrumb a,
+.detail-code,
+.detail-brand,
+.detail-text,
+.detail-shipping,
+.detail-comments-empty {
+  color: var(--color-text-muted);
+}
+
+.detail-heading,
+.detail-section,
+.detail-info,
+.detail-seller,
+.detail-specs,
+.detail-question,
+.seller-info-card,
+.detail-offer-card {
+  border-color: var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-card);
+}
+
+.detail-title,
+.detail-section h2,
+.detail-seller-name,
+.detail-specs-row strong,
+.seller-info-card h2 {
+  color: var(--color-text);
+}
+
+.detail-gallery,
+.detail-main-image {
+  border-color: var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface-muted);
+}
+
+.detail-thumb,
+.detail-arrow,
+.detail-seller-arrow,
+.detail-btn.outline {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.detail-thumb.active {
+  border-color: var(--color-action);
+}
+
+.detail-btn.primary,
+.detail-comment-btn {
+  border-color: var(--color-action);
+  background: var(--color-action);
+  color: var(--color-action-text);
+}
+
+.detail-btn.primary:hover,
+.detail-comment-btn:hover {
+  background: var(--color-action-hover);
+}
+
+.detail-btn.danger {
+  border-color: var(--color-danger);
+  background: var(--color-danger);
+  color: var(--color-danger-action-text);
+}
+
+.detail-specs-row,
+.detail-seller-section .seller-info-stat {
+  border-color: var(--color-border);
+}
+
+.detail-main-image img {
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.detail-comments-head,
+.detail-offer-card label {
+  color: var(--color-text);
+}
+
+.product-detail-page :is(input, textarea, select) {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 44px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.detail-offer-card {
+  gap: var(--space-4);
+}
+
+.detail-offer-modal {
+  z-index: var(--z-overlay);
+  background: var(--color-overlay);
+}
+
+.product-detail-page :is(button, a, input, textarea, select):focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+  .detail-heading,
+  .detail-section,
+  .detail-seller,
+  .detail-specs {
+    box-shadow: var(--shadow-card);
+  }
+
+  .detail-purchase-bar {
+    border-color: var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    box-shadow: var(--shadow-raised);
+  }
+
+  .detail-purchase-bar .detail-actions {
+    background: var(--color-surface);
+  }
+}

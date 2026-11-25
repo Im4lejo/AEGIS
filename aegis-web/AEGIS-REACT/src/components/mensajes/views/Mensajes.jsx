@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import Header from '../../layouts/Header'
+import WorkspaceChrome from '../../layouts/WorkspaceChrome'
 import { useAuth } from '../../../auth/useAuth'
 import { messageApi, productApi } from '../../../services/api'
 import '../css/mensajes.css'
@@ -115,7 +116,8 @@ export default function Mensajes({ id, auth, onNavigate }) {
   return (
     <div className="page-layout mensajes-layout">
       <Header title="AEGIS | Mensajes" auth={auth} onNavigate={onNavigate} />
-      <div className="msg-pagina">
+      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
+      <main className={`msg-pagina ${activeId ? 'msg-pagina--conversation' : 'msg-pagina--list'}`}>
         <aside className="msg-lista">
           <div className="msg-lista-top">
             <h1 className="msg-titulo">Mensajes</h1>
@@ -123,6 +125,7 @@ export default function Mensajes({ id, auth, onNavigate }) {
           <div className="msg-buscar">
             <input
               type="search"
+              aria-label="Buscar conversaciones"
               placeholder="Buscar conversaciones..."
               value={busqueda}
               onChange={search}
@@ -156,6 +159,16 @@ export default function Mensajes({ id, auth, onNavigate }) {
         </aside>
 
         <section className="msg-chat">
+          <button
+            type="button"
+            className="msg-back"
+            onClick={() => setActiveId(null)}
+          >
+            Volver a conversaciones
+          </button>
+          {!activeId && (
+            <p className="msg-chat-empty">Selecciona una conversación para ver los mensajes.</p>
+          )}
           {active?.producto && (
             <div className="msg-producto">
               <div className="msg-producto-info">
@@ -193,11 +206,12 @@ export default function Mensajes({ id, auth, onNavigate }) {
             <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" multiple hidden
               onChange={(event) => setAdjuntos(Array.from(event.target.files || []))} />
             <button type="button" onClick={() => fileRef.current?.click()} disabled={!activeId}>Adjuntar</button>
-            <input type="text" value={texto} onChange={(event) => setTexto(event.target.value)} placeholder="Escribe un mensaje..." />
+            <input type="text" aria-label="Escribe un mensaje" value={texto} onChange={(event) => setTexto(event.target.value)} placeholder="Escribe un mensaje..." />
             <button type="submit" disabled={!activeId}>Enviar</button>
           </form>
         </section>
-      </div>
+      </main>
+      </WorkspaceChrome>
     </div>
   )
 }

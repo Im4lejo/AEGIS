@@ -1,9 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Header from '../../layouts/Header'
+import WorkspaceChrome from '../../layouts/WorkspaceChrome'
+import PageFrame from '../../shared/PageFrame'
 import Footer from '../../layouts/Footer'
 import { avatarUrl, formatCurrency, route } from '../../shared/presentation'
 import { useAuth } from '../../../auth/useAuth'
 import { forumApi, profileApi, reviewApi } from '../../../services/api'
+import { Modal } from '../../shared/ui'
 import '../css/perfil.css'
 
 function etiquetaEstado(estado) {
@@ -62,13 +65,6 @@ const IconShare = () => (
     <circle cx="18" cy="19" r="3" />
     <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
     <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-  </svg>
-)
-
-const IconClose = ({ size = 20 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-    <line x1="18" y1="6" x2="6" y2="18" />
-    <line x1="6" y1="6" x2="18" y2="18" />
   </svg>
 )
 
@@ -232,6 +228,7 @@ export default function Perfil({ auth, onNavigate }) {
   const [textosComentario, setTextosComentario] = useState({})
   const [comentariosNuevos, setComentariosNuevos] = useState({})
   const [lightbox, setLightbox] = useState(null)
+  const closeLightbox = useCallback(() => setLightbox(null), [])
   const [toast, setToast] = useState(null)
 
   useEffect(() => {
@@ -239,15 +236,6 @@ export default function Perfil({ auth, onNavigate }) {
     const timer = setTimeout(() => setToast(null), 2600)
     return () => clearTimeout(timer)
   }, [toast])
-
-  useEffect(() => {
-    if (!lightbox) return
-    const onKeyDown = (event) => {
-      if (event.key === 'Escape') setLightbox(null)
-    }
-    document.addEventListener('keydown', onKeyDown)
-    return () => document.removeEventListener('keydown', onKeyDown)
-  }, [lightbox])
 
   let publicacionesList = [...pubsDemo]
   if (orden === 'comentados') publicacionesList.sort((a, b) => contarComentarios(b) - contarComentarios(a))
@@ -283,14 +271,20 @@ export default function Perfil({ auth, onNavigate }) {
     }
   }
 
-  if (cargandoPerfil) return <main className="perfil-empty">Cargando perfil...</main>
-  if (errorPerfil || !perfil) {
-    return <main className="perfil-empty" role="alert">{errorPerfil || 'No se pudo cargar el perfil.'}</main>
+  if (cargandoPerfil || errorPerfil || !perfil) {
+    return (
+      <PageFrame title="AEGIS | Mi Perfil" auth={auth} onNavigate={onNavigate}>
+        <main className="perfil-empty" role={cargandoPerfil ? 'status' : 'alert'}>
+          {cargandoPerfil ? 'Cargando perfil...' : errorPerfil || 'No se pudo cargar el perfil.'}
+        </main>
+      </PageFrame>
+    )
   }
 
   return (
     <div className="page-layout layout-perfil">
       <Header title="AEGIS | Mi Perfil" auth={auth} onNavigate={onNavigate} />
+      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
 
       <main className="perfil-page">
         <section className="perfil-card">
@@ -461,7 +455,7 @@ export default function Perfil({ auth, onNavigate }) {
                         <IconComment />
                         {comentarios} Comentarios
                       </button>
-                      <button type="button" className="perfil-action" onClick={() => compartir(publicacion)}>
+                      <button type="button" className="perfil-action" aria-label="Copiar enlace de la publicación" onClick={() => compartir(publicacion)}>
                         <IconShare />
                       </button>
                     </div>
@@ -493,6 +487,7 @@ export default function Perfil({ auth, onNavigate }) {
                         >
                           <input
                             type="text"
+                            aria-label="Escribe un comentario"
                             placeholder="Escribe un comentario..."
                             value={textosComentario[id] || ''}
                             onChange={(event) =>
@@ -550,18 +545,14 @@ export default function Perfil({ auth, onNavigate }) {
         </div>
       </main>
 
+      </WorkspaceChrome>
       <Footer onNavigate={onNavigate} />
 
-      {lightbox && (
-        <div className="perfil-lightbox" role="dialog" aria-label="Vista de imagen" onClick={() => setLightbox(null)}>
-          <button type="button" className="perfil-lightbox-close" aria-label="Cerrar" onClick={() => setLightbox(null)}>
-            <IconClose />
-          </button>
-          <img src={lightbox} alt="Vista ampliada" onClick={(event) => event.stopPropagation()} />
-        </div>
-      )}
+      <Modal open={Boolean(lightbox)} onClose={closeLightbox} title="Vista de imagen" className="ui-dialog--media">
+        {lightbox && <img src={lightbox} alt="Vista ampliada" />}
+      </Modal>
 
-      {toast && <div className="perfil-toast">{toast}</div>}
+      {toast && <div className="perfil-toast" role="status">{toast}</div>}
     </div>
   )
 }

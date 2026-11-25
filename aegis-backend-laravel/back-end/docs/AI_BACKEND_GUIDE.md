@@ -102,6 +102,13 @@ Cliente
 - La migración 000030 agrega índices por estado/fecha para feeds y mensajes.
 - Antes de nuevos índices o materializaciones se debe medir `EXPLAIN` con un volumen representativo.
 
+### Cierre web
+
+- Checkout y Live son limitaciones externas declaradas, no funcionalidades simuladas.
+- E2E necesita Playwright/Cypress y cuentas por rol.
+- Las rutas web deben auditarse con teclado, zoom y lectores de pantalla reales.
+- El release no está completo hasta sustituir plantillas, demo residual y VOD/Live gated.
+
 ### CLI
 
 ```text

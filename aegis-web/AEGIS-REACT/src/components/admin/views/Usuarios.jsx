@@ -47,27 +47,46 @@ export default function Usuarios({ auth }) {
           </select>
           <button type="submit">Filtrar</button>
         </form>
-        <table>
-          <thead><tr><th>Cuenta</th><th>Email</th><th>Rol</th><th>Estado</th></tr></thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.nombre} {user.apellido}<br /><small>{user.username}</small></td>
-                <td>{user.email}</td>
-                <td>
-                  <select value={user.rol} onChange={(event) => update(user, 'rol', event.target.value)}>
-                    <option value="usuario">Usuario</option><option value="owner">Owner</option><option value="admin">Admin</option>
-                  </select>
-                </td>
-                <td>
-                  <select value={user.estado} onChange={(event) => update(user, 'estado', event.target.value)}>
-                    <option value="activo">Activo</option><option value="suspendido">Suspendido</option><option value="baneado">Baneado</option>
-                  </select>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <p className="table-scroll-hint" id="admin-users-table-hint">
+          Desliza horizontalmente para ver todos los datos y controles.
+        </p>
+        <div
+          className="table-scroll-region"
+          role="region"
+          aria-label="Cuentas de usuario"
+          aria-describedby="admin-users-table-hint"
+          tabIndex={0}
+          onKeyDown={(event) => {
+            if (event.target !== event.currentTarget) return
+            const direction = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0
+            if (direction) {
+              event.preventDefault()
+              event.currentTarget.scrollBy({ left: direction * Math.max(80, event.currentTarget.clientWidth * 0.8) })
+            }
+          }}
+        >
+          <table>
+            <thead><tr><th>Cuenta</th><th>Email</th><th>Rol</th><th>Estado</th></tr></thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.nombre} {user.apellido}<br /><small>{user.username}</small></td>
+                  <td>{user.email}</td>
+                  <td>
+                    <select aria-label={`Rol de ${user.username}`} value={user.rol} onChange={(event) => update(user, 'rol', event.target.value)}>
+                      <option value="usuario">Usuario</option><option value="owner">Owner</option><option value="admin">Admin</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select aria-label={`Estado de ${user.username}`} value={user.estado} onChange={(event) => update(user, 'estado', event.target.value)}>
+                      <option value="activo">Activo</option><option value="suspendido">Suspendido</option><option value="baneado">Baneado</option>
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </main>
     </PageFrame>
   )

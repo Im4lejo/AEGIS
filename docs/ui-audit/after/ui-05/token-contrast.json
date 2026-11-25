@@ -1,0 +1,96 @@
+[
+  {
+    "theme": "light",
+    "checks": [
+      {
+        "pair": "text/surface",
+        "foreground": "#142338",
+        "background": "#ffffff",
+        "minimum": 4.5,
+        "ratio": 15.82
+      },
+      {
+        "pair": "muted/surface",
+        "foreground": "#4b5c72",
+        "background": "#ffffff",
+        "minimum": 4.5,
+        "ratio": 6.83
+      },
+      {
+        "pair": "action/action-text",
+        "foreground": "#ffffff",
+        "background": "#173a60",
+        "minimum": 4.5,
+        "ratio": 11.6
+      },
+      {
+        "pair": "danger/danger-action-text",
+        "foreground": "#ffffff",
+        "background": "#a3211a",
+        "minimum": 4.5,
+        "ratio": 7.53
+      },
+      {
+        "pair": "focus/surface",
+        "foreground": "#7a3fe0",
+        "background": "#ffffff",
+        "minimum": 3,
+        "ratio": 5.81
+      },
+      {
+        "pair": "focus/canvas",
+        "foreground": "#7a3fe0",
+        "background": "#f3f5f8",
+        "minimum": 3,
+        "ratio": 5.32
+      }
+    ]
+  },
+  {
+    "theme": "dark",
+    "checks": [
+      {
+        "pair": "text/surface",
+        "foreground": "#f0f4f8",
+        "background": "#1a2738",
+        "minimum": 4.5,
+        "ratio": 13.66
+      },
+      {
+        "pair": "muted/surface",
+        "foreground": "#c1ccda",
+        "background": "#1a2738",
+        "minimum": 4.5,
+        "ratio": 9.28
+      },
+      {
+        "pair": "action/action-text",
+        "foreground": "#10243b",
+        "background": "#b7d5ff",
+        "minimum": 4.5,
+        "ratio": 10.45
+      },
+      {
+        "pair": "danger/danger-action-text",
+        "foreground": "#3b1111",
+        "background": "#ff9a91",
+        "minimum": 4.5,
+        "ratio": 8.07
+      },
+      {
+        "pair": "focus/surface",
+        "foreground": "#d2afff",
+        "background": "#1a2738",
+        "minimum": 3,
+        "ratio": 8.13
+      },
+      {
+        "pair": "focus/canvas",
+        "foreground": "#d2afff",
+        "background": "#101927",
+        "minimum": 3,
+        "ratio": 9.51
+      }
+    ]
+  }
+]
