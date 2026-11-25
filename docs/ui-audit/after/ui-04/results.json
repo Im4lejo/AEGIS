@@ -1,0 +1,1026 @@
+[
+  {
+    "name": "marketplace",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "detalle-producto",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "publicar-producto",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "mis-productos",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "mensajes",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "tiendas",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "puntos-fisicos",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "configurar-encuentro",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "ajustes",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "seguridad",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "administracion",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-usuarios",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-reportes",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-auditoria",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-configuracion",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "vendedor-no-disponible",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "marketplace",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "detalle-producto",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "publicar-producto",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "mis-productos",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "mensajes",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "tiendas",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "puntos-fisicos",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "configurar-encuentro",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "ajustes",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "seguridad",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "administracion",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-usuarios",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-reportes",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-auditoria",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-configuracion",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "vendedor-no-disponible",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "marketplace",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "detalle-producto",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "publicar-producto",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "mis-productos",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "mensajes",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "tiendas",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "puntos-fisicos",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "configurar-encuentro",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "ajustes",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "seguridad",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "administracion",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-usuarios",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-reportes",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-auditoria",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-configuracion",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "vendedor-no-disponible",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "marketplace",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "detalle-producto",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "publicar-producto",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "mis-productos",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "mensajes",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "tiendas",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "puntos-fisicos",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "configurar-encuentro",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "ajustes",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "seguridad",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "administracion",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-usuarios",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-reportes",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-auditoria",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-configuracion",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "vendedor-no-disponible",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "marketplace",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "detalle-producto",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "publicar-producto",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "mis-productos",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "mensajes",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "tiendas",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "puntos-fisicos",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "configurar-encuentro",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "ajustes",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "seguridad",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "administracion",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-usuarios",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-reportes",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-auditoria",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-configuracion",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "vendedor-no-disponible",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "marketplace",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "detalle-producto",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "publicar-producto",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "mis-productos",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "mensajes",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "tiendas",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "puntos-fisicos",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "configurar-encuentro",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "ajustes",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "seguridad",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "administracion",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-usuarios",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-reportes",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-auditoria",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-configuracion",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "vendedor-no-disponible",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "marketplace",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "detalle-producto",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "publicar-producto",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "mis-productos",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "mensajes",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "tiendas",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "puntos-fisicos",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "configurar-encuentro",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "ajustes",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "seguridad",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "administracion",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-usuarios",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-reportes",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-auditoria",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-configuracion",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "vendedor-no-disponible",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "marketplace",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "detalle-producto",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "publicar-producto",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "mis-productos",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "mensajes",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "tiendas",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "puntos-fisicos",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "configurar-encuentro",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "ajustes",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "seguridad",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "administracion",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-usuarios",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-reportes",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-auditoria",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "admin-configuracion",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  },
+  {
+    "name": "vendedor-no-disponible",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false
+  }
+]

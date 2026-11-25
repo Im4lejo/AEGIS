@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
+import WorkspaceChrome from '../../layouts/WorkspaceChrome'
 import Footer from '../../layouts/Footer'
 import { searchApi } from '../../../services/api'
 import '../css/busqueda.css'
@@ -68,6 +69,7 @@ export default function Busqueda({ auth, onNavigate, filtros = {} }) {
   return (
     <div className="page-layout">
       <Header title="AEGIS | Búsqueda" auth={auth} onNavigate={onNavigate} />
+      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
       <main className="busqueda-page">
         <form className="busqueda-form" onSubmit={submit}>
           <label htmlFor="busqueda-global">Buscar en AEGIS</label>
@@ -122,6 +124,7 @@ export default function Busqueda({ auth, onNavigate, filtros = {} }) {
           </aside>
         )}
       </main>
+      </WorkspaceChrome>
       <Footer onNavigate={onNavigate} />
     </div>
   )

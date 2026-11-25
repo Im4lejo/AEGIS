@@ -24,13 +24,13 @@ const IconTrend = () => (
 const TEMAS = ['Celulares', 'Computadores', 'Televisores', 'Más']
 
 export default function Sidebar({ busqueda, setBusqueda, orden, setOrden, temaActivo, setTemaActivo, onNavigate }) {
-    const irPlantilla = (origen) => navigateTo(`/plantilla?origen=${origen}`, onNavigate)
 
     return (
         <aside className="foro-sidebar">
             <div className="foro-search">
                 <input
                     type="text"
+                    aria-label="Buscar conversación"
                     placeholder="Buscar Conversación"
                     value={busqueda}
                     onChange={(event) => setBusqueda(event.target.value)}
@@ -74,16 +74,16 @@ export default function Sidebar({ busqueda, setBusqueda, orden, setOrden, temaAc
             <hr className="foro-side-divider" />
 
             <div className="foro-side-nav">
-                <button type="button" className="foro-info-link" onClick={() => irPlantilla('reglas-del-foro')}>
+                <button type="button" className="foro-info-link" disabled title="Contenido próximamente">
                     Reglas del foro
                 </button>
-                <button type="button" className="foro-info-link" onClick={() => irPlantilla('politica-privacidad')}>
+                <button type="button" className="foro-info-link" disabled title="Contenido próximamente">
                     Política Privacidad
                 </button>
-                <button type="button" className="foro-info-link" onClick={() => irPlantilla('terminos-y-condiciones')}>
+                <button type="button" className="foro-info-link" disabled title="Contenido próximamente">
                     Terminos y Condiciones
                 </button>
-                <button type="button" className="foro-info-link" onClick={() => irPlantilla('ayuda')}>
+                <button type="button" className="foro-info-link" disabled title="Contenido próximamente">
                     Ayuda
                 </button>
             </div>

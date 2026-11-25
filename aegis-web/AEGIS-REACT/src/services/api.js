@@ -602,6 +602,66 @@ export const moderationApi = {
     }),
 }
 
+export const personalDataApi = {
+  sellerStats: (periodo, token) =>
+    request(`/datos-vendedor${queryString({ periodo })}`, { token }),
+  activity: (filters = {}, token) =>
+    request(`/mi-actividad${queryString(filters)}`, { token }),
+  exportData: (token) =>
+    request('/datos/exportacion', {
+      method: 'POST',
+      body: { confirmacion: 'EXPORTAR' },
+      token,
+    }),
+  privacyRequest: (tipo, motivo, token) =>
+    request('/datos/privacidad', {
+      method: 'POST',
+      body: { tipo, motivo, confirmacion: 'CONFIRME' },
+      token,
+    }),
+  privacyRequests: (token) => request('/datos/privacidad', { token }),
+}
+
+export const adminApi = {
+  dashboard: (periodo, token) =>
+    request(`/admin/dashboard${queryString({ periodo })}`, { token }),
+  users: (filters = {}, token) =>
+    request(`/admin/users${queryString(filters)}`, { token }),
+  updateUser: (id, details, token) =>
+    request(`/admin/users/${encodeURIComponent(id)}`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  categories: (token) => request('/admin/categorias', { token }),
+  createCategory: (details, token) =>
+    request('/admin/categorias', { method: 'POST', body: details, token }),
+  updateCategory: (id, details, token) =>
+    request(`/admin/categorias/${encodeURIComponent(id)}`, {
+      method: 'PATCH',
+      body: details,
+      token,
+    }),
+  notices: (token) => request('/admin/avisos', { token }),
+  createNotice: (details, token) =>
+    request('/admin/avisos', { method: 'POST', body: details, token }),
+  configuration: (token) => request('/admin/configuracion', { token }),
+  updateConfiguration: (details, token) =>
+    request('/admin/configuracion', { method: 'PUT', body: details, token }),
+  permissions: (token) => request('/admin/permisos', { token }),
+  grantPermission: (details, token) =>
+    request('/admin/permisos', { method: 'POST', body: details, token }),
+  revokePermission: (id, token) =>
+    request(`/admin/permisos/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      token,
+    }),
+  audit: (filters = {}, token) =>
+    request(`/admin/auditoria${queryString(filters)}`, { token }),
+  exportAudit: (token) =>
+    request('/admin/auditoria/exportar', { token }),
+}
+
 export const meetingApi = {
   points: (filters = {}) => request(`/puntos-fisicos/directorio${queryString(filters)}`),
   meetings: (estado = null, token) =>

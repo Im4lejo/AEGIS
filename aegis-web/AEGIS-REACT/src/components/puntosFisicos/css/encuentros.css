@@ -442,3 +442,133 @@
     justify-content: center;
   }
 }
+
+.enc-pagina {
+  color: var(--color-text);
+}
+
+.enc-volver {
+  min-height: 44px;
+  color: var(--color-action);
+}
+
+.enc-cabecera {
+  border-color: var(--color-border);
+}
+
+.enc-cabecera::after,
+.enc-seguridad-titulo::after {
+  height: 1px;
+  background: var(--color-border);
+}
+
+.enc-cabecera-icono,
+.enc-btn-confirmar {
+  background: var(--color-action);
+  color: var(--color-action-text);
+}
+
+.enc-titulo,
+.enc-producto-nombre,
+.enc-seguridad-titulo h3,
+.enc-seguridad-item h4,
+.enc-exito h2 {
+  color: var(--color-text);
+}
+
+.enc-subtitulo,
+.enc-producto-vendedor,
+.enc-seguridad-item p,
+.enc-exito-nota {
+  color: var(--color-text-muted);
+}
+
+.enc-panel,
+.enc-seguridad {
+  border-color: var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-card);
+}
+
+.enc-producto {
+  border-color: var(--color-border);
+}
+
+.enc-producto-precio {
+  color: var(--color-action);
+}
+
+.enc-producto-vendedor i,
+.enc-exito > i {
+  color: var(--color-success);
+}
+
+.enc-campo > span {
+  color: var(--color-text);
+}
+
+.enc-campo input[type="date"],
+.enc-campo textarea,
+.enc-select select {
+  min-height: 44px;
+  border-color: var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.enc-campo :is(input, select, textarea):focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+  border-color: var(--color-focus);
+}
+
+.enc-select i {
+  color: var(--color-action);
+}
+
+.enc-btn-cancelar {
+  min-height: 44px;
+  border-color: var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.enc-btn-cancelar:hover {
+  background: var(--color-surface-muted);
+}
+
+.enc-btn-confirmar {
+  min-height: 44px;
+  border: 1px solid var(--color-action);
+  border-radius: var(--radius-control);
+}
+
+.enc-btn-confirmar:hover:not(:disabled) {
+  background: var(--color-action-hover);
+}
+
+.enc-btn-confirmar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.enc-seguridad-titulo span,
+.enc-seguridad-icono {
+  background: var(--color-info-soft);
+  color: var(--color-info-text);
+}
+
+.enc-seguridad-nota {
+  border-left-color: var(--color-warning-text);
+  background: var(--color-warning-soft);
+  color: var(--color-warning-text);
+}
+
+.enc-pagina :is(button, input, select, textarea):focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}

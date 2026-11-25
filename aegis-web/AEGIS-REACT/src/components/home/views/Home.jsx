@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { advancedContentApi, productApi } from '../../../services/api'
 import Header from '../../layouts/Header'
+import WorkspaceChrome from '../../layouts/WorkspaceChrome'
 import Footer from '../../layouts/Footer'
 import { route } from '../../shared/presentation'
 import {
@@ -9,6 +10,7 @@ import {
   EmptyState,
   ErrorState,
   Input,
+  Modal,
   ProductCard,
   Skeleton,
   Tabs,
@@ -61,6 +63,7 @@ export default function Home({ auth, message, onNavigate }) {
   const [stories, setStories] = useState([])
   const [selectedStory, setSelectedStory] = useState(null)
   const [storyError, setStoryError] = useState('')
+  const closeStory = useCallback(() => setSelectedStory(null), [])
 
   useEffect(() => {
     let active = true
@@ -143,7 +146,7 @@ export default function Home({ auth, message, onNavigate }) {
     },
     {
       id: 'siguiendo',
-      label: 'Siguiendo · próximamente',
+      label: 'Siguiendo',
       disabled: true,
       disabledReason: 'El feed de cuentas seguidas aún no está disponible.',
       content: null,
@@ -168,6 +171,7 @@ export default function Home({ auth, message, onNavigate }) {
   return (
     <div className="page-layout home-layout">
       <Header auth={auth} onNavigate={onNavigate} title="AEGIS | Inicio" />
+      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
       <main className="home-container">
         {feedback && (
           <div className="home-feedback" role="status">
@@ -184,15 +188,14 @@ export default function Home({ auth, message, onNavigate }) {
           </div>
           {storyError && <p role="alert">{storyError}</p>}
           {stories.length ? (
-            <div className="aegis-stories__rail" role="list">
+            <div className="aegis-stories__rail">
               {stories.map((story) => (
                 <button
                   type="button"
-                  role="listitem"
                   className="aegis-story"
                   key={story.id}
                   onClick={() => openStory(story)}
-                  aria-label={`Abrir historia de ${story.usuario?.nombre || story.usuario?.username || 'usuario'}`}
+                  aria-label={`Abrir historia de ${story.usuario?.username || story.usuario?.nombre || 'Usuario'}`}
                 >
                   {story.tipo_media === 'video'
                     ? <video src={story.media_url} muted aria-hidden="true" />
@@ -204,15 +207,16 @@ export default function Home({ auth, message, onNavigate }) {
           ) : (
             <p className="aegis-stories__empty">No hay historias disponibles.</p>
           )}
-          {selectedStory && (
-            <div className="aegis-story-viewer" role="dialog" aria-modal="true" aria-label="Historia">
-              <button type="button" onClick={() => setSelectedStory(null)} aria-label="Cerrar historia">Cerrar</button>
+          <Modal open={Boolean(selectedStory)} onClose={closeStory} title="Historia" className="ui-dialog--media">
+            {selectedStory && (
+              <>
               {selectedStory.tipo_media === 'video'
                 ? <video src={selectedStory.media_url} controls autoPlay />
                 : <img src={selectedStory.media_url} alt={selectedStory.texto || 'Historia'} />}
               {selectedStory.texto && <p>{selectedStory.texto}</p>}
-            </div>
-          )}
+              </>
+            )}
+          </Modal>
         </section>
 
         <Card className="home-composer">
@@ -259,6 +263,7 @@ export default function Home({ auth, message, onNavigate }) {
           <Tabs label="Feed de inicio" tabs={tabs} />
         </section>
       </main>
+      </WorkspaceChrome>
       <Footer onNavigate={onNavigate} />
     </div>
   )

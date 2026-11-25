@@ -29,6 +29,7 @@ import {
   Toast,
 } from './index'
 import { ThemeProvider, ThemeSelector } from '../../../theme/ThemeProvider'
+import Styleguide from './Styleguide'
 
 afterEach(() => {
   cleanup()
@@ -171,10 +172,22 @@ describe('shared accessible components', () => {
     expect(container.querySelectorAll('button')).toHaveLength(0)
   })
 
+  it('preserves the accessible name of an avatar image', () => {
+    render(<Avatar name="Ana Pérez" src="/avatar.png" />)
+    expect(screen.getByRole('img', { name: 'Ana Pérez' })).toBeTruthy()
+  })
+
   it('links product cards to the existing detail route and keeps post content semantic', () => {
     render(
       <>
-        <ProductCard product={{ id: 21, titulo: 'Teclado', precio: 120000 }} />
+        <ProductCard
+          product={{
+            id: 21,
+            titulo: 'Teclado',
+            precio: 120000,
+            categoria: { nombre: 'Hardware' },
+          }}
+        />
         <PostCard
           post={{
             autor: 'ana',
@@ -187,6 +200,7 @@ describe('shared accessible components', () => {
     expect(
       screen.getByRole('link', { name: /Teclado/ }).getAttribute('href'),
     ).toBe('#/productos/detalle?id=21')
+    expect(screen.getByRole('link', { name: /Teclado.*Hardware/ })).toBeTruthy()
     expect(screen.getByRole('article').textContent).toContain(
       '¿Qué recomiendan?',
     )
@@ -227,6 +241,23 @@ describe('shared accessible components', () => {
     expect(window.localStorage.getItem('aegis.theme.preference.v1')).toBe(
       'dark',
     )
+  })
+
+  it('lets the internal guide exercise shared controls', async () => {
+    render(
+      <ThemeProvider>
+        <Styleguide />
+      </ThemeProvider>,
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'Abrir diálogo' }))
+    expect(screen.getByRole('dialog')).toBeTruthy()
+    fireEvent.keyDown(document, { key: 'Escape' })
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+    fireEvent.click(screen.getByRole('tab', { name: 'Segunda' }))
+    expect(screen.getByRole('tabpanel').textContent).toContain('segunda')
+    fireEvent.click(screen.getByRole('button', { name: 'Opciones' }))
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Mostrar aviso' }))
+    expect(screen.getByText('Aviso de ejemplo.')).toBeTruthy()
   })
 
   it('renders a safe error boundary fallback', () => {

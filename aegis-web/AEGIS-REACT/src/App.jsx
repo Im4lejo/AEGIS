@@ -1,5 +1,5 @@
 import './App.css'
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import {
   HashRouter,
   Routes,
@@ -12,40 +12,57 @@ import {
 import { AuthProvider } from './auth/AuthProvider'
 import { useAuth } from './auth/useAuth'
 import Home from './components/home/views/Home'
-import Foro from './components/foro/views/Foro'
-import Publicacion from './components/foro/views/Publicacion'
-import ProductosIndex from './components/productos/views/Index'
-import PublicarProducto from './components/productos/views/PublicarProducto'
-import DetalleProducto from './components/productos/views/Detalle'
-import MisProductos from './components/productos/views/MisProductos'
-import Perfil from './components/perfil/views/Perfil'
-import Vendedor from './components/perfil/views/Vendedor'
-import EditarPerfil from './components/perfil/views/Editar'
-import Login from './components/auth/views/Login'
-import Register from './components/auth/views/Register'
-import ForgotPassword from './components/auth/views/ForgotPassword'
-import ResetPassword from './components/auth/views/ResetPassword'
-import VerifyEmail from './components/auth/views/VerifyEmail'
-import EmailVerified from './components/auth/views/EmailVerified'
-import AccountSecurity from './components/auth/views/AccountSecurity'
-import PuntosFisicos from './components/puntosFisicos/views/Index'
-import Mensajes from './components/mensajes/views/Mensajes'
-import Encuentros from './components/puntosFisicos/views/Encuentros'
-import Admin from './components/admin/views/Dashboard'
-import AdminReportes from './components/admin/views/Reportes'
-import Plantilla from './components/shared/Plantilla'
+const Foro = lazy(() => import('./components/foro/views/Foro'))
+const Publicacion = lazy(() => import('./components/foro/views/Publicacion'))
+const ProductosIndex = lazy(() => import('./components/productos/views/Index'))
+const PublicarProducto = lazy(() => import('./components/productos/views/PublicarProducto'))
+const DetalleProducto = lazy(() => import('./components/productos/views/Detalle'))
+const MisProductos = lazy(() => import('./components/productos/views/MisProductos'))
+const Perfil = lazy(() => import('./components/perfil/views/Perfil'))
+const Vendedor = lazy(() => import('./components/perfil/views/Vendedor'))
+const EditarPerfil = lazy(() => import('./components/perfil/views/Editar'))
+const Login = lazy(() => import('./components/auth/views/Login'))
+const Register = lazy(() => import('./components/auth/views/Register'))
+const ForgotPassword = lazy(() => import('./components/auth/views/ForgotPassword'))
+const ResetPassword = lazy(() => import('./components/auth/views/ResetPassword'))
+const VerifyEmail = lazy(() => import('./components/auth/views/VerifyEmail'))
+const EmailVerified = lazy(() => import('./components/auth/views/EmailVerified'))
+const AccountSecurity = lazy(() => import('./components/auth/views/AccountSecurity'))
+const PuntosFisicos = lazy(() => import('./components/puntosFisicos/views/Index'))
+const Mensajes = lazy(() => import('./components/mensajes/views/Mensajes'))
+const Encuentros = lazy(() => import('./components/puntosFisicos/views/Encuentros'))
+const Admin = lazy(() => import('./components/admin/views/Dashboard'))
+const AdminReportes = lazy(() => import('./components/admin/views/Reportes'))
+const AdminUsuarios = lazy(() => import('./components/admin/views/Usuarios'))
+const AdminAuditoria = lazy(() => import('./components/admin/views/Auditoria'))
+const AdminConfiguracion = lazy(() => import('./components/admin/views/Configuracion'))
+const Plantilla = lazy(() => import('./components/shared/Plantilla'))
+const Styleguide = import.meta.env.DEV
+  ? lazy(() => import('./components/shared/ui/Styleguide'))
+  : null
 import { NotFoundPage } from './components/shared/ApiState'
+import PageFrame from './components/shared/PageFrame'
 import { AccessRestrictedState } from './components/shared/ui'
 import { ErrorBoundary } from './components/shared/ui'
 import { ThemeProvider } from './theme/ThemeProvider'
-import Comunidades from './components/comunidades/views/Comunidades'
-import Tiendas from './components/tiendas/views/Tiendas'
-import Negociacion from './components/negociacion/views/Negociacion'
-import Notificaciones from './components/notificaciones/views/Notificaciones'
-import Busqueda from './components/busqueda/views/Busqueda'
-import Ajustes from './components/ajustes/views/Ajustes'
-import MisReportes from './components/notificaciones/views/MisReportes'
+const Comunidades = lazy(() => import('./components/comunidades/views/Comunidades'))
+const Tiendas = lazy(() => import('./components/tiendas/views/Tiendas'))
+const Negociacion = lazy(() => import('./components/negociacion/views/Negociacion'))
+const Notificaciones = lazy(() => import('./components/notificaciones/views/Notificaciones'))
+const Busqueda = lazy(() => import('./components/busqueda/views/Busqueda'))
+const Ajustes = lazy(() => import('./components/ajustes/views/Ajustes'))
+const MisReportes = lazy(() => import('./components/notificaciones/views/MisReportes'))
+const DatosPersonales = lazy(() => import('./components/ajustes/views/DatosPersonales'))
 import './design-system/design-system.css'
+
+function RouteLoadingFallback() {
+  return (
+    <main className="route-loading" role="status" aria-live="polite">
+      <div className="route-loading__bar" aria-hidden="true" />
+      Cargando contenido…
+    </main>
+  )
+}
 
 function Vista({ Componente }) {
   const navigate = useNavigate()
@@ -93,24 +110,32 @@ function Vista({ Componente }) {
     '/configurar-encuentro',
     '/admin',
     '/admin/reportes',
+    '/admin/usuarios',
+    '/admin/auditoria',
+    '/admin/configuracion',
     '/mis-reportes',
+    '/datos-personales',
   ].includes(location.pathname)
 
   if (requiereSesion && session.loading) {
     return (
-      <main className="auth-loading" aria-live="polite">
-        Verificando sesión...
-      </main>
+      <PageFrame title="AEGIS | Verificando sesión" auth={auth} onNavigate={onNavigate}>
+        <main className="auth-loading" aria-live="polite">
+          Verificando sesión...
+        </main>
+      </PageFrame>
     )
   }
   if (requiereSesion && session.token && session.error) {
     return (
-      <main className="auth-loading" role="alert">
-        <p>No se pudo verificar tu sesión: {session.error}</p>
-        <button type="button" onClick={session.retrySession}>
-          Reintentar
-        </button>
-      </main>
+      <PageFrame title="AEGIS | Error de sesión" auth={auth} onNavigate={onNavigate}>
+        <main className="auth-loading" role="alert">
+          <p>No se pudo verificar tu sesión: {session.error}</p>
+          <button type="button" onClick={session.retrySession}>
+            Reintentar
+          </button>
+        </main>
+      </PageFrame>
     )
   }
   if (requiereSesion && !session.isAuthenticated) {
@@ -118,9 +143,13 @@ function Vista({ Componente }) {
   }
   if (session.isAuthenticated && session.user?.estado !== 'activo') {
     return (
-      <AccessRestrictedState
-        message="Cuenta suspendida: no puedes realizar operaciones ni acceder a funciones protegidas."
-      />
+      <PageFrame title="AEGIS | Acceso restringido" auth={auth} onNavigate={onNavigate}>
+        <main>
+          <AccessRestrictedState
+            message="Cuenta suspendida: no puedes realizar operaciones ni acceder a funciones protegidas."
+          />
+        </main>
+      </PageFrame>
     )
   }
   if (
@@ -129,9 +158,13 @@ function Vista({ Componente }) {
     && session.user?.rol !== 'admin'
   ) {
     return (
-      <AccessRestrictedState
-        message="Esta sección requiere permisos de administración."
-      />
+      <PageFrame title="AEGIS | Acceso restringido" auth={auth} onNavigate={onNavigate}>
+        <main>
+          <AccessRestrictedState
+            message="Esta sección requiere permisos de administración."
+          />
+        </main>
+      </PageFrame>
     )
   }
 
@@ -156,7 +189,8 @@ function App() {
       <ThemeProvider>
         <AuthProvider>
           <HashRouter>
-            <Routes>
+            <Suspense fallback={<RouteLoadingFallback />}>
+              <Routes>
               <Route path="/" element={<Vista Componente={Home} />} />
               <Route path="/home" element={<Vista Componente={Home} />} />
               <Route path="/foro" element={<Vista Componente={Foro} />} />
@@ -167,6 +201,7 @@ function App() {
               <Route path="/busqueda" element={<Vista Componente={Busqueda} />} />
               <Route path="/ajustes" element={<Vista Componente={Ajustes} />} />
               <Route path="/mis-reportes" element={<Vista Componente={MisReportes} />} />
+              <Route path="/datos-personales" element={<Vista Componente={DatosPersonales} />} />
               <Route
                 path="/publicacion"
                 element={<Vista Componente={Publicacion} />}
@@ -198,7 +233,11 @@ function App() {
               />
               <Route
                 path="/vendedor"
-                element={<Vista Componente={Vendedor} />}
+                element={
+                  <main role="alert" className="route-loading">
+                    Esta vista requiere un identificador real de perfil. Usa el perfil público del anuncio.
+                  </main>
+                }
               />
               <Route
                 path="/puntos-fisicos"
@@ -214,6 +253,9 @@ function App() {
               />
               <Route path="/admin" element={<Vista Componente={Admin} />} />
               <Route path="/admin/reportes" element={<Vista Componente={AdminReportes} />} />
+              <Route path="/admin/usuarios" element={<Vista Componente={AdminUsuarios} />} />
+              <Route path="/admin/auditoria" element={<Vista Componente={AdminAuditoria} />} />
+              <Route path="/admin/configuracion" element={<Vista Componente={AdminConfiguracion} />} />
               <Route path="/login" element={<Vista Componente={Login} />} />
               <Route
                 path="/forgot-password"
@@ -243,8 +285,12 @@ function App() {
                 path="/plantilla"
                 element={<Vista Componente={Plantilla} />}
               />
+              {import.meta.env.DEV && (
+                <Route path="/styleguide" element={<Styleguide />} />
+              )}
               <Route path="*" element={<Vista Componente={NotFoundPage} />} />
             </Routes>
+            </Suspense>
           </HashRouter>
         </AuthProvider>
       </ThemeProvider>

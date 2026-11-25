@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
+import WorkspaceChrome from '../../layouts/WorkspaceChrome'
 import Footer from '../../layouts/Footer'
 import { avatarUrl } from '../../shared/presentation'
 import { profileApi } from '../../../services/api'
@@ -296,6 +297,7 @@ export default function Editar({ auth, onNavigate, id }) {
   return (
     <div className="page-layout">
       <Header title="AEGIS | Editar Perfil" auth={auth} onNavigate={onNavigate} />
+      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
 
       <main className="editar-page">
         <aside className="editar-nav">
@@ -505,6 +507,7 @@ export default function Editar({ auth, onNavigate, id }) {
 
       {toast && <div className="editar-toast">{toast}</div>}
 
+      </WorkspaceChrome>
       <Footer onNavigate={onNavigate} />
     </div>
   )

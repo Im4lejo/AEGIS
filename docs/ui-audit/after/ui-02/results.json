@@ -1,0 +1,317 @@
+[
+  {
+    "name": "real-home-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "real-marketplace-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "real-foro-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "real-comunidades-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "real-privada-redireccion-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "fixture-home-vacio-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "fixture-mensajes-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "fixture-ajustes-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "fixture-datos-personales-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "fixture-perfil-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "fixture-admin-restringido-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "fixture-home-datos-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "fixture-admin-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "fixture-admin-menu-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "fixture-mensajes-datos-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "real-home-768",
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "real-marketplace-768",
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "real-foro-768",
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "real-comunidades-768",
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "real-privada-redireccion-768",
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "fixture-home-vacio-768",
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "fixture-mensajes-768",
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "fixture-ajustes-768",
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "fixture-datos-personales-768",
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "fixture-perfil-768",
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "fixture-admin-restringido-768",
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "fixture-home-datos-768",
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "fixture-admin-768",
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "fixture-mensajes-datos-768",
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "real-home-1280",
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "real-marketplace-1280",
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "real-foro-1280",
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "real-comunidades-1280",
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "real-privada-redireccion-1280",
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "fixture-home-vacio-1280",
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "fixture-mensajes-1280",
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "fixture-ajustes-1280",
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "fixture-datos-personales-1280",
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "fixture-perfil-1280",
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "fixture-admin-restringido-1280",
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "fixture-home-datos-1280",
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "fixture-admin-1280",
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "fixture-mensajes-datos-1280",
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "real-home-1440",
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "real-marketplace-1440",
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "real-foro-1440",
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "real-comunidades-1440",
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "real-privada-redireccion-1440",
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "fixture-home-vacio-1440",
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "fixture-mensajes-1440",
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "fixture-ajustes-1440",
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "fixture-datos-personales-1440",
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "fixture-perfil-1440",
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "fixture-admin-restringido-1440",
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "fixture-home-datos-1440",
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "fixture-admin-1440",
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "fixture-mensajes-datos-1440",
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "real-menu-abierto-light-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "real-menu-cerrado-light-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "real-filtros-foro-light-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "real-menu-abierto-dark-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "real-menu-cerrado-dark-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "real-filtros-foro-dark-360",
+    "clientWidth": 360,
+    "scrollWidth": 360
+  }
+]

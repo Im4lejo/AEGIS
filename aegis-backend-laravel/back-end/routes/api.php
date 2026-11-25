@@ -22,6 +22,8 @@ use App\Http\Controllers\Api\TiendaController;
 use App\Http\Controllers\Api\WebAuthController;
 use App\Http\Controllers\Api\VideoController;
 use App\Http\Controllers\Api\ModeracionController;
+use App\Http\Controllers\Api\AdminCenterController;
+use App\Http\Controllers\Api\PersonalDataController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/inicio', InicioController::class);
@@ -93,6 +95,11 @@ Route::prefix('auth/web')->name('auth.web.')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
+    Route::get('/mi-actividad', [PersonalDataController::class, 'activity']);
+    Route::get('/datos-vendedor', [PersonalDataController::class, 'sellerStats']);
+    Route::post('/datos/exportacion', [PersonalDataController::class, 'exportData']);
+    Route::post('/datos/privacidad', [PersonalDataController::class, 'privacyRequest']);
+    Route::get('/datos/privacidad', [PersonalDataController::class, 'privacyRequests']);
     Route::post('/live/sessions', [VideoController::class, 'liveUnavailable'])->middleware('account.active');
     Route::post('/historias', [ContenidoAvanzadoController::class, 'createStory'])->middleware(['account.active', 'verified.web']);
     Route::delete('/historias/{historia}', [ContenidoAvanzadoController::class, 'deleteStory'])->whereNumber('historia')->middleware('account.active');
@@ -237,6 +244,21 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/puntos-fisicos/{punto}', [PuntoFisicoController::class, 'update'])->whereNumber('punto');
         Route::get('/admin/usuarios', [AdminAuthorizationController::class, 'usuarios']);
         Route::patch('/admin/usuarios/{usuario}', [AdminAuthorizationController::class, 'updateUsuario'])->whereNumber('usuario');
+        Route::get('/admin/dashboard', [AdminCenterController::class, 'dashboard']);
+        Route::get('/admin/users', [AdminCenterController::class, 'users']);
+        Route::patch('/admin/users/{usuario}', [AdminCenterController::class, 'updateUser'])->whereNumber('usuario');
+        Route::get('/admin/categorias', [AdminCenterController::class, 'categories']);
+        Route::post('/admin/categorias', [AdminCenterController::class, 'storeCategory']);
+        Route::patch('/admin/categorias/{categoria}', [AdminCenterController::class, 'updateCategory'])->whereNumber('categoria');
+        Route::get('/admin/avisos', [AdminCenterController::class, 'notices']);
+        Route::post('/admin/avisos', [AdminCenterController::class, 'storeNotice']);
+        Route::get('/admin/configuracion', [AdminCenterController::class, 'configuration']);
+        Route::put('/admin/configuracion', [AdminCenterController::class, 'updateConfiguration']);
+        Route::get('/admin/permisos', [AdminCenterController::class, 'permissions']);
+        Route::post('/admin/permisos', [AdminCenterController::class, 'grantPermission']);
+        Route::delete('/admin/permisos/{permiso}', [AdminCenterController::class, 'revokePermission'])->whereNumber('permiso');
+        Route::get('/admin/auditoria', [AdminCenterController::class, 'auditLog']);
+        Route::get('/admin/auditoria/exportar', [AdminCenterController::class, 'exportAudit']);
     });
     Route::post('/foro/{publicacion}/comentarios', [ForoController::class, 'storeComment'])
         ->whereNumber('publicacion')

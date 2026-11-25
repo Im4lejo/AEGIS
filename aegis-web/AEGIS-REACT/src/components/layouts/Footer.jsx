@@ -32,10 +32,10 @@ export default function Footer({ onNavigate }) {
                     <div className="footer-column">
                         <h4>Soporte</h4>
                         <ul>
-                            <li><a href={route('/plantilla?origen=centro-ayuda')} onClick={(e) => go(e, '/plantilla?origen=centro-ayuda')}>Centro de Ayuda</a></li>
-                            <li><a href={route('/plantilla?origen=preguntas-frecuentes')} onClick={(e) => go(e, '/plantilla?origen=preguntas-frecuentes')}>Preguntas Frecuentes</a></li>
-                            <li><a href={route('/plantilla?origen=terminos-y-condiciones')} onClick={(e) => go(e, '/plantilla?origen=terminos-y-condiciones')}>Términos y Condiciones</a></li>
-                            <li><a href={route('/plantilla?origen=politica-privacidad')} onClick={(e) => go(e, '/plantilla?origen=politica-privacidad')}>Políticas de Privacidad</a></li>
+                            <li><span aria-disabled="true">Centro de Ayuda · próximamente</span></li>
+                            <li><span aria-disabled="true">Preguntas Frecuentes · próximamente</span></li>
+                            <li><span aria-disabled="true">Términos y Condiciones · próximamente</span></li>
+                            <li><span aria-disabled="true">Políticas de Privacidad · próximamente</span></li>
                         </ul>
                     </div>
 

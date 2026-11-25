@@ -1,0 +1,218 @@
+[
+  {
+    "name": "inicio",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "name": "foro",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "publicacion",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "comunidades",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "perfil",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1
+      },
+      {
+        "id": "color-contrast",
+        "count": 3
+      }
+    ]
+  },
+  {
+    "name": "editar-perfil",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "inicio",
+    "theme": "light",
+    "width": 1440,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "name": "foro",
+    "theme": "light",
+    "width": 1440,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "publicacion",
+    "theme": "light",
+    "width": 1440,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "comunidades",
+    "theme": "light",
+    "width": 1440,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "perfil",
+    "theme": "light",
+    "width": 1440,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "name": "editar-perfil",
+    "theme": "light",
+    "width": 1440,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "inicio",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "name": "foro",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "publicacion",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "comunidades",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "perfil",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1
+      },
+      {
+        "id": "color-contrast",
+        "count": 3
+      }
+    ]
+  },
+  {
+    "name": "editar-perfil",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "inicio",
+    "theme": "dark",
+    "width": 1440,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "name": "foro",
+    "theme": "dark",
+    "width": 1440,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "publicacion",
+    "theme": "dark",
+    "width": 1440,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "comunidades",
+    "theme": "dark",
+    "width": 1440,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "perfil",
+    "theme": "dark",
+    "width": 1440,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "name": "editar-perfil",
+    "theme": "dark",
+    "width": 1440,
+    "violations": [],
+    "incomplete": []
+  }
+]

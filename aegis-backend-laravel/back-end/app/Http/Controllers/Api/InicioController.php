@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductoResource;
 use App\Models\Producto;
+use Illuminate\Support\Facades\Cache;
 
 class InicioController extends Controller
 {
     public function __invoke()
     {
-        $productos = Producto::query()
+        $productos = Cache::remember('inicio:productos:v1', 60, fn () => Producto::query()
             ->activo()
             ->with([
                 'categoria:id,nombre,descripcion',
@@ -19,7 +20,7 @@ class InicioController extends Controller
             ])
             ->latest('fecha_publicacion')
             ->limit(8)
-            ->get();
+            ->get());
 
         return ProductoResource::collection($productos);
     }

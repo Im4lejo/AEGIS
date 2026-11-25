@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
+import WorkspaceChrome from '../../layouts/WorkspaceChrome'
 import Footer from '../../layouts/Footer'
 import { formatCurrency } from '../../shared/presentation'
 import { useAuth } from '../../../auth/useAuth'
@@ -151,6 +152,7 @@ export default function PublicarProducto({ auth, onNavigate }) {
     return (
         <div className="page-layout publish-layout">
             <Header title="AEGIS | Publicar Producto" auth={auth} onNavigate={onNavigate} />
+            <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
 
             <main className="main-content publish-page">
                 <form onSubmit={publicar}>
@@ -341,7 +343,14 @@ export default function PublicarProducto({ auth, onNavigate }) {
                                         </div>
                                     </div>
 
-                                    <button type="button" className="preview-btn">Comprar ahora</button>
+                                    <button
+                                        type="button"
+                                        className="preview-btn"
+                                        disabled
+                                        title="El checkout no está disponible en esta versión"
+                                    >
+                                        Comprar ahora · próximamente
+                                    </button>
                                 </div>
                             </article>
                         </aside>
@@ -349,6 +358,7 @@ export default function PublicarProducto({ auth, onNavigate }) {
                 </form>
             </main>
 
+            </WorkspaceChrome>
             <Footer onNavigate={onNavigate} />
         </div>
     )

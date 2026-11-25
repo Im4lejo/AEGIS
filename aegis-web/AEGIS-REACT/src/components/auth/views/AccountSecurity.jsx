@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useAuth } from '../../../auth/useAuth'
 import { authApi } from '../../../services/api'
 import Header from '../../layouts/Header'
+import WorkspaceChrome from '../../layouts/WorkspaceChrome'
 import Footer from '../../layouts/Footer'
 import './account-security.css'
 
@@ -146,6 +147,7 @@ export default function AccountSecurity({ auth, onNavigate }) {
   return (
     <div className="page-layout">
       <Header title="Seguridad de cuenta" auth={auth} onNavigate={onNavigate} />
+      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
       <main className="account-security-page">
         <header className="account-security-heading">
           <div>
@@ -367,6 +369,7 @@ export default function AccountSecurity({ auth, onNavigate }) {
           habilitados para esta cuenta.
         </p>
       </main>
+      </WorkspaceChrome>
       <Footer onNavigate={onNavigate} />
     </div>
   )

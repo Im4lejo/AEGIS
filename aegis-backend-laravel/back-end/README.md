@@ -22,11 +22,13 @@ php artisan migrate --seed
 php artisan serve
 ```
 
-`php artisan db:seed` agrega categorías y datos de demostración para usuarios, productos, foro, puntos físicos, encuentros, códigos QR, calificaciones, reportes y notificaciones. Es idempotente: reutiliza sus registros de demostración y no elimina ni actualiza los registros existentes.
+`php artisan db:seed` agrega un conjunto completo de demostración: perfiles, productos, imágenes, tiendas, inventario, búsquedas, foro, comunidades, historias, eventos, mensajería, ofertas, encuentros, reseñas, notificaciones, moderación, administración, analítica y datos personales. Cubre todas las entidades funcionales; las tablas operativas efímeras de framework (`sessions`, jobs, cache locks, tokens de recuperación estándar) no reciben registros falsos.
 
-Para poblar una base ya migrada sin reiniciarla, ejecuta `php artisan db:seed`. No uses `migrate:fresh` si quieres conservar sus datos.
-También puedes ejecutar solo los datos de demostración con `php artisan db:seed --class='Database\Seeders\DemoDataSeeder'`.
-El seeder rechaza la ejecución cuando `APP_ENV=production`.
+El seeder es idempotente: actualiza únicamente registros identificados como demostración, reutiliza sus relaciones y puede ejecutarse repetidamente sin duplicar filas. No elimina datos reales.
+
+Para poblar una base ya migrada sin reiniciarla, ejecuta `php artisan db:seed`. No uses `migrate:fresh` si quieres conservar sus datos. Para restaurar el conjunto completo en otro equipo, configura `.env`, instala dependencias y ejecuta `php artisan migrate --seed`.
+
+También puedes ejecutar únicamente el núcleo anterior con `php artisan db:seed --class='Database\Seeders\DemoDataSeeder'` o únicamente la cobertura ampliada con `php artisan db:seed --class='Database\Seeders\ComprehensiveDemoDataSeeder'`. Los datos ampliados suponen que el seeder núcleo ya existe. Ambos rechazan la ejecución cuando `APP_ENV=production`.
 
 Las cuentas de demostración usan la contraseña `password`:
 
@@ -34,6 +36,11 @@ Las cuentas de demostración usan la contraseña `password`:
 - `owner.demo@aegis.test` (propietario de punto físico)
 - `ana.demo@aegis.test` (vendedora)
 - `carlos.demo@aegis.test` (comprador)
+- `laura.demo@aegis.test` (comunidades)
+- `mateo.demo@aegis.test` (vendedor de componentes)
+- `sofia.demo@aegis.test` (compradora y fotografía)
+- `diego.demo@aegis.test` (moderación)
+- `inactive.demo@aegis.test` (cuenta suspendida)
 
 ## API pública disponible
 
@@ -124,6 +131,37 @@ La API todavía no expone operaciones completas de encuentros ni perfiles privad
 - Solo la persona afectada puede apelar una resolución; aceptar revoca sanción y restaura cuenta activa.
 - Antifraude crea señales interpretables para revisión, sin etiquetar automáticamente culpable.
 - Mensajes privados no quedan abiertos al moderador; las preferencias controlan mensajes de desconocidos.
+
+## Centro administrativo
+
+- Dashboard real con periodos 24h, 7d y 30d.
+- Gestión filtrable de cuentas, categorías, avisos y configuración versionada.
+- Permisos operativos delegables sin convertir a un usuario en administrador.
+- Cambios críticos de cuenta exigen confirmación explícita.
+- Auditoría y exportación CSV controlada en `/api/admin/auditoria`.
+
+## Analítica comercial y datos personales
+
+- Mis productos muestra vistas válidas, contactos, ofertas, reservas y ventas completadas por periodo.
+- Las vistas se deduplican por usuario/sesión y día; no se registran IP/UA completas.
+- `/datos-personales` permite historial, exportación JSON y solicitudes de desactivación/eliminación.
+- La eliminación no borra automáticamente referencias comerciales, investigaciones o auditorías retenibles.
+
+## Optimización y rendimiento
+
+- React divide rutas secundarias en chunks bajo demanda; el entry se redujo de 565.17 KB a 239.01 KB minificados.
+- Inicio usa caché pública de 60 segundos e invalidación explícita al publicar/cambiar productos.
+- Respuestas privadas no se cachean.
+- Migración 000030 agrega índices para rutas públicas de productos, feed, mensajes y notificaciones.
+- Core Web Vitals requiere Lighthouse/browser real; el proyecto no declara números sin medición.
+
+## Estado de cierre web
+
+- Las suites Laravel/React disponibles pasan.
+- Checkout y Live no están operativos y se muestran como no disponibles.
+- Las rutas de ayuda/legal requieren contenido real antes del release público.
+- E2E Playwright/Cypress, auditoría WCAG y medición visual real siguen pendientes.
+- Consulte [notas de release web](./docs/aegis-6/notas-release-web.md) y [matriz de release](./docs/aegis-6/matriz-release-web-29.md).
 
 ## Autorización, propietarios y privacidad
 

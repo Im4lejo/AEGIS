@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
+import WorkspaceChrome from '../../layouts/WorkspaceChrome'
 import Footer from '../../layouts/Footer'
 import { moderationApi } from '../../../services/api'
 
@@ -22,6 +23,7 @@ export default function MisReportes({ auth, onNavigate }) {
   return (
     <div className="page-layout">
       <Header auth={auth} onNavigate={onNavigate} title="AEGIS | Mis reportes" />
+      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
       <main style={{ maxWidth: 960, margin: '0 auto', padding: 24 }}>
         <h1>Seguimiento de mis reportes</h1>
         {error && <p role="alert">{error}</p>}
@@ -35,6 +37,7 @@ export default function MisReportes({ auth, onNavigate }) {
               </article>
             ))}
       </main>
+      </WorkspaceChrome>
       <Footer onNavigate={onNavigate} />
     </div>
   )

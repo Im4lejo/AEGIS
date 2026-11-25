@@ -18,7 +18,7 @@
 
 .account-security-eyebrow {
   margin: 0 0 6px;
-  color: var(--color-primary) !important;
+  color: var(--color-action);
   font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -29,9 +29,9 @@
   gap: 14px;
   padding: 20px;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-card);
   background: var(--color-surface);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-card);
 }
 
 .account-security-card h2 {
@@ -55,23 +55,23 @@
   width: fit-content;
   padding: 5px 10px;
   border-radius: 999px;
-  background: #dcfce7;
-  color: #166534;
+  background: var(--color-success-soft);
+  color: var(--color-success-text);
   font-size: 0.8rem;
   font-weight: 700;
 }
 
 .account-security-badge--pending {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--color-warning-soft);
+  color: var(--color-warning-text);
 }
 
 .account-security-button {
   width: fit-content;
-  min-height: 40px;
+  min-height: 44px;
   padding: 8px 14px;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-control);
   background: var(--color-surface);
   color: var(--color-text);
   cursor: pointer;
@@ -89,8 +89,8 @@
 }
 
 .account-security-button--danger {
-  border-color: #fecaca;
-  color: #b91c1c;
+  border-color: var(--color-danger);
+  color: var(--color-danger);
 }
 
 .account-session-list,
@@ -125,7 +125,7 @@
 }
 
 .account-session .account-session-current {
-  color: #166534;
+  color: var(--color-success-text);
 }
 
 .account-password-form {
@@ -138,7 +138,7 @@
   padding: 4px 0;
   border: 0;
   background: transparent;
-  color: var(--color-primary);
+  color: var(--color-action);
   cursor: pointer;
   font: inherit;
 }
@@ -157,10 +157,10 @@
 
 .account-password-form input {
   width: 100%;
-  min-height: 42px;
+  min-height: 44px;
   padding: 8px 12px;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-control);
   background: var(--color-surface);
   color: var(--color-text);
   font: inherit;
@@ -176,17 +176,17 @@
 .account-security-status {
   margin: 0;
   padding: 10px 12px;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-control);
 }
 
 .account-security-error {
-  background: #fef2f2;
-  color: #991b1b;
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
 }
 
 .account-security-status {
-  background: #f0fdf4;
-  color: #166534;
+  background: var(--color-success-soft);
+  color: var(--color-success-text);
 }
 
 .account-security-unavailable {

@@ -47,13 +47,16 @@ class DemoDataSeederTest extends TestCase
         $this->assertDatabaseHas('reportes', [
             'motivo' => 'DEMO | Reporte de prueba',
         ]);
+        $this->assertComprehensiveDemoDataExists();
     }
 
     private function demoTableCounts(): array
     {
         $tables = [
             'categorias',
+            'users',
             'usuarios',
+            'usuario_password_reset_tokens',
             'productos',
             'imagenes_producto',
             'publicaciones_foro',
@@ -65,6 +68,73 @@ class DemoDataSeederTest extends TestCase
             'calificaciones',
             'reportes',
             'notificaciones',
+            'enlaces_perfil',
+            'seguimientos',
+            'bloqueos_usuario',
+            'desactivaciones_usuario',
+            'permisos_delegados',
+            'auditoria_accesos',
+            'operaciones_media',
+            'reacciones_publicacion',
+            'menciones_publicacion',
+            'etiquetas_publicacion',
+            'etiqueta_publicacion',
+            'reposts',
+            'colecciones_guardado',
+            'guardados',
+            'comunidades',
+            'membresias_comunidad',
+            'acciones_comunidad',
+            'encuestas',
+            'opciones_encuesta',
+            'votos_encuesta',
+            'suscripciones_hilo',
+            'historial_publicacion',
+            'votos_respuesta',
+            'historial_producto',
+            'busquedas_productos',
+            'comparaciones_producto',
+            'preguntas_producto',
+            'tiendas',
+            'miembros_tienda',
+            'verificaciones_tienda',
+            'inventario_producto',
+            'movimientos_inventario',
+            'conversaciones',
+            'participantes_conversacion',
+            'mensajes',
+            'lecturas_mensaje',
+            'adjuntos_mensaje',
+            'reportes_mensaje',
+            'ofertas',
+            'historial_oferta',
+            'reservas_producto',
+            'operaciones_comerciales',
+            'historial_encuentro',
+            'reputacion_agregados',
+            'referencias_publicacion',
+            'preferencias_notificacion',
+            'busquedas_guardadas',
+            'preferencias_busqueda',
+            'historial_busqueda',
+            'preferencias_usuario',
+            'historias',
+            'visualizaciones_historia',
+            'eventos_comunidad',
+            'participaciones_evento',
+            'sesiones_live',
+            'sanciones_moderacion',
+            'apelaciones_moderacion',
+            'acciones_moderacion',
+            'senales_antifraude',
+            'auditoria_moderacion',
+            'permisos_operacion',
+            'configuracion_global',
+            'avisos_sistema',
+            'eventos_comerciales_usuario',
+            'rollups_comerciales_usuario',
+            'solicitudes_privacidad',
+            'exportaciones_datos',
         ];
 
         $counts = [];
@@ -73,5 +143,12 @@ class DemoDataSeederTest extends TestCase
         }
 
         return $counts;
+    }
+
+    private function assertComprehensiveDemoDataExists(): void
+    {
+        foreach ($this->demoTableCounts() as $table => $count) {
+            $this->assertGreaterThan(0, $count, "La tabla {$table} no recibió datos de demostración.");
+        }
     }
 }

@@ -1,0 +1,1070 @@
+[
+  {
+    "route": "styleguide",
+    "theme": "light",
+    "width": 360,
+    "layout": {
+      "clientWidth": 360,
+      "scrollWidth": 360
+    },
+    "violations": []
+  },
+  {
+    "route": "home",
+    "theme": "light",
+    "width": 360,
+    "layout": {
+      "clientWidth": 360,
+      "scrollWidth": 360
+    },
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".aegis-stories__empty"
+          ]
+        ]
+      },
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            ".footer-column:nth-child(1) > h4"
+          ]
+        ]
+      },
+      {
+        "id": "image-redundant-alt",
+        "impact": "minor",
+        "count": 1,
+        "targets": [
+          [
+            ".header-logo > .logo-img[alt=\"AEGIS\"][src$=\"aegis-logo.png\"]"
+          ]
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".cart-btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "marketplace",
+    "theme": "light",
+    "width": 360,
+    "layout": {
+      "clientWidth": 360,
+      "scrollWidth": 360
+    },
+    "violations": [
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            ".footer-column:nth-child(1) > h4"
+          ]
+        ]
+      },
+      {
+        "id": "image-redundant-alt",
+        "impact": "minor",
+        "count": 1,
+        "targets": [
+          [
+            ".header-logo > .logo-img[alt=\"AEGIS\"][src$=\"aegis-logo.png\"]"
+          ]
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".cart-btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "login",
+    "theme": "light",
+    "width": 360,
+    "layout": {
+      "clientWidth": 360,
+      "scrollWidth": 360
+    },
+    "violations": [
+      {
+        "id": "aria-prohibited-attr",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".auth-mobile-brand"
+          ]
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "count": 2,
+        "targets": [
+          [
+            ".back-home"
+          ],
+          [
+            ".register-hint:nth-child(6)"
+          ]
+        ]
+      },
+      {
+        "id": "page-has-heading-one",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            "html"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "styleguide",
+    "theme": "light",
+    "width": 768,
+    "layout": {
+      "clientWidth": 768,
+      "scrollWidth": 768
+    },
+    "violations": []
+  },
+  {
+    "route": "home",
+    "theme": "light",
+    "width": 768,
+    "layout": {
+      "clientWidth": 768,
+      "scrollWidth": 768
+    },
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".aegis-stories__empty"
+          ]
+        ]
+      },
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            ".footer-column:nth-child(1) > h4"
+          ]
+        ]
+      },
+      {
+        "id": "image-redundant-alt",
+        "impact": "minor",
+        "count": 1,
+        "targets": [
+          [
+            ".header-logo > .logo-img[alt=\"AEGIS\"][src$=\"aegis-logo.png\"]"
+          ]
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".cart-btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "marketplace",
+    "theme": "light",
+    "width": 768,
+    "layout": {
+      "clientWidth": 768,
+      "scrollWidth": 768
+    },
+    "violations": [
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            ".footer-column:nth-child(1) > h4"
+          ]
+        ]
+      },
+      {
+        "id": "image-redundant-alt",
+        "impact": "minor",
+        "count": 1,
+        "targets": [
+          [
+            ".header-logo > .logo-img[alt=\"AEGIS\"][src$=\"aegis-logo.png\"]"
+          ]
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".cart-btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "login",
+    "theme": "light",
+    "width": 768,
+    "layout": {
+      "clientWidth": 768,
+      "scrollWidth": 768
+    },
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "count": 2,
+        "targets": [
+          [
+            ".back-home"
+          ],
+          [
+            ".register-hint:nth-child(6)"
+          ]
+        ]
+      },
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            "h3"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "styleguide",
+    "theme": "light",
+    "width": 1280,
+    "layout": {
+      "clientWidth": 1280,
+      "scrollWidth": 1280
+    },
+    "violations": []
+  },
+  {
+    "route": "home",
+    "theme": "light",
+    "width": 1280,
+    "layout": {
+      "clientWidth": 1280,
+      "scrollWidth": 1280
+    },
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".aegis-stories__empty"
+          ]
+        ]
+      },
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            ".footer-column:nth-child(1) > h4"
+          ]
+        ]
+      },
+      {
+        "id": "image-redundant-alt",
+        "impact": "minor",
+        "count": 1,
+        "targets": [
+          [
+            ".header-logo > .logo-img[alt=\"AEGIS\"][src$=\"aegis-logo.png\"]"
+          ]
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".cart-btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "marketplace",
+    "theme": "light",
+    "width": 1280,
+    "layout": {
+      "clientWidth": 1280,
+      "scrollWidth": 1280
+    },
+    "violations": [
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            ".footer-column:nth-child(1) > h4"
+          ]
+        ]
+      },
+      {
+        "id": "image-redundant-alt",
+        "impact": "minor",
+        "count": 1,
+        "targets": [
+          [
+            ".header-logo > .logo-img[alt=\"AEGIS\"][src$=\"aegis-logo.png\"]"
+          ]
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".cart-btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "login",
+    "theme": "light",
+    "width": 1280,
+    "layout": {
+      "clientWidth": 1280,
+      "scrollWidth": 1280
+    },
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "count": 2,
+        "targets": [
+          [
+            ".back-home"
+          ],
+          [
+            ".register-hint:nth-child(6)"
+          ]
+        ]
+      },
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            "h3"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "styleguide",
+    "theme": "light",
+    "width": 1440,
+    "layout": {
+      "clientWidth": 1440,
+      "scrollWidth": 1440
+    },
+    "violations": []
+  },
+  {
+    "route": "home",
+    "theme": "light",
+    "width": 1440,
+    "layout": {
+      "clientWidth": 1440,
+      "scrollWidth": 1440
+    },
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".aegis-stories__empty"
+          ]
+        ]
+      },
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            ".footer-column:nth-child(1) > h4"
+          ]
+        ]
+      },
+      {
+        "id": "image-redundant-alt",
+        "impact": "minor",
+        "count": 1,
+        "targets": [
+          [
+            ".header-logo > .logo-img[alt=\"AEGIS\"][src$=\"aegis-logo.png\"]"
+          ]
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".cart-btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "marketplace",
+    "theme": "light",
+    "width": 1440,
+    "layout": {
+      "clientWidth": 1440,
+      "scrollWidth": 1440
+    },
+    "violations": [
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            ".footer-column:nth-child(1) > h4"
+          ]
+        ]
+      },
+      {
+        "id": "image-redundant-alt",
+        "impact": "minor",
+        "count": 1,
+        "targets": [
+          [
+            ".header-logo > .logo-img[alt=\"AEGIS\"][src$=\"aegis-logo.png\"]"
+          ]
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".cart-btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "login",
+    "theme": "light",
+    "width": 1440,
+    "layout": {
+      "clientWidth": 1440,
+      "scrollWidth": 1440
+    },
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "count": 2,
+        "targets": [
+          [
+            ".back-home"
+          ],
+          [
+            ".register-hint:nth-child(6)"
+          ]
+        ]
+      },
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            "h3"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "styleguide",
+    "theme": "dark",
+    "width": 360,
+    "layout": {
+      "clientWidth": 360,
+      "scrollWidth": 360
+    },
+    "violations": []
+  },
+  {
+    "route": "home",
+    "theme": "dark",
+    "width": 360,
+    "layout": {
+      "clientWidth": 360,
+      "scrollWidth": 360
+    },
+    "violations": [
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            ".footer-column:nth-child(1) > h4"
+          ]
+        ]
+      },
+      {
+        "id": "image-redundant-alt",
+        "impact": "minor",
+        "count": 1,
+        "targets": [
+          [
+            ".header-logo > .logo-img[alt=\"AEGIS\"][src$=\"aegis-logo.png\"]"
+          ]
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".cart-btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "marketplace",
+    "theme": "dark",
+    "width": 360,
+    "layout": {
+      "clientWidth": 360,
+      "scrollWidth": 360
+    },
+    "violations": [
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            ".footer-column:nth-child(1) > h4"
+          ]
+        ]
+      },
+      {
+        "id": "image-redundant-alt",
+        "impact": "minor",
+        "count": 1,
+        "targets": [
+          [
+            ".header-logo > .logo-img[alt=\"AEGIS\"][src$=\"aegis-logo.png\"]"
+          ]
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".cart-btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "login",
+    "theme": "dark",
+    "width": 360,
+    "layout": {
+      "clientWidth": 360,
+      "scrollWidth": 360
+    },
+    "violations": [
+      {
+        "id": "aria-prohibited-attr",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".auth-mobile-brand"
+          ]
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "count": 2,
+        "targets": [
+          [
+            ".back-home"
+          ],
+          [
+            ".register-hint:nth-child(6)"
+          ]
+        ]
+      },
+      {
+        "id": "page-has-heading-one",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            "html"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "styleguide",
+    "theme": "dark",
+    "width": 768,
+    "layout": {
+      "clientWidth": 768,
+      "scrollWidth": 768
+    },
+    "violations": []
+  },
+  {
+    "route": "home",
+    "theme": "dark",
+    "width": 768,
+    "layout": {
+      "clientWidth": 768,
+      "scrollWidth": 768
+    },
+    "violations": [
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            ".footer-column:nth-child(1) > h4"
+          ]
+        ]
+      },
+      {
+        "id": "image-redundant-alt",
+        "impact": "minor",
+        "count": 1,
+        "targets": [
+          [
+            ".header-logo > .logo-img[alt=\"AEGIS\"][src$=\"aegis-logo.png\"]"
+          ]
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".cart-btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "marketplace",
+    "theme": "dark",
+    "width": 768,
+    "layout": {
+      "clientWidth": 768,
+      "scrollWidth": 768
+    },
+    "violations": [
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            ".footer-column:nth-child(1) > h4"
+          ]
+        ]
+      },
+      {
+        "id": "image-redundant-alt",
+        "impact": "minor",
+        "count": 1,
+        "targets": [
+          [
+            ".header-logo > .logo-img[alt=\"AEGIS\"][src$=\"aegis-logo.png\"]"
+          ]
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".cart-btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "login",
+    "theme": "dark",
+    "width": 768,
+    "layout": {
+      "clientWidth": 768,
+      "scrollWidth": 768
+    },
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "count": 2,
+        "targets": [
+          [
+            ".back-home"
+          ],
+          [
+            ".register-hint:nth-child(6)"
+          ]
+        ]
+      },
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            "h3"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "styleguide",
+    "theme": "dark",
+    "width": 1280,
+    "layout": {
+      "clientWidth": 1280,
+      "scrollWidth": 1280
+    },
+    "violations": []
+  },
+  {
+    "route": "home",
+    "theme": "dark",
+    "width": 1280,
+    "layout": {
+      "clientWidth": 1280,
+      "scrollWidth": 1280
+    },
+    "violations": [
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            ".footer-column:nth-child(1) > h4"
+          ]
+        ]
+      },
+      {
+        "id": "image-redundant-alt",
+        "impact": "minor",
+        "count": 1,
+        "targets": [
+          [
+            ".header-logo > .logo-img[alt=\"AEGIS\"][src$=\"aegis-logo.png\"]"
+          ]
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".cart-btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "marketplace",
+    "theme": "dark",
+    "width": 1280,
+    "layout": {
+      "clientWidth": 1280,
+      "scrollWidth": 1280
+    },
+    "violations": [
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            ".footer-column:nth-child(1) > h4"
+          ]
+        ]
+      },
+      {
+        "id": "image-redundant-alt",
+        "impact": "minor",
+        "count": 1,
+        "targets": [
+          [
+            ".header-logo > .logo-img[alt=\"AEGIS\"][src$=\"aegis-logo.png\"]"
+          ]
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".cart-btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "login",
+    "theme": "dark",
+    "width": 1280,
+    "layout": {
+      "clientWidth": 1280,
+      "scrollWidth": 1280
+    },
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "count": 2,
+        "targets": [
+          [
+            ".back-home"
+          ],
+          [
+            ".register-hint:nth-child(6)"
+          ]
+        ]
+      },
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            "h3"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "styleguide",
+    "theme": "dark",
+    "width": 1440,
+    "layout": {
+      "clientWidth": 1440,
+      "scrollWidth": 1440
+    },
+    "violations": []
+  },
+  {
+    "route": "home",
+    "theme": "dark",
+    "width": 1440,
+    "layout": {
+      "clientWidth": 1440,
+      "scrollWidth": 1440
+    },
+    "violations": [
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            ".footer-column:nth-child(1) > h4"
+          ]
+        ]
+      },
+      {
+        "id": "image-redundant-alt",
+        "impact": "minor",
+        "count": 1,
+        "targets": [
+          [
+            ".header-logo > .logo-img[alt=\"AEGIS\"][src$=\"aegis-logo.png\"]"
+          ]
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".cart-btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "marketplace",
+    "theme": "dark",
+    "width": 1440,
+    "layout": {
+      "clientWidth": 1440,
+      "scrollWidth": 1440
+    },
+    "violations": [
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            ".footer-column:nth-child(1) > h4"
+          ]
+        ]
+      },
+      {
+        "id": "image-redundant-alt",
+        "impact": "minor",
+        "count": 1,
+        "targets": [
+          [
+            ".header-logo > .logo-img[alt=\"AEGIS\"][src$=\"aegis-logo.png\"]"
+          ]
+        ]
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "count": 1,
+        "targets": [
+          [
+            ".cart-btn"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "route": "login",
+    "theme": "dark",
+    "width": 1440,
+    "layout": {
+      "clientWidth": 1440,
+      "scrollWidth": 1440
+    },
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "count": 2,
+        "targets": [
+          [
+            ".back-home"
+          ],
+          [
+            ".register-hint:nth-child(6)"
+          ]
+        ]
+      },
+      {
+        "id": "heading-order",
+        "impact": "moderate",
+        "count": 1,
+        "targets": [
+          [
+            "h3"
+          ]
+        ]
+      }
+    ]
+  }
+]

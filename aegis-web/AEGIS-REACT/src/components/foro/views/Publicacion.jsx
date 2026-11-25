@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import Header from '../../layouts/Header'
+import WorkspaceChrome from '../../layouts/WorkspaceChrome'
 import Footer from '../../layouts/Footer'
 import { useAuth } from '../../../auth/useAuth'
 import { forumApi } from '../../../services/api'
@@ -90,6 +91,7 @@ export default function Publicacion({ id, auth, onNavigate }) {
   return (
     <div className="page-layout foro-layout">
       <Header title="AEGIS | Publicación" auth={auth} onNavigate={onNavigate} />
+      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
       <main className="foro-container foro-container--publicacion">
         <section className="foro-feed">
           <button className="pub-volver" type="button" onClick={() => onNavigate && onNavigate('/foro')}>
@@ -197,6 +199,7 @@ export default function Publicacion({ id, auth, onNavigate }) {
                   <input
                     ref={comentarioRef}
                     type="text"
+                    aria-label="Escribe un comentario"
                     placeholder={auth?.isAuthenticated ? 'Escribe un comentario...' : 'Inicia sesión para comentar'}
                     value={comentario}
                     onChange={(event) => setComentario(event.target.value)}
@@ -210,6 +213,7 @@ export default function Publicacion({ id, auth, onNavigate }) {
           )}
         </section>
       </main>
+      </WorkspaceChrome>
       <Footer onNavigate={onNavigate} />
     </div>
   )

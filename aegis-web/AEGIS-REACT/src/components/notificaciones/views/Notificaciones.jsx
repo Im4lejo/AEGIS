@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
+import WorkspaceChrome from '../../layouts/WorkspaceChrome'
 import Footer from '../../layouts/Footer'
 import { notificationApi } from '../../../services/api'
 import '../css/notificaciones.css'
@@ -46,6 +47,7 @@ export default function Notificaciones({ auth, onNavigate }) {
   return (
     <div className="page-layout">
       <Header title="AEGIS | Notificaciones" auth={auth} onNavigate={onNavigate} />
+      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
       <main className="notificaciones-page">
         <h1>Notificaciones</h1>
         {error && <p role="alert">{error}</p>}
@@ -99,6 +101,7 @@ export default function Notificaciones({ auth, onNavigate }) {
           ))}
         </section>
       </main>
+      </WorkspaceChrome>
       <Footer onNavigate={onNavigate} />
     </div>
   )

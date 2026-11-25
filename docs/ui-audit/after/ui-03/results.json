@@ -1,0 +1,450 @@
+[
+  {
+    "name": "inicio",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "foro",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "publicacion",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "comunidades",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "comunidad-detalle",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "perfil",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "editar-perfil",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "vendedor-no-disponible",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "inicio",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "foro",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "publicacion",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "comunidades",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "comunidad-detalle",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "perfil",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "editar-perfil",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "vendedor-no-disponible",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "inicio",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "foro",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "publicacion",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "comunidades",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "comunidad-detalle",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "perfil",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "editar-perfil",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "vendedor-no-disponible",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "inicio",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "foro",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "publicacion",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "comunidades",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "comunidad-detalle",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "perfil",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "editar-perfil",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "vendedor-no-disponible",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "inicio",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "foro",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "publicacion",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "comunidades",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "comunidad-detalle",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "perfil",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "editar-perfil",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "vendedor-no-disponible",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360
+  },
+  {
+    "name": "inicio",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "foro",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "publicacion",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "comunidades",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "comunidad-detalle",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "perfil",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "editar-perfil",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "vendedor-no-disponible",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768
+  },
+  {
+    "name": "inicio",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "foro",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "publicacion",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "comunidades",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "comunidad-detalle",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "perfil",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "editar-perfil",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "vendedor-no-disponible",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280
+  },
+  {
+    "name": "inicio",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "foro",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "publicacion",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "comunidades",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "comunidad-detalle",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "perfil",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "editar-perfil",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "vendedor-no-disponible",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440
+  }
+]

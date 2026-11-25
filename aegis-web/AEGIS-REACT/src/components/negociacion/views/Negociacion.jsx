@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
+import WorkspaceChrome from '../../layouts/WorkspaceChrome'
 import Footer from '../../layouts/Footer'
 import { negotiationApi } from '../../../services/api'
 import '../css/negociacion.css'
@@ -33,6 +34,7 @@ export default function Negociacion({ auth, onNavigate }) {
   return (
     <div className="page-layout">
       <Header title="AEGIS | Negociaciones" auth={auth} onNavigate={onNavigate} />
+      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
       <main className="negociacion-page">
         <h1>Mis negociaciones</h1>
         {error && <p role="alert">{error}</p>}
@@ -64,6 +66,7 @@ export default function Negociacion({ auth, onNavigate }) {
           ))}
         </section>
       </main>
+      </WorkspaceChrome>
       <Footer onNavigate={onNavigate} />
     </div>
   )

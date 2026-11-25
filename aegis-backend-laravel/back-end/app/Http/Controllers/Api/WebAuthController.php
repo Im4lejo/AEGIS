@@ -93,18 +93,19 @@ class WebAuthController extends Controller
                 'mensaje' => 'Se inició sesión en AEGIS Web. Revoca cualquier sesión que no reconozcas desde Seguridad de cuenta.',
             ]);
 
-            Notificacion::query()
+            $keepIds = Notificacion::query()
                 ->where('usuario_id', $usuario->id)
                 ->where('titulo', self::LOGIN_NOTICE_TITLE)
-                ->whereNotIn('id', function ($query) use ($usuario): void {
-                    $query->select('id')
-                        ->from('notificaciones')
-                        ->where('usuario_id', $usuario->id)
-                        ->where('titulo', self::LOGIN_NOTICE_TITLE)
-                        ->orderByDesc('id')
-                        ->limit(20);
-                })
-                ->delete();
+                ->orderByDesc('id')
+                ->limit(20)
+                ->pluck('id');
+            if ($keepIds->isNotEmpty()) {
+                Notificacion::query()
+                    ->where('usuario_id', $usuario->id)
+                    ->where('titulo', self::LOGIN_NOTICE_TITLE)
+                    ->whereNotIn('id', $keepIds)
+                    ->delete();
+            }
 
             return $issuedToken->plainTextToken;
         });

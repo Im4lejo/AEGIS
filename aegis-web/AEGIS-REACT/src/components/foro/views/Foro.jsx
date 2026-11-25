@@ -1,8 +1,11 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import Header from '../../layouts/Header'
+import WorkspaceChrome from '../../layouts/WorkspaceChrome'
 import Footer from '../../layouts/Footer'
 import Sidebar from '../../layouts/Sidebar'
 import { EmptyState, ErrorState, LoadingState } from '../../shared/ApiState'
+import { Modal } from '../../shared/ui'
+import { useDialogFocus } from '../../shared/ui/useDialogFocus'
 import { useAuth } from '../../../auth/useAuth'
 import { forumApi, savedApi, videoApi } from '../../../services/api'
 import '../css/foro.css'
@@ -107,6 +110,10 @@ export default function Foro({ auth, onNavigate }) {
 
   const ordenRef = useRef(null)
   const fileInputRef = useRef(null)
+  const foroMenuRef = useRef(null)
+  const closeForoMenu = useCallback(() => setForoMenuAbierto(false), [])
+  const closeLightbox = useCallback(() => setLightbox(null), [])
+  useDialogFocus(foroMenuAbierto, closeForoMenu, foroMenuRef)
 
   useEffect(() => {
     let active = true
@@ -172,12 +179,12 @@ export default function Foro({ auth, onNavigate }) {
 
   useEffect(() => {
     if (!foroMenuAbierto) return
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape') setForoMenuAbierto(false)
+    const handleResize = () => {
+      if (window.innerWidth > 700) closeForoMenu()
     }
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [foroMenuAbierto])
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [foroMenuAbierto, closeForoMenu])
 
   useEffect(() => {
     if (!ordenOpen) return
@@ -188,15 +195,6 @@ export default function Foro({ auth, onNavigate }) {
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [ordenOpen])
-
-  useEffect(() => {
-    if (!lightbox) return
-    const handleKey = (event) => {
-      if (event.key === 'Escape') setLightbox(null)
-    }
-    document.addEventListener('keydown', handleKey)
-    return () => document.removeEventListener('keydown', handleKey)
-  }, [lightbox])
 
   useEffect(() => {
     if (!toast) return
@@ -380,6 +378,7 @@ export default function Foro({ auth, onNavigate }) {
     const file = event.target.files[0]
     if (!file) return
     setArchivoNuevo(file)
+    setPanelAbierto(true)
     const reader = new FileReader()
     reader.onload = (loadEvent) => setImagenNueva(loadEvent.target.result)
     reader.readAsDataURL(file)
@@ -398,34 +397,15 @@ export default function Foro({ auth, onNavigate }) {
         forumMenuOpen={foroMenuAbierto}
         onForumMenuToggle={() => setForoMenuAbierto((abierto) => !abierto)}
       />
-      <label className="foro-composer-type">
-        Referencia comercial
-        <input
-          type="number"
-          min="1"
-          value={productoReferencia}
-          onChange={(event) => setProductoReferencia(event.target.value)}
-          placeholder="ID de anuncio"
-        />
-      </label>
-      <label className="foro-composer-type">
-        Tipo de publicación
-        <select value={tipoPost} onChange={(event) => setTipoPost(event.target.value)}>
-          <option value="discusion">Discusión</option>
-          <option value="pregunta">Pregunta</option>
-          <option value="tutorial">Tutorial</option>
-          <option value="encuesta">Encuesta</option>
-          <option value="anuncio">Anuncio de grupo</option>
-        </select>
-      </label>
-
+      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
       {foroMenuAbierto && (
-        <div className="foro-sidebar-overlay">
+        <div id="foro-mobile-menu" className="foro-sidebar-overlay" ref={foroMenuRef} role="dialog" aria-modal="true" aria-label="Filtros del foro" tabIndex="-1">
           <button
             className="foro-sidebar-backdrop"
             type="button"
             aria-label="Cerrar menú del foro"
-            onClick={() => setForoMenuAbierto(false)}
+            tabIndex="-1"
+            onClick={closeForoMenu}
           />
           <Sidebar
             busqueda={busqueda}
@@ -469,6 +449,28 @@ export default function Foro({ auth, onNavigate }) {
               </button>
             ))}
           </nav>
+          <div className="foro-composer-options">
+            <label className="foro-composer-type">
+              Referencia comercial
+              <input
+                type="number"
+                min="1"
+                value={productoReferencia}
+                onChange={(event) => setProductoReferencia(event.target.value)}
+                placeholder="ID de anuncio"
+              />
+            </label>
+            <label className="foro-composer-type">
+              Tipo de publicación
+              <select value={tipoPost} onChange={(event) => setTipoPost(event.target.value)}>
+                <option value="discusion">Discusión</option>
+                <option value="pregunta">Pregunta</option>
+                <option value="tutorial">Tutorial</option>
+                <option value="encuesta">Encuesta</option>
+                <option value="anuncio">Anuncio de grupo</option>
+              </select>
+            </label>
+          </div>
           {!panelAbierto ? (
             <div className="foro-composer">
               <div className="foro-composer-avatar">
@@ -478,6 +480,7 @@ export default function Foro({ auth, onNavigate }) {
                 <input
                   className="foro-composer-input"
                   type="text"
+                  aria-label={auth?.isAuthenticated ? 'Crear publicación' : 'Inicia sesión para publicar'}
                   placeholder={
                     auth?.isAuthenticated
                       ? 'Publica aquí...'
@@ -509,10 +512,7 @@ export default function Foro({ auth, onNavigate }) {
             </div>
           ) : (
             <div className="foro-composer-panel">
-              <div
-                className="foro-composer"
-                style={{ border: 'none', boxShadow: 'none', padding: 0 }}
-              >
+              <div className="foro-composer foro-composer--inside">
                 <div className="foro-composer-avatar">
                   {miFoto ? <img src={miFoto} alt="Mi foto" /> : '?'}
                 </div>
@@ -520,6 +520,7 @@ export default function Foro({ auth, onNavigate }) {
                   <input
                     className="foro-composer-input"
                     type="text"
+                    aria-label="Título de la publicación"
                     placeholder="Escribe el título de tu publicación..."
                     value={textoPublicacion.split('\n')[0]}
                     onChange={(event) => {
@@ -535,6 +536,7 @@ export default function Foro({ auth, onNavigate }) {
                 </div>
               </div>
               <textarea
+                aria-label="Detalles de la publicación"
                 placeholder="Cuéntanos más detalles..."
                 required
                 value={textoPublicacion.split('\n').slice(1).join('\n')}
@@ -648,13 +650,7 @@ export default function Foro({ auth, onNavigate }) {
             !errorFeed &&
             postsVisibles.map((post) => (
               <article className="foro-post" key={post.id}>
-                <div
-                  className="foro-post-header"
-                  onClick={() => {
-                    if (auth?.user?.id === post.usuarioId && onNavigate)
-                      onNavigate('/perfil')
-                  }}
-                >
+                <div className="foro-post-header">
                   <div className="foro-post-avatar">
                     <img
                       src={
@@ -663,16 +659,12 @@ export default function Foro({ auth, onNavigate }) {
                         '/avatar-defecto.svg'
                       }
                       alt={post.autor}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        borderRadius: '50%',
-                        objectFit: 'cover',
-                      }}
                     />
                   </div>
                   <div>
-                    <div className="foro-post-author">{post.autor}</div>
+                    {auth?.user?.id === post.usuarioId ? (
+                      <button className="foro-post-author foro-post-author--link" type="button" onClick={() => onNavigate?.('/perfil')}>{post.autor}</button>
+                    ) : <div className="foro-post-author">{post.autor}</div>}
                     <div className="foro-post-date">{post.fecha}</div>
                   </div>
                   {auth?.user?.id === post.usuarioId && (
@@ -754,12 +746,9 @@ export default function Foro({ auth, onNavigate }) {
                     </video>
                   )}
                 {!post.video && post.imagen && (
-                  <img
-                    className="foro-post-image"
-                    src={post.imagen}
-                    alt={post.titulo}
-                    onClick={() => setLightbox(post.imagen)}
-                  />
+                  <button className="foro-image-button" type="button" onClick={() => setLightbox(post.imagen)} aria-label={`Ampliar imagen de ${post.titulo}`}>
+                    <img className="foro-post-image" src={post.imagen} alt="" />
+                  </button>
                 )}
                 {(post.referencias || []).filter((reference) => reference.tipo === 'producto').map((reference) => (
                   <article className="foro-product-reference" key={reference.id || reference.producto_id}>
@@ -810,8 +799,8 @@ export default function Foro({ auth, onNavigate }) {
                   <button
                     className="foro-action"
                     type="button"
-                    aria-label="Compartir"
-                    title="Compartir"
+                    aria-label="Copiar enlace"
+                    title="Copiar enlace"
                     onClick={() => compartir(post)}
                   >
                     <IconShare />
@@ -828,7 +817,7 @@ export default function Foro({ auth, onNavigate }) {
                       }
                     }}
                   >
-                    Compartir
+                    Compartir en foro
                   </button>
                   <button
                     className="foro-action"
@@ -852,7 +841,7 @@ export default function Foro({ auth, onNavigate }) {
                 {comentariosAbiertos[post.id] && (
                   <div className="foro-comments">
                     {post.comentarios.length === 0 && (
-                      <p style={{ margin: 0, fontSize: 13, color: '#9ca3af' }}>
+                      <p className="foro-comments-empty">
                         Sé el primero en comentar.
                       </p>
                     )}
@@ -866,12 +855,6 @@ export default function Foro({ auth, onNavigate }) {
                               '/avatar-defecto.svg'
                             }
                             alt={comentario.autor}
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              borderRadius: '50%',
-                              objectFit: 'cover',
-                            }}
                           />
                         </div>
                         <div className="foro-comment-bubble">
@@ -893,6 +876,7 @@ export default function Foro({ auth, onNavigate }) {
                     <div className="foro-comment-form">
                       <input
                         type="text"
+                        aria-label="Escribe un comentario"
                         placeholder={
                           auth?.isAuthenticated
                             ? 'Escribe un comentario...'
@@ -956,14 +940,13 @@ export default function Foro({ auth, onNavigate }) {
         </aside>
       </div>
 
-      {lightbox && (
-        <div className="foro-lightbox" onClick={() => setLightbox(null)}>
-          <img src={lightbox} alt="Imagen ampliada" />
-        </div>
-      )}
+      <Modal open={Boolean(lightbox)} onClose={closeLightbox} title="Imagen ampliada" className="ui-dialog--media">
+        {lightbox && <img src={lightbox} alt="Imagen ampliada" />}
+      </Modal>
 
-      {toast && <div className="foro-toast">{toast}</div>}
+      {toast && <div className="foro-toast" role="status">{toast}</div>}
 
+      </WorkspaceChrome>
       <Footer onNavigate={onNavigate} />
     </div>
   )

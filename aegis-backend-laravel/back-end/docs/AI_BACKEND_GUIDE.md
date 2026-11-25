@@ -81,6 +81,34 @@ Cliente
 - Las resoluciones crean acciones y registros encadenados en auditoría moderativa.
 - Las sanciones pueden revocarse desde una apelación aceptada.
 
+### Centro administrativo
+
+- Las métricas admin son agregaciones SQL reales con periodos explícitos.
+- `/api/admin/users` y cambios críticos requieren permiso operativo o rol admin.
+- Categorías, avisos, configuración y auditoría tienen rutas separadas y capacidades delegables.
+- Configuración global usa versionado optimista y auditoría encadenada.
+
+### Datos personales y analítica comercial
+
+- Las métricas vendedor usan registros reales de vistas, mensajes, ofertas, reservas y operaciones.
+- Las vistas se deduplican y se resumen en rollups diarios.
+- Exportación propia usa JSON, confirmación y hash SHA-256.
+- Desactivación revoca tokens; eliminación física no ocurre automáticamente y conserva referencias retenibles.
+
+### Rendimiento
+
+- Inicio usa caché pública breve e invalidación desde cambios de producto.
+- Las rutas privadas no deben usar caché compartida.
+- La migración 000030 agrega índices por estado/fecha para feeds y mensajes.
+- Antes de nuevos índices o materializaciones se debe medir `EXPLAIN` con un volumen representativo.
+
+### Cierre web
+
+- Checkout y Live son limitaciones externas declaradas, no funcionalidades simuladas.
+- E2E necesita Playwright/Cypress y cuentas por rol.
+- Las rutas web deben auditarse con teclado, zoom y lectores de pantalla reales.
+- El release no está completo hasta sustituir plantillas, demo residual y VOD/Live gated.
+
 ### CLI
 
 ```text

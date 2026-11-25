@@ -1,0 +1,254 @@
+[
+  {
+    "name": "marketplace",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 2
+      }
+    ]
+  },
+  {
+    "name": "detalle-producto",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1
+      },
+      {
+        "id": "color-contrast",
+        "count": 2
+      }
+    ]
+  },
+  {
+    "name": "mensajes",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "tiendas",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "puntos-fisicos",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "ajustes",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "seguridad",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "marketplace",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 2
+      }
+    ]
+  },
+  {
+    "name": "detalle-producto",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1
+      },
+      {
+        "id": "color-contrast",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "name": "mensajes",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "tiendas",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "puntos-fisicos",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "ajustes",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "seguridad",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "marketplace",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 2
+      }
+    ]
+  },
+  {
+    "name": "detalle-producto",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1
+      },
+      {
+        "id": "color-contrast",
+        "count": 2
+      }
+    ]
+  },
+  {
+    "name": "mensajes",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "tiendas",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "puntos-fisicos",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "ajustes",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "seguridad",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "marketplace",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 2
+      }
+    ]
+  },
+  {
+    "name": "detalle-producto",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1
+      },
+      {
+        "id": "color-contrast",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "name": "mensajes",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "tiendas",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "puntos-fisicos",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "ajustes",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "name": "seguridad",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": []
+  }
+]
