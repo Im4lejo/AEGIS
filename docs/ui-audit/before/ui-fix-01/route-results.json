@@ -1,0 +1,1922 @@
+[
+  {
+    "name": "home",
+    "persona": "guest",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/"
+  },
+  {
+    "name": "login",
+    "persona": "guest",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/login"
+  },
+  {
+    "name": "forum",
+    "persona": "guest",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/foro"
+  },
+  {
+    "name": "communities",
+    "persona": "guest",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/comunidades"
+  },
+  {
+    "name": "marketplace",
+    "persona": "guest",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos?"
+  },
+  {
+    "name": "product-detail",
+    "persona": "guest",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/detalle?id=501"
+  },
+  {
+    "name": "stores",
+    "persona": "guest",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/tiendas"
+  },
+  {
+    "name": "physical-points",
+    "persona": "guest",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/puntos-fisicos"
+  },
+  {
+    "name": "saved-unavailable",
+    "persona": "guest",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/guardados"
+  },
+  {
+    "name": "ad-create",
+    "persona": "seller",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/crear"
+  },
+  {
+    "name": "messages",
+    "persona": "seller",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/mensajes"
+  },
+  {
+    "name": "profile",
+    "persona": "seller",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/perfil"
+  },
+  {
+    "name": "seller-products",
+    "persona": "seller",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/mis-productos"
+  },
+  {
+    "name": "settings",
+    "persona": "seller",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/ajustes"
+  },
+  {
+    "name": "security",
+    "persona": "seller",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/seguridad"
+  },
+  {
+    "name": "admin-denied",
+    "persona": "seller",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin"
+  },
+  {
+    "name": "buyer-negotiations",
+    "persona": "buyer",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/negociacion"
+  },
+  {
+    "name": "owner-points",
+    "persona": "point-owner",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/puntos-fisicos"
+  },
+  {
+    "name": "moderated-community",
+    "persona": "community-moderator",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/comunidades"
+  },
+  {
+    "name": "admin-dashboard",
+    "persona": "admin",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin"
+  },
+  {
+    "name": "admin-users",
+    "persona": "admin",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/usuarios"
+  },
+  {
+    "name": "admin-reports",
+    "persona": "admin",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/reportes"
+  },
+  {
+    "name": "admin-audit",
+    "persona": "admin",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/auditoria"
+  },
+  {
+    "name": "admin-settings",
+    "persona": "admin",
+    "theme": "light",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/configuracion"
+  },
+  {
+    "name": "home",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/"
+  },
+  {
+    "name": "login",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/login"
+  },
+  {
+    "name": "forum",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/foro"
+  },
+  {
+    "name": "communities",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/comunidades"
+  },
+  {
+    "name": "marketplace",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos?"
+  },
+  {
+    "name": "product-detail",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/detalle?id=501"
+  },
+  {
+    "name": "stores",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/tiendas"
+  },
+  {
+    "name": "physical-points",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/puntos-fisicos"
+  },
+  {
+    "name": "saved-unavailable",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/guardados"
+  },
+  {
+    "name": "ad-create",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/crear"
+  },
+  {
+    "name": "messages",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/mensajes"
+  },
+  {
+    "name": "profile",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/perfil"
+  },
+  {
+    "name": "seller-products",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/mis-productos"
+  },
+  {
+    "name": "settings",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/ajustes"
+  },
+  {
+    "name": "security",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/seguridad"
+  },
+  {
+    "name": "admin-denied",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin"
+  },
+  {
+    "name": "buyer-negotiations",
+    "persona": "buyer",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/negociacion"
+  },
+  {
+    "name": "owner-points",
+    "persona": "point-owner",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/puntos-fisicos"
+  },
+  {
+    "name": "moderated-community",
+    "persona": "community-moderator",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/comunidades"
+  },
+  {
+    "name": "admin-dashboard",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin"
+  },
+  {
+    "name": "admin-users",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/usuarios"
+  },
+  {
+    "name": "admin-reports",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/reportes"
+  },
+  {
+    "name": "admin-audit",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/auditoria"
+  },
+  {
+    "name": "admin-settings",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 360,
+    "clientWidth": 360,
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/configuracion"
+  },
+  {
+    "name": "home",
+    "persona": "guest",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/"
+  },
+  {
+    "name": "login",
+    "persona": "guest",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/login"
+  },
+  {
+    "name": "forum",
+    "persona": "guest",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/foro"
+  },
+  {
+    "name": "communities",
+    "persona": "guest",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/comunidades"
+  },
+  {
+    "name": "marketplace",
+    "persona": "guest",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos?"
+  },
+  {
+    "name": "product-detail",
+    "persona": "guest",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/detalle?id=501"
+  },
+  {
+    "name": "stores",
+    "persona": "guest",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/tiendas"
+  },
+  {
+    "name": "physical-points",
+    "persona": "guest",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/puntos-fisicos"
+  },
+  {
+    "name": "saved-unavailable",
+    "persona": "guest",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/guardados"
+  },
+  {
+    "name": "ad-create",
+    "persona": "seller",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/crear"
+  },
+  {
+    "name": "messages",
+    "persona": "seller",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/mensajes"
+  },
+  {
+    "name": "profile",
+    "persona": "seller",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/perfil"
+  },
+  {
+    "name": "seller-products",
+    "persona": "seller",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/mis-productos"
+  },
+  {
+    "name": "settings",
+    "persona": "seller",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/ajustes"
+  },
+  {
+    "name": "security",
+    "persona": "seller",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/seguridad"
+  },
+  {
+    "name": "admin-denied",
+    "persona": "seller",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin"
+  },
+  {
+    "name": "buyer-negotiations",
+    "persona": "buyer",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/negociacion"
+  },
+  {
+    "name": "owner-points",
+    "persona": "point-owner",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/puntos-fisicos"
+  },
+  {
+    "name": "moderated-community",
+    "persona": "community-moderator",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/comunidades"
+  },
+  {
+    "name": "admin-dashboard",
+    "persona": "admin",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin"
+  },
+  {
+    "name": "admin-users",
+    "persona": "admin",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/usuarios"
+  },
+  {
+    "name": "admin-reports",
+    "persona": "admin",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/reportes"
+  },
+  {
+    "name": "admin-audit",
+    "persona": "admin",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/auditoria"
+  },
+  {
+    "name": "admin-settings",
+    "persona": "admin",
+    "theme": "light",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/configuracion"
+  },
+  {
+    "name": "home",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/"
+  },
+  {
+    "name": "login",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/login"
+  },
+  {
+    "name": "forum",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/foro"
+  },
+  {
+    "name": "communities",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/comunidades"
+  },
+  {
+    "name": "marketplace",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos?"
+  },
+  {
+    "name": "product-detail",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/detalle?id=501"
+  },
+  {
+    "name": "stores",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/tiendas"
+  },
+  {
+    "name": "physical-points",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/puntos-fisicos"
+  },
+  {
+    "name": "saved-unavailable",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/guardados"
+  },
+  {
+    "name": "ad-create",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/crear"
+  },
+  {
+    "name": "messages",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/mensajes"
+  },
+  {
+    "name": "profile",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/perfil"
+  },
+  {
+    "name": "seller-products",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/mis-productos"
+  },
+  {
+    "name": "settings",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/ajustes"
+  },
+  {
+    "name": "security",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/seguridad"
+  },
+  {
+    "name": "admin-denied",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin"
+  },
+  {
+    "name": "buyer-negotiations",
+    "persona": "buyer",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/negociacion"
+  },
+  {
+    "name": "owner-points",
+    "persona": "point-owner",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/puntos-fisicos"
+  },
+  {
+    "name": "moderated-community",
+    "persona": "community-moderator",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/comunidades"
+  },
+  {
+    "name": "admin-dashboard",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin"
+  },
+  {
+    "name": "admin-users",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/usuarios"
+  },
+  {
+    "name": "admin-reports",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/reportes"
+  },
+  {
+    "name": "admin-audit",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/auditoria"
+  },
+  {
+    "name": "admin-settings",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 768,
+    "clientWidth": 768,
+    "scrollWidth": 768,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/configuracion"
+  },
+  {
+    "name": "home",
+    "persona": "guest",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/"
+  },
+  {
+    "name": "login",
+    "persona": "guest",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/login"
+  },
+  {
+    "name": "forum",
+    "persona": "guest",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/foro"
+  },
+  {
+    "name": "communities",
+    "persona": "guest",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/comunidades"
+  },
+  {
+    "name": "marketplace",
+    "persona": "guest",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos?"
+  },
+  {
+    "name": "product-detail",
+    "persona": "guest",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/detalle?id=501"
+  },
+  {
+    "name": "stores",
+    "persona": "guest",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/tiendas"
+  },
+  {
+    "name": "physical-points",
+    "persona": "guest",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/puntos-fisicos"
+  },
+  {
+    "name": "saved-unavailable",
+    "persona": "guest",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/guardados"
+  },
+  {
+    "name": "ad-create",
+    "persona": "seller",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/crear"
+  },
+  {
+    "name": "messages",
+    "persona": "seller",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/mensajes"
+  },
+  {
+    "name": "profile",
+    "persona": "seller",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/perfil"
+  },
+  {
+    "name": "seller-products",
+    "persona": "seller",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/mis-productos"
+  },
+  {
+    "name": "settings",
+    "persona": "seller",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/ajustes"
+  },
+  {
+    "name": "security",
+    "persona": "seller",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/seguridad"
+  },
+  {
+    "name": "admin-denied",
+    "persona": "seller",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin"
+  },
+  {
+    "name": "buyer-negotiations",
+    "persona": "buyer",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/negociacion"
+  },
+  {
+    "name": "owner-points",
+    "persona": "point-owner",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/puntos-fisicos"
+  },
+  {
+    "name": "moderated-community",
+    "persona": "community-moderator",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/comunidades"
+  },
+  {
+    "name": "admin-dashboard",
+    "persona": "admin",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin"
+  },
+  {
+    "name": "admin-users",
+    "persona": "admin",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/usuarios"
+  },
+  {
+    "name": "admin-reports",
+    "persona": "admin",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/reportes"
+  },
+  {
+    "name": "admin-audit",
+    "persona": "admin",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/auditoria"
+  },
+  {
+    "name": "admin-settings",
+    "persona": "admin",
+    "theme": "light",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/configuracion"
+  },
+  {
+    "name": "home",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/"
+  },
+  {
+    "name": "login",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/login"
+  },
+  {
+    "name": "forum",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/foro"
+  },
+  {
+    "name": "communities",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/comunidades"
+  },
+  {
+    "name": "marketplace",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos?"
+  },
+  {
+    "name": "product-detail",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/detalle?id=501"
+  },
+  {
+    "name": "stores",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/tiendas"
+  },
+  {
+    "name": "physical-points",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/puntos-fisicos"
+  },
+  {
+    "name": "saved-unavailable",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/guardados"
+  },
+  {
+    "name": "ad-create",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/crear"
+  },
+  {
+    "name": "messages",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/mensajes"
+  },
+  {
+    "name": "profile",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/perfil"
+  },
+  {
+    "name": "seller-products",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/mis-productos"
+  },
+  {
+    "name": "settings",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/ajustes"
+  },
+  {
+    "name": "security",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/seguridad"
+  },
+  {
+    "name": "admin-denied",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin"
+  },
+  {
+    "name": "buyer-negotiations",
+    "persona": "buyer",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/negociacion"
+  },
+  {
+    "name": "owner-points",
+    "persona": "point-owner",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/puntos-fisicos"
+  },
+  {
+    "name": "moderated-community",
+    "persona": "community-moderator",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/comunidades"
+  },
+  {
+    "name": "admin-dashboard",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin"
+  },
+  {
+    "name": "admin-users",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/usuarios"
+  },
+  {
+    "name": "admin-reports",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/reportes"
+  },
+  {
+    "name": "admin-audit",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/auditoria"
+  },
+  {
+    "name": "admin-settings",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 1280,
+    "clientWidth": 1280,
+    "scrollWidth": 1280,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/configuracion"
+  },
+  {
+    "name": "home",
+    "persona": "guest",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/"
+  },
+  {
+    "name": "login",
+    "persona": "guest",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/login"
+  },
+  {
+    "name": "forum",
+    "persona": "guest",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/foro"
+  },
+  {
+    "name": "communities",
+    "persona": "guest",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/comunidades"
+  },
+  {
+    "name": "marketplace",
+    "persona": "guest",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos?"
+  },
+  {
+    "name": "product-detail",
+    "persona": "guest",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/detalle?id=501"
+  },
+  {
+    "name": "stores",
+    "persona": "guest",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/tiendas"
+  },
+  {
+    "name": "physical-points",
+    "persona": "guest",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/puntos-fisicos"
+  },
+  {
+    "name": "saved-unavailable",
+    "persona": "guest",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/guardados"
+  },
+  {
+    "name": "ad-create",
+    "persona": "seller",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/crear"
+  },
+  {
+    "name": "messages",
+    "persona": "seller",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/mensajes"
+  },
+  {
+    "name": "profile",
+    "persona": "seller",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/perfil"
+  },
+  {
+    "name": "seller-products",
+    "persona": "seller",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/mis-productos"
+  },
+  {
+    "name": "settings",
+    "persona": "seller",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/ajustes"
+  },
+  {
+    "name": "security",
+    "persona": "seller",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/seguridad"
+  },
+  {
+    "name": "admin-denied",
+    "persona": "seller",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin"
+  },
+  {
+    "name": "buyer-negotiations",
+    "persona": "buyer",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/negociacion"
+  },
+  {
+    "name": "owner-points",
+    "persona": "point-owner",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/puntos-fisicos"
+  },
+  {
+    "name": "moderated-community",
+    "persona": "community-moderator",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/comunidades"
+  },
+  {
+    "name": "admin-dashboard",
+    "persona": "admin",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin"
+  },
+  {
+    "name": "admin-users",
+    "persona": "admin",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/usuarios"
+  },
+  {
+    "name": "admin-reports",
+    "persona": "admin",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/reportes"
+  },
+  {
+    "name": "admin-audit",
+    "persona": "admin",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/auditoria"
+  },
+  {
+    "name": "admin-settings",
+    "persona": "admin",
+    "theme": "light",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/configuracion"
+  },
+  {
+    "name": "home",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/"
+  },
+  {
+    "name": "login",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/login"
+  },
+  {
+    "name": "forum",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/foro"
+  },
+  {
+    "name": "communities",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/comunidades"
+  },
+  {
+    "name": "marketplace",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos?"
+  },
+  {
+    "name": "product-detail",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/detalle?id=501"
+  },
+  {
+    "name": "stores",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/tiendas"
+  },
+  {
+    "name": "physical-points",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/puntos-fisicos"
+  },
+  {
+    "name": "saved-unavailable",
+    "persona": "guest",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/guardados"
+  },
+  {
+    "name": "ad-create",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/crear"
+  },
+  {
+    "name": "messages",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/mensajes"
+  },
+  {
+    "name": "profile",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/perfil"
+  },
+  {
+    "name": "seller-products",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/productos/mis-productos"
+  },
+  {
+    "name": "settings",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/ajustes"
+  },
+  {
+    "name": "security",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/seguridad"
+  },
+  {
+    "name": "admin-denied",
+    "persona": "seller",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin"
+  },
+  {
+    "name": "buyer-negotiations",
+    "persona": "buyer",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/negociacion"
+  },
+  {
+    "name": "owner-points",
+    "persona": "point-owner",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/puntos-fisicos"
+  },
+  {
+    "name": "moderated-community",
+    "persona": "community-moderator",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/comunidades"
+  },
+  {
+    "name": "admin-dashboard",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin"
+  },
+  {
+    "name": "admin-users",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/usuarios"
+  },
+  {
+    "name": "admin-reports",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/reportes"
+  },
+  {
+    "name": "admin-audit",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/auditoria"
+  },
+  {
+    "name": "admin-settings",
+    "persona": "admin",
+    "theme": "dark",
+    "width": 1440,
+    "clientWidth": 1440,
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "url": "http://127.0.0.1:5173/#/admin/configuracion"
+  }
+]

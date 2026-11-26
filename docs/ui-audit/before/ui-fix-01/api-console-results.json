@@ -1,0 +1,4326 @@
+{
+  "apiRequests": [
+    {
+      "method": "GET",
+      "pathname": "/inicio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/historias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/inicio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/historias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/video/capabilities",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/foro",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/video/capabilities",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/foro",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/501",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/501",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/tiendas",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/tiendas",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes/123/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "PATCH",
+      "pathname": "/mensajes/123/lectura",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199/tabs/publicaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199/tabs/publicaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/mis",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/datos-vendedor",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/mis",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/datos-vendedor",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/preferencias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/preferencias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/sessions",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/security-notices",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/sessions",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/security-notices",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/negociacion",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/negociacion",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/dashboard",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/dashboard",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/users",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/users",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/reportes",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/apelaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/antifraude",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/reportes",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/apelaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/antifraude",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/auditoria",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/auditoria",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/configuracion",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/configuracion",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/inicio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/historias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/inicio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/historias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/video/capabilities",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/foro",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/video/capabilities",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/foro",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/501",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/501",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/tiendas",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/tiendas",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes/123/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "PATCH",
+      "pathname": "/mensajes/123/lectura",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199/tabs/publicaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199/tabs/publicaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/mis",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/datos-vendedor",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/mis",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/datos-vendedor",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/preferencias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/preferencias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/sessions",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/security-notices",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/sessions",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/security-notices",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/negociacion",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/negociacion",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/dashboard",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/dashboard",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/users",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/users",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/reportes",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/apelaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/antifraude",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/reportes",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/apelaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/antifraude",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/auditoria",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/auditoria",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/configuracion",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/configuracion",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/inicio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/historias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/inicio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/historias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/video/capabilities",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/foro",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/video/capabilities",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/foro",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/501",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/501",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/tiendas",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/tiendas",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes/123/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "PATCH",
+      "pathname": "/mensajes/123/lectura",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199/tabs/publicaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199/tabs/publicaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/mis",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/datos-vendedor",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/mis",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/datos-vendedor",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/preferencias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/preferencias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/sessions",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/security-notices",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/sessions",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/security-notices",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/negociacion",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/negociacion",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/dashboard",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/dashboard",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/users",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/users",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/reportes",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/apelaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/antifraude",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/reportes",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/apelaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/antifraude",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/auditoria",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/auditoria",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/configuracion",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/configuracion",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/inicio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/historias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/inicio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/historias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/video/capabilities",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/foro",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/video/capabilities",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/foro",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/501",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/501",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/tiendas",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/tiendas",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes/123/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "PATCH",
+      "pathname": "/mensajes/123/lectura",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199/tabs/publicaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199/tabs/publicaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/mis",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/datos-vendedor",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/mis",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/datos-vendedor",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/preferencias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/preferencias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/sessions",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/security-notices",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/sessions",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/security-notices",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/negociacion",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/negociacion",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/dashboard",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/dashboard",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/users",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/users",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/reportes",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/apelaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/antifraude",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/reportes",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/apelaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/antifraude",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/auditoria",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/auditoria",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/configuracion",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/configuracion",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/inicio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/historias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/inicio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/historias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/video/capabilities",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/foro",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/video/capabilities",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/foro",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/501",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/501",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/tiendas",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/tiendas",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes/123/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "PATCH",
+      "pathname": "/mensajes/123/lectura",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199/tabs/publicaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199/tabs/publicaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/mis",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/datos-vendedor",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/mis",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/datos-vendedor",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/preferencias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/preferencias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/sessions",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/security-notices",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/sessions",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/security-notices",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/negociacion",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/negociacion",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/dashboard",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/dashboard",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/users",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/users",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/reportes",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/apelaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/antifraude",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/reportes",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/apelaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/antifraude",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/auditoria",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/auditoria",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/configuracion",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/configuracion",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/inicio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/historias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/inicio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/historias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/video/capabilities",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/foro",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/video/capabilities",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/foro",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/501",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/501",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/tiendas",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/tiendas",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes/123/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "PATCH",
+      "pathname": "/mensajes/123/lectura",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199/tabs/publicaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199/tabs/publicaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/mis",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/datos-vendedor",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/mis",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/datos-vendedor",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/preferencias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/preferencias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/sessions",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/security-notices",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/sessions",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/security-notices",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/negociacion",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/negociacion",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/dashboard",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/dashboard",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/users",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/users",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/reportes",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/apelaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/antifraude",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/reportes",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/apelaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/antifraude",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/auditoria",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/auditoria",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/configuracion",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/configuracion",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/inicio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/historias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/inicio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/historias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/video/capabilities",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/foro",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/video/capabilities",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/foro",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/501",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/501",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/tiendas",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/tiendas",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes/123/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "PATCH",
+      "pathname": "/mensajes/123/lectura",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199/tabs/publicaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199/tabs/publicaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/mis",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/datos-vendedor",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/mis",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/datos-vendedor",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/preferencias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/preferencias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/sessions",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/security-notices",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/sessions",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/security-notices",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/negociacion",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/negociacion",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/dashboard",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/dashboard",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/users",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/users",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/reportes",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/apelaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/antifraude",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/reportes",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/apelaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/antifraude",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/auditoria",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/auditoria",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/configuracion",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/configuracion",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/inicio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/historias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/inicio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/historias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/video/capabilities",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/foro",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/video/capabilities",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/foro",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/501",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/501",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/tiendas",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/tiendas",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "guest"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/categorias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/mensajes/123/mensajes",
+      "role": "seller"
+    },
+    {
+      "method": "PATCH",
+      "pathname": "/mensajes/123/lectura",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199/tabs/publicaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199/tabs/publicaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/perfil/199",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/mis",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/datos-vendedor",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/productos/mis",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/datos-vendedor",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/preferencias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/preferencias",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/sessions",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/security-notices",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/sessions",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/security-notices",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "seller"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/negociacion",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/negociacion",
+      "role": "buyer"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/puntos-fisicos/directorio",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "point-owner"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/comunidades",
+      "role": "community-moderator"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/auth/web/me",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/dashboard",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/dashboard",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/users",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/users",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/reportes",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/apelaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/antifraude",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/reportes",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/apelaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/moderacion/antifraude",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/auditoria",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/auditoria",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/configuracion",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/notificaciones",
+      "role": "admin"
+    },
+    {
+      "method": "GET",
+      "pathname": "/admin/configuracion",
+      "role": "admin"
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": []
+}
