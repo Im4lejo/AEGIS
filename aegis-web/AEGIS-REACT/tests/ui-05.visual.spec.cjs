@@ -3,7 +3,10 @@ const path = require('node:path')
 const { test, expect } = require('playwright/test')
 const AxeBuilder = require('@axe-core/playwright').default
 
-const output = path.resolve(__dirname, '../../../docs/ui-audit/after/ui-05')
+const output = path.resolve(
+  __dirname,
+  process.env.UI_AUDIT_OUTPUT || '../../../docs/ui-audit/after/ui-05',
+)
 const sizes = [
   [360, 800],
   [768, 1024],
@@ -422,6 +425,22 @@ const routeGroups = [
       ['security', '/seguridad', '.account-security-page'],
       ['admin-denied', '/admin', '[role="alert"]'],
     ],
+  },
+  {
+    persona: { name: 'buyer', user: { ...user, username: 'buyer-fixture' } },
+    routes: [['buyer-negotiations', '/negociacion', '.negociacion-page']],
+  },
+  {
+    persona: {
+      name: 'point-owner',
+      user: {
+        ...user,
+        id: 989,
+        username: 'owner-fixture',
+        rol: 'owner',
+      },
+    },
+    routes: [['owner-points', '/puntos-fisicos', '.pv-lugar']],
   },
   {
     persona: {
