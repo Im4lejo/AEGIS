@@ -60,8 +60,6 @@ export default function Index({ auth, onNavigate }) {
     return () => { active = false }
   }, [city])
 
-  const selected = points.find((point) => point.id === selectedId)
-
   return (
     <div className="page-layout verificados-layout">
       <Header title="AEGIS | Puntos Verificados" auth={auth} onNavigate={onNavigate} />
@@ -97,27 +95,29 @@ export default function Index({ auth, onNavigate }) {
                 <p role="status">No hay puntos registrados para esta búsqueda.</p>
               )}
               {points.map((point) => (
-                <button
-                  key={point.id}
-                  type="button"
-                  className={selectedId === point.id ? 'pv-lugar pv-lugar-activo' : 'pv-lugar'}
-                  aria-pressed={selectedId === point.id}
-                  onClick={() => setSelectedId(point.id)}
-                >
-                  <strong>{point.nombre}</strong>
-                  {point.direccion && <span>{point.direccion}</span>}
-                  {point.ciudad && <span>{point.ciudad}</span>}
-                </button>
+                <div className="pv-lugar-item" key={point.id}>
+                  <button
+                    type="button"
+                    className={selectedId === point.id ? 'pv-lugar pv-lugar-activo' : 'pv-lugar'}
+                    aria-expanded={selectedId === point.id}
+                    onClick={() => setSelectedId(selectedId === point.id ? null : point.id)}
+                  >
+                    <strong>{point.nombre}</strong>
+                    {point.direccion && <span>{point.direccion}</span>}
+                    {point.ciudad && <span>{point.ciudad}</span>}
+                    <i className={`pv-lugar-chevron fa-solid ${selectedId === point.id ? 'fa-chevron-up' : 'fa-chevron-down'}`} aria-hidden="true" />
+                  </button>
+                  {selectedId === point.id && (
+                    <div className="pv-panel" id={`punto-details-${point.id}`} role="region" aria-label={`Detalles de ${point.nombre}`}>
+                      <button type="button" className="pv-cerrar" onClick={() => setSelectedId(null)} aria-label="Cerrar detalles">
+                        <i className="fa-solid fa-xmark" aria-hidden="true" />
+                      </button>
+                      <InfoLugar punto={point} />
+                    </div>
+                  )}
+                </div>
               ))}
             </section>
-            {selected && (
-              <aside className="pv-panel" aria-label={`Detalles de ${selected.nombre}`}>
-                <button type="button" className="pv-cerrar" onClick={() => setSelectedId(null)} aria-label="Cerrar detalles">
-                  <i className="fa-solid fa-xmark" aria-hidden="true" />
-                </button>
-                <InfoLugar punto={selected} />
-              </aside>
-            )}
             <div className="pv-mapa-placeholder" role="note">
               <i className="fa-solid fa-map-location-dot" aria-hidden="true" />
               <strong>Mapa no disponible</strong>

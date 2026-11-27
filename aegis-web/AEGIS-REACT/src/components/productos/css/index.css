@@ -377,7 +377,21 @@
 }
 
 .products-page .product-image-container {
+  position: relative;
   background: var(--color-surface-muted);
+}
+
+.products-page .product-discount-badge {
+  position: absolute;
+  z-index: 1;
+  top: 10px;
+  right: 10px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+  font-size: 0.75rem;
+  font-weight: 800;
 }
 
 .products-grid-container .product-info {

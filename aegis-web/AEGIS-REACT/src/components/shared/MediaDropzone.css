@@ -5,9 +5,10 @@
 
 .media-dropzone__target {
   min-height: 112px;
-  border: 1px dashed #718096;
-  border-radius: 12px;
-  background: #f8fafc;
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-card);
+  background: var(--color-surface-muted);
+  color: var(--color-text);
   display: grid;
   place-content: center;
   gap: 6px;
@@ -20,7 +21,7 @@
 }
 
 .media-dropzone__error {
-  color: #b42318;
+  color: var(--color-danger);
   margin: 0;
 }
 
@@ -31,8 +32,10 @@
 }
 
 .media-dropzone__item {
-  border: 1px solid #d0d5dd;
-  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text);
   overflow: hidden;
 }
 
@@ -52,8 +55,41 @@
   padding: 8px;
 }
 
+.media-dropzone__controls button {
+  min-height: 36px;
+  padding: 6px 9px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.media-dropzone__controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.media-dropzone__controls button:hover:not(:disabled) {
+  border-color: var(--color-action);
+  background: var(--color-surface-muted);
+}
+
 .media-dropzone__alt {
   display: grid;
   gap: 6px;
   font-weight: 600;
+  color: var(--color-text);
+}
+
+.media-dropzone__alt input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
 }

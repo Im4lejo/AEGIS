@@ -352,3 +352,93 @@
 .main-header .cart-badge {
   background: linear-gradient(135deg, #a855f7 0%, #db2777 100%);
 }
+
+[data-theme='dark'] .car-panel {
+  border-left: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+[data-theme='dark'] .car-panel .car-cabecera h2,
+[data-theme='dark'] .car-panel .car-item-nombre,
+[data-theme='dark'] .car-panel .car-item-cant,
+[data-theme='dark'] .car-panel .car-total-fila,
+[data-theme='dark'] .car-panel .car-total-fila strong {
+  color: var(--color-text);
+}
+
+[data-theme='dark'] .car-panel .car-cerrar,
+[data-theme='dark'] .car-panel .car-item-un,
+[data-theme='dark'] .car-panel .car-item-marca,
+[data-theme='dark'] .car-panel .car-item-precio-viejo,
+[data-theme='dark'] .car-panel .car-item-garantia,
+[data-theme='dark'] .car-panel .car-vacio {
+  color: var(--color-text-muted);
+}
+
+[data-theme='dark'] .car-panel .car-cerrar:hover,
+[data-theme='dark'] .car-panel .car-item-trash:hover {
+  background: var(--color-surface-muted);
+}
+
+[data-theme='dark'] .car-panel .car-aviso {
+  border-color: var(--color-border);
+  background: var(--color-info-soft);
+  color: var(--color-info-text);
+}
+
+[data-theme='dark'] .car-panel .car-aviso h4,
+[data-theme='dark'] .car-panel .car-aviso p {
+  color: var(--color-info-text);
+}
+
+[data-theme='dark'] .car-panel .car-item,
+[data-theme='dark'] .car-panel .car-pie {
+  border-color: var(--color-border);
+}
+
+[data-theme='dark'] .car-panel .car-item-img,
+[data-theme='dark'] .car-panel .car-item-cant,
+[data-theme='dark'] .car-panel .car-item-trash {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-muted);
+}
+
+[data-theme='dark'] .car-panel .car-item-img {
+  background: var(--color-surface-muted);
+}
+
+[data-theme='dark'] .car-panel .car-item:hover .car-item-nombre,
+[data-theme='dark'] .car-panel .car-item-precio,
+[data-theme='dark'] .car-panel .car-item-eliminar,
+[data-theme='dark'] .car-panel .car-vaciar,
+[data-theme='dark'] .car-panel .car-total-sub strong {
+  color: var(--color-action);
+}
+
+[data-theme='dark'] .car-panel .car-item-eliminar:hover,
+[data-theme='dark'] .car-panel .car-vaciar:hover {
+  color: var(--color-action-hover);
+}
+
+[data-theme='dark'] .car-panel .car-pie {
+  background: var(--color-surface);
+}
+
+[data-theme='dark'] .car-panel .car-btn-volver {
+  background:
+    linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
+    linear-gradient(90deg, #a855f7 0%, #db2777 100%) border-box;
+  color: var(--color-action);
+}
+
+[data-theme='dark'] .car-panel .car-btn-volver:hover {
+  background:
+    linear-gradient(var(--color-surface-muted), var(--color-surface-muted)) padding-box,
+    linear-gradient(90deg, #a855f7 0%, #db2777 100%) border-box;
+}
+
+[data-theme='dark'] .car-panel .car-btn-finalizar:disabled {
+  background: var(--color-border-strong);
+  color: var(--color-text-muted);
+}

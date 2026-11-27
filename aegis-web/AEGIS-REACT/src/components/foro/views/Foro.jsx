@@ -6,6 +6,7 @@ import Sidebar from '../../layouts/Sidebar'
 import { EmptyState, ErrorState, LoadingState } from '../../shared/ApiState'
 import { Modal } from '../../shared/ui'
 import { useDialogFocus } from '../../shared/ui/useDialogFocus'
+import { route } from '../../shared/presentation'
 import { useAuth } from '../../../auth/useAuth'
 import { forumApi, savedApi, videoApi } from '../../../services/api'
 import '../css/foro.css'
@@ -383,9 +384,6 @@ export default function Foro({ auth, onNavigate }) {
     reader.onload = (loadEvent) => setImagenNueva(loadEvent.target.result)
     reader.readAsDataURL(file)
   }
-
-  const irPlantilla = (origen) =>
-    onNavigate && onNavigate(`/plantilla?origen=${origen}`)
 
   return (
     <div className="page-layout foro-layout">
@@ -917,26 +915,32 @@ export default function Foro({ auth, onNavigate }) {
         </main>
 
         <aside className="foro-banners">
-          <button
+          <a
             className="foro-banner"
-            type="button"
-            onClick={() => irPlantilla('banner-ofertas-1')}
+            href={route('/productos')}
+            onClick={(event) => {
+              event.preventDefault()
+              onNavigate?.('/productos')
+            }}
           >
             <img
               src="/ofertas-banner.svg"
               alt="OFERTAS INCREÍBLES HASTA -50% DTO."
             />
-          </button>
-          <button
+          </a>
+          <a
             className="foro-banner"
-            type="button"
-            onClick={() => irPlantilla('banner-ofertas-2')}
+            href={route('/productos')}
+            onClick={(event) => {
+              event.preventDefault()
+              onNavigate?.('/productos')
+            }}
           >
             <img
               src="/ofertas-banner.svg"
               alt="OFERTAS INCREÍBLES HASTA -50% DTO."
             />
-          </button>
+          </a>
         </aside>
       </div>
 

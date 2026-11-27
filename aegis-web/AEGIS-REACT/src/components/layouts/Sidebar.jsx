@@ -1,4 +1,4 @@
-import { navigateTo } from '../shared/presentation'
+import { navigateTo, route } from '../shared/presentation'
 
 const IconSearch = () => (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -18,6 +18,13 @@ const IconTrend = () => (
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
         <polyline points="17 6 23 6 23 12" />
+    </svg>
+)
+
+const IconCommunities = () => (
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="9" cy="8" r="3" />
+        <path d="M3 20v-1a6 6 0 0 1 12 0v1M16 5.5a3 3 0 0 1 0 5.8M18 14a5 5 0 0 1 3 4.6" />
     </svg>
 )
 
@@ -53,6 +60,16 @@ export default function Sidebar({ busqueda, setBusqueda, orden, setOrden, temaAc
                 >
                     <IconTrend /> Popular
                 </button>
+                <a
+                    className="foro-side-link"
+                    href={route('/comunidades')}
+                    onClick={(event) => {
+                        event.preventDefault()
+                        navigateTo('/comunidades', onNavigate)
+                    }}
+                >
+                    <IconCommunities /> Comunidades
+                </a>
             </nav>
 
             <hr className="foro-side-divider" />

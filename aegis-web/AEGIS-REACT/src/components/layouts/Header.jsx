@@ -6,7 +6,7 @@ import Head from './Head'
 import Navbar from './Navbar'
 import { WorkspacePrimaryNav } from './WorkspaceChrome'
 import { useDialogFocus } from '../shared/ui/useDialogFocus'
-import { ThemeSelector } from '../../theme/ThemeProvider'
+import { ThemeToggle } from '../../theme/ThemeProvider'
 import CarritoPanel from '../carrito/CarritoPanel'
 import { totalUnidades } from '../carrito/carritoDemo'
 import './css/layouts.css'
@@ -104,7 +104,7 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
         if (event) event.preventDefault()
         const termino = busqueda.trim()
         setMenuAbierto(false)
-        navigateTo(termino ? `/busqueda?buscar=${encodeURIComponent(termino)}` : '/busqueda', onNavigate)
+        navigateTo(termino ? `/productos?buscar=${encodeURIComponent(termino)}` : '/productos', onNavigate)
     }
 
     const navegarDesdeMenu = (path) => {
@@ -114,6 +114,7 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
     }
 
     const usuario = auth && auth.user ? auth.user : null
+    const mostrarAccionesPrivadas = Boolean(usuario || auth?.isAdmin)
     const nombreMostrar = usuario ? `${usuario.nombre || ''} ${usuario.apellido || ''}`.trim() : 'Invitado'
     const apodoMostrar = usuario && usuario.username ? `@${usuario.username}` : ''
     const avatar = usuario?.foto_perfil_url || usuario?.avatar || avatarUrl(usuario)
@@ -229,7 +230,7 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
                                 <a className="header-mobile-link" href={route('/novedades')} onClick={(event) => go(event, '/novedades')}>Novedades</a>
                             </div>
                         </nav>
-                        <ThemeSelector className="theme-select--mobile" />
+                        <ThemeToggle className="theme-control--mobile" />
 
                         {usuario
                             ? <a className="header-mobile-link header-mobile-logout" href={route('/login')} onClick={cerrarSesion}>Cerrar sesión</a>
@@ -259,43 +260,60 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
                     </div>
 
                     <div className="header-user-actions">
-                        <a className="header-message-link" href={route('/mensajes')} onClick={(event) => go(event, '/mensajes')}>
-                            Mensajes
-                        </a>
-                        <div className="header-notification">
-                            <button
-                                type="button"
-                                className="header-notification-button"
-                                aria-expanded={notificacionesAbiertas}
-                                aria-label={`Notificaciones${noLeidas ? `, ${noLeidas} no leídas` : ''}`}
-                                onClick={() => setNotificacionesAbiertas((open) => !open)}
-                            >
-                                Notificaciones
-                                {noLeidas > 0 && <span className="header-notification-badge">{noLeidas}</span>}
-                            </button>
-                            {notificacionesAbiertas && (
-                                <div className="header-notification-panel" role="region" aria-label="Novedades">
-                                    {notificaciones.length === 0 ? (
-                                        <p>No tienes notificaciones.</p>
-                                    ) : notificaciones.map((notification) => (
-                                        <button
-                                            type="button"
-                                            className={notification.leida ? 'header-notification-item' : 'header-notification-item unread'}
-                                            key={notification.id}
-                                            onClick={async () => {
-                                                await notificationApi.read(notification.id, auth.token)
-                                                if (notification.destino) go(null, notification.destino)
-                                                setNotificacionesAbiertas(false)
-                                            }}
-                                        >
-                                            <strong>{notification.titulo}</strong>
-                                            <span>{notification.mensaje}</span>
-                                        </button>
-                                    ))}
+                        {mostrarAccionesPrivadas && (
+                            <>
+                                <a
+                                    className="header-message-link"
+                                    href={route('/mensajes')}
+                                    aria-label="Mensajes"
+                                    title="Mensajes"
+                                    onClick={(event) => go(event, '/mensajes')}
+                                >
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                        <rect x="3" y="5" width="18" height="14" rx="2" />
+                                        <path d="m3 7 9 7 9-7" />
+                                    </svg>
+                                </a>
+                                <div className="header-notification">
+                                    <button
+                                        type="button"
+                                        className="header-notification-button"
+                                        aria-expanded={notificacionesAbiertas}
+                                        aria-label={`Notificaciones${noLeidas ? `, ${noLeidas} no leídas` : ''}`}
+                                        title="Notificaciones"
+                                        onClick={() => setNotificacionesAbiertas((open) => !open)}
+                                    >
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
+                                            <path d="M10 21h4" />
+                                        </svg>
+                                        {noLeidas > 0 && <span className="header-notification-badge">{noLeidas}</span>}
+                                    </button>
+                                    {notificacionesAbiertas && (
+                                        <div className="header-notification-panel" role="region" aria-label="Novedades">
+                                            {notificaciones.length === 0 ? (
+                                                <p>No tienes notificaciones.</p>
+                                            ) : notificaciones.map((notification) => (
+                                                <button
+                                                    type="button"
+                                                    className={notification.leida ? 'header-notification-item' : 'header-notification-item unread'}
+                                                    key={notification.id}
+                                                    onClick={async () => {
+                                                        await notificationApi.read(notification.id, auth.token)
+                                                        if (notification.destino) go(null, notification.destino)
+                                                        setNotificacionesAbiertas(false)
+                                                    }}
+                                                >
+                                                    <strong>{notification.titulo}</strong>
+                                                    <span>{notification.mensaje}</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
-                            )}
-                        </div>
-                        <ThemeSelector className="theme-select--desktop" />
+                            </>
+                        )}
+                        <ThemeToggle className="theme-control--desktop" />
                         <div className="profile-dropdown-container" ref={profileRef}>
                             <button
                                 className="profile-btn"
@@ -317,6 +335,7 @@ export default function Header({ title, stylesheet, auth, onNavigate, forumMode 
                                             {apodoMostrar && <span>{apodoMostrar}</span>}
                                         </div>
                                     </div>
+                                    <a href={route('/ajustes')} onClick={(e) => go(e, '/ajustes')}>Ajustes</a>
                                     {usuario ? (
                                         <>
                                             <a href={route('/perfil')} onClick={(e) => go(e, '/perfil')}>Mi Perfil</a>
