@@ -4,12 +4,13 @@ const avisar = () => {
   window.dispatchEvent(new Event('carrito-cambio'))
 }
 
-export const agregarProducto = (id) => {
+export const agregarProducto = (id, producto) => {
   const existente = CARRITO.find((item) => String(item.id) === String(id))
   if (existente) {
     existente.cantidad = existente.cantidad + 1
+    if (producto) existente.producto = producto
   } else {
-    CARRITO.push({ id: id, cantidad: 1 })
+    CARRITO.push({ id, cantidad: 1, ...(producto ? { producto } : {}) })
   }
   avisar()
 }

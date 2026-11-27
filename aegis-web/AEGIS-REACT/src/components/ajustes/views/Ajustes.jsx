@@ -1,22 +1,51 @@
 import { useEffect, useState } from 'react'
 import Header from '../../layouts/Header'
-import WorkspaceChrome from '../../layouts/WorkspaceChrome'
 import Footer from '../../layouts/Footer'
-import PageFrame from '../../shared/PageFrame'
 import { preferenceApi } from '../../../services/api'
 import '../css/ajustes.css'
 
 const CATEGORIES = [
-  'Apariencia',
-  'Feed',
-  'Marketplace',
-  'Mensajería',
-  'Privacidad',
-  'Notificaciones',
-  'Seguridad',
-  'Accesibilidad',
-  'Datos',
+  { label: 'Apariencia', icon: 'appearance' },
+  { label: 'Feed', icon: 'feed' },
+  { label: 'Marketplace', icon: 'marketplace' },
+  { label: 'Mensajería', icon: 'messages' },
+  { label: 'Privacidad', icon: 'privacy' },
+  { label: 'Notificaciones', icon: 'notifications' },
+  { label: 'Seguridad', icon: 'security' },
+  { label: 'Accesibilidad', icon: 'accessibility' },
+  { label: 'Datos', icon: 'data' },
 ]
+
+const CATEGORY_ICONS = {
+  appearance: <><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" /></>,
+  feed: <><path d="M8 6h13M8 12h13M8 18h13" /><path d="M3 6h.01M3 12h.01M3 18h.01" /></>,
+  marketplace: <><rect x="3" y="3" width="8" height="8" rx="1" /><rect x="13" y="3" width="8" height="8" rx="1" /><rect x="3" y="13" width="8" height="8" rx="1" /><rect x="13" y="13" width="8" height="8" rx="1" /></>,
+  messages: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m4 7 8 6 8-6" /></>,
+  privacy: <><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z" /><path d="m9 12 2 2 4-4" /></>,
+  notifications: <><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" /><path d="M10 21h4" /></>,
+  security: <><rect x="4" y="10" width="16" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3" /></>,
+  accessibility: <><circle cx="12" cy="5" r="2" /><path d="M5 9h14M12 9v12m-5-7 5-2 5 2m-8 7 3-5 3 5" /></>,
+  data: <><ellipse cx="12" cy="5" rx="8" ry="3" /><path d="M4 5v7c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12v7c0 1.7 3.6 3 8 3s8-1.3 8-3v-7" /></>,
+  settings: <><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.8 3.1-.2-.1a1.7 1.7 0 0 0-1.8-.1 1.7 1.7 0 0 0-1 1.5v.2h-3.6v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.1l-.2.1-1.8-3.1.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H5v-3.6h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1 1.8-3.1.2.1a1.7 1.7 0 0 0 1.8.1 1.7 1.7 0 0 0 1-1.5v-.2h3.6v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.1l.2-.1 1.8 3.1-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.5 1h.2v3.6h-.2a1.7 1.7 0 0 0-1.5 1Z" /></>,
+}
+
+function CategoryIcon({ name }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className="ajustes-menu__icon"
+      fill="none"
+      focusable="false"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.8"
+      viewBox="0 0 24 24"
+    >
+      {CATEGORY_ICONS[name]}
+    </svg>
+  )
+}
 
 export default function Ajustes({ auth, onNavigate }) {
   const [active, setActive] = useState('Apariencia')
@@ -75,33 +104,46 @@ export default function Ajustes({ auth, onNavigate }) {
 
   if (!preferences) {
     return (
-      <PageFrame title="AEGIS | Ajustes" auth={auth} onNavigate={onNavigate}>
-        <main className="ajustes-page">
+      <div className="page-layout ajustes-page-layout">
+        <Header title="AEGIS | Ajustes" auth={auth} onNavigate={onNavigate} />
+        <main className="ajustes-page ajustes-page--loading">
           {error ? <p role="alert">{error}</p> : auth?.token
             ? <p role="status">Cargando ajustes...</p>
             : <p>Inicia sesión para consultar tus ajustes.</p>}
         </main>
-      </PageFrame>
+        <Footer onNavigate={onNavigate} />
+      </div>
     )
   }
 
   return (
-    <div className="page-layout">
+    <div className="page-layout ajustes-page-layout">
       <Header title="AEGIS | Ajustes" auth={auth} onNavigate={onNavigate} />
-      <WorkspaceChrome auth={auth} onNavigate={onNavigate}>
       <main className="ajustes-page">
-        <h1>Ajustes</h1>
-        {error && <p role="alert">{error}</p>}
-        {status && <p role="status">{status}</p>}
         <div className="ajustes-layout">
           <nav className="ajustes-menu" aria-label="Categorías de ajustes">
-            {CATEGORIES.map((category) => (
-              <button type="button" key={category} className={active === category ? 'active' : ''} onClick={() => setActive(category)}>
-                {category}
+            <h2 className="ajustes-menu__heading">
+              <CategoryIcon name="settings" />
+              Ajustes de la cuenta
+            </h2>
+            {CATEGORIES.map(({ label, icon }) => (
+              <button
+                type="button"
+                key={label}
+                aria-pressed={active === label}
+                className={active === label ? 'active' : ''}
+                onClick={() => setActive(label)}
+              >
+                <CategoryIcon name={icon} />
+                <span>{label}</span>
               </button>
             ))}
           </nav>
-          <section className="ajustes-panel" aria-live="polite">
+          <div className="ajustes-content">
+            <h1>Ajustes</h1>
+            {error && <p role="alert">{error}</p>}
+            {status && <p role="status">{status}</p>}
+            <section className="ajustes-panel" aria-live="polite">
             {active === 'Apariencia' && (
               <>
                 <h2>Apariencia</h2>
@@ -200,10 +242,10 @@ export default function Ajustes({ auth, onNavigate }) {
               <button type="button" onClick={reset}>Restablecer preferencias</button>
               <button type="button" onClick={save} disabled={saving}>{saving ? 'Guardando...' : 'Guardar cambios'}</button>
             </div>
-          </section>
+            </section>
+          </div>
         </div>
       </main>
-      </WorkspaceChrome>
       <Footer onNavigate={onNavigate} />
     </div>
   )

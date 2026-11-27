@@ -6,25 +6,11 @@
   display: grid;
   align-content: start;
   gap: 24px;
-  padding-top: 28px;
+  padding-top: 18px;
   padding-bottom: 36px;
 }
 
-.home-composer {
-  display: grid;
-  gap: 18px;
-  padding: clamp(20px, 3vw, 32px);
-  border-top: 4px solid var(--color-action);
-}
-
-.home-composer h1 {
-  margin: 8px 0;
-  color: var(--color-text);
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  line-height: 1.2;
-}
-
-.home-composer p,
+.home-promo p,
 .home-feed-note,
 .home-recent-card p {
   color: var(--color-text-muted);
@@ -37,13 +23,6 @@
   font-weight: 750;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-}
-
-.home-composer form {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: end;
-  gap: 10px;
 }
 
 .home-feed-section {
@@ -113,14 +92,6 @@
 }
 
 @media (max-width: 520px) {
-  .home-composer form {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .home-composer form .ui-button {
-    width: 100%;
-  }
-
   .home-section-heading {
     align-items: flex-start;
     flex-direction: column;

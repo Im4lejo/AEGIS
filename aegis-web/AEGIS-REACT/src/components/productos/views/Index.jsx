@@ -152,7 +152,10 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
   const cargando = respuesta.key !== requestKey
   const productos = cargando ? [] : respuesta.productos
   const error = cargando ? '' : respuesta.error
-  const lista = productos
+  const soloOfertas = filtros.filtro === 'ofertas'
+  const lista = soloOfertas
+    ? productos.filter((producto) => Number(producto.descuento) > 0)
+    : productos
   useEffect(() => {
     const params = new URLSearchParams()
     if (termino) params.set('buscar', termino)
@@ -164,15 +167,20 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
     if (marca) params.set('marca', marca)
     if (dias) params.set('dias', dias)
     if (orden !== 'reciente') params.set('sort', orden)
+    if (soloOfertas) params.set('filtro', 'ofertas')
     const base = window.location.hash.split('?')[0] || '#/productos'
     window.history.replaceState(null, '', `${base}?${params.toString()}`)
     localStorage.setItem('aegis-marketplace-filters', JSON.stringify({
       termino, categoria, estado, precioMin, precioMax, ciudad, marca, dias, orden,
     }))
-  }, [termino, categoria, estado, precioMin, precioMax, ciudad, marca, dias, orden])
+  }, [termino, categoria, estado, precioMin, precioMax, ciudad, marca, dias, orden, soloOfertas])
   const titulo = termino
     ? `Resultados para "${termino}"`
-    : categoria || (modoNovedades ? 'Novedades' : 'Productos')
+    : categoria || (modoNovedades
+      ? 'Novedades'
+      : soloOfertas
+        ? 'Productos en oferta'
+        : 'Productos')
 
   const limpiarFiltros = () => {
     setBusqueda('')
@@ -255,8 +263,13 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
           </label>
         </div>
 
-        {(categoria || estado !== 'todo' || precioMin || precioMax || ciudad || marca || dias) && (
+        {(categoria || estado !== 'todo' || precioMin || precioMax || ciudad || marca || dias || soloOfertas) && (
           <div className="products-active-filters" aria-label="Filtros activos">
+            {soloOfertas && (
+              <button type="button" onClick={() => onNavigate?.('/productos')}>
+                Solo productos en oferta ×
+              </button>
+            )}
             {categoria && <button type="button" onClick={() => setCategoria('')}>Categoría: {categoria} ×</button>}
             {estado !== 'todo' && <button type="button" onClick={() => setEstado('todo')}>Estado: {estado} ×</button>}
             {precioMin && <button type="button" onClick={() => setPrecioMin('')}>Desde COP {precioMin} ×</button>}
@@ -373,7 +386,9 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
               <EmptyState
                 title="Sin productos"
                 message={
-                  modoNovedades
+                  soloOfertas
+                    ? 'No hay productos con descuento disponibles en este momento.'
+                    : modoNovedades
                     ? 'Todavía no hay productos recientes.'
                     : 'No se encontraron productos con los filtros seleccionados.'
                 }
@@ -406,6 +421,11 @@ function Catalogo({ filtros = {}, auth, onNavigate, vista }) {
                           src={imageUrl(producto.imagen)}
                           alt=""
                         />
+                        {Number(producto.descuento) > 0 && (
+                          <span className="product-discount-badge">
+                            -{Number(producto.descuento)}%
+                          </span>
+                        )}
                         <span
                           className={`product-state-tag ${badgeEstado(producto.estado)}`}
                         >

@@ -11,6 +11,7 @@ import './css/carrito.css'
 
 export default function CarritoPanel({ onCerrar, onNavigate }) {
   const [items, setItems] = useState(CARRITO.slice())
+  const obtenerProducto = (item) => item.producto || buscarProducto(item.id)
 
   useEffect(() => {
     const actualizar = () => setItems(CARRITO.slice())
@@ -18,14 +19,14 @@ export default function CarritoPanel({ onCerrar, onNavigate }) {
     return () => window.removeEventListener('carrito-cambio', actualizar)
   }, [])
 
-  const visibles = items.filter((item) => buscarProducto(item.id) !== null)
+  const visibles = items.filter((item) => obtenerProducto(item) !== null)
 
   let unidades = 0
   let total = 0
   let ahorro = 0
 
   visibles.forEach((item) => {
-    const p = buscarProducto(item.id) || {}
+    const p = obtenerProducto(item) || {}
     const precio = p.precio || 0
     const anterior = p.precioAnterior || 0
     const base = anterior > precio ? anterior : precio
@@ -70,7 +71,7 @@ export default function CarritoPanel({ onCerrar, onNavigate }) {
           )}
 
           {visibles.map((item) => {
-            const p = buscarProducto(item.id) || {}
+            const p = obtenerProducto(item) || {}
             const nombre = p.nombre || p.titulo || 'Producto'
             const precio = p.precio || 0
             const anterior = p.precioAnterior || 0

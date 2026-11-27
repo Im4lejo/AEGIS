@@ -123,6 +123,7 @@ export function Modal({
   title,
   children,
   className,
+  overlayClassName,
   labelledBy,
 }) {
   const generatedId = useId()
@@ -134,7 +135,7 @@ export function Modal({
 
   return (
     <div
-      className="ui-overlay"
+      className={classNames('ui-overlay', overlayClassName)}
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onClose?.()
       }}
