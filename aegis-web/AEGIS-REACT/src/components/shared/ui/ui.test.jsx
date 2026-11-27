@@ -28,7 +28,11 @@ import {
   Textarea,
   Toast,
 } from './index'
-import { ThemeProvider, ThemeSelector } from '../../../theme/ThemeProvider'
+import {
+  ThemeProvider,
+  ThemeSelector,
+  ThemeToggle,
+} from '../../../theme/ThemeProvider'
 import Styleguide from './Styleguide'
 
 afterEach(() => {
@@ -112,6 +116,22 @@ describe('shared accessible components', () => {
     fireEvent.keyDown(document, { key: 'Escape' })
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
     expect(document.activeElement).toBe(trigger)
+  })
+
+  it('applies a custom class to the modal overlay', () => {
+    render(
+      <Modal
+        open
+        onClose={() => {}}
+        title="Reel"
+        overlayClassName="home-reel-overlay"
+      >
+        Contenido
+      </Modal>,
+    )
+    expect(screen.getByRole('dialog').parentElement.className).toContain(
+      'home-reel-overlay',
+    )
   })
 
   it('renders a drawer as a modal dialog', () => {
@@ -241,6 +261,27 @@ describe('shared accessible components', () => {
     expect(window.localStorage.getItem('aegis.theme.preference.v1')).toBe(
       'dark',
     )
+  })
+
+  it('toggles between a sun icon for light and a moon icon for dark', async () => {
+    render(
+      <ThemeProvider>
+        <ThemeToggle />
+      </ThemeProvider>,
+    )
+
+    const lightButton = screen.getByRole('button', {
+      name: 'Cambiar a modo oscuro',
+    })
+    expect(lightButton.querySelector('circle')).toBeTruthy()
+    fireEvent.click(lightButton)
+
+    await waitFor(() =>
+      expect(document.documentElement.dataset.theme).toBe('dark'),
+    )
+    expect(
+      screen.getByRole('button', { name: 'Cambiar a modo claro' }).querySelector('path'),
+    ).toBeTruthy()
   })
 
   it('lets the internal guide exercise shared controls', async () => {

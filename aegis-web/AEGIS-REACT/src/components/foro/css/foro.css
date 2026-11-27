@@ -1,13 +1,13 @@
 
 .foro-container {
-  max-width: 1300px;
+  max-width: 1440px;
   width: 100%;
   margin: 0 auto;
-  padding: 24px 20px;
+  padding: 20px 24px;
   flex: 1;
   display: grid;
-  grid-template-columns: 215px minmax(0, 1fr) 200px;
-  gap: 24px;
+  grid-template-columns: minmax(220px, 20vw) minmax(0, 1fr) 200px;
+  gap: 20px;
   align-items: start;
   box-sizing: border-box;
   position: relative;
@@ -23,9 +23,9 @@
   flex-direction: column;
   gap: 8px;
   position: sticky;
-  top: 16px;
+  top: 88px;
   align-self: start;
-  max-height: calc(100vh - 48px);
+  max-height: calc(100dvh - 104px);
   overflow-y: auto;
   scrollbar-width: thin;
   background: var(--color-surface);
@@ -83,6 +83,7 @@
   color: var(--color-text);
   cursor: pointer;
   text-align: left;
+  text-decoration: none;
   transition: background-color 0.2s, color 0.2s;
 }
 
@@ -724,9 +725,11 @@
   background: none;
   border-radius: 14px;
   overflow: hidden;
+  color: inherit;
   cursor: pointer;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
   transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
 }
 
 .foro-banner:hover {
@@ -839,7 +842,7 @@
 
 @media (max-width: 900px) {
   .foro-container {
-    grid-template-columns: 205px minmax(0, 1fr);
+    grid-template-columns: minmax(190px, 20vw) minmax(0, 1fr);
   }
 
   .foro-banners {

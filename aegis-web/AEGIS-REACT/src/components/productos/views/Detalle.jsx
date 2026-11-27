@@ -105,7 +105,7 @@ export default function Detalle({ id, auth, onNavigate }) {
 
   const agregarAlCarrito = () => {
     if (producto.id) {
-      agregarProducto(producto.id)
+      agregarProducto(producto.id, producto)
       setProductoAgregado(producto.id)
     }
   }

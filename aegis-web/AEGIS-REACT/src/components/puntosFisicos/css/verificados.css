@@ -433,3 +433,61 @@
         padding: var(--space-4);
     }
 }
+
+.pv-fila {
+    grid-template-columns: minmax(0, 0.9fr) minmax(360px, 1.1fr);
+    align-items: start;
+}
+
+.pv-lista {
+    align-content: start;
+}
+
+.pv-lugar-item {
+    display: grid;
+    min-width: 0;
+}
+
+.pv-lugar {
+    position: relative;
+    padding-right: 44px;
+}
+
+.pv-lugar-activo {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.pv-lugar-chevron {
+    position: absolute;
+    top: 50%;
+    right: var(--space-3);
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+}
+
+.pv-panel {
+    border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    box-shadow: none;
+}
+
+.pv-mapa-placeholder {
+    position: sticky;
+    top: 88px;
+    height: calc(100dvh - 120px);
+    min-height: 360px;
+}
+
+@media (max-width: 760px) {
+    .pv-fila {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .pv-mapa-placeholder {
+        position: static;
+        height: 360px;
+        min-height: 320px;
+    }
+}

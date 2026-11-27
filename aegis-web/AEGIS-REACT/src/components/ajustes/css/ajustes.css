@@ -97,15 +97,48 @@
   font: inherit;
 }
 
-.ajustes-menu button:hover,
+.ajustes-menu button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-color: transparent;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.ajustes-menu__heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 6px;
+  padding: 8px 10px 14px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-size: 0.95rem;
+  font-weight: 750;
+}
+
+.ajustes-menu__icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+}
+
+.ajustes-menu button:not(.active):hover,
 .ajustes-actions button:hover {
   background: var(--color-surface-muted);
+  color: var(--color-text);
 }
 
 .ajustes-menu button.active {
-  border-color: var(--color-action);
-  background: var(--color-info-soft);
-  color: var(--color-info-text);
+  border-color: transparent;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  color: #ffffff;
+  box-shadow:
+    0 12px 30px rgb(124 58 237 / 20%),
+    0 4px 14px rgb(236 72 153 / 16%);
 }
 
 .ajustes-page :is(input, select, textarea) {
@@ -135,5 +168,75 @@
 @media (max-width: 700px) {
   .ajustes-menu {
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  }
+
+  .ajustes-menu__heading {
+    grid-column: 1 / -1;
+  }
+}
+
+.page-layout.ajustes-page-layout {
+  padding-bottom: 0;
+}
+
+.ajustes-page {
+  flex: 1;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ajustes-page--loading {
+  padding: 32px;
+}
+
+.ajustes-layout {
+  grid-template-columns: 30vw minmax(0, 1fr);
+  align-items: stretch;
+  gap: 0;
+  min-height: calc(100dvh - 150px);
+  margin: 0;
+}
+
+.ajustes-menu {
+  align-content: start;
+  gap: 8px;
+  padding: 28px clamp(18px, 3vw, 42px);
+  border-top: 0;
+  border-bottom: 0;
+  border-left: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.ajustes-content {
+  min-width: 0;
+  padding: 32px clamp(24px, 5vw, 72px);
+}
+
+.ajustes-content > h1 {
+  margin: 0 0 24px;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+.ajustes-panel {
+  min-height: 320px;
+}
+
+@media (max-width: 700px) {
+  .ajustes-layout {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .ajustes-menu {
+    padding: 16px;
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .ajustes-content {
+    padding: 24px 16px;
   }
 }

@@ -1,0 +1,1960 @@
+[
+  {
+    "name": "home",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1,
+        "targets": [
+          [
+            ".home-products-grid"
+          ]
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "count": 5,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".workspace-bottom-nav__link[aria-current=\"page\"][href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "login",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 4,
+        "targets": [
+          [
+            ".login-btn"
+          ],
+          [
+            "a[href$=\"#/forgot-password\"]"
+          ],
+          [
+            "a[href$=\"#/verify-email\"]"
+          ],
+          [
+            "a[href$=\"#/register\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "forum",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 4,
+        "targets": [
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "communities",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 5,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[aria-current=\"page\"][href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "marketplace",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 7,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".badge-used"
+          ],
+          [
+            ".badge-new"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[aria-current=\"page\"][href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "product-detail",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1,
+        "targets": [
+          [
+            ".detail-badge"
+          ]
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "count": 11,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".outline.detail-btn:nth-child(2)"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__label"
+          ],
+          [
+            ".workspace-bottom-nav__link[aria-current=\"page\"][href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[aria-current=\"page\"][href$=\"#/productos\"] > .workspace-bottom-nav__label"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos/crear\"] > .workspace-bottom-nav__label"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__label"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__label"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "messages",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 5,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "profile",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1,
+        "targets": [
+          [
+            ".perfil-tab-pagination"
+          ]
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "count": 9,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".perfil-stat-stars"
+          ],
+          [
+            ".perfil-tabs > button:nth-child(3)"
+          ],
+          [
+            "button:nth-child(4)"
+          ],
+          [
+            ".perfil-tabs > button:nth-child(5)"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[aria-current=\"page\"][href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "seller-products",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 5,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[aria-current=\"page\"][href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "settings",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 5,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "security",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 5,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "admin-dashboard",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 5,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "admin-users",
+    "theme": "light",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 5,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "home",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1,
+        "targets": [
+          [
+            ".home-products-grid"
+          ]
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "count": 5,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".workspace-bottom-nav__link[aria-current=\"page\"][href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "login",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 5,
+        "targets": [
+          [
+            ".eye-icon"
+          ],
+          [
+            ".login-btn"
+          ],
+          [
+            "a[href$=\"#/forgot-password\"]"
+          ],
+          [
+            "a[href$=\"#/verify-email\"]"
+          ],
+          [
+            "a[href$=\"#/register\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "forum",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 4,
+        "targets": [
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "communities",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 5,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[aria-current=\"page\"][href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "marketplace",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 7,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".badge-used"
+          ],
+          [
+            ".badge-new"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[aria-current=\"page\"][href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "product-detail",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1,
+        "targets": [
+          [
+            ".detail-badge"
+          ]
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "count": 11,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".outline.detail-btn:nth-child(2)"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__label"
+          ],
+          [
+            ".workspace-bottom-nav__link[aria-current=\"page\"][href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[aria-current=\"page\"][href$=\"#/productos\"] > .workspace-bottom-nav__label"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos/crear\"] > .workspace-bottom-nav__label"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__label"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__label"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "messages",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 5,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "profile",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1,
+        "targets": [
+          [
+            ".perfil-tab-pagination"
+          ]
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "count": 9,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".perfil-stat-stars"
+          ],
+          [
+            ".perfil-tabs > button:nth-child(3)"
+          ],
+          [
+            "button:nth-child(4)"
+          ],
+          [
+            ".perfil-tabs > button:nth-child(5)"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[aria-current=\"page\"][href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "seller-products",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 5,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[aria-current=\"page\"][href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "settings",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 5,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "security",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 5,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "admin-dashboard",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 5,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "admin-users",
+    "theme": "dark",
+    "width": 360,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 5,
+        "targets": [
+          [
+            ".cart-badge"
+          ],
+          [
+            ".workspace-bottom-nav__link[href=\"#/\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/productos\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/comunidades\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".workspace-bottom-nav__link[href$=\"#/perfil\"] > .workspace-bottom-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "home",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1,
+        "targets": [
+          [
+            ".home-products-grid"
+          ]
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "count": 8,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "login",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 10,
+        "targets": [
+          [
+            "h1"
+          ],
+          [
+            ".security-wrapper > p"
+          ],
+          [
+            "h3"
+          ],
+          [
+            ".security-item:nth-child(2) > span"
+          ],
+          [
+            ".security-item:nth-child(3) > span"
+          ],
+          [
+            ".security-item:nth-child(4) > span"
+          ],
+          [
+            ".login-btn"
+          ],
+          [
+            "a[href$=\"#/forgot-password\"]"
+          ],
+          [
+            "a[href$=\"#/verify-email\"]"
+          ],
+          [
+            "a[href$=\"#/register\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "forum",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 8,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "communities",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 8,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "marketplace",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 10,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".badge-used"
+          ],
+          [
+            ".badge-new"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "product-detail",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1,
+        "targets": [
+          [
+            ".detail-badge"
+          ]
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "count": 8,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "messages",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 8,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "profile",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1,
+        "targets": [
+          [
+            ".perfil-tab-pagination"
+          ]
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "count": 9,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".perfil-stat-stars"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "seller-products",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 8,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "settings",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 8,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "security",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 8,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "admin-dashboard",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 9,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Administración\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "admin-users",
+    "theme": "light",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 9,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Administración\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "home",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1,
+        "targets": [
+          [
+            ".home-products-grid"
+          ]
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "count": 8,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "login",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 11,
+        "targets": [
+          [
+            "h1"
+          ],
+          [
+            ".security-wrapper > p"
+          ],
+          [
+            "h3"
+          ],
+          [
+            ".security-item:nth-child(2) > span"
+          ],
+          [
+            ".security-item:nth-child(3) > span"
+          ],
+          [
+            ".security-item:nth-child(4) > span"
+          ],
+          [
+            ".eye-icon"
+          ],
+          [
+            ".login-btn"
+          ],
+          [
+            "a[href$=\"#/forgot-password\"]"
+          ],
+          [
+            "a[href$=\"#/verify-email\"]"
+          ],
+          [
+            "a[href$=\"#/register\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "forum",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 8,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "communities",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 8,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "marketplace",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 10,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".badge-used"
+          ],
+          [
+            ".badge-new"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "product-detail",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1,
+        "targets": [
+          [
+            ".detail-badge"
+          ]
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "count": 8,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "messages",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 8,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "profile",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "aria-prohibited-attr",
+        "count": 1,
+        "targets": [
+          [
+            ".perfil-tab-pagination"
+          ]
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "count": 9,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            ".perfil-stat-stars"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "seller-products",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 8,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "settings",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 8,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "security",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 8,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "admin-dashboard",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 9,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Administración\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "admin-users",
+    "theme": "dark",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "count": 9,
+        "targets": [
+          [
+            ".profile-caret"
+          ],
+          [
+            ".cart-badge"
+          ],
+          [
+            "a[title=\"Inicio\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Marketplace\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Comunidades\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Foro\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Perfil\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Puntos verificados\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ],
+          [
+            "a[title=\"Administración\"] > .workspace-nav__icon[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  }
+]
