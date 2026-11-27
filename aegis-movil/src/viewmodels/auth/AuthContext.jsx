@@ -3,6 +3,8 @@ import {
     createContext,
     useContext,
     useEffect,
+    useCallback,
+    useRef,
     useState,
 } from "react";
 
@@ -22,6 +24,7 @@ export function AuthProvider({ children }) {
     const [isLoading, setIsLoading] = useState(true);
     const [token, setToken] = useState(null);
     const [user, setUser] = useState(null);
+    const userRef = useRef(null);
 
     useEffect(() => {
         const restoreSession = async () => {
@@ -33,11 +36,13 @@ export function AuthProvider({ children }) {
 
                 setToken(storedToken);
                 setUser(storedToken ? storedUser : null);
+                userRef.current = storedToken ? storedUser : null;
                 setLog(!!storedToken);
             } catch (error) {
                 console.error("Error recuperando la sesión:", error);
                 setToken(null);
                 setUser(null);
+                userRef.current = null;
                 setLog(false);
             } finally {
                 setIsLoading(false);
@@ -52,6 +57,7 @@ export function AuthProvider({ children }) {
         await setAuthToken(authToken);
         setToken(authToken);
         setUser(authenticatedUser);
+        userRef.current = authenticatedUser;
         setLog(true);
     };
 
@@ -61,9 +67,17 @@ export function AuthProvider({ children }) {
         } finally {
             setToken(null);
             setUser(null);
+            userRef.current = null;
             setLog(false);
         }
     };
+
+    const updateUser = useCallback(async (userChanges) => {
+        const updatedUser = { ...userRef.current, ...userChanges };
+        await setAuthUser(updatedUser);
+        userRef.current = updatedUser;
+        setUser(updatedUser);
+    }, []);
 
     return (
         <AuthContext.Provider
@@ -75,6 +89,7 @@ export function AuthProvider({ children }) {
                 user,
                 login,
                 logout,
+                updateUser,
             }}
         >
             {children}

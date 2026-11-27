@@ -237,7 +237,7 @@ class MediaController extends Controller
 
         $uploaded = $this->media->upload(
             $validated['imagen'],
-            'usuarios/avatar',
+            'profile_images',
             'Usuario/'.$request->user()->id,
         );
         $usuario = $request->user();
@@ -274,8 +274,18 @@ class MediaController extends Controller
 
         $uploaded = $this->media->upload(
             $validated['imagen'],
-            'usuarios/portada',
+            'background_images',
             'Usuario/'.$request->user()->id,
+            false,
+            [
+                'transformation' => [
+                    'quality' => 'auto',
+                    'fetch_format' => 'jpg',
+                    'width' => 1280,
+                    'height' => 1600,
+                    'crop' => 'limit',
+                ],
+            ],
         );
         $usuario = $request->user();
         $previousId = $usuario->img_background_id;

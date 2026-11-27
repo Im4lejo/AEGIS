@@ -1,6 +1,8 @@
 import {
     ActivityIndicator,
     Image,
+    Platform,
+    RefreshControl,
     StyleSheet,
     View,
     ScrollView,
@@ -10,95 +12,208 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
+import * as ImagePicker from "expo-image-picker";
 import { Redirect } from "expo-router";
 import ProfileProducts from "./ProfileProducts";
 import ForumPostCard from "../forum/ForumPostCard";
 import { useAuth } from "../../viewmodels/auth/AuthContext";
 import useProfileViewModel from "../../viewmodels/profile/useProfileViewModel";
 
-export default function Profile() {
+const MAX_PROFILE_IMAGE_SIZE = 5 * 1024 * 1024;
+const PROFILE_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+export default function Profile({ profileId }) {
     const { user } = useAuth();
+    const isOwnProfile = !profileId || Number(profileId) === Number(user?.id);
+    const viewedUserId = profileId || user?.id;
     const [selectedSection, setSelectedSection] = useState("publicaciones");
     const [failedBackgroundUrl, setFailedBackgroundUrl] = useState(null);
     const [showBackgroundMenu, setShowBackgroundMenu] = useState(false);
+    const [isUploadingImage, setIsUploadingImage] = useState(false);
+    const [imageError, setImageError] = useState("");
     const {
         errorMessage: profileError,
         isLoading: isProfileLoading,
+        isRefreshing,
         actionError,
         addComment,
         likedPosts,
+        profile,
         products,
         publications,
+        refresh,
         toggleLike,
-    } = useProfileViewModel(user?.id);
+        uploadProfileImage,
+    } = useProfileViewModel(viewedUserId, isOwnProfile);
+    const displayedProfile = profile || (isOwnProfile ? user : null);
 
-    if (!user) {
+    if (isOwnProfile && !user) {
         return <Redirect href="/auth" />;
     }
 
+    const backgroundImageCandidate = isOwnProfile
+        ? profile?.img_background_url || user?.img_background_url
+        : displayedProfile?.img_background_url;
     const backgroundImageUrl =
-        typeof user.img_background_url === "string" && user.img_background_url.trim()
-            ? user.img_background_url.trim()
+        typeof backgroundImageCandidate === "string" &&
+        backgroundImageCandidate.trim()
+            ? backgroundImageCandidate.trim()
             : null;
+    const chooseProfileImage = async (type) => {
+        setImageError("");
+        setIsUploadingImage(true);
+        try {
+            const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+            if (!permission.granted) {
+                setImageError("Permite el acceso a tus fotos para cambiar la imagen.");
+                return;
+            }
+
+            const result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ["images"],
+                allowsEditing: true,
+                aspect: type === "avatar" ? [1, 1] : [13, 6],
+                quality: 0.8,
+            });
+            if (result.canceled || !result.assets?.[0]) {
+                return;
+            }
+
+            const image = result.assets[0];
+            const mimeType = image.mimeType || "image/jpeg";
+            if (!PROFILE_IMAGE_TYPES.includes(mimeType)) {
+                setImageError("El formato debe ser JPG, PNG o WEBP.");
+                return;
+            }
+            if ((image.fileSize || 0) > MAX_PROFILE_IMAGE_SIZE) {
+                setImageError("La imagen debe pesar máximo 5 MB.");
+                return;
+            }
+
+            const saved = await uploadProfileImage(
+                { ...image, mimeType },
+                type
+            );
+            if (saved && type === "cover") {
+                setFailedBackgroundUrl(null);
+                setShowBackgroundMenu(false);
+            }
+        } catch (error) {
+            setImageError(
+                error?.message || "No se pudo seleccionar la imagen."
+            );
+        } finally {
+            setIsUploadingImage(false);
+        }
+    };
+
+    if (!profile && !isOwnProfile && isProfileLoading) {
+        return (
+            <View style={styles.profileLoading}>
+                <ActivityIndicator color="#317df8" />
+                <Text style={styles.sectionPlaceholder}>Cargando perfil...</Text>
+            </View>
+        );
+    }
+
+    if (!profile && !isOwnProfile) {
+        return (
+            <View style={styles.profileLoading}>
+                <Text accessibilityRole="alert" style={styles.sectionPlaceholder}>
+                    {profileError || "No se pudo cargar este perfil."}
+                </Text>
+                <Pressable onPress={() => refresh()} style={styles.retryButton}>
+                    <Text style={styles.retryButtonText}>Reintentar</Text>
+                </Pressable>
+            </View>
+        );
+    }
 
     return (
         <View style={styles.profileScreen}>
             <View style={styles.profileContent}>
-                <ScrollView style={styles.scrollView}>
+                <ScrollView
+                    style={styles.scrollView}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={isRefreshing}
+                            onRefresh={() => refresh(true)}
+                            tintColor="#317df8"
+                            colors={["#317df8"]}
+                        />
+                    }
+                >
                     <View style={styles.container}>
                         <View style={styles.primaryBackground}>
-                            <LinearGradient
-                                colors={["#FFFFFF", "#d1d1d1", "#a09f9f"]}
-                                start={{ x: 0, y: 0 }}
-                                end={{ x: 1, y: 1 }}
-                                style={styles.profileImgContainer}
-                            >
+                            <View style={styles.profileImgContainer}>
                                 {backgroundImageUrl &&
-                                    failedBackgroundUrl !== backgroundImageUrl ? (
+                                failedBackgroundUrl !== backgroundImageUrl ? (
                                     <Image
-                                        source={{ uri: backgroundImageUrl }}
+                                        key={backgroundImageUrl}
+                                        source={{
+                                            uri: backgroundImageUrl,
+                                            ...(Platform.OS === "web"
+                                                ? {}
+                                                : { headers: { Accept: "image/jpeg" } }),
+                                        }}
                                         style={styles.backgroundImage}
                                         resizeMode="cover"
                                         onError={() =>
                                             setFailedBackgroundUrl(backgroundImageUrl)
                                         }
                                     />
-                                ) : null}
-                                <Pressable
-                                    accessibilityRole="button"
-                                    accessibilityLabel="Editar fondo del perfil"
-                                    onPress={() => setShowBackgroundMenu(true)}
-                                    style={styles.coverEditButton}
-                                >
-                                    <Ionicons
-                                        name="pencil"
-                                        size={20}
-                                        color="#2c2c2c"
+                                ) : (
+                                    <LinearGradient
+                                        colors={["#FFFFFF", "#b3b3b3", "#797878"]}
+                                        start={{ x: 0, y: 0 }}
+                                        end={{ x: 1, y: 1 }}
+                                        style={styles.backgroundImage}
                                     />
-                                    <Text style={styles.cardTitle}>Editar Fondo</Text>
-                                </Pressable>
-                            </LinearGradient>
+                                )}
+                                {isOwnProfile ? (
+                                    <Pressable
+                                        accessibilityRole="button"
+                                        accessibilityLabel="Editar fondo del perfil"
+                                        onPress={() => setShowBackgroundMenu(true)}
+                                        style={styles.coverEditButton}
+                                    >
+                                        <Ionicons
+                                            name="pencil"
+                                            size={20}
+                                            color="#2c2c2c"
+                                        />
+                                        <Text style={styles.cardTitle}>Editar Fondo</Text>
+                                    </Pressable>
+                                ) : null}
+                            </View>
                             <View style={styles.avatarContainer}>
                                 <Image
                                     source={
-                                        user?.foto_perfil_url
-                                            ? { uri: user.foto_perfil_url }
+                                        displayedProfile?.foto_perfil_url
+                                            ? { uri: displayedProfile.foto_perfil_url }
                                             : require("../../../assets/default-profile.png")
                                     }
                                     style={styles.logo}
                                 />
-                                <View style={styles.avatarEditButton}>
-                                    <Ionicons
-                                        name="pencil"
-                                        size={18}
-                                        color="#f1f1f1"
-                                    />
-                                </View>
+                                {isOwnProfile ? (
+                                    <Pressable
+                                        accessibilityRole="button"
+                                        accessibilityLabel="Cambiar foto de perfil"
+                                        onPress={() => chooseProfileImage("avatar")}
+                                        style={styles.avatarEditButton}
+                                    >
+                                        {isUploadingImage ? (
+                                            <ActivityIndicator size="small" color="#ffffff" />
+                                        ) : (
+                                            <Ionicons name="pencil" size={18} color="#f1f1f1" />
+                                        )}
+                                    </Pressable>
+                                ) : null}
                             </View>
                             <Text style={styles.primaryName}>
-                                {user.nombre} {user.apellido}
+                                {displayedProfile?.nombre} {displayedProfile?.apellido}
                             </Text>
-                            <Text style={styles.username}>@{user.username}</Text>
+                            <Text style={styles.username}>@{displayedProfile?.username}</Text>
                             <View style={styles.cardContainer}>
                                 <View style={styles.card_1}>
                                     <Ionicons
@@ -118,7 +233,7 @@ export default function Profile() {
                                         color="#ffffff"
                                     />
                                     <Text style={styles.userValues}>
-                                        {user.reputacion}
+                                        {displayedProfile?.reputacion ?? "—"}
                                     </Text>
                                     <Text style={styles.cardDescription}>
                                         Reseñas
@@ -140,18 +255,20 @@ export default function Profile() {
                         <View style={styles.personalData}>
                             <Text style={styles.description}>Descripción</Text>
                             <Text style={styles.usernameDATA}>
-                                {user.descripcion}
+                                {displayedProfile?.descripcion || "Sin descripción"}
                             </Text>
                             <Text>Lugar de residencia</Text>
-                            <Text style={styles.usernameDATA}>{user.ciudad}</Text>
-                            <Text>Fecha de Nacimiento</Text>
                             <Text style={styles.usernameDATA}>
-                                29 de marzo del 2006
+                                {displayedProfile?.ciudad_aprox || "No especificado"}
                             </Text>
-                            <Text>Fecha de registro de cuenta</Text>
-                            <Text style={styles.usernameDATA}>
-                                {user.fecha_registro}
-                            </Text>
+                            {displayedProfile?.fecha_registro ? (
+                                <>
+                                    <Text>Fecha de registro de cuenta</Text>
+                                    <Text style={styles.usernameDATA}>
+                                        {displayedProfile.fecha_registro}
+                                    </Text>
+                                </>
+                            ) : null}
                         </View>
                         <View style={styles.sectionTabs}>
                             <Pressable
@@ -206,7 +323,6 @@ export default function Profile() {
                                 publications={publications}
                                 isLoading={isProfileLoading}
                                 errorMessage={profileError}
-                                actionError={actionError}
                                 likedPosts={likedPosts}
                                 onToggleLike={toggleLike}
                                 onCreateComment={addComment}
@@ -218,6 +334,11 @@ export default function Profile() {
                                 errorMessage={profileError}
                             />
                         )}
+                        {isOwnProfile && actionError ? (
+                            <Text accessibilityRole="alert" style={styles.sectionPlaceholder}>
+                                {actionError}
+                            </Text>
+                        ) : null}
 
 
                     </View>
@@ -255,7 +376,13 @@ export default function Profile() {
                         {backgroundImageUrl &&
                             failedBackgroundUrl !== backgroundImageUrl ? (
                             <Image
-                                source={{ uri: backgroundImageUrl }}
+                                key={backgroundImageUrl}
+                                source={{
+                                    uri: backgroundImageUrl,
+                                    ...(Platform.OS === "web"
+                                        ? {}
+                                        : { headers: { Accept: "image/jpeg" } }),
+                                }}
                                 style={styles.backgroundPreviewImage}
                                 resizeMode="cover"
                                 onError={() =>
@@ -281,13 +408,27 @@ export default function Profile() {
                             Elige una imagen para tu perfil
                         </Text>
                         <Text style={styles.imagePickerDescription}>
-                            Usa una imagen horizontal en formato JPG o PNG.
+                            Usa una imagen horizontal JPG, PNG o WEBP (máximo 5 MB).
                         </Text>
-                        <View style={styles.imagePickerButton}>
-                            <Text style={styles.imagePickerButtonText}>
-                                Seleccionar imagen
+                        {imageError || actionError ? (
+                            <Text accessibilityRole="alert" style={styles.imageError}>
+                                {imageError || actionError}
                             </Text>
-                        </View>
+                        ) : null}
+                        <Pressable
+                            accessibilityRole="button"
+                            disabled={isUploadingImage}
+                            onPress={() => chooseProfileImage("cover")}
+                            style={styles.imagePickerButton}
+                        >
+                            {isUploadingImage ? (
+                                <ActivityIndicator size="small" color="#ffffff" />
+                            ) : (
+                                <Text style={styles.imagePickerButtonText}>
+                                    Seleccionar imagen
+                                </Text>
+                            )}
+                        </Pressable>
                     </View>
                 </View>
             ) : null}
@@ -299,7 +440,6 @@ function Publicaciones({
     publications,
     isLoading,
     errorMessage,
-    actionError,
     likedPosts,
     onToggleLike,
     onCreateComment,
@@ -333,11 +473,6 @@ function Publicaciones({
 
     return (
         <View style={styles.publicationList}>
-            {actionError ? (
-                <Text accessibilityRole="alert" style={styles.sectionPlaceholder}>
-                    {actionError}
-                </Text>
-            ) : null}
             {publications.map((publication) => (
                 <ForumPostCard
                     key={publication.id}
@@ -355,6 +490,24 @@ const styles = StyleSheet.create({
     profileScreen: {
         flex: 1,
         position: "relative",
+    },
+    profileLoading: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 24,
+        backgroundColor: "#e0e0e0",
+    },
+    retryButton: {
+        marginTop: 10,
+        paddingHorizontal: 16,
+        paddingVertical: 9,
+        borderRadius: 8,
+        backgroundColor: "#317df8",
+    },
+    retryButtonText: {
+        color: "#ffffff",
+        fontWeight: "700",
     },
     profileContent: {
         flex: 1,
@@ -491,6 +644,12 @@ const styles = StyleSheet.create({
         color: "#FFFFFF",
         fontSize: 12,
         fontWeight: "700",
+    },
+    imageError: {
+        marginTop: 8,
+        color: "#ffe0e0",
+        fontSize: 12,
+        textAlign: "center",
     },
     backgroundImage: {
         ...StyleSheet.absoluteFillObject,

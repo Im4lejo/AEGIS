@@ -37,6 +37,7 @@ export default function RootLayout() {
                         <Stack.Screen name="auth" />
                         <Stack.Screen name="settings" />
                         <Stack.Screen name="product/[id]" />
+                        <Stack.Screen name="profile/[id]" />
                         <Stack.Screen name="(tabs)" />
                     </Stack>
                 </SafeAreaView>

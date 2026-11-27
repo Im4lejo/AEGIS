@@ -1,62 +1,74 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
     createForumComment,
     getApiErrorMessage,
     getUserProfile,
+    replaceProfileImage,
 } from "../../models/api/apiClient";
 import { mapForumPost } from "../../models/forum/forumPostMapper";
 import { useAuth } from "../auth/AuthContext";
 
-export default function useProfileViewModel(userId) {
-    const { token } = useAuth();
+export default function useProfileViewModel(userId, isOwnProfile) {
+    const { token, updateUser } = useAuth();
     const [profileData, setProfileData] = useState(null);
     const [isLoading, setIsLoading] = useState(Boolean(userId));
+    const [isRefreshing, setIsRefreshing] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [actionError, setActionError] = useState("");
     const [likedPosts, setLikedPosts] = useState({});
+    const requestId = useRef(0);
 
-    useEffect(() => {
-        let isActive = true;
-
+    const refresh = useCallback(async (pullToRefresh = false) => {
         if (!userId) {
             setProfileData(null);
             setIsLoading(false);
-            return () => {
-                isActive = false;
-            };
+            setIsRefreshing(false);
+            return false;
         }
 
-        const loadProfile = async () => {
+        const currentRequestId = ++requestId.current;
+        if (pullToRefresh) {
+            setIsRefreshing(true);
+        } else {
             setIsLoading(true);
-            setErrorMessage("");
+        }
+        setErrorMessage("");
 
-            try {
-                const response = await getUserProfile(userId);
-                const data = response.data?.data;
-                if (!data) {
-                    throw new Error("La API no devolvió los datos del perfil.");
-                }
+        try {
+            const profileResponse = await getUserProfile(userId, token);
+            const data = profileResponse.data?.data;
+            if (!data?.perfil) {
+                throw new Error("La API no devolvió los datos del perfil.");
+            }
 
-                if (isActive) {
-                    setProfileData(data);
-                }
-            } catch (error) {
-                if (isActive) {
-                    setErrorMessage(getApiErrorMessage(error));
-                }
-            } finally {
-                if (isActive) {
-                    setIsLoading(false);
+            if (requestId.current === currentRequestId) {
+                setProfileData(data);
+                if (isOwnProfile) {
+                    await updateUser(data.perfil);
                 }
             }
-        };
+            return true;
+        } catch (error) {
+            if (requestId.current === currentRequestId) {
+                setErrorMessage(error?.response
+                    ? getApiErrorMessage(error)
+                    : error?.message || getApiErrorMessage(error));
+            }
+            return false;
+        } finally {
+            if (requestId.current === currentRequestId) {
+                setIsLoading(false);
+                setIsRefreshing(false);
+            }
+        }
+    }, [isOwnProfile, token, updateUser, userId]);
 
-        loadProfile();
-
+    useEffect(() => {
+        refresh();
         return () => {
-            isActive = false;
+            requestId.current += 1;
         };
-    }, [userId]);
+    }, [refresh]);
 
     const publications = useMemo(
         () => (profileData?.publicaciones || []).map((post) =>
@@ -104,6 +116,38 @@ export default function useProfileViewModel(userId) {
         }
     };
 
+    const uploadProfileImage = async (image, type) => {
+        if (!token) {
+            setActionError("Inicia sesión para cambiar la imagen del perfil.");
+            return false;
+        }
+
+        setActionError("");
+        try {
+            const response = await replaceProfileImage(image, type, token);
+            const url = response.data?.data?.url;
+            if (!url) {
+                throw new Error("La API no devolvió la URL de la imagen.");
+            }
+
+            const field = type === "avatar" ? "foto_perfil_url" : "img_background_url";
+            setProfileData((currentData) => currentData
+                ? {
+                    ...currentData,
+                    perfil: { ...currentData.perfil, [field]: url },
+                }
+                : currentData);
+            await updateUser({ [field]: url });
+            await refresh(true);
+            return true;
+        } catch (error) {
+            setActionError(error?.response
+                ? getApiErrorMessage(error)
+                : error?.message || getApiErrorMessage(error));
+            return false;
+        }
+    };
+
     const toggleLike = (postId) => {
         setLikedPosts((currentLikes) => ({
             ...currentLikes,
@@ -116,9 +160,13 @@ export default function useProfileViewModel(userId) {
         addComment,
         errorMessage,
         isLoading,
+        isRefreshing,
         likedPosts,
+        profile: profileData?.perfil || null,
         products: profileData?.productos || [],
         publications,
+        refresh,
         toggleLike,
+        uploadProfileImage,
     };
 }

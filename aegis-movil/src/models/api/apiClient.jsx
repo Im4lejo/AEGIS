@@ -16,6 +16,17 @@ export function getApiErrorMessage(error) {
         return "No se pudo conectar con la API. Verifica que el servidor esté iniciado y que la URL configurada sea accesible desde el teléfono.";
     }
 
+    const validationMessage = Object.values(error.response.data?.errors || {})
+        .flat()
+        .find((message) => typeof message === "string");
+    if (validationMessage) {
+        return validationMessage;
+    }
+
+    if (typeof error.response.data?.message === "string") {
+        return error.response.data.message;
+    }
+
     return `La API respondió con el error HTTP ${error.response.status}.`;
 }
 
@@ -40,7 +51,10 @@ export const createProduct = (productData, token) => {
     return API.post("/productos", productData, { headers });
 };
 
-export const getForum = (params) => API.get("/foro", { params });
+export const getForum = (params, token) => API.get("/foro", {
+    params,
+    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+});
 
 export const createForumPost = (post, token) =>
     API.post("/foro", post, {
@@ -57,8 +71,34 @@ export const createForumComment = (postId, comment, token) =>
         },
     });
 
-export const getUserProfile = (usuario) => {
-    return API.get(`/perfil/${usuario}`);
+export const getUserProfile = (usuario, token) =>
+    API.get(`/perfil/${usuario}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    });
+
+export const updateOwnProfile = (profile, token) =>
+    API.patch("/perfil/me", profile, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+
+export const replaceProfileImage = (image, type, token) => {
+    const formData = new FormData();
+    formData.append("imagen", {
+        uri: image.uri,
+        name: image.fileName || `${type === "avatar" ? "profile" : "background"}.jpg`,
+        type: image.mimeType || "image/jpeg",
+    });
+
+    return API.post(
+        `/perfil/media/${type === "avatar" ? "avatar" : "portada"}`,
+        formData,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
+            },
+        }
+    );
 };
 
 // Autenticación

@@ -85,7 +85,7 @@ class PerfilController extends Controller
                     ->with('usuario:id,nombre,username,foto_perfil_url as foto_perfil')
                     ->orderBy('fecha_comentario'),
             ])
-            ->withCount('comentarios')
+            ->withCount(['comentarios', 'reacciones'])
             ->latest('fecha_publicacion')
             ->limit(10)
             ->get(['id', 'usuario_id', 'titulo', 'contenido', 'fecha_publicacion']);

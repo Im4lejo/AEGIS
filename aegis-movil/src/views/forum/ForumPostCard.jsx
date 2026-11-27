@@ -9,6 +9,7 @@ import {
     TextInput,
     View,
 } from "react-native";
+import { useRouter } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 export function ForumAvatar({ uri, size = 40 }) {
@@ -40,6 +41,7 @@ export default function ForumPostCard({
     onToggleLike,
     onCreateComment,
 }) {
+    const router = useRouter();
     const [showComments, setShowComments] = useState(false);
     const [commentDraft, setCommentDraft] = useState("");
     const [isSubmittingComment, setIsSubmittingComment] = useState(false);
@@ -62,14 +64,35 @@ export default function ForumPostCard({
         message: [post.title, post.body].filter(Boolean).join("\n\n"),
     });
 
+    const openProfile = (userId) => {
+        if (userId) {
+            router.push({
+                pathname: "/profile/[id]",
+                params: { id: String(userId) },
+            });
+        }
+    };
+
     return (
         <View style={styles.postCard}>
             <View style={styles.postHeader}>
-                <ForumAvatar uri={post.avatar} size={42} />
-                <View style={styles.authorInfo}>
+                <Pressable
+                    accessibilityRole={post.authorId ? "button" : undefined}
+                    accessibilityLabel={`Ver perfil de ${post.author}`}
+                    disabled={!post.authorId}
+                    onPress={() => openProfile(post.authorId)}
+                >
+                    <ForumAvatar uri={post.avatar} size={42} />
+                </Pressable>
+                <Pressable
+                    accessibilityRole={post.authorId ? "button" : undefined}
+                    disabled={!post.authorId}
+                    onPress={() => openProfile(post.authorId)}
+                    style={styles.authorInfo}
+                >
                     <Text style={styles.authorName}>{post.author}</Text>
                     <Text style={styles.postAge}>{post.age}</Text>
-                </View>
+                </Pressable>
                 <Pressable
                     accessibilityRole="button"
                     accessibilityLabel="Más opciones de la publicación"
@@ -151,9 +174,22 @@ export default function ForumPostCard({
                 <View style={styles.commentsSection}>
                     {post.commentItems.map((comment) => (
                         <View key={comment.id} style={styles.commentRow}>
-                            <ForumAvatar uri={comment.avatar} size={30} />
+                            <Pressable
+                                accessibilityRole={comment.authorId ? "button" : undefined}
+                                accessibilityLabel={`Ver perfil de ${comment.author}`}
+                                disabled={!comment.authorId}
+                                onPress={() => openProfile(comment.authorId)}
+                            >
+                                <ForumAvatar uri={comment.avatar} size={30} />
+                            </Pressable>
                             <View style={styles.commentBubble}>
-                                <Text style={styles.commentAuthor}>{comment.author}</Text>
+                                <Pressable
+                                    accessibilityRole={comment.authorId ? "button" : undefined}
+                                    disabled={!comment.authorId}
+                                    onPress={() => openProfile(comment.authorId)}
+                                >
+                                    <Text style={styles.commentAuthor}>{comment.author}</Text>
+                                </Pressable>
                                 <Text style={styles.commentText}>{comment.body}</Text>
                             </View>
                         </View>

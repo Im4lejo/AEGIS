@@ -68,11 +68,17 @@ class MediaManager
         string $folder,
         string $resourceId,
         bool $allowVideo = false,
+        array $storageOptions = [],
     ): array {
         $metadata = $this->validate($file, $allowVideo);
-        $uploaded = $this->storage->upload($file, $folder, [
-            'resource_type' => $metadata['resource_type'],
-        ]);
+        $uploaded = $this->storage->upload(
+            $file,
+            $folder,
+            array_merge(
+                ['resource_type' => $metadata['resource_type']],
+                $storageOptions,
+            ),
+        );
 
         if (! $uploaded['public_id'] || ! $uploaded['url']) {
             throw new \RuntimeException('El proveedor no devolvió identificador o URL.');

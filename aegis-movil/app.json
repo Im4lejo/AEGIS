@@ -21,7 +21,7 @@
     },
     "web": {
       "bundler": "metro",
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon.png"
     },
     "plugins": [
       [
@@ -43,7 +43,7 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "AEGIS necesita acceso a tus fotos para adjuntar imágenes a tus productos.",
+          "photosPermission": "AEGIS necesita acceso a tus fotos para publicaciones, productos y tu perfil.",
           "cameraPermission": false,
           "microphonePermission": false
         }

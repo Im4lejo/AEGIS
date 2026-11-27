@@ -28,6 +28,7 @@ export function mapForumComment(comment) {
 
     return {
         id: comment.id,
+        authorId: comment.usuario?.id ?? comment.usuario_id ?? null,
         author: authorName || comment.usuario?.username || "Usuario",
         avatar: comment.usuario?.foto_perfil || comment.usuario?.foto_perfil_url || null,
         body: comment.comentario,
@@ -44,6 +45,7 @@ export function mapForumPost(post, author = post.usuario) {
 
     return {
         id: post.id,
+        authorId: author?.id ?? post.usuario_id ?? null,
         author: authorName || author?.username || "Usuario",
         avatar: author?.foto_perfil || author?.foto_perfil_url || null,
         age: formatForumPostAge(post.fecha_publicacion),
@@ -51,9 +53,9 @@ export function mapForumPost(post, author = post.usuario) {
             ? post.titulo
             : "",
         body: content,
-        likes: Number(post.likes_count || 0),
+        likes: Number(post.reacciones_count ?? post.likes_count ?? 0),
         comments: Number(post.comentarios_count ?? comments.length),
         commentItems: comments,
-        images: (post.imagenes || []).map((image) => image.imagen),
+        images: (post.imagenes || []).map((image) => image.imagen || image.url).filter(Boolean),
     };
 }

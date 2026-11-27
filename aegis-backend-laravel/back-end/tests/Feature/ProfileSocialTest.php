@@ -6,8 +6,10 @@ use App\Models\Categoria;
 use App\Models\Producto;
 use App\Models\Publicacion;
 use App\Models\Usuario;
+use App\Services\MediaManager;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\UploadedFile;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -104,6 +106,9 @@ class ProfileSocialTest extends TestCase
         $this->getJson('/api/perfil/'.$owner->id.'/tabs/publicaciones?per_page=1')
             ->assertOk()
             ->assertJsonStructure(['data', 'meta']);
+        $this->getJson('/api/perfil/'.$owner->id)
+            ->assertOk()
+            ->assertJsonPath('data.publicaciones.0.reacciones_count', 0);
         $this->getJson('/api/perfil/'.$owner->id.'/tabs/productos?per_page=1')
             ->assertOk()
             ->assertJsonPath('data.0.id', $product->id);
@@ -145,6 +150,50 @@ class ProfileSocialTest extends TestCase
             'usuario_id' => $user->id,
             'estado' => 'pendiente_retencion',
         ]);
+    }
+
+    public function test_profile_images_use_their_cloudinary_folders(): void
+    {
+        $user = $this->createUser();
+        Sanctum::actingAs($user);
+
+        $media = \Mockery::mock(MediaManager::class);
+        $media->shouldReceive('upload')
+            ->once()
+            ->with(\Mockery::type(UploadedFile::class), 'profile_images', 'Usuario/'.$user->id)
+            ->andReturn(['url' => 'https://example.com/avatar.jpg', 'public_id' => 'profile-avatar']);
+        $media->shouldReceive('upload')
+            ->once()
+            ->with(
+                \Mockery::type(UploadedFile::class),
+                'background_images',
+                'Usuario/'.$user->id,
+                false,
+                [
+                    'transformation' => [
+                        'quality' => 'auto',
+                        'fetch_format' => 'jpg',
+                        'width' => 1280,
+                        'height' => 1600,
+                        'crop' => 'limit',
+                    ],
+                ],
+            )
+            ->andReturn(['url' => 'https://example.com/cover.jpg', 'public_id' => 'profile-cover']);
+        $this->app->instance(MediaManager::class, $media);
+
+        $this->withHeaders(['Accept' => 'application/json'])
+            ->post('/api/perfil/media/avatar', [
+                'imagen' => UploadedFile::fake()->create('avatar.jpg', 10, 'image/jpeg'),
+            ])
+            ->assertOk()
+            ->assertJsonPath('data.url', 'https://example.com/avatar.jpg');
+        $this->withHeaders(['Accept' => 'application/json'])
+            ->post('/api/perfil/media/portada', [
+                'imagen' => UploadedFile::fake()->create('cover.jpg', 10, 'image/jpeg'),
+            ])
+            ->assertOk()
+            ->assertJsonPath('data.url', 'https://example.com/cover.jpg');
     }
 
     private function createUser(array $overrides = []): Usuario

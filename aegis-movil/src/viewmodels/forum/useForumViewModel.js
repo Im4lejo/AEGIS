@@ -53,7 +53,7 @@ export default function useForumViewModel() {
 
         const loadForum = async () => {
             try {
-                const response = await getForum({ per_page: 50 });
+                const response = await getForum({ per_page: 50 }, token);
                 if (isCurrent) {
                     setPosts((response.data?.data || []).map(mapForumPost));
                 }
@@ -73,7 +73,7 @@ export default function useForumViewModel() {
         return () => {
             isCurrent = false;
         };
-    }, []);
+    }, [token]);
 
     const visiblePosts = useMemo(() => {
         const normalizedSearch = search.trim().toLowerCase();
